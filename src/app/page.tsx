@@ -1,13 +1,19 @@
-import { Container } from '@/components/ui/Container';
+import { Hero } from '@/components/home/Hero';
+import { FeaturedProperties } from '@/components/home/FeaturedProperties';
+import { AboutPreview } from '@/components/home/AboutPreview';
+import { JournalPreview } from '@/components/home/JournalPreview';
+import { PartnerCTA } from '@/components/home/PartnerCTA';
+import { FinalCTA } from '@/components/home/FinalCTA';
 
 export default function HomePage() {
   return (
-    <main className="flex flex-1 items-center justify-center">
-      <Container className="text-center">
-        <h1 className="font-serif text-3xl font-bold tracking-tight md:text-5xl lg:text-6xl text-gray-900">
-          Miio Frontend Ready
-        </h1>
-      </Container>
-    </main>
+    <>
+      <Hero />
+      <FeaturedProperties />
+      <AboutPreview />
+      <JournalPreview />
+      <PartnerCTA />
+      <FinalCTA />
+    </>
   );
 }
