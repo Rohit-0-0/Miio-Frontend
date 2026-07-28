@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Inter, Playfair_Display } from 'next/font/google';
 import './globals.css';
 import { siteConfig } from '@/config/site';
+import { AppLayout } from '@/components/layout/AppLayout';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -36,8 +37,8 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${playfair.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col font-sans text-gray-900 bg-white">
-        {children}
+      <body className="font-sans text-gray-900 bg-white">
+        <AppLayout>{children}</AppLayout>
       </body>
     </html>
   );
