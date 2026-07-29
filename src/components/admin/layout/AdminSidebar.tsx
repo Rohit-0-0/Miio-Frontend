@@ -19,7 +19,7 @@ import {
 
 const sidebarItems = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-  { label: 'Homepage', href: '/admin/homepage', icon: Home },
+  { label: 'Homepage', href: '/admin/home', icon: Home },
   { label: 'Journal', href: '/admin/journal', icon: BookOpen },
   { label: 'About', href: '/admin/about', icon: Info },
   { label: 'Partners', href: '/admin/partners', icon: Handshake },
