@@ -1,4 +1,6 @@
 import { Metadata } from 'next';
+
+export const dynamic = 'force-dynamic';
 import { getPartnerData } from '@/lib/server/partner';
 import { ErrorState } from '@/components/shared/ErrorState';
 import { EmptyState } from '@/components/shared/EmptyState';

@@ -18,7 +18,19 @@ export function AboutForm({ initialData, isSaving, onSave }: AboutFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSave(formData);
+    
+    // Auto-populate alt tags from corresponding titles if missing
+    const submissionData = { ...formData };
+    
+    if (submissionData.hero?.backgroundImage?.assetId && !submissionData.hero.backgroundImage.alt) {
+      submissionData.hero.backgroundImage.alt = submissionData.hero.title;
+    }
+    
+    if (submissionData.story?.image?.assetId && !submissionData.story.image.alt) {
+      submissionData.story.image.alt = submissionData.story.title;
+    }
+    
+    onSave(submissionData);
   };
 
   const handleHeroChange = (field: keyof AboutData['hero'], value: string) => {

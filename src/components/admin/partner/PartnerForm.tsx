@@ -18,7 +18,23 @@ export function PartnerForm({ initialData, isSaving, onSave }: PartnerFormProps)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSave(formData);
+    
+    // Auto-populate alt tags from corresponding names if missing
+    const submissionData = { ...formData };
+    
+    if (submissionData.partners && submissionData.partners.length > 0) {
+      submissionData.partners = submissionData.partners.map(partner => {
+        if (partner.logo?.assetId && !partner.logo.alt) {
+          return {
+            ...partner,
+            logo: { ...partner.logo, alt: partner.name }
+          };
+        }
+        return partner;
+      });
+    }
+    
+    onSave(submissionData);
   };
 
   const emptyPartner = { name: '', logo: { assetId: '', alt: '' }, url: '' };

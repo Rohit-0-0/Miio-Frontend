@@ -1,4 +1,6 @@
 import { Metadata } from 'next';
+
+export const dynamic = 'force-dynamic';
 import { getAboutData } from '@/lib/server/about';
 import { AboutHero } from '@/components/about/AboutHero';
 import { AboutStory } from '@/components/about/AboutStory';
