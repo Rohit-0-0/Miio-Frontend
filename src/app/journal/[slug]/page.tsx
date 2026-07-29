@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import { AppImage } from '@/components/media/AppImage';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { journalService } from '@/services/journal.service';
@@ -59,19 +59,12 @@ export default async function JournalDetailPage({
     <article className="flex flex-col bg-white flex-1 pb-24">
       {/* Cover Image Section */}
       <div className="relative w-full h-[50vh] md:h-[60vh] lg:h-[70vh] bg-gray-100 mb-12 md:mb-20">
-        {article.coverImage?.assetId ? (
-          <Image
-            src={`https://cdn.sanity.io/images/placeholder/production/${article.coverImage.assetId}`}
-            alt={article.coverImage.alt || article.title}
-            fill
-            className="object-cover"
-            priority
-          />
-        ) : (
-          <div className="absolute inset-0 bg-gray-200 flex items-center justify-center text-gray-500">
-            No cover image
-          </div>
-        )}
+        <AppImage
+          image={article.coverImage}
+          alt={article.coverImage?.alt || article.title}
+          fill
+          priority
+        />
       </div>
 
       <Container>

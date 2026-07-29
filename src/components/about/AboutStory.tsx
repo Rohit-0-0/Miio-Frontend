@@ -1,13 +1,9 @@
 import React from 'react';
-import Image from 'next/image';
+import { AppImage } from '@/components/media/AppImage';
 import { AboutData } from '@/types/about';
 
 export function AboutStory({ story }: { story: AboutData['story'] }) {
   if (!story) return null;
-
-  const imageUrl = story.image?.assetId 
-    ? `https://cdn.sanity.io/images/placeholder/production/${story.image.assetId}`
-    : null;
 
   return (
     <section className="py-24 px-4 bg-white">
@@ -19,19 +15,13 @@ export function AboutStory({ story }: { story: AboutData['story'] }) {
           </div>
         </div>
         <div className="relative w-full aspect-[4/5] bg-gray-100 rounded-sm overflow-hidden">
-          {imageUrl ? (
-            <Image
-              src={imageUrl}
-              alt={story.image?.alt || story.title}
-              fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 50vw"
-            />
-          ) : (
-            <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-              No Image
-            </div>
-          )}
+          <AppImage
+            image={story.image}
+            alt={story.image?.alt || story.title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 1024px) 100vw, 50vw"
+          />
         </div>
       </div>
     </section>

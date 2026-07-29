@@ -1,25 +1,22 @@
 import React from 'react';
-import Image from 'next/image';
+import { AppImage } from '@/components/media/AppImage';
 import Link from 'next/link';
 import { AboutData } from '@/types/about';
 
 export function AboutHero({ hero }: { hero: AboutData['hero'] }) {
-  const imageUrl = hero?.backgroundImage?.assetId 
-    ? `https://cdn.sanity.io/images/placeholder/production/${hero.backgroundImage.assetId}`
-    : null;
-
   return (
     <section className="relative h-[80vh] min-h-[600px] w-full flex items-center justify-center bg-gray-900">
-      {imageUrl && (
-        <Image
-          src={imageUrl}
-          alt={hero.backgroundImage?.alt || hero.title}
+      {hero?.backgroundImage?.assetId ? (
+        <AppImage
+          image={hero.backgroundImage}
+          alt={hero.backgroundImage.alt || hero.title}
           fill
           priority
           className="object-cover object-center opacity-60"
         />
+      ) : (
+        <div className="absolute inset-0 bg-gray-800" />
       )}
-      {!imageUrl && <div className="absolute inset-0 bg-gray-800" />}
       <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto space-y-6">
         <h1 className="text-5xl md:text-7xl font-serif tracking-tight">{hero?.title}</h1>
         <p className="text-lg md:text-2xl font-light text-white/90">{hero?.subtitle}</p>

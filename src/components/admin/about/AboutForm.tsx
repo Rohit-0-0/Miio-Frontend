@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { AboutDocument, AboutData } from '@/types/about';
 import { ArrayFieldEditor } from '../singleton/ArrayFieldEditor';
 import Link from 'next/link';
+import { ImageUploader } from '@/components/media/ImageUploader';
+import { ImageAsset } from '@/lib/media/imageTypes';
 
 interface AboutFormProps {
   initialData: AboutDocument;
@@ -33,10 +35,10 @@ export function AboutForm({ initialData, isSaving, onSave }: AboutFormProps) {
     }));
   };
 
-  const handleHeroImageChange = (field: keyof AboutData['hero']['backgroundImage'], value: string) => {
+  const handleHeroImageChange = (image: ImageAsset | null) => {
     setFormData(prev => ({
       ...prev,
-      hero: { ...prev.hero, backgroundImage: { ...prev.hero.backgroundImage, [field]: value } }
+      hero: { ...prev.hero, backgroundImage: image || { assetId: '', alt: '' } }
     }));
   };
 
@@ -47,10 +49,10 @@ export function AboutForm({ initialData, isSaving, onSave }: AboutFormProps) {
     }));
   };
 
-  const handleStoryImageChange = (field: keyof AboutData['story']['image'], value: string) => {
+  const handleStoryImageChange = (image: ImageAsset | null) => {
     setFormData(prev => ({
       ...prev,
-      story: { ...prev.story, image: { ...prev.story.image, [field]: value } }
+      story: { ...prev.story, image: image || { assetId: '', alt: '' } }
     }));
   };
 
@@ -97,13 +99,12 @@ export function AboutForm({ initialData, isSaving, onSave }: AboutFormProps) {
             <label className="block text-sm font-medium text-gray-700">Subtitle</label>
             <textarea required value={formData.hero?.subtitle || ''} onChange={e => handleHeroChange('subtitle', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" rows={2} />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Background Image (Asset ID)</label>
-            <input required value={formData.hero?.backgroundImage?.assetId || ''} onChange={e => handleHeroImageChange('assetId', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Background Image Alt</label>
-            <input required value={formData.hero?.backgroundImage?.alt || ''} onChange={e => handleHeroImageChange('alt', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" />
+          <div className="md:col-span-2">
+            <ImageUploader 
+              label="Background Image"
+              value={formData.hero?.backgroundImage?.assetId ? formData.hero.backgroundImage as ImageAsset : null}
+              onChange={(img) => handleHeroImageChange(img)}
+            />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">CTA Label</label>
@@ -128,13 +129,12 @@ export function AboutForm({ initialData, isSaving, onSave }: AboutFormProps) {
             <textarea required value={formData.story?.content || ''} onChange={e => handleStoryChange('content', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" rows={6} />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Image (Asset ID)</label>
-              <input required value={formData.story?.image?.assetId || ''} onChange={e => handleStoryImageChange('assetId', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Image Alt</label>
-              <input required value={formData.story?.image?.alt || ''} onChange={e => handleStoryImageChange('alt', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" />
+            <div className="md:col-span-2">
+              <ImageUploader 
+                label="Story Image"
+                value={formData.story?.image?.assetId ? formData.story.image as ImageAsset : null}
+                onChange={(img) => handleStoryImageChange(img)}
+              />
             </div>
           </div>
         </div>

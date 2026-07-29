@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import Image from 'next/image';
+import { AppImage } from '@/components/media/AppImage';
 import { ROUTES } from '@/constants/routes';
 import { JournalArticle } from '@/types/journal';
 
@@ -16,20 +16,13 @@ export function JournalCard({ article }: { article: JournalArticle }) {
     <article className="group flex flex-col h-full relative">
       <Link href={`${ROUTES.JOURNAL}/${article.slug}`} className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 rounded-sm mb-6">
         <div className="relative w-full aspect-[4/3] md:aspect-[3/2] overflow-hidden rounded-sm bg-gray-100">
-          {article.coverImage?.assetId ? (
-            <Image
-              src={`https://cdn.sanity.io/images/placeholder/production/${article.coverImage.assetId}`} // Assuming standard sanity CDN format for placeholder, backend should ideally provide full URL
-              alt={article.coverImage.alt || article.title}
-              fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
-          ) : (
-            <div className="absolute inset-0 bg-gray-200 w-full h-full flex items-center justify-center text-gray-400 transition-transform duration-500 group-hover:scale-105">
-              <span>No Image Available</span>
-            </div>
-          )}
-          
+          <AppImage
+            image={article.coverImage}
+            alt={article.coverImage?.alt || article.title}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
           {article.featured && (
             <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 text-xs font-bold uppercase tracking-wider text-gray-900 rounded-sm shadow-sm">
               Featured

@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { JournalArticle, CreateJournalInput, UpdateJournalInput } from '@/types/journal';
 import { journalService } from '@/services/journal.service';
 import Link from 'next/link';
+import { ImageUploader } from '@/components/media/ImageUploader';
+import { ImageAsset } from '@/lib/media/imageTypes';
 
 interface JournalFormProps {
   initialData?: JournalArticle;
@@ -15,6 +17,7 @@ export function JournalForm({ initialData, isEditMode = false }: JournalFormProp
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [coverImage, setCoverImage] = useState<ImageAsset | null>(initialData?.coverImage || null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -32,10 +35,8 @@ export function JournalForm({ initialData, isEditMode = false }: JournalFormProp
       featured: formData.get('featured') === 'on',
     };
 
-    const assetId = formData.get('coverImageId') as string;
-    const alt = formData.get('coverImageAlt') as string;
-    if (assetId) {
-      data.coverImage = { assetId, alt: alt || data.title };
+    if (coverImage) {
+      data.coverImage = { ...coverImage, alt: formData.get('title') as string };
     }
 
     try {
@@ -139,30 +140,11 @@ export function JournalForm({ initialData, isEditMode = false }: JournalFormProp
         </div>
 
         <div className="space-y-1 md:col-span-2 border-t border-gray-100 pt-6">
-          <h4 className="text-sm font-semibold text-gray-900 mb-4">Cover Image (Sanity Asset ID)</h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="coverImageId" className="block text-xs font-medium text-gray-700 mb-1">Asset ID</label>
-              <input
-                type="text"
-                id="coverImageId"
-                name="coverImageId"
-                placeholder="e.g. image-xxxx-1200x800-jpg"
-                defaultValue={initialData?.coverImage?.assetId}
-                className="w-full rounded-sm border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
-              />
-            </div>
-            <div>
-              <label htmlFor="coverImageAlt" className="block text-xs font-medium text-gray-700 mb-1">Alt Text</label>
-              <input
-                type="text"
-                id="coverImageAlt"
-                name="coverImageAlt"
-                defaultValue={initialData?.coverImage?.alt}
-                className="w-full rounded-sm border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
-              />
-            </div>
-          </div>
+          <ImageUploader 
+            label="Cover Image"
+            value={coverImage}
+            onChange={(image) => setCoverImage(image)}
+          />
         </div>
 
         <div className="space-y-1 md:col-span-2 border-t border-gray-100 pt-6">

@@ -19,23 +19,35 @@ export function SingletonEditor<T>({ title, fetchData, updateData, children }: S
   const [success, setSuccess] = useState<string | null>(null);
 
   useEffect(() => {
+    let mounted = true;
+
     const load = async () => {
       try {
         const result = await fetchData();
-        setData(result);
+        if (mounted) {
+          setData(result);
+        }
       } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message || 'Failed to load content');
-        } else {
-          setError('Failed to load content');
+        if (mounted) {
+          if (err instanceof Error) {
+            setError(err.message || 'Failed to load content');
+          } else {
+            setError('Failed to load content');
+          }
         }
       } finally {
-        setIsLoading(false);
+        if (mounted) {
+          setIsLoading(false);
+        }
       }
     };
+
     load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
+    return () => {
+      mounted = false;
+    };
+  }, [fetchData]);
 
   const handleSave = async (updatedData: T) => {
     if (isSaving) return;

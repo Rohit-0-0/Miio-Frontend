@@ -25,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: data?.hero?.title || 'About Us - Miio',
       description: data?.mission?.description || 'Learn more about Miio.',
     };
-  } catch (error) {
+  } catch {
     return {
       title: 'About Us - Miio',
       description: 'Learn more about Miio.',

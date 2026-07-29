@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { getPartnerData } from '@/lib/server/partner';
 import { ErrorState } from '@/components/shared/ErrorState';
 import { EmptyState } from '@/components/shared/EmptyState';
-import Image from 'next/image';
+import { AppImage } from '@/components/media/AppImage';
 
 export const metadata: Metadata = {
   title: 'Partner With Us | Miio',
@@ -58,24 +58,24 @@ export default async function PartnersPage() {
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12 items-center opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
               {partnerData.partners.map((partner, i) => {
-                const imageUrl = partner.logo?.assetId 
-                  ? `https://cdn.sanity.io/images/placeholder/production/${partner.logo.assetId}`
-                  : null;
-
                 return (
                   <div key={i} className="flex justify-center">
                     {partner.url ? (
                       <a href={partner.url} target="_blank" rel="noopener noreferrer" className="block transition-transform hover:scale-105">
-                        {imageUrl ? (
-                          <Image src={imageUrl} alt={partner.name} width={160} height={80} className="object-contain" />
+                        {partner.logo?.assetId ? (
+                          <div className="relative w-40 h-20">
+                            <AppImage image={partner.logo} alt={partner.name} fill className="object-contain" />
+                          </div>
                         ) : (
                           <span className="text-xl font-bold text-gray-400">{partner.name}</span>
                         )}
                       </a>
                     ) : (
                       <div className="block">
-                        {imageUrl ? (
-                          <Image src={imageUrl} alt={partner.name} width={160} height={80} className="object-contain" />
+                        {partner.logo?.assetId ? (
+                          <div className="relative w-40 h-20">
+                            <AppImage image={partner.logo} alt={partner.name} fill className="object-contain" />
+                          </div>
                         ) : (
                           <span className="text-xl font-bold text-gray-400">{partner.name}</span>
                         )}

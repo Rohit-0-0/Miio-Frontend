@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { PartnerDocument } from '@/types/partner';
 import { ArrayFieldEditor } from '../singleton/ArrayFieldEditor';
 import Link from 'next/link';
+import { ImageUploader } from '@/components/media/ImageUploader';
+import { ImageAsset } from '@/lib/media/imageTypes';
 
 interface PartnerFormProps {
   initialData: PartnerDocument;
@@ -58,8 +60,11 @@ export function PartnerForm({ initialData, isSaving, onSave }: PartnerFormProps)
                 <input value={item.url || ''} onChange={e => updateItem({ ...item, url: e.target.value })} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" />
               </div>
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Logo (Asset ID)</label>
-                <input required value={item.logo?.assetId || ''} onChange={e => updateItem({ ...item, logo: { ...item.logo, assetId: e.target.value } })} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" />
+                <ImageUploader 
+                  label="Logo"
+                  value={item.logo?.assetId ? item.logo as ImageAsset : null}
+                  onChange={(img) => updateItem({ ...item, logo: img || { assetId: '', alt: '' } })}
+                />
               </div>
             </div>
           )}

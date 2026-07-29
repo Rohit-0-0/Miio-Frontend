@@ -4,11 +4,7 @@ export interface BaseEntity {
   _updatedAt: string;
 }
 
-export interface ImageAsset {
-  assetId: string;
-  alt: string;
-}
-
+export * from '@/lib/media/imageTypes';
 export interface SeoMetadata {
   title: string;
   description: string;
