@@ -4,15 +4,16 @@ import { useCallback } from 'react';
 import { SingletonEditor } from '@/components/admin/singleton/SingletonEditor';
 import { PartnerForm } from '@/components/admin/partner/PartnerForm';
 import { partnerService } from '@/services/partner.service';
+import { PageContainer } from '@/components/admin/shared/PageContainer';
 
 export default function AdminPartnerPage() {
   const fetchData = useCallback(() => partnerService.getPartner().then(res => res.data), []);
   const updateData = useCallback((data: any) => partnerService.updatePartner(data).then(res => res.data), []);
 
   return (
-    <div className="py-8">
+    <PageContainer>
       <SingletonEditor
-        title="Edit Partner Page"
+        title="Partners CMS"
         fetchData={fetchData}
         updateData={updateData}
       >
@@ -20,6 +21,6 @@ export default function AdminPartnerPage() {
           <PartnerForm initialData={data} isSaving={isSaving} onSave={onSave} />
         )}
       </SingletonEditor>
-    </div>
+    </PageContainer>
   );
 }
