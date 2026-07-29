@@ -10,15 +10,55 @@ export class ApiClient {
   private async fetch<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
     
-    const headers = {
+    // Retrieve access token from localStorage (if running in browser)
+    const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
+    
+    const headers: Record<string, string> = {
       'Content-Type': 'application/json',
-      ...options.headers,
+      ...((options.headers as Record<string, string>) || {}),
     };
 
-    const response = await fetch(url, {
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    let response = await fetch(url, {
       ...options,
       headers,
+      credentials: 'include', // Ensure cookies are sent for refresh
     });
+
+    if (response.status === 401 && endpoint !== '/auth/refresh' && endpoint !== '/auth/login') {
+      try {
+        // Attempt token refresh
+        const refreshResponse = await fetch(`${this.baseUrl}/auth/refresh`, {
+          method: 'POST',
+          credentials: 'include',
+        });
+        
+        if (refreshResponse.ok) {
+          const refreshData = await refreshResponse.json();
+          if (refreshData?.data?.accessToken && typeof window !== 'undefined') {
+            localStorage.setItem('accessToken', refreshData.data.accessToken);
+            // Retry original request
+            headers['Authorization'] = `Bearer ${refreshData.data.accessToken}`;
+            response = await fetch(url, {
+              ...options,
+              headers,
+              credentials: 'include',
+            });
+          }
+        } else {
+          // Refresh failed, clear token and maybe redirect to login
+          if (typeof window !== 'undefined') {
+            localStorage.removeItem('accessToken');
+            // window.location.href = '/login'; // Optional: Redirect to login
+          }
+        }
+      } catch (e) {
+        // Ignore refresh errors, they will just throw the 401
+      }
+    }
 
     if (!response.ok) {
       throw new Error(`API error: ${response.statusText}`);
