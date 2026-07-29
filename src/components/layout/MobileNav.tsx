@@ -3,10 +3,12 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { NAVIGATION, ROUTES } from '@/constants/routes';
+import { useAuth } from '@/components/providers/AuthProvider';
 
 export function MobileNav() {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const { user, logout } = useAuth();
 
   // Lock body scroll when open
   useEffect(() => {
@@ -142,6 +144,45 @@ export function MobileNav() {
                   {item.label}
                 </Link>
               ))}
+
+              {!user ? (
+                <Link
+                  href={ROUTES.LOGIN}
+                  onClick={() => setIsOpen(false)}
+                  className="block px-2 py-3 text-lg font-medium text-gray-900 hover:bg-gray-50 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900"
+                >
+                  Login
+                </Link>
+              ) : user.role === 'ADMIN' ? (
+                <>
+                  <Link
+                    href={ROUTES.ADMIN}
+                    onClick={() => setIsOpen(false)}
+                    className="block px-2 py-3 text-lg font-medium text-gray-900 hover:bg-gray-50 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900"
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={() => {
+                      logout();
+                      setIsOpen(false);
+                    }}
+                    className="block w-full text-left px-2 py-3 text-lg font-medium text-gray-900 hover:bg-gray-50 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 cursor-pointer"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <button
+                  onClick={() => {
+                    logout();
+                    setIsOpen(false);
+                  }}
+                  className="block w-full text-left px-2 py-3 text-lg font-medium text-gray-900 hover:bg-gray-50 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 cursor-pointer"
+                >
+                  Logout
+                </button>
+              )}
             </nav>
 
             <div className="p-4 border-t border-gray-100">

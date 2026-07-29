@@ -61,7 +61,18 @@ export class ApiClient {
     }
 
     if (!response.ok) {
-      throw new Error(`API error: ${response.statusText}`);
+      let errorData: any = null;
+      try {
+        errorData = await response.json();
+      } catch (e) {
+        // Not a JSON response
+      }
+      const errorMessage = errorData?.message || `API error: ${response.statusText}`;
+      const apiError = new Error(errorMessage);
+      (apiError as any).status = response.status;
+      (apiError as any).details = errorData?.details;
+      (apiError as any).code = errorData?.code;
+      throw apiError;
     }
 
     return response.json();

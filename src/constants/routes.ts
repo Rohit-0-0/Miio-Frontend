@@ -4,6 +4,8 @@ export const ROUTES = {
   JOURNAL: '/journal',
   PARTNERS: '/partners',
   BOOKING: '/booking',
+  LOGIN: '/login',
+  ADMIN: '/admin',
 } as const;
 
 export const NAVIGATION = [

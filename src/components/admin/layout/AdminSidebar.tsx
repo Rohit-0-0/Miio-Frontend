@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { ROUTES } from '@/constants/routes';
+import { useAuth } from '@/components/providers/AuthProvider';
 import { 
   LayoutDashboard, 
   Home, 
@@ -12,7 +13,8 @@ import {
   Building2, 
   Image as ImageIcon, 
   Settings,
-  ArrowLeft
+  ArrowLeft,
+  LogOut
 } from 'lucide-react';
 
 const sidebarItems = [
@@ -28,6 +30,13 @@ const sidebarItems = [
 
 export function AdminSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { logout } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+    router.push(ROUTES.LOGIN);
+  };
 
   return (
     <aside className="w-64 bg-gray-50 border-r border-gray-200 min-h-screen flex flex-col hidden md:flex sticky top-0 h-screen">
@@ -59,7 +68,7 @@ export function AdminSidebar() {
         })}
       </nav>
       
-      <div className="p-4 border-t border-gray-200">
+      <div className="p-4 border-t border-gray-200 space-y-2">
         <Link 
           href={ROUTES.HOME} 
           className="flex items-center space-x-2 text-sm text-gray-500 hover:text-gray-900 transition-colors px-3 py-2 rounded-sm hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900"
@@ -67,6 +76,13 @@ export function AdminSidebar() {
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Public Site</span>
         </Link>
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center space-x-2 text-sm text-red-600 hover:text-red-800 hover:bg-red-50 transition-colors px-3 py-2 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 cursor-pointer"
+        >
+          <LogOut className="w-4 h-4" />
+          <span>Log Out</span>
+        </button>
       </div>
     </aside>
   );

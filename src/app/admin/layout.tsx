@@ -1,4 +1,5 @@
 import { AdminLayout } from '@/components/admin/layout/AdminLayout';
+import { AdminGuard } from '@/components/admin/layout/AdminGuard';
 
 export const metadata = {
   title: 'Miio Admin',
@@ -6,5 +7,9 @@ export const metadata = {
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <AdminLayout>{children}</AdminLayout>;
+  return (
+    <AdminGuard>
+      <AdminLayout>{children}</AdminLayout>
+    </AdminGuard>
+  );
 }

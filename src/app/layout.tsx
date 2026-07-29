@@ -3,6 +3,7 @@ import { Inter, Playfair_Display } from 'next/font/google';
 import './globals.css';
 import { siteConfig } from '@/config/site';
 import { AppLayout } from '@/components/layout/AppLayout';
+import { AuthProvider } from '@/components/providers/AuthProvider';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -38,7 +39,9 @@ export default function RootLayout({
       className={`${inter.variable} ${playfair.variable} h-full antialiased`}
     >
       <body className="font-sans text-gray-900 bg-white">
-        <AppLayout>{children}</AppLayout>
+        <AuthProvider>
+          <AppLayout>{children}</AppLayout>
+        </AuthProvider>
       </body>
     </html>
   );
