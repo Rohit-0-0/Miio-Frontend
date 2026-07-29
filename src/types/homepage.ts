@@ -1,6 +1,11 @@
 import { BaseEntity, ImageAsset, SeoMetadata } from './common';
 
-export interface HeroSection {
+export interface SectionMetadata {
+  updatedAt?: string;
+  updatedBy?: string;
+}
+
+export interface HeroSection extends SectionMetadata {
   eyebrow?: string;
   title: string;
   subtitle: string;
@@ -14,15 +19,93 @@ export interface HeroSection {
   showScrollIndicator?: boolean;
 }
 
+export type FeaturedPropertiesMode = 'MANUAL' | 'FEATURED' | 'LATEST' | 'COLLECTION';
+
+export interface FeaturedPropertiesSection extends SectionMetadata {
+  title: string;
+  subtitle?: string;
+  description?: string;
+  ctaLabel?: string;
+  ctaLink?: string;
+  maxProperties?: number;
+  displayMode: FeaturedPropertiesMode;
+  manualSelection?: string[]; // Array of property IDs
+  collectionId?: string; // For future
+}
+
+export interface WhyMiioSection extends SectionMetadata {
+  title: string;
+  subtitle?: string;
+  content: string;
+  image?: ImageAsset;
+  ctaLabel?: string;
+  ctaLink?: string;
+}
+
+export interface ExperienceCard {
+  id: string;
+  title: string;
+  description: string;
+  icon?: ImageAsset;
+}
+
+export interface ExperiencesSection extends SectionMetadata {
+  title: string;
+  subtitle?: string;
+  items: ExperienceCard[];
+}
+
+export interface TestimonialItem {
+  id: string;
+  customerName: string;
+  location?: string;
+  testimonial: string;
+  rating: 1 | 2 | 3 | 4 | 5;
+  avatar?: ImageAsset;
+}
+
+export interface TestimonialsSection extends SectionMetadata {
+  title: string;
+  subtitle?: string;
+  items: TestimonialItem[];
+}
+
+export interface FaqItem {
+  id: string;
+  question: string;
+  answer: string;
+}
+
+export interface FaqSection extends SectionMetadata {
+  title: string;
+  subtitle?: string;
+  items: FaqItem[];
+}
+
+export interface NewsletterSection extends SectionMetadata {
+  heading: string;
+  description: string;
+  ctaText: string;
+}
+
+export interface SeoSection extends SeoMetadata, SectionMetadata {
+  canonicalUrl?: string;
+  ogImage?: ImageAsset;
+  metaRobots?: string;
+}
+
 export interface HomepageData {
+  version: number;
+  analytics?: unknown;
+  
   hero: HeroSection;
-  featuredProperties?: unknown;
-  whyMiio?: unknown;
-  experiences?: unknown;
-  testimonials?: unknown;
-  faq?: unknown;
-  newsletter?: unknown;
-  seo?: SeoMetadata;
+  featuredProperties?: FeaturedPropertiesSection;
+  whyMiio?: WhyMiioSection;
+  experiences?: ExperiencesSection;
+  testimonials?: TestimonialsSection;
+  faq?: FaqSection;
+  newsletter?: NewsletterSection;
+  seo?: SeoSection;
 }
 
 export interface HomepageDocument extends HomepageData, BaseEntity {}

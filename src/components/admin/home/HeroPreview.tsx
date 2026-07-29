@@ -1,7 +1,9 @@
 'use client';
-import type { HeroForm } from './HeroEditor';
+import React from 'react';
+import { HeroSection } from '@/types/homepage';
 
-export function HeroPreview({ hero }: { hero: HeroForm }) {
+export function HeroPreview({ hero }: { hero: Partial<HeroSection> }) {
+  if (!hero) return null;
   return (
     <div
       className="relative w-full h-64 bg-gray-200 flex flex-col items-center justify-center text-center overflow-hidden"
@@ -30,9 +32,11 @@ export function HeroPreview({ hero }: { hero: HeroForm }) {
           {hero.subtitle}
         </p>
         <div className="flex gap-3">
-          <span className="px-4 py-2 bg-white text-black font-semibold rounded cursor-pointer">
-            {hero.primaryCta.label || 'Primary CTA'}
-          </span>
+          {hero.primaryCta && (
+            <span className="px-4 py-2 bg-white text-black font-semibold rounded cursor-pointer">
+              {hero.primaryCta.label || 'Primary CTA'}
+            </span>
+          )}
           {hero.secondaryCta?.label && (
             <span className="px-4 py-2 border border-white text-white font-semibold rounded cursor-pointer">
               {hero.secondaryCta.label}
