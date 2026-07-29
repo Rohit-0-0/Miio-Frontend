@@ -40,3 +40,33 @@ export async function getPropertyListing(
 
   return response.json();
 }
+
+export async function getPropertyBySlug(slug: string): Promise<ApiResponse<PropertyDocument>> {
+  const url = `${env.NEXT_PUBLIC_API_URL}/properties/slug/${slug}`;
+  
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get('accessToken');
+
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+
+  if (accessToken) {
+    headers['Authorization'] = `Bearer ${accessToken.value}`;
+  }
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers,
+    cache: 'no-store',
+  });
+
+  if (!response.ok) {
+    if (response.status === 404) {
+      return { success: false, message: 'Not found', data: null as any };
+    }
+    throw new Error(`Failed to fetch property by slug: ${response.statusText}`);
+  }
+
+  return response.json();
+}

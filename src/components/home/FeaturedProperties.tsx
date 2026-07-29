@@ -1,30 +1,30 @@
 import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/ui/Section';
 import { PropertyCard } from './PropertyCard';
+import { getPropertyListing } from '@/lib/server/property';
+import { PropertyDocument } from '@/types/property';
 
-// Realistic placeholder data
-const PROPERTIES = [
-  {
-    id: '1',
-    name: 'The Glasshouse',
-    location: 'Upstate New York',
-    description: 'A secluded architectural masterpiece surrounded by nature, featuring floor-to-ceiling windows and panoramic forest views.',
-  },
-  {
-    id: '2',
-    name: 'Villa Serena',
-    location: 'Tuscany, Italy',
-    description: 'An elegant restored 18th-century villa with private vineyards, an infinity pool, and authentic regional charm.',
-  },
-  {
-    id: '3',
-    name: 'Ocean Retreat',
-    location: 'Malibu, California',
-    description: 'A modern coastal sanctuary offering direct beach access, expansive decks, and unparalleled sunset vistas.',
-  },
-];
+export async function FeaturedProperties() {
+  let properties: PropertyDocument[] = [];
+  
+  try {
+    const response = await getPropertyListing({
+      featured: 'true',
+      status: 'PUBLISHED',
+      visibleOnWebsite: 'true',
+      sort: 'sortOrder',
+      order: 'asc',
+      limit: '3'
+    });
+    properties = response.data || [];
+  } catch (error) {
+    console.error('Failed to fetch featured properties:', error);
+  }
 
-export function FeaturedProperties() {
+  if (properties.length === 0) {
+    return null; // Gracefully hide if no featured properties
+  }
+
   return (
     <Section className="bg-gray-50">
       <Container>
@@ -38,13 +38,14 @@ export function FeaturedProperties() {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
-          {PROPERTIES.map((property) => (
+          {properties.map((property) => (
             <PropertyCard
               key={property.id}
-              id={property.id}
-              name={property.name}
-              location={property.location}
-              description={property.description}
+              slug={property.slug}
+              name={property.title}
+              location={[property.city, property.country].filter(Boolean).join(', ') || 'Various Locations'}
+              description={property.shortDescription || property.longDescription?.substring(0, 150) || ''}
+              coverImage={property.coverImageId || property.gallery?.[0]?.assetId}
             />
           ))}
         </div>
