@@ -32,3 +32,19 @@ export interface JournalQuery {
 }
 
 export type JournalListResponse = PaginatedResponse<JournalArticle>;
+
+export interface CreateJournalInput {
+  title: string;
+  excerpt?: string;
+  content: string;
+  coverImage?: ImageAsset;
+  author?: string;
+  category?: string;
+  tags?: string[];
+  status: JournalStatus;
+  featured?: boolean;
+  publishedAt?: string;
+  seo?: SeoMetadata;
+}
+
+export type UpdateJournalInput = Partial<CreateJournalInput>;

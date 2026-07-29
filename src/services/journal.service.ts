@@ -1,5 +1,5 @@
 import { apiClient } from '@/lib/api/client';
-import { JournalArticle, JournalListResponse, JournalQuery } from '@/types/journal';
+import { JournalArticle, JournalListResponse, JournalQuery, CreateJournalInput, UpdateJournalInput } from '@/types/journal';
 import { ApiResponse } from '@/types/api';
 
 class JournalService {
@@ -30,8 +30,24 @@ class JournalService {
     return apiClient.get<ApiResponse<JournalArticle>>(`${this.basePath}/${slug}`);
   }
 
+  async getArticleById(id: string): Promise<ApiResponse<JournalArticle>> {
+    return apiClient.get<ApiResponse<JournalArticle>>(`${this.basePath}/id/${id}`);
+  }
+
   async getFeaturedArticles(): Promise<JournalListResponse> {
     return this.getJournalArticles({ featured: true, limit: 3 });
+  }
+
+  async createArticle(data: CreateJournalInput): Promise<ApiResponse<JournalArticle>> {
+    return apiClient.post<ApiResponse<JournalArticle>>(this.basePath, data);
+  }
+
+  async updateArticle(id: string, data: UpdateJournalInput): Promise<ApiResponse<JournalArticle>> {
+    return apiClient.put<ApiResponse<JournalArticle>>(`${this.basePath}/${id}`, data);
+  }
+
+  async deleteArticle(id: string): Promise<ApiResponse<null>> {
+    return apiClient.delete<ApiResponse<null>>(`${this.basePath}/${id}`);
   }
 }
 
