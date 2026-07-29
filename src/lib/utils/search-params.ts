@@ -44,6 +44,31 @@ export function normalizeJournalQuery(
   if (orderRaw === 'asc' || orderRaw === 'desc') {
     query.order = orderRaw;
   }
+  return query;
+}
+export function normalizePropertyQuery(
+  searchParams: Record<string, string | string[] | undefined>
+) {
+  const query: Record<string, any> = {
+    page: normalizeNumber(searchParams.page, 1),
+    limit: normalizeNumber(searchParams.limit, 10),
+    search: normalizeString(searchParams.search),
+    status: normalizeString(searchParams.status),
+    propertyType: normalizeString(searchParams.propertyType),
+    featured: normalizeBoolean(searchParams.featured),
+    country: normalizeString(searchParams.country),
+    city: normalizeString(searchParams.city),
+  };
+
+  const sortRaw = normalizeString(searchParams.sort);
+  if (sortRaw === 'sortOrder' || sortRaw === 'createdAt' || sortRaw === 'updatedAt' || sortRaw === 'title') {
+    query.sort = sortRaw;
+  }
+  
+  const orderRaw = normalizeString(searchParams.order);
+  if (orderRaw === 'asc' || orderRaw === 'desc') {
+    query.order = orderRaw;
+  }
 
   return query;
 }

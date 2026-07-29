@@ -21,9 +21,9 @@ const sidebarItems = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { label: 'Homepage', href: '/admin/home', icon: Home },
   { label: 'Journal', href: '/admin/journal', icon: BookOpen },
+  { label: 'Properties', href: '/admin/properties', icon: Building2 },
   { label: 'About', href: '/admin/about', icon: Info },
   { label: 'Partners', href: '/admin/partners', icon: Handshake },
-  { label: 'Properties', href: '/admin/properties', icon: Building2 },
   { label: 'Media', href: '/admin/media', icon: ImageIcon },
   { label: 'Settings', href: '/admin/settings', icon: Settings },
 ];
