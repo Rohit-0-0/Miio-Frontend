@@ -1,18 +1,23 @@
 'use client';
 import React from 'react';
 import { HeroSection } from '@/types/homepage';
+import { AppImage } from '@/components/media/AppImage';
 
 export function HeroPreview({ hero }: { hero: Partial<HeroSection> }) {
   if (!hero) return null;
   return (
     <div
       className="relative w-full h-64 bg-gray-200 flex flex-col items-center justify-center text-center overflow-hidden"
-      style={{
-        backgroundImage: hero.backgroundImage?.assetId ? `url(${hero.backgroundImage.assetId})` : undefined,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
     >
+      {hero.backgroundImage?.assetId && (
+        <div className="absolute inset-0 z-0">
+          <AppImage 
+            image={hero.backgroundImage}
+            alt="Hero Preview"
+            fill
+          />
+        </div>
+      )}
       <div 
         className="absolute inset-0 bg-black" 
         style={{ opacity: hero.overlayOpacity ?? 0 }} 

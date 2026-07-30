@@ -1,7 +1,7 @@
 import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/ui/Section';
 import { TestimonialsSection } from '@/types/homepage';
-import { buildImageUrl } from '@/lib/media/buildImageUrl';
+import { AppImage } from '@/components/media/AppImage';
 
 function StarRating({ rating }: { rating: number }) {
   const stars = Array.from({ length: 5 }).map((_, index) => {
@@ -40,7 +40,6 @@ export function Testimonials({ testimonials }: { testimonials: TestimonialsSecti
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {testimonials.items.map((item, index) => {
-            const avatarUrl = buildImageUrl(item.avatar?.assetId);
             return (
               <div key={item.id || index} className="bg-gray-50 p-8 rounded-sm flex flex-col h-full border border-gray-100">
                 <div className="mb-6">
@@ -50,11 +49,15 @@ export function Testimonials({ testimonials }: { testimonials: TestimonialsSecti
                   "{item.testimonial}"
                 </blockquote>
                 <div className="flex items-center space-x-4">
-                  {avatarUrl ? (
-                    <div 
-                      className="w-12 h-12 rounded-full bg-cover bg-center flex-shrink-0"
-                      style={{ backgroundImage: `url(${avatarUrl})` }}
-                    />
+                  {item.avatar?.assetId ? (
+                    <div className="w-12 h-12 rounded-full flex-shrink-0 relative overflow-hidden">
+                      <AppImage 
+                        image={item.avatar}
+                        alt={item.customerName || 'Customer avatar'}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
                   ) : (
                     <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-bold flex-shrink-0">
                       {item.customerName?.charAt(0) || 'U'}

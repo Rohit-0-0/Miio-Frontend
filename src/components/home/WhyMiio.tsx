@@ -2,12 +2,10 @@ import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/ui/Section';
 import { WhyMiioSection } from '@/types/homepage';
-import { buildImageUrl } from '@/lib/media/buildImageUrl';
+import { AppImage } from '@/components/media/AppImage';
 
 export function WhyMiio({ whyMiio }: { whyMiio: WhyMiioSection }) {
   if (!whyMiio) return null;
-
-  const imageUrl = buildImageUrl(whyMiio.image?.assetId);
 
   return (
     <Section className="bg-white">
@@ -15,12 +13,12 @@ export function WhyMiio({ whyMiio }: { whyMiio: WhyMiioSection }) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
           {/* Image Column */}
           <div className="w-full aspect-square md:aspect-[4/5] relative overflow-hidden rounded-sm bg-gray-100">
-            {imageUrl ? (
-              <div 
-                className="absolute inset-0 bg-cover bg-center"
-                style={{ backgroundImage: `url(${imageUrl})` }}
-                aria-label={whyMiio.image?.alt || 'Why Miio Image'}
-                role="img"
+            {whyMiio.image?.assetId ? (
+              <AppImage
+                image={whyMiio.image}
+                alt={whyMiio.image.alt || 'Why Miio Image'}
+                fill
+                className="object-cover"
               />
             ) : (
               <div className="absolute inset-0 bg-gray-200 w-full h-full flex items-center justify-center text-gray-400">

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { AppImage } from '@/components/media/AppImage';
 
 interface PropertyCardProps {
   slug: string;
@@ -13,10 +14,14 @@ export function PropertyCard({ slug, name, location, description, coverImage }: 
     <div className="group flex flex-col group h-full">
       <div className="relative w-full aspect-[4/3] overflow-hidden rounded-sm bg-gray-100 mb-6">
         {coverImage ? (
-          <div 
-            className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-            style={{ backgroundImage: `url(${coverImage})` }}
-          />
+          <div className="absolute inset-0 transition-transform duration-500 group-hover:scale-105">
+            <AppImage 
+              image={{ assetId: coverImage }}
+              alt={name}
+              fill
+              className="object-cover"
+            />
+          </div>
         ) : (
           <div className="absolute inset-0 bg-gray-200 w-full h-full flex items-center justify-center text-gray-400 transition-transform duration-500 group-hover:scale-105">
             <span>No Image Available</span>

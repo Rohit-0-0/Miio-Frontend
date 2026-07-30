@@ -1,24 +1,29 @@
 import Link from 'next/link';
 import { HeroSection } from '@/types/homepage';
-import { buildImageUrl } from '@/lib/media/buildImageUrl';
+import { AppImage } from '@/components/media/AppImage';
 
 export function Hero({ hero }: { hero: HeroSection }) {
   if (!hero) return null;
-
-  const imageUrl = buildImageUrl(hero.backgroundImage?.assetId);
 
   return (
     <section 
       className="relative w-full flex items-center overflow-hidden bg-gray-900"
       style={{
         minHeight: hero.heroHeight || '80vh',
-        backgroundImage: imageUrl ? `url(${imageUrl})` : undefined,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
       }}
       role="banner"
       aria-label={hero.backgroundAlt || hero.title}
     >
+      {/* Background Image */}
+      {hero.backgroundImage?.assetId && (
+        <div className="absolute inset-0 z-0">
+          <AppImage 
+            image={hero.backgroundImage} 
+            alt={hero.backgroundAlt || hero.title}
+            fill
+          />
+        </div>
+      )}
       {/* Overlay */}
       {hero.overlayOpacity !== undefined && hero.overlayOpacity > 0 && (
         <div 

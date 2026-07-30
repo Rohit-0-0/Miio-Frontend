@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { SectionEditorHeader } from '@/components/admin/home/SectionEditorHeader';
 import { SeoSection } from '@/types/homepage';
 import { ImageUploader } from '@/components/media/ImageUploader';
+import { AppImage } from '@/components/media/AppImage';
 
 export interface SeoEditorProps {
   initialData?: SeoSection;
@@ -187,10 +188,14 @@ export function SeoEditor({ initialData, onSave, onDirtyChange }: SeoEditorProps
         <div className="border border-gray-200 rounded-sm bg-white overflow-hidden shadow-sm">
           <div className="aspect-[1.91/1] bg-gray-100 flex items-center justify-center border-b border-gray-200 relative">
             {data.ogImage ? (
-              <div 
-                className="absolute inset-0 bg-cover bg-center"
-                style={{ backgroundImage: `url(${data.ogImage.assetId})` }}
-              />
+              <div className="absolute inset-0">
+                <AppImage 
+                  image={data.ogImage}
+                  alt="OG Preview"
+                  fill
+                  className="object-cover"
+                />
+              </div>
             ) : (
               <span className="text-gray-400">Open Graph Image (1200x630)</span>
             )}

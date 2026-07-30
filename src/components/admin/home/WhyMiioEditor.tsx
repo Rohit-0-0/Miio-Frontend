@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { SectionEditorHeader } from '@/components/admin/home/SectionEditorHeader';
 import { WhyMiioSection } from '@/types/homepage';
 import { ImageUploader } from '@/components/media/ImageUploader';
+import { AppImage } from '@/components/media/AppImage';
 
 export interface WhyMiioEditorProps {
   initialData?: WhyMiioSection;
@@ -147,10 +148,14 @@ export function WhyMiioEditor({ initialData, onSave, onDirtyChange }: WhyMiioEdi
           </div>
           <div className="bg-gray-200 rounded-sm flex items-center justify-center overflow-hidden">
             {data.image ? (
-              <div 
-                className="w-full h-full bg-cover bg-center"
-                style={{ backgroundImage: `url(${data.image.assetId})` }}
-              />
+              <div className="relative w-full h-full">
+                <AppImage 
+                  image={data.image}
+                  alt={data.title}
+                  fill
+                  className="object-cover"
+                />
+              </div>
             ) : (
               <span className="text-gray-400">Image</span>
             )}

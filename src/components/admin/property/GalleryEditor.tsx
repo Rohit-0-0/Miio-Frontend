@@ -20,6 +20,7 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { ImageAsset } from '@/types/common';
 import { ImageUploader } from '@/components/media/ImageUploader';
+import { AppImage } from '@/components/media/AppImage';
 
 interface GalleryEditorProps {
   images: ImageAsset[];
@@ -59,12 +60,18 @@ function SortableImage({
         isCover ? 'border-blue-500 shadow-md' : 'border-gray-200'
       }`}
     >
-      <div 
-        {...attributes} 
-        {...listeners}
-        className="w-full h-full bg-cover bg-center cursor-grab active:cursor-grabbing"
-        style={{ backgroundImage: `url(${image.assetId})` }}
-      />
+      <div
+  {...attributes}
+  {...listeners}
+  className="w-full h-full cursor-grab active:cursor-grabbing relative"
+>
+        <AppImage 
+          image={image}
+          alt={image.alt || 'Gallery image'}
+          fill
+          className="object-cover pointer-events-none"
+        />
+</div>
       <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-opacity flex flex-col justify-between p-2 pointer-events-none">
         <div className="flex justify-between items-start pointer-events-auto">
           {isCover ? (

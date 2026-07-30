@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { AppImage } from '@/components/media/AppImage';
 import { getPropertyListing } from '@/lib/server/property';
 import { normalizePropertyQuery } from '@/lib/utils/search-params';
 import { PageHeader } from '@/components/admin/PageHeader';
@@ -79,9 +80,11 @@ export default async function AdminPropertyPage({
                   render: (item) => (
                     <div className="w-12 h-12 bg-gray-100 rounded-sm overflow-hidden flex items-center justify-center">
                       {item.coverImageId || (item.gallery && item.gallery.length > 0) ? (
-                        <div 
-                          className="w-full h-full bg-cover bg-center" 
-                          style={{ backgroundImage: `url(${item.coverImageId || item.gallery?.[0]?.assetId})` }} 
+                        <AppImage 
+                          image={{ assetId: item.coverImageId || item.gallery?.[0]?.assetId || '' }}
+                          alt={item.title}
+                          fill
+                          className="object-cover"
                         />
                       ) : (
                         <span className="text-gray-400 text-xs">No img</span>

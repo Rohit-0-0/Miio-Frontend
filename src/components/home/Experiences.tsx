@@ -1,7 +1,7 @@
 import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/ui/Section';
 import { ExperiencesSection } from '@/types/homepage';
-import { buildImageUrl } from '@/lib/media/buildImageUrl';
+import { AppImage } from '@/components/media/AppImage';
 
 export function Experiences({ experiences }: { experiences: ExperiencesSection }) {
   if (!experiences || !experiences.items || experiences.items.length === 0) return null;
@@ -22,16 +22,16 @@ export function Experiences({ experiences }: { experiences: ExperiencesSection }
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {experiences.items.map((item, index) => {
-            const imageUrl = buildImageUrl(item.icon?.assetId);
+
             return (
               <div key={item.id || index} className="flex flex-col group h-full bg-white rounded-sm overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                 <div className="w-full aspect-[4/3] relative overflow-hidden bg-gray-100">
-                  {imageUrl ? (
-                    <div 
-                      className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                      style={{ backgroundImage: `url(${imageUrl})` }}
-                      aria-label={item.icon?.alt || item.title}
-                      role="img"
+                  {item.icon?.assetId ? (
+                    <AppImage
+                      image={item.icon}
+                      alt={item.icon.alt || item.title}
+                      fill
+                      className="transition-transform duration-700 group-hover:scale-105 object-cover"
                     />
                   ) : (
                     <div className="absolute inset-0 bg-gray-200 w-full h-full flex items-center justify-center text-gray-400">

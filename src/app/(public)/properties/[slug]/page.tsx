@@ -4,6 +4,8 @@ import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/ui/Section';
 import { LIFECYCLE_STATUS } from '@/types/property';
 import { Metadata } from 'next';
+import { buildImageUrl } from '@/lib/media/buildImageUrl';
+import { AppImage } from '@/components/media/AppImage';
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -25,9 +27,10 @@ export async function generateMetadata(
       title: property.seoTitle || `${property.title} | Miio`,
       description: property.seoDescription || property.shortDescription || `Stay at ${property.title} with Miio.`,
       openGraph: {
-        images: property.ogImage?.assetId ? [property.ogImage.assetId] : 
-                (property.coverImageId ? [property.coverImageId] : []),
-      }
+    images: property.coverImageId
+        ? [buildImageUrl(property.coverImageId)!]
+        : []
+}
     };
   } catch (e) {
     return { title: 'Miio' };
@@ -51,18 +54,24 @@ export default async function PropertyDetailPage({ params }: Props) {
     notFound();
   }
 
-  const coverImage = property.coverImageId || property.gallery?.[0]?.assetId;
+  const coverImageUrl = buildImageUrl(
+  property.coverImageId || property.gallery?.[0]?.assetId
+);
   const location = [property.city, property.state, property.country].filter(Boolean).join(', ');
 
   return (
     <article className="min-h-screen bg-white pb-20">
       {/* Hero Section */}
       <div className="relative w-full h-[60vh] md:h-[80vh] bg-gray-100">
-        {coverImage ? (
-          <div 
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${coverImage})` }}
-          />
+        {coverImageUrl ? (
+          <div className="absolute inset-0 z-0">
+            <AppImage
+              image={{ assetId: property.coverImageId || property.gallery?.[0]?.assetId || '' }}
+              alt={property.title}
+              fill
+              className="object-cover"
+            />
+          </div>
         ) : (
           <div className="absolute inset-0 bg-gray-200 w-full h-full flex items-center justify-center text-gray-400">
             <span>No Image Available</span>
@@ -126,9 +135,11 @@ export default async function PropertyDetailPage({ params }: Props) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {property.gallery.map(img => (
                     <div key={img.assetId} className="aspect-[4/3] rounded-sm overflow-hidden bg-gray-100">
-                      <div 
-                        className="w-full h-full bg-cover bg-center transition-transform duration-500 hover:scale-105"
-                        style={{ backgroundImage: `url(${img.assetId})` }}
+                      <AppImage
+                        image={img}
+                        alt="Gallery Image"
+                        fill
+                        className="transition-transform duration-500 hover:scale-105 object-cover"
                       />
                     </div>
                   ))}
