@@ -29,25 +29,31 @@ export function PropertyForm({ initialData }: PropertyFormProps) {
   const [formData, setFormData] = useState<Partial<PropertyData>>(initialData || emptyProperty);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
     setError(null);
+    setSuccess(null);
 
     try {
       if (initialData?.id) {
         await propertyService.update(initialData.id, formData);
+        setSuccess('Property updated successfully');
+        setTimeout(() => setSuccess(null), 3000);
+        router.refresh();
       } else {
         // Need to provide a random ID for new properties if not set by server
         const payload = {
           ...formData,
           id: formData.id || crypto.randomUUID(),
         };
-        await propertyService.create(payload);
+        const response = await propertyService.create(payload);
+        const newPropertyId = response.data?.id || payload.id;
+        router.push(`/admin/properties/${newPropertyId}`);
+        router.refresh();
       }
-      router.push('/admin/properties');
-      router.refresh();
     } catch (err: any) {
       setError(err.message || 'Failed to save property');
     } finally {
@@ -66,6 +72,12 @@ export function PropertyForm({ initialData }: PropertyFormProps) {
       {error && (
         <div className="bg-red-50 text-red-700 p-4 rounded-sm border border-red-200">
           {error}
+        </div>
+      )}
+      
+      {success && (
+        <div className="bg-green-50 text-green-700 p-4 rounded-sm border border-green-200">
+          {success}
         </div>
       )}
 
