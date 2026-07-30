@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from 'next';
 import { Inter, Playfair_Display } from 'next/font/google';
 import './globals.css';
 import { siteConfig } from '@/config/site';
-import { AppLayout } from '@/components/layout/AppLayout';
 import { AuthProvider } from '@/components/providers/AuthProvider';
 
 const inter = Inter({
@@ -40,7 +39,7 @@ export default function RootLayout({
     >
       <body className="font-sans text-gray-900 bg-white">
         <AuthProvider>
-          <AppLayout>{children}</AppLayout>
+          {children}
         </AuthProvider>
       </body>
     </html>

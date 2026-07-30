@@ -41,6 +41,31 @@ export async function getPropertyListing(
   return response.json();
 }
 
+export async function getPropertiesByIds(ids: string[]): Promise<ApiResponse<PropertyDocument[]>> {
+  if (!ids || ids.length === 0) {
+    return { success: true, message: 'No IDs provided', data: [] };
+  }
+
+  const queryString = `ids=${ids.join(',')}`;
+  const url = `${env.NEXT_PUBLIC_API_URL}/properties/by-ids?${queryString}`;
+  
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers,
+    cache: 'no-store',
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch properties by ids: ${response.statusText}`);
+  }
+
+  return response.json();
+}
+
 export async function getPropertyBySlug(slug: string): Promise<ApiResponse<PropertyDocument>> {
   const url = `${env.NEXT_PUBLIC_API_URL}/properties/slug/${slug}`;
   

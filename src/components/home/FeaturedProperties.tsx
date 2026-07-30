@@ -1,27 +1,17 @@
 import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/ui/Section';
 import { PropertyCard } from './PropertyCard';
-import { getPropertyListing } from '@/lib/server/property';
 import { PropertyDocument } from '@/types/property';
+import { FeaturedPropertiesSection } from '@/types/homepage';
+import Link from 'next/link';
 
-export async function FeaturedProperties() {
-  let properties: PropertyDocument[] = [];
-  
-  try {
-    const response = await getPropertyListing({
-      featured: 'true',
-      status: 'PUBLISHED',
-      visibleOnWebsite: 'true',
-      sort: 'sortOrder',
-      order: 'asc',
-      limit: '3'
-    });
-    properties = response.data || [];
-  } catch (error) {
-    console.error('Failed to fetch featured properties:', error);
-  }
+interface FeaturedPropertiesProps {
+  properties: PropertyDocument[];
+  config: FeaturedPropertiesSection;
+}
 
-  if (properties.length === 0) {
+export function FeaturedProperties({ properties, config }: FeaturedPropertiesProps) {
+  if (!properties || properties.length === 0) {
     return null; // Gracefully hide if no featured properties
   }
 
@@ -30,11 +20,18 @@ export async function FeaturedProperties() {
       <Container>
         <div className="flex flex-col items-center text-center max-w-2xl mx-auto mb-16">
           <h2 className="font-serif text-3xl md:text-4xl font-bold tracking-tight text-gray-900 mb-4">
-            Featured Properties
+            {config.title || 'Featured Properties'}
           </h2>
-          <p className="text-gray-600 text-lg">
-            Discover our curated collection of exceptional homes, designed to provide unforgettable stays in the world&apos;s most captivating locations.
-          </p>
+          {config.subtitle && (
+            <p className="text-gray-600 text-lg">
+              {config.subtitle}
+            </p>
+          )}
+          {config.description && (
+            <p className="text-gray-500 mt-2">
+              {config.description}
+            </p>
+          )}
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
@@ -49,6 +46,17 @@ export async function FeaturedProperties() {
             />
           ))}
         </div>
+
+        {config.ctaLabel && (
+          <div className="mt-16 flex justify-center">
+            <Link
+              href={config.ctaLink || '/properties'}
+              className="inline-flex items-center justify-center rounded-sm bg-gray-900 px-8 py-3.5 text-base font-medium text-white transition-colors hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2"
+            >
+              {config.ctaLabel}
+            </Link>
+          </div>
+        )}
       </Container>
     </Section>
   );
