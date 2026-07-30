@@ -6,6 +6,7 @@ import { LIFECYCLE_STATUS } from '@/types/property';
 import { Metadata } from 'next';
 import { buildImageUrl } from '@/lib/media/buildImageUrl';
 import { AppImage } from '@/components/media/AppImage';
+import { RichTextRenderer } from '@/components/ui/editor';
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -102,9 +103,7 @@ export default async function PropertyDetailPage({ params }: Props) {
               </h2>
               <div className="prose prose-lg text-gray-600">
                 {property.longDescription ? (
-                  property.longDescription.split('\n').map((paragraph, idx) => (
-                    <p key={idx}>{paragraph}</p>
-                  ))
+                  <RichTextRenderer html={property.longDescription} />
                 ) : (
                   <p>{property.shortDescription}</p>
                 )}

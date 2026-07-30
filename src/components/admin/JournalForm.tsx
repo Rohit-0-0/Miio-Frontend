@@ -7,6 +7,7 @@ import { journalService } from '@/services/journal.service';
 import Link from 'next/link';
 import { ImageUploader } from '@/components/media/ImageUploader';
 import { ImageAsset } from '@/lib/media/imageTypes';
+import { RichTextEditor } from '@/components/ui/editor';
 
 interface JournalFormProps {
   initialData?: JournalArticle;
@@ -18,6 +19,7 @@ export function JournalForm({ initialData, isEditMode = false }: JournalFormProp
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [coverImage, setCoverImage] = useState<ImageAsset | null>(initialData?.coverImage || null);
+  const [content, setContent] = useState(initialData?.content || '');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -28,7 +30,7 @@ export function JournalForm({ initialData, isEditMode = false }: JournalFormProp
     const data: CreateJournalInput = {
       title: formData.get('title') as string,
       excerpt: formData.get('excerpt') as string || undefined,
-      content: formData.get('content') as string,
+      content, // Using controlled state from RichTextEditor
       author: formData.get('author') as string || undefined,
       category: formData.get('category') as string || undefined,
       status: formData.get('status') as 'draft' | 'published' | 'archived',
@@ -148,15 +150,10 @@ export function JournalForm({ initialData, isEditMode = false }: JournalFormProp
         </div>
 
         <div className="space-y-1 md:col-span-2 border-t border-gray-100 pt-6">
-          <label htmlFor="content" className="block text-sm font-medium text-gray-700">Content <span className="text-red-500">*</span></label>
-          <textarea
-            id="content"
-            name="content"
-            required
-            rows={15}
-            defaultValue={initialData?.content}
-            className="w-full rounded-sm border border-gray-300 px-3 py-2 font-mono text-sm focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
-            placeholder="Write your article content here..."
+          <label className="block text-sm font-medium text-gray-700 mb-2">Content <span className="text-red-500">*</span></label>
+          <RichTextEditor 
+            value={content}
+            onChange={setContent}
           />
         </div>
       </div>

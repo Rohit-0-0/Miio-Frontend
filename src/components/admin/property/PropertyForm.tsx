@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { PropertyData, PROPERTY_TYPES, LIFECYCLE_STATUS, PropertyType, LifecycleStatus } from '@/types/property';
 import { GalleryEditor } from './GalleryEditor';
 import { ArrayFieldEditor } from '../singleton/ArrayFieldEditor';
+import { RichTextEditor } from '@/components/ui/editor';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { propertyService } from '@/services/property.service';
@@ -98,8 +99,11 @@ export function PropertyForm({ initialData }: PropertyFormProps) {
             <textarea value={formData.shortDescription || ''} onChange={e => handleChange('shortDescription', e.target.value)} rows={2} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" />
           </div>
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700">Long Description</label>
-            <textarea value={formData.longDescription || ''} onChange={e => handleChange('longDescription', e.target.value)} rows={6} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" />
+            <label className="block text-sm font-medium text-gray-700 mb-2">Long Description</label>
+            <RichTextEditor 
+              value={formData.longDescription || ''} 
+              onChange={val => handleChange('longDescription', val)} 
+            />
           </div>
         </div>
       </section>

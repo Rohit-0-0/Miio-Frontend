@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { journalService } from '@/services/journal.service';
 import { Container } from '@/components/ui/Container';
 import { ROUTES } from '@/constants/routes';
+import { RichTextRenderer } from '@/components/ui/editor';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -100,11 +101,7 @@ export default async function JournalDetailPage({
           </div>
 
           {/* Content */}
-          <div className="prose prose-lg md:prose-xl prose-gray max-w-none prose-headings:font-serif prose-p:leading-relaxed">
-            {/* For now, just rendering plain text content as a paragraph, 
-                ideally this would be processed markdown or portable text */}
-            <p className="whitespace-pre-wrap">{article.content}</p>
-          </div>
+          <RichTextRenderer html={article.content} />
         </div>
       </Container>
     </article>

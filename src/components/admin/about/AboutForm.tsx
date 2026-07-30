@@ -6,6 +6,7 @@ import { ArrayFieldEditor } from '../singleton/ArrayFieldEditor';
 import Link from 'next/link';
 import { ImageUploader } from '@/components/media/ImageUploader';
 import { ImageAsset } from '@/lib/media/imageTypes';
+import { RichTextEditor } from '@/components/ui/editor';
 
 interface AboutFormProps {
   initialData: AboutDocument;
@@ -137,8 +138,11 @@ export function AboutForm({ initialData, isSaving, onSave }: AboutFormProps) {
             <input required value={formData.story?.title || ''} onChange={e => handleStoryChange('title', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Content</label>
-            <textarea required value={formData.story?.content || ''} onChange={e => handleStoryChange('content', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" rows={6} />
+            <label className="block text-sm font-medium text-gray-700 mb-2">Content</label>
+            <RichTextEditor 
+              value={formData.story?.content || ''} 
+              onChange={val => handleStoryChange('content', val)} 
+            />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="md:col-span-2">

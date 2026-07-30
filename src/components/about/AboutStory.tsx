@@ -1,6 +1,7 @@
 import React from 'react';
 import { AppImage } from '@/components/media/AppImage';
 import { AboutData } from '@/types/about';
+import { RichTextRenderer } from '@/components/ui/editor';
 
 export function AboutStory({ story }: { story: AboutData['story'] }) {
   if (!story) return null;
@@ -10,9 +11,7 @@ export function AboutStory({ story }: { story: AboutData['story'] }) {
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         <div className="space-y-8">
           <h2 className="text-3xl md:text-5xl font-serif text-gray-900">{story.title}</h2>
-          <div className="prose prose-lg prose-gray font-light text-gray-600 leading-relaxed whitespace-pre-wrap">
-            {story.content}
-          </div>
+          <RichTextRenderer html={story.content} />
         </div>
         <div className="relative w-full aspect-[4/5] bg-gray-100 rounded-sm overflow-hidden">
           <AppImage
