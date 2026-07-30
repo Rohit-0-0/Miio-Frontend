@@ -1,26 +1,25 @@
 'use client';
 
-import React, { useState } from 'react';
 import {
   DndContext,
   closestCenter,
-  KeyboardSensor,
   PointerSensor,
+  KeyboardSensor,
   useSensor,
   useSensors,
   DragEndEvent,
 } from '@dnd-kit/core';
 import {
-  arrayMove,
   SortableContext,
-  sortableKeyboardCoordinates,
-  horizontalListSortingStrategy,
   useSortable,
+  arrayMove,
+  horizontalListSortingStrategy,
+  sortableKeyboardCoordinates,
 } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
+
 import { ImageAsset } from '@/types/common';
 import { ImageUploader } from '@/components/media/ImageUploader';
-import { AppImage } from '@/components/media/AppImage';
+import { buildImageUrl } from '@/lib/media/buildImageUrl';
 
 interface GalleryEditorProps {
   images: ImageAsset[];
@@ -47,54 +46,53 @@ function SortableImage({
     transition,
   } = useSortable({ id: image.assetId });
 
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
+  // Debug transform values
+  console.log("Sortable Transform:", image.assetId, transform);
 
   return (
     <div
       ref={setNodeRef}
-      style={style}
+      style={{
+        // ONLY transition for now
+        transition,
+      }}
       className={`relative w-48 h-48 group rounded-sm overflow-hidden border-2 ${
-        isCover ? 'border-blue-500 shadow-md' : 'border-gray-200'
+        isCover ? "border-blue-500 shadow-md" : "border-gray-200"
       }`}
     >
       <div
-  {...attributes}
-  {...listeners}
-  className="w-full h-full cursor-grab active:cursor-grabbing relative"
->
-        <AppImage 
-          image={image}
-          alt={image.alt || 'Gallery image'}
-          fill
-          className="object-cover pointer-events-none"
+        {...attributes}
+        {...listeners}
+        className="w-full h-full cursor-grab active:cursor-grabbing"
+      >
+        <img
+          src={buildImageUrl(image.assetId) ?? ""}
+          alt={image.alt || ""}
+          className="w-full h-full object-cover pointer-events-none"
+          draggable={false}
         />
-</div>
-      <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-opacity flex flex-col justify-between p-2 pointer-events-none">
+      </div>
+
+      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex flex-col justify-between p-2 pointer-events-none">
         <div className="flex justify-between items-start pointer-events-auto">
           {isCover ? (
-            <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded">Cover</span>
+            <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded">
+              Cover
+            </span>
           ) : (
             <button
               type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                onSetCover();
-              }}
-              className="bg-white/90 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white"
+              onClick={onSetCover}
+              className="bg-white/90 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity"
             >
               Set Cover
             </button>
           )}
+
           <button
             type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              onRemove();
-            }}
-            className="bg-red-500/90 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
+            onClick={onRemove}
+            className="bg-red-500 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity"
           >
             Remove
           </button>
@@ -104,7 +102,11 @@ function SortableImage({
   );
 }
 
-export function GalleryEditor({ images, coverImageId, onChange }: GalleryEditorProps) {
+export function GalleryEditor({
+  images,
+  coverImageId,
+  onChange,
+}: GalleryEditorProps) {
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -114,45 +116,57 @@ export function GalleryEditor({ images, coverImageId, onChange }: GalleryEditorP
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    if (over && active.id !== over.id) {
-      const oldIndex = images.findIndex((img) => img.assetId === active.id);
-      const newIndex = images.findIndex((img) => img.assetId === over.id);
-      const newImages = arrayMove(images, oldIndex, newIndex);
-      onChange(newImages, coverImageId);
-    }
+
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = images.findIndex((i) => i.assetId === active.id);
+    const newIndex = images.findIndex((i) => i.assetId === over.id);
+
+    onChange(arrayMove(images, oldIndex, newIndex), coverImageId);
   };
 
   const handleUpload = (image: ImageAsset | null) => {
-    if (image && !images.find((i) => i.assetId === image.assetId)) {
-      const newImages = [...images, image];
-      // Automatically set as cover if it's the first image
-      const newCoverId = !coverImageId && newImages.length === 1 ? image.assetId : coverImageId;
-      onChange(newImages, newCoverId);
-    }
+    if (!image) return;
+
+    if (images.some((i) => i.assetId === image.assetId)) return;
+
+    const next = [...images, image];
+
+    onChange(
+      next,
+      coverImageId ?? (next.length === 1 ? image.assetId : undefined)
+    );
   };
 
   const handleRemove = (assetId: string) => {
-    const newImages = images.filter((img) => img.assetId !== assetId);
-    // If we removed the cover, set a new cover or clear it
-    let newCoverId = coverImageId;
+    const next = images.filter((i) => i.assetId !== assetId);
+
+    let nextCover = coverImageId;
+
     if (coverImageId === assetId) {
-      newCoverId = newImages.length > 0 ? newImages[0].assetId : undefined;
+      nextCover = next[0]?.assetId;
     }
-    onChange(newImages, newCoverId);
+
+    onChange(next, nextCover);
   };
 
   return (
     <div className="space-y-4">
       <div className="flex gap-4 overflow-x-auto p-2 min-h-[14rem] border border-dashed border-gray-300 rounded-sm items-center">
         {images.length === 0 ? (
-          <p className="text-gray-400 text-sm w-full text-center py-12">No images in gallery. Upload below.</p>
+          <p className="text-gray-400 text-sm w-full text-center py-12">
+            No images in gallery. Upload below.
+          </p>
         ) : (
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
             onDragEnd={handleDragEnd}
           >
-            <SortableContext items={images.map((img) => img.assetId)} strategy={horizontalListSortingStrategy}>
+            <SortableContext
+              items={images.map((i) => i.assetId)}
+              strategy={horizontalListSortingStrategy}
+            >
               <div className="flex gap-4">
                 {images.map((img) => (
                   <SortableImage
@@ -170,7 +184,11 @@ export function GalleryEditor({ images, coverImageId, onChange }: GalleryEditorP
       </div>
 
       <div className="w-full max-w-sm">
-        <ImageUploader label="Add new image" value={null} onChange={handleUpload} />
+        <ImageUploader
+          label="Add new image"
+          value={null}
+          onChange={handleUpload}
+        />
       </div>
     </div>
   );
