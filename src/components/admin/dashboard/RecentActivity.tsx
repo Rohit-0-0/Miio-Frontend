@@ -4,7 +4,7 @@ import { Activity } from 'lucide-react';
 
 export function RecentActivity({ activity }: { activity: RecentActivityItem[] }) {
   return (
-    <div className="bg-white rounded-sm border border-gray-200 shadow-sm overflow-hidden h-full flex flex-col">
+    <div className="bg-white rounded-sm border border-gray-200 shadow-sm overflow-hidden flex flex-col">
       <div className="p-6 border-b border-gray-200 flex justify-between items-center">
         <h3 className="text-lg font-bold text-gray-900">Recent Activity</h3>
       </div>

@@ -10,7 +10,7 @@ export function DashboardQuickActions() {
   ];
 
   return (
-    <div className="bg-white rounded-sm border border-gray-200 shadow-sm overflow-hidden h-full">
+    <div className="bg-white rounded-sm border border-gray-200 shadow-sm overflow-hidden">
       <div className="p-6 border-b border-gray-200">
         <h3 className="text-lg font-bold text-gray-900">Quick Actions</h3>
       </div>
