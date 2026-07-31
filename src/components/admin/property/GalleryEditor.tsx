@@ -19,7 +19,7 @@ import {
 
 import { ImageAsset } from '@/types/common';
 import { ImageUploader } from '@/components/media/ImageUploader';
-import { buildImageUrl } from '@/lib/media/buildImageUrl';
+import { AppImage } from '@/components/media/AppImage';
 
 interface GalleryEditorProps {
   images: ImageAsset[];
@@ -65,11 +65,11 @@ function SortableImage({
         {...listeners}
         className="w-full h-full cursor-grab active:cursor-grabbing"
       >
-        <img
-          src={buildImageUrl(image.assetId) ?? ""}
+        <AppImage
+          image={image}
           alt={image.alt || ""}
-          className="w-full h-full object-cover pointer-events-none"
-          draggable={false}
+          className="object-cover pointer-events-none"
+          fill
         />
       </div>
 

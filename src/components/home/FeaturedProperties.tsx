@@ -40,7 +40,7 @@ export function FeaturedProperties({ properties, config }: FeaturedPropertiesPro
               key={property.id}
               slug={property.slug}
               name={property.title}
-              location={[property.city, property.country].filter(Boolean).join(', ') || 'Various Locations'}
+              location={[property.location?.city, property.location?.country].filter(Boolean).join(', ') || 'Various Locations'}
               description={property.shortDescription || property.longDescription?.substring(0, 150) || ''}
               coverImage={property.coverImageId || property.gallery?.[0]?.assetId}
             />

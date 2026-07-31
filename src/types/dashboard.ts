@@ -36,5 +36,5 @@ export interface DashboardResponse {
   charts: DashboardCharts;
   recentProperties: PropertyDocument[];
   recentActivity: RecentActivityItem[];
-  analytics: Record<string, any>;
+  analytics: Record<string, unknown>;
 }

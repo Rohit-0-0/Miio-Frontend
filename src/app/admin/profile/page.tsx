@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { PageContainer } from '@/components/admin/shared/PageContainer';
 import { PageHeader } from '@/components/admin/PageHeader';
 import { SectionCard } from '@/components/admin/shared/SectionCard';
@@ -26,14 +26,16 @@ export default function ProfilePage() {
   const [passwordMessage, setPasswordMessage] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
-  useEffect(() => {
+  const [prevUser, setPrevUser] = useState(user);
+  if (user !== prevUser) {
+    setPrevUser(user);
     if (user) {
       setDisplayName(user.displayName || '');
       setAvatarUrl(user.avatarUrl || '');
       setEmail(user.email || '');
       setRole(user.role || '');
     }
-  }, [user]);
+  }
 
   const handleSaveGeneral = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,8 +45,8 @@ export default function ProfilePage() {
       await userService.updateProfile({ displayName, avatarUrl });
       await verifySession(); // Refresh auth context
       setGeneralMessage('Profile updated successfully.');
-    } catch (error: any) {
-      setGeneralMessage(error.response?.data?.message || 'Failed to update profile.');
+    } catch (error: unknown) {
+      setGeneralMessage((error as { response?: { data?: { message?: string } } }).response?.data?.message || 'Failed to update profile.');
     } finally {
       setGeneralLoading(false);
     }
@@ -72,8 +74,8 @@ export default function ProfilePage() {
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
-    } catch (error: any) {
-      setPasswordError(error.response?.data?.message || 'Failed to update password.');
+    } catch (error: unknown) {
+      setPasswordError((error as { response?: { data?: { message?: string } } }).response?.data?.message || 'Failed to update password.');
     } finally {
       setPasswordLoading(false);
     }

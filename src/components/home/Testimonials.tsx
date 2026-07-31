@@ -46,7 +46,7 @@ export function Testimonials({ testimonials }: { testimonials: TestimonialsSecti
                   <StarRating rating={item.rating ?? 5} />
                 </div>
                 <blockquote className="flex-1 text-gray-700 text-lg italic mb-8">
-                  "{item.testimonial}"
+                  &quot;{item.testimonial}&quot;
                 </blockquote>
                 <div className="flex items-center space-x-4">
                   {item.avatar?.assetId ? (

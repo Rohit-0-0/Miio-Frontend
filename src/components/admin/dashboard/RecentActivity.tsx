@@ -17,7 +17,7 @@ export function RecentActivity({ activity }: { activity: RecentActivityItem[] })
             </div>
             <h4 className="text-gray-900 font-medium mb-1">No Recent Activity</h4>
             <p className="text-sm text-gray-500 max-w-xs">
-              Activity logging is currently not fully implemented. Future updates will display your team's actions here.
+              Activity logging is currently not fully implemented. Future updates will display your team&apos;s actions here.
             </p>
           </div>
         ) : (

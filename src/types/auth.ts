@@ -6,6 +6,8 @@ export interface User {
   avatarUrl?: string;
   isActive?: boolean;
   lastLoginAt?: string | Date;
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
 }
 
 export interface LoginResponse {

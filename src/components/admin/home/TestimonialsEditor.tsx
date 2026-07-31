@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SectionEditorHeader } from '@/components/admin/home/SectionEditorHeader';
 import { TestimonialsSection, TestimonialItem } from '@/types/homepage';
 import { ImageUploader } from '@/components/media/ImageUploader';
@@ -129,23 +129,30 @@ export function TestimonialsEditor({ initialData, onSave, onDirtyChange }: Testi
   };
 
   const [data, setData] = useState<TestimonialsSection>(initialData || defaultData);
+  const [prevInitialData, setPrevInitialData] = useState<TestimonialsSection | undefined>(initialData);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   
-  const isDirty = useRef(false);
+  const [isDirty, setIsDirty] = useState(false);
+
+  if (initialData !== prevInitialData) {
+    setPrevInitialData(initialData);
+    if (initialData) {
+      setData(initialData);
+      setIsDirty(false);
+    }
+  }
 
   useEffect(() => {
     if (initialData) {
-      setData(initialData);
-      isDirty.current = false;
       onDirtyChange(false);
     }
   }, [initialData, onDirtyChange]);
 
   const handleChange = (updates: Partial<TestimonialsSection>) => {
     setData(prev => ({ ...prev, ...updates }));
-    isDirty.current = true;
+    setIsDirty(true);
     onDirtyChange(true);
     setSuccess(null);
     setError(null);
@@ -158,7 +165,7 @@ export function TestimonialsEditor({ initialData, onSave, onDirtyChange }: Testi
     try {
       await onSave(data);
       setSuccess('Testimonials section saved successfully');
-      isDirty.current = false;
+      setIsDirty(false);
       onDirtyChange(false);
     } catch (e) {
       setError((e as Error).message);
@@ -205,7 +212,7 @@ export function TestimonialsEditor({ initialData, onSave, onDirtyChange }: Testi
       <div className="space-y-6 bg-white border border-gray-200 p-6 rounded-sm">
         <SectionEditorHeader
           title="Testimonials Settings"
-          isDirty={isDirty.current}
+          isDirty={isDirty}
           isSaving={saving}
           updatedAt={data.updatedAt}
           onSave={handleSave}
@@ -290,7 +297,7 @@ export function TestimonialsEditor({ initialData, onSave, onDirtyChange }: Testi
                     <span key={j} className="text-yellow-400">★</span>
                   ))}
                 </div>
-                <p className="text-sm text-gray-600 line-clamp-3">"{item.testimonial}"</p>
+                <p className="text-sm text-gray-600 line-clamp-3">&quot;{item.testimonial}&quot;</p>
               </div>
             ))}
           </div>

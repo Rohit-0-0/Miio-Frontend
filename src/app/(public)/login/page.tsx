@@ -44,9 +44,9 @@ export default function LoginPage() {
       } else {
         router.push(ROUTES.HOME);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      setError(err?.message || 'Invalid email or password.');
+      setError((err as Error)?.message || 'Invalid email or password.');
     } finally {
       setIsSubmitting(false);
     }
@@ -160,7 +160,7 @@ export default function LoginPage() {
           </form>
 
           <div className="mt-6 text-center text-sm text-gray-500">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <Link
               href="/register"
               className="font-semibold text-gray-950 hover:underline"

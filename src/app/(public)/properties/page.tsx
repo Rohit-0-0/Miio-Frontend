@@ -27,7 +27,7 @@ export default async function PropertiesPage({
   let hasError = false;
 
   try {
-    response = await getPropertyListing(query);
+    response = await getPropertyListing(query as Record<string, string | string[] | undefined>);
   } catch (error) {
     console.error('Failed to fetch public properties:', error);
     hasError = true;
@@ -70,7 +70,7 @@ export default async function PropertiesPage({
                     key={property.id}
                     slug={property.slug}
                     name={property.title}
-                    location={[property.city, property.country].filter(Boolean).join(', ') || 'Various Locations'}
+                    location={[property.location?.city, property.location?.country].filter(Boolean).join(', ') || 'Various Locations'}
                     description={property.shortDescription || property.longDescription?.substring(0, 150) || ''}
                     coverImage={property.coverImageId || property.gallery?.[0]?.assetId}
                   />

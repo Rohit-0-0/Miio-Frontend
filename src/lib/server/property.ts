@@ -88,7 +88,7 @@ export async function getPropertyBySlug(slug: string): Promise<ApiResponse<Prope
 
   if (!response.ok) {
     if (response.status === 404) {
-      return { success: false, message: 'Not found', data: null as any };
+      return { success: false, message: 'Not found', data: null as unknown as PropertyDocument };
     }
     throw new Error(`Failed to fetch property by slug: ${response.statusText}`);
   }

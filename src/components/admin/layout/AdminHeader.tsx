@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { Search, Bell, User, LogOut, Settings } from 'lucide-react';
+import { Search, Bell, User, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { useAuth } from '@/components/providers/AuthProvider';
 
@@ -83,6 +83,7 @@ export function AdminHeader() {
             className="flex items-center text-gray-400 hover:text-gray-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 rounded-full bg-gray-100 p-1.5 border border-gray-200 overflow-hidden"
           >
             {user?.avatarUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
               <img src={user.avatarUrl} alt="Avatar" className="w-5 h-5 object-cover rounded-full" />
             ) : (
               <User className="h-5 w-5" />

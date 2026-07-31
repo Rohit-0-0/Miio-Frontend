@@ -50,7 +50,7 @@ export default async function AdminPropertyPage({
             <input 
               name="search" 
               placeholder="Search properties..." 
-              defaultValue={query.search || ''}
+              defaultValue={(query.search as string) || ''}
               className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900"
             />
           </form>
@@ -100,7 +100,7 @@ export default async function AdminPropertyPage({
                 { 
                   key: 'location', 
                   header: 'Location',
-                  render: (item) => [item.city, item.country].filter(Boolean).join(', ') || '-'
+                  render: (item) => [item.location?.city, item.location?.country].filter(Boolean).join(', ') || '-'
                 },
                 { key: 'propertyType', header: 'Type' },
                 { 

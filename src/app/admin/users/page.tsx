@@ -4,11 +4,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { PageContainer } from '@/components/admin/shared/PageContainer';
 import { PageHeader } from '@/components/admin/PageHeader';
 import { DataTable } from '@/components/admin/DataTable';
-import { Pagination } from '@/components/shared/Pagination';
-import { userService, ListUsersResponse, Pagination as PaginationType } from '@/services/user.service';
+import { userService, Pagination as PaginationType } from '@/services/user.service';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { User } from '@/types/auth';
-import { AppImage } from '@/components/media/AppImage';
 
 export default function UsersAdminPage() {
   const { user } = useAuth();
@@ -26,7 +24,7 @@ export default function UsersAdminPage() {
 
   // Modals / Actions
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [createData, setCreateData] = useState({ email: '', password: '', displayName: '', role: 'USER' });
+  const [createData, setCreateData] = useState({ email: '', password: '', displayName: '', role: 'USER' as 'USER' | 'ADMIN' });
   const [createLoading, setCreateLoading] = useState(false);
 
   const fetchUsers = useCallback(async () => {
@@ -41,8 +39,8 @@ export default function UsersAdminPage() {
       });
       setUsers(response.data || []);
       setPagination(response.pagination || null);
-    } catch (err: any) {
-      setError(err.message || 'Failed to load users');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load users');
     } finally {
       setLoading(false);
     }
@@ -50,7 +48,10 @@ export default function UsersAdminPage() {
 
   useEffect(() => {
     if (user?.role === 'ADMIN') {
-      fetchUsers();
+      const init = async () => {
+        await fetchUsers();
+      };
+      init();
     }
   }, [fetchUsers, user]);
 
@@ -62,8 +63,8 @@ export default function UsersAdminPage() {
       setIsCreateModalOpen(false);
       setCreateData({ email: '', password: '', displayName: '', role: 'USER' });
       fetchUsers();
-    } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to create user');
+    } catch (err: unknown) {
+      alert((err as { response?: { data?: { message?: string } } }).response?.data?.message || 'Failed to create user');
     } finally {
       setCreateLoading(false);
     }
@@ -73,8 +74,8 @@ export default function UsersAdminPage() {
     try {
       await userService.updateUserRole(userId, newRole);
       fetchUsers();
-    } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to update role');
+    } catch (err: unknown) {
+      alert((err as { response?: { data?: { message?: string } } }).response?.data?.message || 'Failed to update role');
     }
   };
 
@@ -82,8 +83,8 @@ export default function UsersAdminPage() {
     try {
       await userService.updateUserStatus(userId, isActive);
       fetchUsers();
-    } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to update status');
+    } catch (err: unknown) {
+      alert((err as { response?: { data?: { message?: string } } }).response?.data?.message || 'Failed to update status');
     }
   };
 
@@ -163,6 +164,7 @@ export default function UsersAdminPage() {
                   render: (item) => (
                     <div className="w-8 h-8 rounded-full bg-gray-200 overflow-hidden flex items-center justify-center">
                       {item.avatarUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
                         <img src={item.avatarUrl} alt={item.displayName || item.email} className="w-full h-full object-cover" />
                       ) : (
                         <span className="text-gray-500 text-xs">{(item.displayName || item.email).charAt(0).toUpperCase()}</span>
@@ -218,7 +220,7 @@ export default function UsersAdminPage() {
                 { 
                   key: 'createdAt', 
                   header: 'Created At',
-                  render: (item: any) => item.createdAt ? new Date(item.createdAt).toLocaleDateString() : '-'
+                  render: (item: User) => item.createdAt ? new Date(item.createdAt).toLocaleDateString() : '-'
                 },
               ]}
             />
@@ -293,7 +295,7 @@ export default function UsersAdminPage() {
                 <label className="block text-sm font-medium text-gray-700">Role</label>
                 <select 
                   value={createData.role}
-                  onChange={(e) => setCreateData({...createData, role: e.target.value})}
+                  onChange={(e) => setCreateData({...createData, role: e.target.value as 'USER' | 'ADMIN'})}
                   className="mt-1 block w-full rounded-sm border-gray-300 shadow-sm focus:border-gray-900 focus:ring-gray-900 sm:text-sm"
                 >
                   <option value="USER">User</option>

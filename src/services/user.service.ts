@@ -35,11 +35,11 @@ export const userService = {
     return api.get<{ success: boolean; data: User }>('/users/me');
   },
 
-  createUser: (data: any) => {
+  createUser: (data: Partial<User>) => {
     return api.post<{ success: boolean; data: User }>('/users', data);
   },
 
-  updateUser: (id: string, data: any) => {
+  updateUser: (id: string, data: Partial<User>) => {
     return api.patch<{ success: boolean; data: User }>(`/users/${id}`, data);
   },
 
@@ -59,7 +59,7 @@ export const userService = {
     return api.patch<{ success: boolean; data: User }>('/users/profile', data);
   },
 
-  updatePassword: (data: any) => {
+  updatePassword: (data: Record<string, string>) => {
     return api.patch<{ success: boolean }>('/users/password', data);
   }
 };

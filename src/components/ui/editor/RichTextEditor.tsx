@@ -9,10 +9,9 @@ import { MediaLibraryModal } from '@/components/media/MediaLibraryModal';
 interface RichTextEditorProps {
   value: string;
   onChange: (value: string) => void;
-  placeholder?: string;
 }
 
-export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorProps) {
+export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
   const [isMediaModalOpen, setIsMediaModalOpen] = useState(false);
 
   const editor = useEditor({

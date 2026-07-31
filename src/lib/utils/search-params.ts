@@ -49,7 +49,7 @@ export function normalizeJournalQuery(
 export function normalizePropertyQuery(
   searchParams: Record<string, string | string[] | undefined>
 ) {
-  const query: Record<string, any> = {
+  const query: Record<string, string | number | boolean | undefined> = {
     page: normalizeNumber(searchParams.page, 1),
     limit: normalizeNumber(searchParams.limit, 10),
     search: normalizeString(searchParams.search),

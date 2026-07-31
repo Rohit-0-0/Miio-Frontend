@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getPropertyBySlug } from '@/lib/server/property';
 import { Container } from '@/components/ui/Container';
-import { Section } from '@/components/ui/Section';
+
 import { LIFECYCLE_STATUS } from '@/types/property';
 import { Metadata } from 'next';
 import { buildImageUrl } from '@/lib/media/buildImageUrl';
@@ -33,7 +33,7 @@ export async function generateMetadata(
         : []
 }
     };
-  } catch (e) {
+  } catch {
     return { title: 'Miio' };
   }
 }
@@ -58,7 +58,7 @@ export default async function PropertyDetailPage({ params }: Props) {
   const coverImageUrl = buildImageUrl(
   property.coverImageId || property.gallery?.[0]?.assetId
 );
-  const location = [property.city, property.state, property.country].filter(Boolean).join(', ');
+  const location = [property.location?.city, property.location?.state, property.location?.country].filter(Boolean).join(', ');
 
   return (
     <article className="min-h-screen bg-white pb-20">

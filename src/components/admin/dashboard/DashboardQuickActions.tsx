@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Plus, List, Settings, Image as ImageIcon } from 'lucide-react';
+import { Plus, List, Settings } from 'lucide-react';
 
 export function DashboardQuickActions() {
   const actions = [

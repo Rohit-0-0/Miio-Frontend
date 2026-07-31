@@ -7,36 +7,14 @@ import { DashboardCharts } from '@/components/admin/dashboard/DashboardCharts';
 import { RecentProperties } from '@/components/admin/dashboard/RecentProperties';
 import { RecentActivity } from '@/components/admin/dashboard/RecentActivity';
 import { DashboardQuickActions } from '@/components/admin/dashboard/DashboardQuickActions';
-import { DashboardSkeleton } from '@/components/admin/dashboard/DashboardSkeleton';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function AdminDashboardPage() {
+  let data;
   try {
-    const data = await dashboardService.getDashboardStats();
-
-    return (
-      <PageContainer>
-        <div className="space-y-6">
-          <DashboardHeader />
-          
-          <DashboardStats stats={data.stats} />
-          
-          <DashboardCharts charts={data.charts} />
-          
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pb-12">
-            <div className="lg:col-span-2">
-              <RecentProperties properties={data.recentProperties} />
-            </div>
-            <div className="space-y-6 lg:col-span-1">
-              <DashboardQuickActions />
-              <RecentActivity activity={data.recentActivity} />
-            </div>
-          </div>
-        </div>
-      </PageContainer>
-    );
+    data = await dashboardService.getDashboardStats();
   } catch (error) {
     console.error('Failed to load dashboard:', error);
     return (
@@ -48,4 +26,26 @@ export default async function AdminDashboardPage() {
       </PageContainer>
     );
   }
+
+  return (
+    <PageContainer>
+      <div className="space-y-6">
+        <DashboardHeader />
+        
+        <DashboardStats stats={data.stats} />
+        
+        <DashboardCharts charts={data.charts} />
+        
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pb-12">
+          <div className="lg:col-span-2">
+            <RecentProperties properties={data.recentProperties} />
+          </div>
+          <div className="space-y-6 lg:col-span-1">
+            <DashboardQuickActions />
+            <RecentActivity activity={data.recentActivity} />
+          </div>
+        </div>
+      </div>
+    </PageContainer>
+  );
 }

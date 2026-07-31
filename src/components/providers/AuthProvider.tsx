@@ -32,7 +32,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(currentUser);
       localStorage.setItem('user', JSON.stringify(currentUser));
       return currentUser;
-    } catch (e) {
+    } catch {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('user');
       setUser(null);
@@ -73,8 +73,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setLoading(true);
     try {
       await authService.logout();
-    } catch (e) {
-      console.error('Logout request failed', e);
+    } catch {
+      console.error('Logout request failed');
     } finally {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('user');

@@ -26,6 +26,39 @@ interface EditorToolbarProps {
   onOpenMediaLibrary: () => void;
 }
 
+const ToolbarButton = ({
+  onClick,
+  isActive = false,
+  disabled = false,
+  children,
+  title,
+}: {
+  onClick: () => void;
+  isActive?: boolean;
+  disabled?: boolean;
+  children: React.ReactNode;
+  title: string;
+}) => (
+  <button
+    type="button"
+    onClick={onClick}
+    disabled={disabled}
+    title={title}
+    className={`p-2 rounded-sm transition-colors flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900
+      ${
+        isActive
+          ? 'bg-gray-200 text-gray-900'
+          : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+      }
+      ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+    `}
+  >
+    {children}
+  </button>
+);
+
+const Divider = () => <div className="w-px h-6 bg-gray-200 mx-1" />;
+
 export function EditorToolbar({ editor, onOpenMediaLibrary }: EditorToolbarProps) {
   const [showLinkDialog, setShowLinkDialog] = useState(false);
   const [linkUrl, setLinkUrl] = useState('');
@@ -56,38 +89,7 @@ export function EditorToolbar({ editor, onOpenMediaLibrary }: EditorToolbarProps
     setShowLinkDialog(false);
   };
 
-  const ToolbarButton = ({
-    onClick,
-    isActive = false,
-    disabled = false,
-    children,
-    title,
-  }: {
-    onClick: () => void;
-    isActive?: boolean;
-    disabled?: boolean;
-    children: React.ReactNode;
-    title: string;
-  }) => (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      title={title}
-      className={`p-2 rounded-sm transition-colors flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900
-        ${
-          isActive
-            ? 'bg-gray-200 text-gray-900'
-            : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-        }
-        ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-      `}
-    >
-      {children}
-    </button>
-  );
 
-  const Divider = () => <div className="w-px h-6 bg-gray-200 mx-1" />;
 
   return (
     <>

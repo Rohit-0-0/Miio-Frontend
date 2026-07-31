@@ -11,6 +11,7 @@ import { Newsletter } from '@/components/home/Newsletter';
 import { JournalPreview } from '@/components/home/JournalPreview';
 import { PartnerCTA } from '@/components/home/PartnerCTA';
 import { PropertyDocument } from '@/types/property';
+import { FeaturedPropertiesSection } from '@/types/homepage';
 
 export async function generateMetadata(): Promise<Metadata> {
   const homepage = await getHomepage();
@@ -54,7 +55,7 @@ export default async function HomePage() {
   // Resolve Featured Properties
   let properties: PropertyDocument[] = [];
   try {
-    const featuredProps = homepage.featuredProperties || {};
+    const featuredProps = homepage.featuredProperties || ({} as Partial<FeaturedPropertiesSection>);
     const mode = featuredProps.displayMode || 'LATEST';
     const maxItems = featuredProps.maxProperties || 3;
     const propertyIds = featuredProps.manualSelection || [];

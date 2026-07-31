@@ -1,4 +1,4 @@
-import { BaseEntity, ImageAsset, SeoMetadata } from './common';
+import { BaseEntity, ImageAsset } from './common';
 
 export const LIFECYCLE_STATUS = {
   DRAFT: 'DRAFT',

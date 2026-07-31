@@ -5,10 +5,11 @@ import { SingletonEditor } from '@/components/admin/singleton/SingletonEditor';
 import { AboutForm } from '@/components/admin/about/AboutForm';
 import { aboutService } from '@/services/about.service';
 import { PageContainer } from '@/components/admin/shared/PageContainer';
+import { AboutData } from '@/types/about';
 
 export default function AdminAboutPage() {
   const fetchData = useCallback(() => aboutService.getAbout().then(res => res.data), []);
-  const updateData = useCallback((data: any) => aboutService.updateAbout(data).then(res => res.data), []);
+  const updateData = useCallback((data: Partial<AboutData>) => aboutService.updateAbout(data).then(res => res.data), []);
 
   return (
     <PageContainer>

@@ -37,7 +37,7 @@ export default function AdminMapsPage() {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const response = await propertyService.getProperties({ limit: 1000 });
+        const response = await propertyService.list({ limit: 1000 });
         setProperties(response.data);
       } catch (error) {
         console.error("Failed to fetch properties:", error);

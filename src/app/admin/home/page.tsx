@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { PageContainer } from '@/components/admin/shared/PageContainer';
 import { SectionCard } from '@/components/admin/shared/SectionCard';
 import { HeroEditor } from '@/components/admin/home/HeroEditor';
@@ -12,7 +12,7 @@ import { FaqEditor } from '@/components/admin/home/FaqEditor';
 import { NewsletterEditor } from '@/components/admin/home/NewsletterEditor';
 import { SeoEditor } from '@/components/admin/home/SeoEditor';
 import { homepageService } from '@/services/homepage.service';
-import { HomepageDocument, HomepageData, HeroSection, FeaturedPropertiesSection, WhyMiioSection, ExperiencesSection, TestimonialsSection, FaqSection, NewsletterSection, SeoSection } from '@/types/homepage';
+import { HomepageDocument, HeroSection, FeaturedPropertiesSection, WhyMiioSection, ExperiencesSection, TestimonialsSection, FaqSection, NewsletterSection, SeoSection } from '@/types/homepage';
 
 export default function HomeAdminPage() {
   const [data, setData] = useState<HomepageDocument | null>(null);

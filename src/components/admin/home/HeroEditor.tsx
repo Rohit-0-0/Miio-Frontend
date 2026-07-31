@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ImageUploader } from '@/components/media/ImageUploader';
 import { HeroPreview } from '@/components/admin/home/HeroPreview';
 import { SectionEditorHeader } from '@/components/admin/home/SectionEditorHeader';
@@ -13,23 +13,30 @@ export interface HeroEditorProps {
 
 export function HeroEditor({ initialData, onSave, onDirtyChange }: HeroEditorProps) {
   const [hero, setHero] = useState<HeroSection>(initialData);
+  const [prevInitialData, setPrevInitialData] = useState<HeroSection | undefined>(initialData);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   
-  // Track dirty state
-  const isDirty = useRef(false);
+  const [isDirty, setIsDirty] = useState(false);
 
-  // Sync with parent when initialData changes (e.g. after save)
+  if (initialData !== prevInitialData) {
+    setPrevInitialData(initialData);
+    if (initialData) {
+      setHero(initialData);
+      setIsDirty(false);
+    }
+  }
+
   useEffect(() => {
-    setHero(initialData);
-    isDirty.current = false;
-    onDirtyChange(false);
+    if (initialData) {
+      onDirtyChange(false);
+    }
   }, [initialData, onDirtyChange]);
 
   const handleChange = (updates: Partial<HeroSection>) => {
     setHero(prev => ({ ...prev, ...updates }));
-    isDirty.current = true;
+    setIsDirty(true);
     onDirtyChange(true);
     setSuccess(null);
     setError(null);
@@ -46,7 +53,7 @@ export function HeroEditor({ initialData, onSave, onDirtyChange }: HeroEditorPro
       };
       await onSave(dataToSave);
       setSuccess('Hero section saved successfully');
-      isDirty.current = false;
+      setIsDirty(false);
       onDirtyChange(false);
     } catch (e) {
       setError((e as Error).message);
@@ -62,7 +69,7 @@ export function HeroEditor({ initialData, onSave, onDirtyChange }: HeroEditorPro
         
         <SectionEditorHeader
           title="Hero Settings"
-          isDirty={isDirty.current}
+          isDirty={isDirty}
           isSaving={saving}
           updatedAt={hero.updatedAt}
           onSave={handleSave}
@@ -129,7 +136,7 @@ export function HeroEditor({ initialData, onSave, onDirtyChange }: HeroEditorPro
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Text Alignment</label>
-            <select className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900 bg-white" value={hero.textAlignment ?? ''} onChange={e => handleChange({ textAlignment: e.target.value as any })}>
+            <select className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900 bg-white" value={hero.textAlignment ?? ''} onChange={e => handleChange({ textAlignment: e.target.value as HeroSection['textAlignment'] })}>
               <option value="">Default</option>
               <option value="left">Left</option>
               <option value="center">Center</option>

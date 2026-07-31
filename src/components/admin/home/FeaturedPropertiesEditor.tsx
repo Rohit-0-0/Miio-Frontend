@@ -1,9 +1,7 @@
 'use client';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SectionEditorHeader } from '@/components/admin/home/SectionEditorHeader';
 import { FeaturedPropertiesSection, FeaturedPropertiesMode } from '@/types/homepage';
-import { propertyService } from '@/services/property.service';
-import { PropertyDocument } from '@/types/property';
 
 export interface FeaturedPropertiesEditorProps {
   initialData?: FeaturedPropertiesSection;
@@ -20,25 +18,30 @@ export function FeaturedPropertiesEditor({ initialData, onSave, onDirtyChange }:
   };
 
   const [data, setData] = useState<FeaturedPropertiesSection>(initialData || defaultData);
+  const [prevInitialData, setPrevInitialData] = useState<FeaturedPropertiesSection | undefined>(initialData);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   
-  // Track dirty state
-  const isDirty = useRef(false);
+  const [isDirty, setIsDirty] = useState(false);
 
-  // Sync with parent when initialData changes (e.g. after save)
-  useEffect(() => {
+  if (initialData !== prevInitialData) {
+    setPrevInitialData(initialData);
     if (initialData) {
       setData(initialData);
-      isDirty.current = false;
+      setIsDirty(false);
+    }
+  }
+
+  useEffect(() => {
+    if (initialData) {
       onDirtyChange(false);
     }
   }, [initialData, onDirtyChange]);
 
   const handleChange = (updates: Partial<FeaturedPropertiesSection>) => {
     setData(prev => ({ ...prev, ...updates }));
-    isDirty.current = true;
+    setIsDirty(true);
     onDirtyChange(true);
     setSuccess(null);
     setError(null);
@@ -51,7 +54,7 @@ export function FeaturedPropertiesEditor({ initialData, onSave, onDirtyChange }:
     try {
       await onSave(data);
       setSuccess('Featured Properties section saved successfully');
-      isDirty.current = false;
+      setIsDirty(false);
       onDirtyChange(false);
     } catch (e) {
       setError((e as Error).message);
@@ -65,7 +68,7 @@ export function FeaturedPropertiesEditor({ initialData, onSave, onDirtyChange }:
       <div className="space-y-6 bg-white border border-gray-200 p-6 rounded-sm">
         <SectionEditorHeader
           title="Featured Properties Settings"
-          isDirty={isDirty.current}
+          isDirty={isDirty}
           isSaving={saving}
           updatedAt={data.updatedAt}
           onSave={handleSave}

@@ -56,14 +56,14 @@ export function PropertyForm({ initialData }: PropertyFormProps) {
         router.push(`/admin/properties/${newPropertyId}`);
         router.refresh();
       }
-    } catch (err: any) {
-      setError(err.message || 'Failed to save property');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save property');
     } finally {
       setIsSaving(false);
     }
   };
 
-  const handleChange = (field: keyof PropertyData, value: any) => {
+  const handleChange = <K extends keyof PropertyData>(field: K, value: PropertyData[K]) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
