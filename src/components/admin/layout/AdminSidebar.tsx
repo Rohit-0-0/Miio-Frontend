@@ -15,7 +15,8 @@ import {
   Settings,
   ArrowLeft,
   LogOut,
-  Map as MapIcon
+  Map as MapIcon,
+  Users
 } from 'lucide-react';
 
 const sidebarItems = [
@@ -26,6 +27,7 @@ const sidebarItems = [
   { label: 'Maps', href: '/admin/maps', icon: MapIcon },
   { label: 'About', href: '/admin/about', icon: Info },
   { label: 'Partners', href: '/admin/partners', icon: Handshake },
+  { label: 'Users', href: '/admin/users', icon: Users, role: 'ADMIN' },
   { label: 'Media', href: '/admin/media', icon: ImageIcon },
   { label: 'Settings', href: '/admin/settings', icon: Settings },
 ];
@@ -33,7 +35,7 @@ const sidebarItems = [
 export function AdminSidebar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
 
   const handleLogout = async () => {
     await logout();
@@ -50,6 +52,8 @@ export function AdminSidebar() {
       
       <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
         {sidebarItems.map((item) => {
+          if (item.role && user?.role !== item.role) return null;
+          
           const isActive = pathname === item.href || (item.href !== '/admin' && pathname.startsWith(item.href));
           const Icon = item.icon;
           
