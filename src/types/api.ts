@@ -4,6 +4,13 @@ export interface ApiResponse<T> {
   data: T;
 }
 
+export interface ApiErrorResponse {
+  success: boolean;
+  message: string;
+  code?: string;
+  errors?: unknown;
+}
+
 export interface PaginationMeta {
   page: number;
   limit: number;

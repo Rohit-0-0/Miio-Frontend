@@ -7,13 +7,17 @@ import { toast } from 'sonner';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { ROUTES } from '@/constants/routes';
 import { Container } from '@/components/ui/Container';
+import { authService } from '@/services/auth.service';
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const router = useRouter();
-  const { login, user, loading } = useAuth();
+  const { user, loading } = useAuth();
   
+  const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -32,29 +36,29 @@ export default function LoginPage() {
     e.preventDefault();
     setError(null);
 
-    if (!email || !password) {
+    if (!displayName || !email || !password || !confirmPassword) {
       setError('Please fill in all fields.');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.');
+      return;
+    }
+
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters long.');
       return;
     }
 
     setIsSubmitting(true);
     try {
-      const loggedInUser = await login({ email, password });
-      if (loggedInUser.role === 'ADMIN') {
-        router.push(ROUTES.ADMIN);
-      } else {
-        router.push(ROUTES.HOME);
-      }
+      await authService.register({ displayName, email, password });
+      toast.success('Registration successful!', { description: 'Please verify your email address.' });
+      router.push(`/verify-email?email=${encodeURIComponent(email)}`);
     } catch (err: any) {
       console.error(err);
-      
-      if (err.code === 'EMAIL_NOT_VERIFIED') {
-        toast.error('Email not verified', { description: 'Please verify your email address to continue.' });
-        router.push(`/verify-email?email=${encodeURIComponent(email)}`);
-        return;
-      }
-      
-      setError(err?.message || 'Invalid email or password.');
+      setError(err?.message || 'Registration failed. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -66,10 +70,10 @@ export default function LoginPage() {
         <div className="bg-white px-8 py-10 shadow-sm border border-gray-100 rounded-sm">
           <div className="mb-8 text-center">
             <span className="text-xs font-semibold uppercase tracking-widest text-gray-400">
-              Welcome back
+              Create an account
             </span>
             <h2 className="mt-2 font-serif text-3xl font-bold tracking-tight text-gray-900">
-              Sign in to Miio
+              Join Miio
             </h2>
           </div>
 
@@ -81,6 +85,27 @@ export default function LoginPage() {
           )}
 
           <form className="space-y-6" onSubmit={handleSubmit}>
+            <div>
+              <label
+                htmlFor="displayName"
+                className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2"
+              >
+                Full Name
+              </label>
+              <input
+                id="displayName"
+                name="displayName"
+                type="text"
+                autoComplete="name"
+                required
+                disabled={isSubmitting || loading}
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                className="w-full rounded-sm border border-gray-200 px-4 py-3 text-sm text-gray-900 bg-white placeholder-gray-400 focus:outline-none focus:border-gray-950 focus:ring-1 focus:ring-gray-950 disabled:bg-gray-50 transition-colors"
+                placeholder="John Doe"
+              />
+            </div>
+
             <div>
               <label
                 htmlFor="email"
@@ -103,29 +128,42 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <label
-                  htmlFor="password"
-                  className="block text-xs font-semibold uppercase tracking-wider text-gray-500"
-                >
-                  Password
-                </label>
-                <Link
-                  href="/forgot-password"
-                  className="text-xs font-semibold text-gray-500 hover:text-gray-950 transition-colors"
-                >
-                  Forgot password?
-                </Link>
-              </div>
+              <label
+                htmlFor="password"
+                className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2"
+              >
+                Password
+              </label>
               <input
                 id="password"
                 name="password"
                 type="password"
-                autoComplete="current-password"
+                autoComplete="new-password"
                 required
                 disabled={isSubmitting || loading}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                className="w-full rounded-sm border border-gray-200 px-4 py-3 text-sm text-gray-900 bg-white placeholder-gray-400 focus:outline-none focus:border-gray-950 focus:ring-1 focus:ring-gray-950 disabled:bg-gray-50 transition-colors"
+                placeholder="••••••••"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="confirmPassword"
+                className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2"
+              >
+                Confirm Password
+              </label>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                autoComplete="new-password"
+                required
+                disabled={isSubmitting || loading}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-full rounded-sm border border-gray-200 px-4 py-3 text-sm text-gray-900 bg-white placeholder-gray-400 focus:outline-none focus:border-gray-950 focus:ring-1 focus:ring-gray-950 disabled:bg-gray-50 transition-colors"
                 placeholder="••••••••"
               />
@@ -158,22 +196,22 @@ export default function LoginPage() {
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                       />
                     </svg>
-                    Signing in...
+                    Creating account...
                   </span>
                 ) : (
-                  'Sign In'
+                  'Sign Up'
                 )}
               </button>
             </div>
           </form>
 
           <div className="mt-6 text-center text-sm text-gray-500">
-            Don&apos;t have an account?{' '}
+            Already have an account?{' '}
             <Link
-              href="/register"
+              href="/login"
               className="font-semibold text-gray-950 hover:underline"
             >
-              Sign up
+              Sign in
             </Link>
           </div>
         </div>

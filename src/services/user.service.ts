@@ -24,7 +24,20 @@ export interface ListUsersParams {
 
 export const userService = {
   getUsers: (params?: ListUsersParams) => {
-    return api.get<ListUsersResponse>('/users', { params });
+    let query = '';
+    if (params) {
+      const searchParams = new URLSearchParams();
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          searchParams.append(key, String(value));
+        }
+      });
+      const queryString = searchParams.toString();
+      if (queryString) {
+        query = `?${queryString}`;
+      }
+    }
+    return api.get<ListUsersResponse>(`/users${query}`);
   },
 
   getUser: (id: string) => {

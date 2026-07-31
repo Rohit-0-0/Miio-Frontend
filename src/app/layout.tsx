@@ -3,6 +3,7 @@ import { Inter, Playfair_Display } from 'next/font/google';
 import './globals.css';
 import { siteConfig } from '@/config/site';
 import { AuthProvider } from '@/components/providers/AuthProvider';
+import { Toaster } from 'sonner';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -40,6 +41,7 @@ export default function RootLayout({
       <body className="font-sans text-gray-900 bg-white">
         <AuthProvider>
           {children}
+          <Toaster richColors position="top-right" />
         </AuthProvider>
       </body>
     </html>

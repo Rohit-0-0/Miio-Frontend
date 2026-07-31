@@ -20,7 +20,7 @@ export function MediaLibraryModal({ isOpen, onClose, onSelect }: MediaLibraryMod
 
   const handleSelect = () => {
     if (asset) {
-      const src = buildImageUrl(asset.assetId) || asset.url || '';
+      const src = buildImageUrl(asset.assetId) || (asset as any).url || '';
       onSelect({ src, alt: alt || asset.alt || '', caption });
     }
   };

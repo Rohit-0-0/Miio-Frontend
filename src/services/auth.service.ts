@@ -10,6 +10,26 @@ export interface LoginInput {
 class AuthService {
   private readonly basePath = '/auth';
 
+  async register(data: { email: string; password?: string; displayName: string }): Promise<ApiResponse<{ message: string }>> {
+    return apiClient.post<ApiResponse<{ message: string }>>(`${this.basePath}/register`, data);
+  }
+
+  async verifyEmail(data: { email: string; otp: string }): Promise<ApiResponse<{ message: string }>> {
+    return apiClient.post<ApiResponse<{ message: string }>>(`${this.basePath}/verify-email`, data);
+  }
+
+  async resendVerificationOtp(data: { email: string }): Promise<ApiResponse<{ message: string }>> {
+    return apiClient.post<ApiResponse<{ message: string }>>(`${this.basePath}/resend-verification-otp`, data);
+  }
+
+  async forgotPassword(data: { email: string }): Promise<ApiResponse<{ message: string }>> {
+    return apiClient.post<ApiResponse<{ message: string }>>(`${this.basePath}/forgot-password`, data);
+  }
+
+  async resetPassword(data: { email: string; otp: string; password?: string }): Promise<ApiResponse<{ message: string }>> {
+    return apiClient.post<ApiResponse<{ message: string }>>(`${this.basePath}/reset-password`, data);
+  }
+
   async login(data: { email: string; password?: string }): Promise<ApiResponse<LoginResponse>> {
     return apiClient.post<ApiResponse<LoginResponse>>(`${this.basePath}/login`, data);
   }
