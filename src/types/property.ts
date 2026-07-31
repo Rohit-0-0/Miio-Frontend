@@ -58,12 +58,20 @@ export interface PropertyData {
   slug: string;
   shortDescription?: string;
   longDescription?: string;
-  city?: string;
-  state?: string;
-  country?: string;
-  address?: string;
-  latitude?: number;
-  longitude?: number;
+  location?: {
+    address: string;
+    city: string;
+    state: string;
+    country: string;
+    postalCode?: string;
+    latitude: number;
+    longitude: number;
+    placeId?: string;
+    source: 'manual';
+    mapViewport?: {
+      zoom?: number;
+    };
+  };
   gallery?: ImageAsset[];
   coverImageId?: string;
   propertyType: PropertyType;

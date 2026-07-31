@@ -5,6 +5,7 @@ import { PropertyData, PROPERTY_TYPES, LIFECYCLE_STATUS, PropertyType, Lifecycle
 import { GalleryEditor } from './GalleryEditor';
 import { ArrayFieldEditor } from '../singleton/ArrayFieldEditor';
 import { RichTextEditor } from '@/components/ui/editor';
+import { LocationPicker, LocationData } from '@/components/ui/maps/LocationPicker';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { propertyService } from '@/services/property.service';
@@ -66,6 +67,10 @@ export function PropertyForm({ initialData }: PropertyFormProps) {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  const handleLocationChange = (location: LocationData) => {
+    setFormData(prev => ({ ...prev, location }));
+  };
+
   const emptyAmenity = { id: crypto.randomUUID(), label: '', icon: '', category: '' };
 
   return (
@@ -111,24 +116,15 @@ export function PropertyForm({ initialData }: PropertyFormProps) {
       {/* Location */}
       <section className="bg-white p-6 rounded-sm border border-gray-200 space-y-4">
         <h3 className="text-lg font-bold border-b pb-2 mb-4">Location</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700">Address</label>
-            <input value={formData.address || ''} onChange={e => handleChange('address', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">City</label>
-            <input value={formData.city || ''} onChange={e => handleChange('city', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">State</label>
-            <input value={formData.state || ''} onChange={e => handleChange('state', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Country</label>
-            <input value={formData.country || ''} onChange={e => handleChange('country', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" />
-          </div>
-        </div>
+        <LocationPicker
+          value={formData.location as LocationData | undefined}
+          onChange={handleLocationChange}
+        />
+        {(!formData.location?.latitude || !formData.location?.longitude) && (
+          <p className="text-sm text-amber-600 mt-2">
+            Warning: Property has no valid coordinates. Map display may be affected.
+          </p>
+        )}
       </section>
 
       {/* Media */}

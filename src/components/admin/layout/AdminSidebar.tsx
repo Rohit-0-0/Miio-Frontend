@@ -14,7 +14,8 @@ import {
   Image as ImageIcon, 
   Settings,
   ArrowLeft,
-  LogOut
+  LogOut,
+  Map as MapIcon
 } from 'lucide-react';
 
 const sidebarItems = [
@@ -22,6 +23,7 @@ const sidebarItems = [
   { label: 'Homepage', href: '/admin/home', icon: Home },
   { label: 'Journal', href: '/admin/journal', icon: BookOpen },
   { label: 'Properties', href: '/admin/properties', icon: Building2 },
+  { label: 'Maps', href: '/admin/maps', icon: MapIcon },
   { label: 'About', href: '/admin/about', icon: Info },
   { label: 'Partners', href: '/admin/partners', icon: Handshake },
   { label: 'Media', href: '/admin/media', icon: ImageIcon },
