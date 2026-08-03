@@ -9,6 +9,7 @@ import { AboutValues } from '@/components/about/AboutValues';
 import { ErrorState } from '@/components/shared/ErrorState';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { AboutDocument } from '@/types/about';
+import { TrackAboutView } from '@/components/analytics/TrackAboutView';
 
 export const revalidate = 3600; // revalidate every hour
 
@@ -69,6 +70,7 @@ export default async function AboutPage() {
 
   return (
     <main className="flex flex-col min-h-screen">
+      <TrackAboutView />
       {data.hero && <AboutHero hero={data.hero} />}
       {data.story && <AboutStory story={data.story} />}
       {(data.mission || data.vision) && (

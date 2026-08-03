@@ -4,6 +4,8 @@ import './globals.css';
 import { siteConfig } from '@/config/site';
 import { AuthProvider } from '@/components/providers/AuthProvider';
 import { Toaster } from 'sonner';
+import { GoogleAnalytics } from '@next/third-parties/google';
+import { env } from '@/config/env';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -43,6 +45,9 @@ export default function RootLayout({
           {children}
           <Toaster richColors position="top-right" />
         </AuthProvider>
+        {process.env.NODE_ENV === 'development' && env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+          <GoogleAnalytics gaId={env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
+        )}
       </body>
     </html>
   );
