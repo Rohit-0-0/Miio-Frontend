@@ -1,3 +1,7 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { ROUTES } from '@/constants/routes';
 import { Container } from '@/components/ui/Container';
@@ -6,8 +10,42 @@ import { DesktopNav } from './DesktopNav';
 import { MobileNav } from './MobileNav';
 
 export function Header() {
+  const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+  const isHomepage = pathname === ROUTES.HOME;
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 80) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    // Check initial position
+    handleScroll();
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // If not homepage, maybe we want it always solid? 
+  // The brief says: "Top: Transparent. Scroll ~80px. Become Cream background, Slight blur, Soft shadow."
+  // We'll apply this to the homepage, and maybe everywhere for consistency or keep it solid elsewhere.
+  // Let's make it always solid if not on homepage, or transparent if isHomepage && !scrolled.
+  const isTransparent = isHomepage && !scrolled;
+
+  const headerClasses = isHomepage
+    ? `fixed top-0 z-50 w-full transition-all duration-300 ${
+        isTransparent
+          ? 'bg-transparent text-white'
+          : 'bg-[#F8F5EF]/95 backdrop-blur-md shadow-sm border-b border-gray-200/50 text-[#1B1A17]'
+      }`
+    : 'sticky top-0 z-50 w-full bg-[#F8F5EF]/95 backdrop-blur-md shadow-sm border-b border-gray-200/50 text-[#1B1A17] transition-all duration-300';
+
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-gray-100 bg-white/80 backdrop-blur-md">
+    <header className={headerClasses}>
       <Container>
         <div className="flex h-16 items-center justify-between">
           <Logo />

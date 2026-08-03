@@ -13,7 +13,7 @@ export function DesktopNav() {
         <Link
           key={item.href}
           href={item.href}
-          className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2 rounded-sm"
+          className="text-sm font-medium text-current opacity-80 hover:opacity-100 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-2 rounded-sm"
         >
           {item.label}
         </Link>
@@ -22,29 +22,14 @@ export function DesktopNav() {
       {!user ? (
         <Link
           href={ROUTES.LOGIN}
-          className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2 rounded-sm"
+          className="text-sm font-medium text-current opacity-80 hover:opacity-100 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-2 rounded-sm"
         >
-          Login
+          Guest Login
         </Link>
-      ) : user.role === 'ADMIN' ? (
-        <>
-          <Link
-            href={ROUTES.ADMIN}
-            className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2 rounded-sm"
-          >
-            Dashboard
-          </Link>
-          <button
-            onClick={() => logout()}
-            className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2 rounded-sm cursor-pointer"
-          >
-            Logout
-          </button>
-        </>
       ) : (
         <button
           onClick={() => logout()}
-          className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2 rounded-sm cursor-pointer"
+          className="text-sm font-medium text-current opacity-80 hover:opacity-100 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-2 rounded-sm cursor-pointer"
         >
           Logout
         </button>

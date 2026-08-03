@@ -1,83 +1,89 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { HeroSection } from '@/types/homepage';
 import { AppImage } from '@/components/media/AppImage';
 
 export function Hero({ hero }: { hero: HeroSection }) {
+  const images = hero?.heroImages?.length ? hero.heroImages : (hero?.backgroundImage ? [hero.backgroundImage] : []);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    if (images.length <= 1) return;
+    const interval = setInterval(() => {
+      setActiveIndex((current) => (current + 1) % images.length);
+    }, 8000); // 8 seconds per image
+    return () => clearInterval(interval);
+  }, [images.length]);
+
   if (!hero) return null;
 
   return (
     <section 
-      className="relative w-full flex items-center overflow-hidden bg-gray-900"
-      style={{
-        minHeight: hero.heroHeight || '80vh',
-      }}
+      className="relative w-full h-[100svh] flex flex-col justify-end pb-24 md:pb-32 overflow-hidden bg-[#1B1A17]"
       role="banner"
       aria-label={hero.backgroundAlt || hero.title}
     >
-      {/* Background Image */}
-      {hero.backgroundImage?.assetId && (
-        <div className="absolute inset-0 z-0">
+      {/* Background Images Carousel */}
+      {images.map((img, index) => (
+        <div 
+          key={img.assetId + index}
+          className={`absolute inset-0 z-0 transition-opacity duration-[2000ms] ease-in-out ${index === activeIndex ? 'opacity-100' : 'opacity-0'}`}
+        >
           <AppImage 
-            image={hero.backgroundImage} 
+            image={img} 
             alt={hero.backgroundAlt || hero.title}
             fill
+            className="object-cover animate-in fade-in zoom-in-105 duration-[2000ms] ease-out fill-mode-both"
           />
         </div>
-      )}
-      {/* Overlay */}
-      {hero.overlayOpacity !== undefined && hero.overlayOpacity > 0 && (
-        <div 
-          className="absolute inset-0 bg-black"
-          style={{ opacity: hero.overlayOpacity }}
-        />
-      )}
+      ))}
+
+      {/* Gradient Overlay for Text Readability */}
+      <div 
+        className="absolute inset-0 z-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10"
+        style={{ opacity: hero.overlayOpacity ?? 1 }}
+      />
 
       {/* Content */}
-      <div className="relative z-10 w-full px-6 md:px-10 lg:px-16 mx-auto max-w-7xl flex flex-col justify-center"
-           style={{ alignItems: hero.textAlignment === 'left' ? 'flex-start' : hero.textAlignment === 'right' ? 'flex-end' : 'center', textAlign: hero.textAlignment || 'center' }}>
+      <div className="relative z-10 w-full px-6 md:px-10 lg:px-16 mx-auto max-w-7xl flex flex-col items-start animate-in slide-in-from-bottom-8 fade-in duration-1000 delay-300 fill-mode-both">
         
         {hero.eyebrow && (
-          <span className="text-sm md:text-base font-semibold uppercase tracking-widest text-white/80 mb-4 block">
+          <span className="text-xs md:text-sm font-semibold uppercase tracking-[0.2em] text-white/80 mb-6 block">
             {hero.eyebrow}
           </span>
         )}
         
-        <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-tight mb-6 max-w-4xl">
+        <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-medium tracking-wide text-white leading-[1.1] mb-6 max-w-4xl">
           {hero.title}
         </h1>
         
-        <p className="text-lg md:text-xl text-white/90 max-w-2xl leading-relaxed mb-10">
+        <p className="text-lg md:text-xl font-light text-white/90 max-w-2xl leading-relaxed mb-12">
           {hero.subtitle}
         </p>
         
-        <div className={`flex flex-col sm:flex-row gap-4 ${hero.textAlignment === 'left' ? 'justify-start' : hero.textAlignment === 'right' ? 'justify-end' : 'justify-center'} w-full max-w-md`}>
-          {hero.primaryCta && (
-            <Link
-              href={hero.primaryCta.href || '#'}
-              className="inline-flex items-center justify-center rounded-sm bg-white px-8 py-3.5 text-base font-medium text-gray-900 transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 w-full sm:w-auto"
-            >
-              {hero.primaryCta.label || 'Learn More'}
-            </Link>
-          )}
-          {hero.secondaryCta?.label && (
-            <Link
-              href={hero.secondaryCta.href || '#'}
-              className="inline-flex items-center justify-center rounded-sm bg-transparent border border-white px-8 py-3.5 text-base font-medium text-white transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 w-full sm:w-auto"
-            >
-              {hero.secondaryCta.label}
-            </Link>
-          )}
+        {/* Search Component (UI Only - Matches Guesty layout) */}
+        <div className="w-full max-w-4xl bg-white/10 backdrop-blur-md rounded-sm p-2 flex flex-col md:flex-row gap-2">
+          <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-2 bg-white rounded-sm overflow-hidden">
+            <div className="px-6 py-4 flex flex-col justify-center border-b md:border-b-0 md:border-r border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Check In</span>
+              <span className="text-sm font-medium text-gray-900">Add dates</span>
+            </div>
+            <div className="px-6 py-4 flex flex-col justify-center border-b md:border-b-0 md:border-r border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Check Out</span>
+              <span className="text-sm font-medium text-gray-900">Add dates</span>
+            </div>
+            <div className="px-6 py-4 flex flex-col justify-center cursor-pointer hover:bg-gray-50 transition-colors">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Guests</span>
+              <span className="text-sm font-medium text-gray-900">2 guests</span>
+            </div>
+          </div>
+          <button className="bg-[#1B1A17] text-white px-8 py-4 md:py-0 rounded-sm font-medium tracking-widest uppercase text-sm hover:opacity-90 transition-opacity whitespace-nowrap">
+            {hero.primaryCta?.label || 'Explore Stays'}
+          </button>
         </div>
       </div>
-
-      {hero.showScrollIndicator && (
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/80 animate-bounce z-10 flex flex-col items-center">
-          <span className="text-xs uppercase tracking-widest mb-2 opacity-75">Scroll</span>
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-          </svg>
-        </div>
-      )}
     </section>
   );
 }

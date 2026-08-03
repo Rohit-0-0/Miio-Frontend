@@ -5,14 +5,14 @@ import { PageContainer } from '@/components/admin/shared/PageContainer';
 import { SectionCard } from '@/components/admin/shared/SectionCard';
 import { HeroEditor } from '@/components/admin/home/HeroEditor';
 import { FeaturedPropertiesEditor } from '@/components/admin/home/FeaturedPropertiesEditor';
-import { WhyMiioEditor } from '@/components/admin/home/WhyMiioEditor';
-import { ExperiencesEditor } from '@/components/admin/home/ExperiencesEditor';
-import { TestimonialsEditor } from '@/components/admin/home/TestimonialsEditor';
-import { FaqEditor } from '@/components/admin/home/FaqEditor';
-import { NewsletterEditor } from '@/components/admin/home/NewsletterEditor';
+import { EditorialStatementEditor } from '@/components/admin/home/EditorialStatementEditor';
+import { LocationsEditor } from '@/components/admin/home/LocationsEditor';
+import { TrustEditor } from '@/components/admin/home/TrustEditor';
+import { JournalPreviewEditor } from '@/components/admin/home/JournalPreviewEditor';
+import { FinalCtaEditor } from '@/components/admin/home/FinalCtaEditor';
 import { SeoEditor } from '@/components/admin/home/SeoEditor';
 import { homepageService } from '@/services/homepage.service';
-import { HomepageDocument, HeroSection, FeaturedPropertiesSection, WhyMiioSection, ExperiencesSection, TestimonialsSection, FaqSection, NewsletterSection, SeoSection } from '@/types/homepage';
+import { HomepageDocument, HeroSection, FeaturedPropertiesSection, EditorialStatementSection, LocationsSection, TrustSection, JournalSection, FinalCtaSection, SeoSection } from '@/types/homepage';
 
 export default function HomeAdminPage() {
   const [data, setData] = useState<HomepageDocument | null>(null);
@@ -60,11 +60,11 @@ export default function HomeAdminPage() {
   const dirtyHandlers = useMemo(() => ({
     hero: (isDirty: boolean) => handleDirtyChange('hero', isDirty),
     featuredProperties: (isDirty: boolean) => handleDirtyChange('featuredProperties', isDirty),
-    whyMiio: (isDirty: boolean) => handleDirtyChange('whyMiio', isDirty),
-    experiences: (isDirty: boolean) => handleDirtyChange('experiences', isDirty),
-    testimonials: (isDirty: boolean) => handleDirtyChange('testimonials', isDirty),
-    faq: (isDirty: boolean) => handleDirtyChange('faq', isDirty),
-    newsletter: (isDirty: boolean) => handleDirtyChange('newsletter', isDirty),
+    editorialStatement: (isDirty: boolean) => handleDirtyChange('editorialStatement', isDirty),
+    locations: (isDirty: boolean) => handleDirtyChange('locations', isDirty),
+    trust: (isDirty: boolean) => handleDirtyChange('trust', isDirty),
+    journal: (isDirty: boolean) => handleDirtyChange('journal', isDirty),
+    finalCta: (isDirty: boolean) => handleDirtyChange('finalCta', isDirty),
     seo: (isDirty: boolean) => handleDirtyChange('seo', isDirty),
   }), [handleDirtyChange]);
 
@@ -76,24 +76,24 @@ export default function HomeAdminPage() {
     const res = await homepageService.updateFeaturedProperties(featuredData);
     setData(res.data);
   };
-  const handleSaveWhyMiio = async (whyMiioData: Partial<WhyMiioSection>) => {
-    const res = await homepageService.updateWhyMiio(whyMiioData);
+  const handleSaveEditorialStatement = async (edData: Partial<EditorialStatementSection>) => {
+    const res = await homepageService.updateEditorialStatement(edData);
     setData(res.data);
   };
-  const handleSaveExperiences = async (expData: Partial<ExperiencesSection>) => {
-    const res = await homepageService.updateExperiences(expData);
+  const handleSaveLocations = async (locData: Partial<LocationsSection>) => {
+    const res = await homepageService.updateLocations(locData);
     setData(res.data);
   };
-  const handleSaveTestimonials = async (testData: Partial<TestimonialsSection>) => {
-    const res = await homepageService.updateTestimonials(testData);
+  const handleSaveTrust = async (trustData: Partial<TrustSection>) => {
+    const res = await homepageService.updateTrust(trustData);
     setData(res.data);
   };
-  const handleSaveFaq = async (faqData: Partial<FaqSection>) => {
-    const res = await homepageService.updateFaq(faqData);
+  const handleSaveJournal = async (journalData: Partial<JournalSection>) => {
+    const res = await homepageService.updateJournal(journalData);
     setData(res.data);
   };
-  const handleSaveNewsletter = async (newsData: Partial<NewsletterSection>) => {
-    const res = await homepageService.updateNewsletter(newsData);
+  const handleSaveFinalCta = async (ctaData: Partial<FinalCtaSection>) => {
+    const res = await homepageService.updateFinalCta(ctaData);
     setData(res.data);
   };
   const handleSaveSeo = async (seoData: Partial<SeoSection>) => {
@@ -149,43 +149,43 @@ export default function HomeAdminPage() {
           />
         </SectionCard>
         
-        <SectionCard title="Why Miio">
-          <WhyMiioEditor
-            initialData={data.whyMiio as WhyMiioSection}
-            onSave={handleSaveWhyMiio}
-            onDirtyChange={dirtyHandlers.whyMiio}
+        <SectionCard title="Editorial Statement">
+          <EditorialStatementEditor
+            initialData={data.editorialStatement as EditorialStatementSection}
+            onSave={handleSaveEditorialStatement}
+            onDirtyChange={dirtyHandlers.editorialStatement}
           />
         </SectionCard>
         
-        <SectionCard title="Experiences">
-          <ExperiencesEditor
-            initialData={data.experiences as ExperiencesSection}
-            onSave={handleSaveExperiences}
-            onDirtyChange={dirtyHandlers.experiences}
+        <SectionCard title="Locations">
+          <LocationsEditor
+            initialData={data.locations as LocationsSection}
+            onSave={handleSaveLocations}
+            onDirtyChange={dirtyHandlers.locations}
           />
         </SectionCard>
         
-        <SectionCard title="Testimonials">
-          <TestimonialsEditor
-            initialData={data.testimonials as TestimonialsSection}
-            onSave={handleSaveTestimonials}
-            onDirtyChange={dirtyHandlers.testimonials}
+        <SectionCard title="Trust / Miio Standard">
+          <TrustEditor
+            initialData={data.trust as TrustSection}
+            onSave={handleSaveTrust}
+            onDirtyChange={dirtyHandlers.trust}
           />
         </SectionCard>
         
-        <SectionCard title="FAQ">
-          <FaqEditor
-            initialData={data.faq as FaqSection}
-            onSave={handleSaveFaq}
-            onDirtyChange={dirtyHandlers.faq}
+        <SectionCard title="Journal Preview">
+          <JournalPreviewEditor
+            initialData={data.journal as JournalSection}
+            onSave={handleSaveJournal}
+            onDirtyChange={dirtyHandlers.journal}
           />
         </SectionCard>
         
-        <SectionCard title="Newsletter">
-          <NewsletterEditor
-            initialData={data.newsletter as NewsletterSection}
-            onSave={handleSaveNewsletter}
-            onDirtyChange={dirtyHandlers.newsletter}
+        <SectionCard title="Final CTA">
+          <FinalCtaEditor
+            initialData={data.finalCta as FinalCtaSection}
+            onSave={handleSaveFinalCta}
+            onDirtyChange={dirtyHandlers.finalCta}
           />
         </SectionCard>
         

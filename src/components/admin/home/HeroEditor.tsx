@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { ImageUploader } from '@/components/media/ImageUploader';
+import { MultiImageUploader } from '@/components/media/MultiImageUploader';
 import { HeroPreview } from '@/components/admin/home/HeroPreview';
 import { SectionEditorHeader } from '@/components/admin/home/SectionEditorHeader';
 import { HeroSection } from '@/types/homepage';
@@ -47,10 +47,7 @@ export function HeroEditor({ initialData, onSave, onDirtyChange }: HeroEditorPro
     setError(null);
     setSuccess(null);
     try {
-      const dataToSave = {
-        ...hero,
-        backgroundImage: hero.backgroundImage || undefined
-      };
+      const dataToSave = { ...hero };
       await onSave(dataToSave);
       setSuccess('Hero section saved successfully');
       setIsDirty(false);
@@ -93,10 +90,10 @@ export function HeroEditor({ initialData, onSave, onDirtyChange }: HeroEditorPro
         </div>
 
         <div>
-          <ImageUploader
-            value={hero.backgroundImage ?? null}
-            onChange={img => handleChange({ backgroundImage: img || undefined })}
-            label="Background Image"
+          <MultiImageUploader
+            values={hero.heroImages || []}
+            onChange={imgs => handleChange({ heroImages: imgs })}
+            label="Hero Carousel Images"
           />
         </div>
 

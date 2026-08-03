@@ -4,11 +4,11 @@ import {
   HomepageDocument,
   HeroSection,
   FeaturedPropertiesSection,
-  WhyMiioSection,
-  ExperiencesSection,
-  TestimonialsSection,
-  FaqSection,
-  NewsletterSection,
+  EditorialStatementSection,
+  LocationsSection,
+  TrustSection,
+  JournalSection,
+  FinalCtaSection,
   SeoSection
 } from '@/types/homepage';
 
@@ -27,24 +27,24 @@ class HomepageService {
     return apiClient.patch<ApiResponse<HomepageDocument>>(`${this.basePath}/featured-properties`, data);
   }
 
-  async updateWhyMiio(data: Partial<WhyMiioSection>): Promise<ApiResponse<HomepageDocument>> {
-    return apiClient.patch<ApiResponse<HomepageDocument>>(`${this.basePath}/why-miio`, data);
+  async updateEditorialStatement(data: Partial<EditorialStatementSection>): Promise<ApiResponse<HomepageDocument>> {
+    return apiClient.patch<ApiResponse<HomepageDocument>>(`${this.basePath}/editorial-statement`, data);
   }
 
-  async updateExperiences(data: Partial<ExperiencesSection>): Promise<ApiResponse<HomepageDocument>> {
-    return apiClient.patch<ApiResponse<HomepageDocument>>(`${this.basePath}/experiences`, data);
+  async updateLocations(data: Partial<LocationsSection>): Promise<ApiResponse<HomepageDocument>> {
+    return apiClient.patch<ApiResponse<HomepageDocument>>(`${this.basePath}/locations`, data);
   }
 
-  async updateTestimonials(data: Partial<TestimonialsSection>): Promise<ApiResponse<HomepageDocument>> {
-    return apiClient.patch<ApiResponse<HomepageDocument>>(`${this.basePath}/testimonials`, data);
+  async updateTrust(data: Partial<TrustSection>): Promise<ApiResponse<HomepageDocument>> {
+    return apiClient.patch<ApiResponse<HomepageDocument>>(`${this.basePath}/trust`, data);
   }
 
-  async updateFaq(data: Partial<FaqSection>): Promise<ApiResponse<HomepageDocument>> {
-    return apiClient.patch<ApiResponse<HomepageDocument>>(`${this.basePath}/faq`, data);
+  async updateJournal(data: Partial<JournalSection>): Promise<ApiResponse<HomepageDocument>> {
+    return apiClient.patch<ApiResponse<HomepageDocument>>(`${this.basePath}/journal`, data);
   }
 
-  async updateNewsletter(data: Partial<NewsletterSection>): Promise<ApiResponse<HomepageDocument>> {
-    return apiClient.patch<ApiResponse<HomepageDocument>>(`${this.basePath}/newsletter`, data);
+  async updateFinalCta(data: Partial<FinalCtaSection>): Promise<ApiResponse<HomepageDocument>> {
+    return apiClient.patch<ApiResponse<HomepageDocument>>(`${this.basePath}/final-cta`, data);
   }
 
   async updateSeo(data: Partial<SeoSection>): Promise<ApiResponse<HomepageDocument>> {

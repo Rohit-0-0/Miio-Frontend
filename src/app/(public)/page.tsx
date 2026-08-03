@@ -1,15 +1,14 @@
 import { Metadata } from 'next';
 import { getHomepage } from '@/lib/server/homepage';
 import { getPropertyListing, getPropertiesByIds } from '@/lib/server/property';
+import { getJournalListing } from '@/lib/server/journal';
 import { Hero } from '@/components/home/Hero';
 import { FeaturedProperties } from '@/components/home/FeaturedProperties';
-import { WhyMiio } from '@/components/home/WhyMiio';
-import { Experiences } from '@/components/home/Experiences';
-import { Testimonials } from '@/components/home/Testimonials';
-import { FAQ } from '@/components/home/FAQ';
-import { Newsletter } from '@/components/home/Newsletter';
+import { EditorialStatement } from '@/components/home/EditorialStatement';
+import { Locations } from '@/components/home/Locations';
+import { Trust } from '@/components/home/Trust';
 import { JournalPreview } from '@/components/home/JournalPreview';
-import { PartnerCTA } from '@/components/home/PartnerCTA';
+import { FinalCTA } from '@/components/home/FinalCTA';
 import { PropertyDocument } from '@/types/property';
 import { FeaturedPropertiesSection } from '@/types/homepage';
 
@@ -22,7 +21,6 @@ export async function generateMetadata(): Promise<Metadata> {
 
   const { seo, hero } = homepage;
   
-  // Fallback hierarchy: SEO fields -> Hero fields -> Defaults
   const title = seo?.title || hero?.title || 'Miio - A New Standard in Hospitality';
   const description = seo?.description || hero?.subtitle || 'Experience the perfect blend of luxury, comfort, and thoughtful design.';
   
@@ -42,13 +40,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function HomePage() {
   const homepage = await getHomepage();
 
-  // If no CMS data, fallback to rendering existing placeholder structure 
-  // (though our updated components handle their own null checks)
   if (!homepage) {
     return (
-      <>
-        <div className="py-24 text-center">Homepage content unavailable.</div>
-      </>
+      <div className="py-24 text-center">Homepage content unavailable.</div>
     );
   }
 
@@ -88,17 +82,34 @@ export default async function HomePage() {
     console.error('Failed to resolve featured properties:', err);
   }
 
+  // Resolve Journal Articles
+  let articles: any[] = [];
+  try {
+    const res = await getJournalListing({ limit: '3', status: 'PUBLISHED' });
+    articles = res.data || [];
+  } catch (err) {
+    console.error('Failed to resolve journal articles:', err);
+  }
+
   return (
-    <>
+    <main className="w-full flex flex-col">
       {homepage.hero && <Hero hero={homepage.hero} />}
-      {homepage.featuredProperties && <FeaturedProperties config={homepage.featuredProperties} properties={properties} />}
-      {homepage.whyMiio && <WhyMiio whyMiio={homepage.whyMiio} />}
-      {homepage.experiences && <Experiences experiences={homepage.experiences} />}
-      {homepage.testimonials && <Testimonials testimonials={homepage.testimonials} />}
-      {homepage.faq && <FAQ faq={homepage.faq} />}
-      <JournalPreview />
-      <PartnerCTA />
-      {homepage.newsletter && <Newsletter newsletter={homepage.newsletter} />}
-    </>
+      
+      <section className="bg-white">
+        <div className="max-w-[1440px] mx-auto px-6 md:px-10 lg:px-16 py-24 md:py-32 flex flex-col lg:flex-row gap-16 xl:gap-24 items-stretch">
+          <div className="w-full lg:w-2/3">
+            {homepage.featuredProperties && <FeaturedProperties config={homepage.featuredProperties} properties={properties} />}
+          </div>
+          <div className="w-full lg:w-1/3 flex">
+            {homepage.editorialStatement && <EditorialStatement statement={homepage.editorialStatement} />}
+          </div>
+        </div>
+      </section>
+
+      {homepage.locations && <Locations locations={homepage.locations} />}
+      {homepage.trust && <Trust trust={homepage.trust} />}
+      {homepage.journal && <JournalPreview journal={homepage.journal} articles={articles} />}
+      {homepage.finalCta && <FinalCTA finalCta={homepage.finalCta} />}
+    </main>
   );
 }
