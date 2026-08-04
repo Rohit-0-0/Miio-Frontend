@@ -172,5 +172,32 @@ export interface PropertySummary {
   bathrooms: number;
   maxGuests: number;
   beds: number;
+}
+
+export interface PropertyDetails {
+  id: string;
+  title: string;
+  slug: string;
+  shortDescription?: string;
+  longDescription?: string;
+  location: {
+    city: string;
+    state: string;
+    country: string;
+  };
+  gallery: ImageAsset[];
+  coverImageId?: string;
+  propertyType: string;
+  bedrooms: number;
+  bathrooms: number;
+  maxGuests: number;
+  beds: number;
   amenities: Amenity[];
+  
+  // Future fields for the Editorial merge
+  editorial?: any;
+  lifecycleStatus?: string;
+  visibleOnWebsite?: boolean;
+  seoTitle?: string;
+  seoDescription?: string;
 }

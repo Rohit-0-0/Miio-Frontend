@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getPropertyBySlug } from '@/lib/server/property';
+import { getPropertyById } from '@/lib/server/property';
 import { Container } from '@/components/ui/Container';
 import { LIFECYCLE_STATUS } from '@/types/property';
 import { Metadata } from 'next';
@@ -12,6 +12,7 @@ import { QuickInfo } from '@/components/properties/details/QuickInfo';
 import { EditorialDescription } from '@/components/properties/details/EditorialDescription';
 import { PropertyExperience } from '@/components/properties/details/PropertyExperience';
 import { AmenitiesSection } from '@/components/properties/details/AmenitiesSection';
+import { PropertyDetails } from '@/types/property';
 import { MiioStandard } from '@/components/properties/details/MiioStandard';
 import { TrustSignals } from '@/components/properties/details/TrustSignals';
 import { FAQSection } from '@/components/properties/details/FAQSection';
@@ -20,14 +21,21 @@ import { BookingCard } from '@/components/properties/booking/BookingCard';
 
 type Props = {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ id?: string }>;
 };
 
 export async function generateMetadata(
-  { params }: Props
+  { params, searchParams }: Props
 ): Promise<Metadata> {
-  const resolvedParams = await params;
+  const resolvedSearchParams = await searchParams;
+  const guestyId = resolvedSearchParams.id;
+  
+  if (!guestyId) {
+    return { title: 'Not Found | Miio' };
+  }
+
   try {
-    const response = await getPropertyBySlug(resolvedParams.slug);
+    const response = await getPropertyById<PropertyDetails>(guestyId);
     const property = response.data;
     
     if (!property || property.lifecycleStatus !== LIFECYCLE_STATUS.PUBLISHED || !property.visibleOnWebsite) {
@@ -51,12 +59,17 @@ export async function generateMetadata(
   }
 }
 
-export default async function PropertyDetailPage({ params }: Props) {
-  const resolvedParams = await params;
-  
-  let property;
+export default async function PropertyDetailPage({ params, searchParams }: Props) {
+  const resolvedSearchParams = await searchParams;
+  const guestyId = resolvedSearchParams.id;
+
+  if (!guestyId) {
+    notFound();
+  }
+
+  let property: PropertyDetails | undefined;
   try {
-    const response = await getPropertyBySlug(resolvedParams.slug);
+    const response = await getPropertyById<PropertyDetails>(guestyId);
     property = response.data;
   } catch (error) {
     console.error('Failed to fetch property details:', error);

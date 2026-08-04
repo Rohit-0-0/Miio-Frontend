@@ -66,8 +66,8 @@ export async function getPropertiesByIds(ids: string[]): Promise<ApiResponse<Pro
   return response.json();
 }
 
-export async function getPropertyBySlug(slug: string): Promise<ApiResponse<PropertyDocument>> {
-  const url = `${env.NEXT_PUBLIC_API_URL}/properties/slug/${slug}`;
+export async function getPropertyById<T = PropertyDocument>(id: string): Promise<ApiResponse<T>> {
+  const url = `${env.NEXT_PUBLIC_API_URL}/properties/${id}`;
   
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('accessToken');
@@ -88,9 +88,9 @@ export async function getPropertyBySlug(slug: string): Promise<ApiResponse<Prope
 
   if (!response.ok) {
     if (response.status === 404) {
-      return { success: false, message: 'Not found', data: null as unknown as PropertyDocument };
+      return { success: false, message: 'Not found', data: null as unknown as T };
     }
-    throw new Error(`Failed to fetch property by slug: ${response.statusText}`);
+    throw new Error(`Failed to fetch property by id: ${response.statusText}`);
   }
 
   return response.json();

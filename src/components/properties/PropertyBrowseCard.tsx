@@ -15,6 +15,7 @@ interface PropertyBrowseCardProps {
 }
 
 export function PropertyBrowseCard({
+  id,
   slug,
   name,
   location,
@@ -24,7 +25,7 @@ export function PropertyBrowseCard({
   coverImage,
 }: PropertyBrowseCardProps) {
   return (
-    <Link href={`/properties/${slug}`} className="group block no-underline cursor-pointer">
+    <Link href={`/properties/${slug}?id=${id}`} className="group block no-underline cursor-pointer">
       <div className="relative w-full aspect-[3/4] overflow-hidden rounded-sm bg-gray-100 mb-5">
         {coverImage ? (
           <AppImage
