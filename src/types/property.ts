@@ -150,3 +150,27 @@ export interface PropertyData {
 }
 
 export interface PropertyDocument extends PropertyData, BaseEntity {}
+
+/**
+ * Lightweight model strictly matching the backend's Guesty integration response.
+ * Used exclusively for the public Stays page list view.
+ */
+export interface PropertySummary {
+  id: string;
+  title: string;
+  slug: string;
+  shortDescription?: string | undefined;
+  location: {
+    city: string;
+    state: string;
+    country: string;
+  };
+  gallery: ImageAsset[];
+  coverImageId?: string | undefined;
+  propertyType: string;
+  bedrooms: number;
+  bathrooms: number;
+  maxGuests: number;
+  beds: number;
+  amenities: Amenity[];
+}

@@ -3,9 +3,9 @@ import { env } from '@/config/env';
 import { ApiResponse, PaginatedResponse } from '@/types/api';
 import { PropertyDocument } from '@/types/property';
 
-export async function getPropertyListing(
+export async function getPropertyListing<T = PropertyDocument>(
   params: Record<string, string | string[] | undefined>
-): Promise<PaginatedResponse<PropertyDocument>> {
+): Promise<PaginatedResponse<T>> {
   const searchParams = new URLSearchParams();
 
   Object.entries(params).forEach(([key, value]) => {

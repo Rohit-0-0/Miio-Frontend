@@ -9,6 +9,7 @@ import { PropertyBrowseCard } from '@/components/properties/PropertyBrowseCard';
 import { EmptyState } from '@/components/properties/EmptyState';
 import { Pagination } from '@/components/shared/Pagination';
 import type { Metadata } from 'next';
+import { PropertySummary } from '@/types/property';
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
@@ -48,7 +49,7 @@ export default async function PropertiesPage({
 
   try {
     const [propRes, cmsRes] = await Promise.all([
-      getPropertyListing(query as Record<string, string | string[] | undefined>),
+      getPropertyListing<PropertySummary>(query as Record<string, string | string[] | undefined>),
       staysPageService.get(),
     ]);
     response = propRes;
@@ -107,7 +108,7 @@ export default async function PropertiesPage({
                   location={[property.location?.city, property.location?.country].filter(Boolean).join(', ') || 'Various Locations'}
                   guests={property.maxGuests || 2}
                   bedrooms={property.bedrooms || 1}
-                  price={(property as any).price ? `$${(property as any).price}` : 'Enquire'}
+                  price={'Enquire'}
                   coverImage={property.gallery?.[0]}
                 />
               ))}
