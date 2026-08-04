@@ -16,12 +16,14 @@ import {
   ArrowLeft,
   LogOut,
   Map as MapIcon,
-  Users
+  Users,
+  LayoutTemplate
 } from 'lucide-react';
 
 const sidebarItems = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { label: 'Homepage', href: '/admin/home', icon: Home },
+  { label: 'Stays Page', href: '/admin/stays', icon: LayoutTemplate },
   { label: 'Journal', href: '/admin/journal', icon: BookOpen },
   { label: 'Properties', href: '/admin/properties', icon: Building2 },
   { label: 'Maps', href: '/admin/maps', icon: MapIcon },

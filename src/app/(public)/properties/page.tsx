@@ -1,14 +1,33 @@
 import { getPropertyListing } from '@/lib/server/property';
-import { PropertyCard } from '@/components/home/PropertyCard';
-import { Container } from '@/components/ui/Container';
-import { Section } from '@/components/ui/Section';
-import { Pagination } from '@/components/shared/Pagination';
+import { staysPageService } from '@/services/stays-page.service';
 import { normalizePropertyQuery } from '@/lib/utils/search-params';
+import { SectionContainer } from '@/components/properties/SectionContainer';
+import { BrowseHeader } from '@/components/properties/BrowseHeader';
+import { BrowseFilters } from '@/components/properties/BrowseFilters';
+import { PropertyGrid } from '@/components/properties/PropertyGrid';
+import { PropertyBrowseCard } from '@/components/properties/PropertyBrowseCard';
+import { EmptyState } from '@/components/properties/EmptyState';
+import { Pagination } from '@/components/shared/Pagination';
+import type { Metadata } from 'next';
 
-export const metadata = {
-  title: 'Luxury Properties | Miio',
-  description: 'Explore our curated collection of luxury properties available for your next unforgettable stay.',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  try {
+    const staysPage = await staysPageService.get();
+    if (staysPage.seo) {
+      return {
+        title: staysPage.seo.metaTitle,
+        description: staysPage.seo.metaDescription,
+        keywords: staysPage.seo.keywords,
+      };
+    }
+  } catch (error) {
+    console.error('Failed to fetch SEO for stays page:', error);
+  }
+  return {
+    title: 'Luxury Properties | Miio',
+    description: 'Explore our curated collection of luxury properties available for your next unforgettable stay.',
+  };
+}
 
 export default async function PropertiesPage({
   searchParams,
@@ -24,63 +43,79 @@ export default async function PropertiesPage({
   query.limit = query.limit || 12;
 
   let response;
+  let staysPage;
   let hasError = false;
 
   try {
-    response = await getPropertyListing(query as Record<string, string | string[] | undefined>);
+    const [propRes, cmsRes] = await Promise.all([
+      getPropertyListing(query as Record<string, string | string[] | undefined>),
+      staysPageService.get(),
+    ]);
+    response = propRes;
+    staysPage = cmsRes;
   } catch (error) {
-    console.error('Failed to fetch public properties:', error);
+    console.error('Failed to fetch properties or stays page data:', error);
     hasError = true;
   }
 
   const properties = response?.data || [];
+  
+  // Fallbacks if CMS is completely unreachable
+  const generalSettings = staysPage?.general || {
+    heading: 'All Stays',
+    introText: 'Browse our carefully curated collection of homes designed for slower living.',
+  };
+  const filterConfig = staysPage?.filters || {
+    showLocationFilter: true,
+    showGuestsFilter: true,
+    showPriceFilter: true,
+    enableMapButton: true,
+    defaultSort: 'recommended',
+  };
+  const emptyStateConfig = staysPage?.emptyState || {
+    heading: 'No stays available',
+    description: "We're currently updating our curated collection.",
+    ctaText: 'Return Home',
+    ctaLink: '/',
+  };
 
   return (
     <div className="min-h-screen bg-white">
-      <Section className="bg-gray-50 pt-32 pb-16">
-        <Container>
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-6">
-              Our Collection
-            </h1>
-            <p className="text-xl text-gray-600">
-              Discover exceptional homes designed to provide unforgettable stays in the world&apos;s most captivating locations.
-            </p>
-          </div>
-        </Container>
-      </Section>
+      <SectionContainer className="pt-32 pb-8">
+        <BrowseHeader 
+          heading={generalSettings.heading} 
+          introText={generalSettings.introText} 
+        />
+        
+        <BrowseFilters config={filterConfig} />
 
-      <Section className="py-16">
-        <Container>
-          {hasError ? (
-            <div className="text-center py-20">
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Failed to load properties</h3>
-              <p className="text-gray-600">Please try refreshing the page or check back later.</p>
-            </div>
-          ) : properties.length === 0 ? (
-            <div className="text-center py-20 bg-gray-50 rounded-sm">
-              <h3 className="text-xl font-bold text-gray-900 mb-2">No properties available</h3>
-              <p className="text-gray-600">We couldn&apos;t find any properties matching your current criteria.</p>
-            </div>
-          ) : (
-            <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 mb-12">
-                {properties.map((property) => (
-                  <PropertyCard
-                    key={property.id}
-                    slug={property.slug}
-                    name={property.title}
-                    location={[property.location?.city, property.location?.country].filter(Boolean).join(', ') || 'Various Locations'}
-                    description={property.shortDescription || property.longDescription?.substring(0, 150) || ''}
-                    coverImage={property.coverImageId || property.gallery?.[0]?.assetId}
-                  />
-                ))}
-              </div>
-              {response?.pagination && <Pagination pagination={response.pagination} />}
-            </>
-          )}
-        </Container>
-      </Section>
+        {hasError ? (
+          <div className="text-center py-20 text-gray-500">
+            <p>Something went wrong. Please try refreshing the page.</p>
+          </div>
+        ) : properties.length === 0 ? (
+          <EmptyState config={emptyStateConfig} />
+        ) : (
+          <>
+            <PropertyGrid>
+              {properties.map((property) => (
+                <PropertyBrowseCard
+                  key={property.id}
+                  id={property.id}
+                  slug={property.slug}
+                  name={property.title}
+                  location={[property.location?.city, property.location?.country].filter(Boolean).join(', ') || 'Various Locations'}
+                  guests={property.maxGuests || 2}
+                  bedrooms={property.bedrooms || 1}
+                  price={(property as any).price ? `$${(property as any).price}` : 'Enquire'}
+                  coverImage={property.gallery?.[0]}
+                />
+              ))}
+            </PropertyGrid>
+            {response?.pagination && <Pagination pagination={response.pagination} />}
+          </>
+        )}
+      </SectionContainer>
     </div>
   );
 }

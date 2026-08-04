@@ -19,30 +19,30 @@ export function Pagination({ pagination }: { pagination: PaginationMeta }) {
   const pages = Array.from({ length: pagination.totalPages }, (_, i) => i + 1);
 
   return (
-    <nav className="flex items-center justify-center space-x-2 mt-12" aria-label="Pagination">
+    <nav className="flex items-center justify-center space-x-4 mt-16 pb-8" aria-label="Pagination">
       {pagination.hasPreviousPage ? (
         <Link
           href={createPageUrl(pagination.page - 1)}
-          className="px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 rounded-sm"
+          className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors"
           aria-label="Previous page"
         >
-          Previous
+          <span aria-hidden="true">&larr;</span> Previous
         </Link>
       ) : (
-        <span className="px-3 py-2 text-sm font-medium text-gray-400 cursor-not-allowed">
-          Previous
+        <span className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-300 cursor-not-allowed">
+          <span aria-hidden="true">&larr;</span> Previous
         </span>
       )}
 
-      <ul className="flex items-center space-x-1 hidden sm:flex">
+      <ul className="flex items-center space-x-2 hidden md:flex">
         {pages.map((page) => (
           <li key={page}>
             <Link
               href={createPageUrl(page)}
-              className={`px-3 py-2 text-sm font-medium rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 ${
+              className={`w-10 h-10 flex items-center justify-center text-sm transition-all rounded-full ${
                 page === pagination.page
-                  ? 'bg-gray-100 text-gray-900'
-                  : 'text-gray-600 hover:bg-gray-50'
+                  ? 'bg-gray-900 text-white font-medium'
+                  : 'text-gray-600 hover:bg-gray-100'
               }`}
               aria-current={page === pagination.page ? 'page' : undefined}
             >
@@ -55,14 +55,14 @@ export function Pagination({ pagination }: { pagination: PaginationMeta }) {
       {pagination.hasNextPage ? (
         <Link
           href={createPageUrl(pagination.page + 1)}
-          className="px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 rounded-sm"
+          className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors"
           aria-label="Next page"
         >
-          Next
+          Next <span aria-hidden="true">&rarr;</span>
         </Link>
       ) : (
-        <span className="px-3 py-2 text-sm font-medium text-gray-400 cursor-not-allowed">
-          Next
+        <span className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-300 cursor-not-allowed">
+          Next <span aria-hidden="true">&rarr;</span>
         </span>
       )}
     </nav>
