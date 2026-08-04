@@ -1,7 +1,13 @@
 import { env } from '@/config/env';
 
 export function buildImageUrl(assetId?: string | null): string | null {
-  if (!assetId || !assetId.startsWith('image-')) {
+  if (!assetId) return null;
+
+  if (assetId.startsWith('http://') || assetId.startsWith('https://')) {
+    return assetId;
+  }
+
+  if (!assetId.startsWith('image-')) {
     return null;
   }
 
