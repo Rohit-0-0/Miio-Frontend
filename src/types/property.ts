@@ -51,6 +51,55 @@ export interface SyncMetadata {
   version?: string;
 }
 
+export interface FAQ {
+  question: string;
+  answer: string;
+}
+
+export interface MiioStandard {
+  icon: string;
+  title: string;
+  description: string;
+}
+
+export interface RelatedPropertiesSettings {
+  displayMode: 'AUTO' | 'MANUAL' | 'OFF';
+  properties: string[]; 
+}
+
+export interface PropertyEditorialData {
+  guestyListingId: string;
+  description: string;
+  experience: string;
+  miioStandard: MiioStandard[];
+  faq: FAQ[];
+  featuredAmenityIds: string[];
+  seo: {
+    title: string;
+    description: string;
+    keywords: string[];
+  };
+  relatedProperties: RelatedPropertiesSettings;
+}
+
+export const DEFAULT_PROPERTY_EDITORIAL: PropertyEditorialData = {
+  guestyListingId: '',
+  description: '',
+  experience: '',
+  miioStandard: [],
+  faq: [],
+  featuredAmenityIds: [],
+  seo: {
+    title: '',
+    description: '',
+    keywords: [],
+  },
+  relatedProperties: {
+    displayMode: 'OFF',
+    properties: [],
+  },
+};
+
 export interface PropertyData {
   id: string;
   guestyId?: string;
@@ -96,6 +145,7 @@ export interface PropertyData {
   ogImage?: ImageAsset;
   metaRobots?: string;
   sync?: SyncMetadata;
+  editorial?: PropertyEditorialData;
   deletedAt?: string;
 }
 

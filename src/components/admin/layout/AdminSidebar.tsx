@@ -26,6 +26,7 @@ const sidebarItems = [
   { label: 'Stays Page', href: '/admin/stays', icon: LayoutTemplate },
   { label: 'Journal', href: '/admin/journal', icon: BookOpen },
   { label: 'Properties', href: '/admin/properties', icon: Building2 },
+  { label: 'Property Editorial', href: '/admin/properties/editorial', icon: BookOpen },
   { label: 'Maps', href: '/admin/maps', icon: MapIcon },
   { label: 'About', href: '/admin/about', icon: Info },
   { label: 'Partners', href: '/admin/partners', icon: Handshake },
