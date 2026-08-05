@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, Playfair_Display } from 'next/font/google';
+import { Inter, Playfair_Display, Montserrat, Cormorant_Garamond } from 'next/font/google';
 import './globals.css';
 import { siteConfig } from '@/config/site';
 import { AuthProvider } from '@/components/providers/AuthProvider';
@@ -15,6 +15,18 @@ const inter = Inter({
 const playfair = Playfair_Display({
   variable: '--font-playfair',
   subsets: ['latin'],
+});
+
+const montserrat = Montserrat({
+  variable: '--font-montserrat',
+  subsets: ['latin'],
+});
+
+const cormorant = Cormorant_Garamond({
+  variable: '--font-cormorant',
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  style: ['normal', 'italic'],
 });
 
 export const viewport: Viewport = {
@@ -38,7 +50,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${playfair.variable} h-full antialiased`}
+      className={`${inter.variable} ${playfair.variable} ${montserrat.variable} ${cormorant.variable} h-full antialiased`}
     >
       <body className="font-sans text-gray-900 bg-white">
         <AuthProvider>

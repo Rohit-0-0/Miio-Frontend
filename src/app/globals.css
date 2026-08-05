@@ -3,6 +3,8 @@
 @theme inline {
   --font-sans: var(--font-inter);
   --font-serif: var(--font-playfair);
+  --font-montserrat: var(--font-montserrat);
+  --font-cormorant: var(--font-cormorant);
 }
 
 body {
