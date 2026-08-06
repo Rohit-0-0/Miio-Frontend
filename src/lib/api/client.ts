@@ -57,6 +57,7 @@ export class ApiClient {
       ...options,
       headers,
       credentials: 'include', // Ensure cookies are sent for refresh
+      cache: 'no-store', // Disable aggressive Next.js caching to always fetch fresh data
     });
 
     if (response.status === 401 && endpoint !== '/auth/refresh' && endpoint !== '/auth/login') {
@@ -75,6 +76,7 @@ export class ApiClient {
           ...options,
           headers,
           credentials: 'include',
+          cache: 'no-store', // Disable aggressive Next.js caching
         });
       } else {
         // Refresh failed, let it fall through and throw the 401

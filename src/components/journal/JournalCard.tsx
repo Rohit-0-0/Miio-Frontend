@@ -12,9 +12,11 @@ export function JournalCard({ article }: { article: JournalArticle }) {
       })
     : null;
 
+  const slugStr = typeof article.slug === 'object' ? (article.slug as any)?.current : article.slug;
+
   return (
     <article className="group flex flex-col h-full relative">
-      <Link href={`${ROUTES.JOURNAL}/${article.slug}`} className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 rounded-sm mb-6">
+      <Link href={`${ROUTES.JOURNAL}/${slugStr}`} className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 rounded-sm mb-6">
         <div className="relative w-full aspect-[4/3] md:aspect-[3/2] overflow-hidden rounded-sm bg-gray-100">
           <AppImage
             image={article.coverImage}
@@ -39,7 +41,7 @@ export function JournalCard({ article }: { article: JournalArticle }) {
         </div>
         
         <h3 className="text-xl font-serif font-bold text-gray-900 mb-3 group-hover:text-gray-600 transition-colors">
-          <Link href={`${ROUTES.JOURNAL}/${article.slug}`} className="focus-visible:outline-none focus-visible:underline rounded-sm">
+          <Link href={`${ROUTES.JOURNAL}/${slugStr}`} className="focus-visible:outline-none focus-visible:underline rounded-sm">
             {article.title}
           </Link>
         </h3>

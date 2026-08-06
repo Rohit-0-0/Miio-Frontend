@@ -7,6 +7,8 @@ interface PropertyBrowseCardProps {
   id: string;
   slug: string;
   name: string;
+  nickname?: string;
+  unitType?: string;
   location: string;
   guests: number;
   bedrooms: number;
@@ -14,16 +16,28 @@ interface PropertyBrowseCardProps {
   coverImage?: ImageAsset;
 }
 
+const formatUnitType = (type?: string) => {
+  if (!type) return null;
+  if (type === 'MTL') return 'Multi Unit';
+  if (type === 'MTL_CHILD') return 'Sub Unit';
+  if (type === 'SINGLE') return 'Single Unit';
+  return type.replace(/_/g, ' ').replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.substr(1).toLowerCase());
+};
+
 export function PropertyBrowseCard({
   id,
   slug,
   name,
+  nickname,
+  unitType,
   location,
   guests,
   bedrooms,
   price,
   coverImage,
 }: PropertyBrowseCardProps) {
+  const formattedUnitType = formatUnitType(unitType);
+
   return (
     <Link href={`/properties/${slug}?id=${id}`} className="group block no-underline cursor-pointer">
       <div className="relative w-full aspect-[3/4] overflow-hidden rounded-sm bg-gray-100 mb-5">
@@ -48,6 +62,13 @@ export function PropertyBrowseCard({
         <h3 className="font-serif text-xl text-gray-900 tracking-tight capitalize">
           {name.toLowerCase()}
         </h3>
+        
+        {(nickname || formattedUnitType) && (
+          <div className="text-sm font-medium text-gray-700 mt-0.5">
+            {formattedUnitType && <span className="text-gray-500 mr-1">{formattedUnitType} • </span>}
+            Unit: {nickname || name}
+          </div>
+        )}
         
         <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-sm text-gray-500 mt-1">
           <div className="flex items-center gap-3">

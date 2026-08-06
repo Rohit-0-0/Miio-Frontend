@@ -6,6 +6,8 @@ interface PropertyCardProps {
   id?: string;
   slug: string;
   title: string;
+  nickname?: string;
+  unitType?: string;
   location?: string;
   guests?: number;
   bedrooms?: number;
@@ -14,10 +16,20 @@ interface PropertyCardProps {
   className?: string;
 }
 
+const formatUnitType = (type?: string) => {
+  if (!type) return null;
+  if (type === 'MTL') return 'Multi Unit';
+  if (type === 'MTL_CHILD') return 'Sub Unit';
+  if (type === 'SINGLE') return 'Single Unit';
+  return type.replace(/_/g, ' ').replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.substr(1).toLowerCase());
+};
+
 export function PropertyCard({
   id,
   slug,
   title,
+  nickname,
+  unitType,
   location,
   guests,
   bedrooms,
@@ -27,8 +39,10 @@ export function PropertyCard({
 }: PropertyCardProps) {
   const details = [
     guests ? `${guests} Guests` : null,
-    bedrooms ? `${bedrooms} Bedrooms` : null,
+    bedrooms ? `${bedrooms} Beds` : null, // Assuming bedrooms maps to "Beds" based on user example: "4 Guests • 2 Beds"
   ].filter(Boolean).join(' · ');
+
+  const formattedUnitType = formatUnitType(unitType);
 
   return (
     <Link 
@@ -59,6 +73,13 @@ export function PropertyCard({
             </span>
           )}
         </div>
+        
+        {(nickname || formattedUnitType) && (
+          <div className="text-sm font-medium text-[#1B1A17]/80">
+            {formattedUnitType && <span className="text-[#1B1A17]/60 mr-1">{formattedUnitType} • </span>}
+            Unit: {nickname || title}
+          </div>
+        )}
         
         {(location || details) && (
           <div className="flex justify-between items-center text-sm font-light text-[#1B1A17]/60">

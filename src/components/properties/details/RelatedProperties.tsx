@@ -23,6 +23,8 @@ export function RelatedProperties({ properties, mode }: RelatedPropertiesProps) 
               key={property.id} 
               slug={property.slug}
               title={property.title}
+              nickname={property.nickname}
+              unitType={property.unitType}
               location={locationStr}
               guests={property.maxGuests}
               bedrooms={property.bedrooms}

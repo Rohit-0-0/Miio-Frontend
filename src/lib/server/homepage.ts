@@ -14,7 +14,7 @@ export const getHomepage = cache(async (): Promise<HomepageDocument | null> => {
     const response = await fetch(url, {
       method: 'GET',
       headers,
-      next: { revalidate: 60 } // Optional ISR revalidation, adjust as needed
+      next: { revalidate: 0 } // Disable caching to see immediate Sanity Studio updates
     });
 
     if (!response.ok) {

@@ -85,8 +85,15 @@ export default async function HomePage() {
   // Resolve Journal Articles
   let articles: any[] = [];
   try {
-    const res = await getJournalListing({ limit: '3', status: 'PUBLISHED' });
-    articles = res.data || [];
+    // 1. Try fetching featured journals
+    const featuredRes = await getJournalListing({ limit: '3', featured: 'true' });
+    articles = featuredRes.data || [];
+    
+    // 2. Fallback to latest published if no featured journals exist
+    if (articles.length === 0) {
+      const fallbackRes = await getJournalListing({ limit: '3' });
+      articles = fallbackRes.data || [];
+    }
   } catch (err) {
     console.error('Failed to resolve journal articles:', err);
   }
@@ -98,7 +105,12 @@ export default async function HomePage() {
       <section className="bg-white">
         <div className="max-w-[1440px] mx-auto px-6 md:px-10 lg:px-16 py-24 md:py-32 flex flex-col lg:flex-row gap-16 xl:gap-24 items-stretch">
           <div className="w-full lg:w-2/3">
-            {homepage.featuredProperties && <FeaturedProperties config={homepage.featuredProperties} properties={properties} />}
+            {properties.length > 0 && (
+              <FeaturedProperties 
+                config={homepage.featuredProperties || {} as any} 
+                properties={properties} 
+              />
+            )}
           </div>
           <div className="w-full lg:w-1/3 flex">
             {homepage.editorialStatement && <EditorialStatement statement={homepage.editorialStatement} />}

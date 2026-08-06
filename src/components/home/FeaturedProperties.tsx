@@ -3,6 +3,7 @@ import { SectionHeader } from '@/components/shared/SectionHeader';
 import { PropertyDocument } from '@/types/property';
 import { FeaturedPropertiesSection } from '@/types/homepage';
 import Link from 'next/link';
+import { HOME_DEFAULTS } from '@/lib/defaults/home';
 
 interface FeaturedPropertiesProps {
   properties: PropertyDocument[];
@@ -14,22 +15,26 @@ export function FeaturedProperties({ properties, config }: FeaturedPropertiesPro
     return null;
   }
 
+  const title = config.title || HOME_DEFAULTS.featuredProperties.heading;
+  const ctaText = config.ctaText || config.ctaLabel || HOME_DEFAULTS.editorialStatement.cta.text;
+  const ctaLink = config.ctaLink || HOME_DEFAULTS.editorialStatement.cta.href;
+
   return (
     <div className="flex flex-col space-y-12">
       <div className="flex flex-col md:flex-row justify-between items-end gap-8">
         <SectionHeader 
-            title={config.title || 'Featured Stays'} 
+            title={title} 
             subtitle={config.subtitle} 
             align="left" 
           />
           
-          {(config.ctaLabel || config.ctaText) && (
+          {ctaText && (
             <div className="hidden md:block pb-2">
               <Link
-                href={config.ctaLink || '/properties'}
+                href={ctaLink}
                 className="text-sm font-medium tracking-widest uppercase text-[#1B1A17] hover:underline underline-offset-4 decoration-1 transition-all"
               >
-                {config.ctaText || config.ctaLabel} &rarr;
+                {ctaText} &rarr;
               </Link>
             </div>
           )}
@@ -43,8 +48,11 @@ export function FeaturedProperties({ properties, config }: FeaturedPropertiesPro
             return (
               <PropertyCard
                 key={property.id}
+                id={property.id}
                 slug={property.slug}
                 title={property.title}
+                nickname={property.nickname}
+                unitType={property.unitType}
                 location={[property.location?.city, property.location?.country].filter(Boolean).join(', ') || 'Various Locations'}
                 guests={property.maxGuests}
                 bedrooms={property.bedrooms}
@@ -55,13 +63,13 @@ export function FeaturedProperties({ properties, config }: FeaturedPropertiesPro
           })}
         </div>
 
-        {(config.ctaLabel || config.ctaText) && (
+        {ctaText && (
           <div className="md:hidden pt-8 flex justify-center">
             <Link
-              href={config.ctaLink || '/properties'}
+              href={ctaLink}
               className="text-sm font-medium tracking-widest uppercase text-[#1B1A17] hover:underline underline-offset-4 decoration-1 transition-all"
             >
-              {config.ctaText || config.ctaLabel} &rarr;
+              {ctaText} &rarr;
             </Link>
           </div>
         )}

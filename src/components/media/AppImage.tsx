@@ -16,11 +16,13 @@ export function AppImage({ image, alt, fallbackAlt = 'Image', className = '', ..
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  if (!image || !image.assetId) {
+  const resolvedAssetId = image?.assetId || (image as any)?.asset?._ref || (image as any)?.asset?._id || (image as any)?._ref || (image as any)?._id || (image as any)?.url;
+
+  if (!image || !resolvedAssetId) {
     return <ImagePlaceholder className={className} />;
   }
 
-  const url = buildImageUrl(image.assetId);
+  const url = buildImageUrl(resolvedAssetId);
 
   if (!url || error) {
     return <ImagePlaceholder className={className} />;
@@ -29,7 +31,10 @@ export function AppImage({ image, alt, fallbackAlt = 'Image', className = '', ..
   const finalAlt = alt || image.alt || fallbackAlt;
 
   return (
-    <div className={`relative overflow-hidden ${props.fill ? 'w-full h-full' : ''} ${className}`}>
+    <div 
+      className={`relative overflow-hidden ${props.fill ? 'w-full h-full' : ''} ${className}`}
+      suppressHydrationWarning
+    >
       {isLoading && (
         <div className="absolute inset-0 bg-gray-100 animate-pulse z-10" />
       )}

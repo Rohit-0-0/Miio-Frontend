@@ -58,6 +58,9 @@ export function normalizePropertyQuery(
     featured: normalizeBoolean(searchParams.featured),
     country: normalizeString(searchParams.country),
     city: normalizeString(searchParams.city),
+    checkIn: normalizeString(searchParams.checkIn),
+    checkOut: normalizeString(searchParams.checkOut),
+    guests: normalizeNumber(searchParams.guests),
   };
 
   const sortRaw = normalizeString(searchParams.sort);

@@ -9,8 +9,7 @@ export interface HeroSection extends SectionMetadata {
   eyebrow?: string;
   title: string;
   subtitle: string;
-  heroImages?: ImageAsset[];
-  backgroundImage?: ImageAsset; // Legacy fallback
+  images?: ImageAsset[];
   backgroundAlt?: string;
   primaryCta: { label: string; href: string };
   secondaryCta?: { label: string; href: string };
@@ -48,6 +47,8 @@ export interface LocationItem {
   description: string;
   image?: ImageAsset;
   displayOrder?: number;
+  ctaText?: string;
+  ctaLink?: string;
 }
 
 export interface LocationsSection extends SectionMetadata {

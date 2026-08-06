@@ -9,10 +9,10 @@ export function HeroPreview({ hero }: { hero: Partial<HeroSection> }) {
     <div
       className="relative w-full h-64 bg-gray-200 flex flex-col items-center justify-center text-center overflow-hidden"
     >
-      {hero.backgroundImage?.assetId && (
+      {hero.images?.[0]?.assetId && (
         <div className="absolute inset-0 z-0">
           <AppImage 
-            image={hero.backgroundImage}
+            image={hero.images[0]}
             alt="Hero Preview"
             fill
           />

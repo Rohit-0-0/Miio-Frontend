@@ -104,6 +104,8 @@ export interface PropertyData {
   id: string;
   guestyId?: string;
   title: string;
+  nickname?: string;
+  unitType?: string;
   slug: string;
   shortDescription?: string;
   longDescription?: string;
@@ -158,6 +160,8 @@ export interface PropertyDocument extends PropertyData, BaseEntity {}
 export interface PropertySummary {
   id: string;
   title: string;
+  nickname?: string;
+  unitType?: string;
   slug: string;
   shortDescription?: string | undefined;
   location: {
@@ -177,6 +181,8 @@ export interface PropertySummary {
 export interface PropertyDetails {
   id: string;
   title: string;
+  nickname?: string;
+  unitType?: string;
   slug: string;
   shortDescription?: string;
   longDescription?: string;

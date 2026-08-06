@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { ImageAsset as ImageType } from '@/types/common';
 import { GalleryGrid } from './GalleryGrid';
+import { CrossfadeCarousel } from '@/components/shared/CrossfadeCarousel';
 
 interface HeroGalleryProps {
   images: ImageType[];
@@ -26,8 +27,8 @@ export function HeroGallery({ images }: HeroGalleryProps) {
         </div>
         
         {/* Mobile View - Fallback to just the first image for now, later replaced by GalleryCarousel */}
-        <div className="block md:hidden">
-          <GalleryGrid images={images} onImageClick={handleImageClick} />
+        <div className="block md:hidden h-[50vh]">
+          <CrossfadeCarousel images={images} alt="Location Gallery Image" intervalMs={6000} />
         </div>
       </section>
 

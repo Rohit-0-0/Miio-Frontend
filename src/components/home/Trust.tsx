@@ -1,7 +1,12 @@
 import { TrustSection } from '@/types/homepage';
+import { HOME_DEFAULTS } from '@/lib/defaults/home';
 
 export function Trust({ trust }: { trust: TrustSection }) {
-  if (!trust) return null;
+  const heading = trust?.heading || HOME_DEFAULTS.trust.heading;
+  const rating = trust?.rating || HOME_DEFAULTS.trust.rating;
+  const reviewCount = trust?.reviewCount || HOME_DEFAULTS.trust.reviewCount;
+  const verifiedText = trust?.verifiedText || HOME_DEFAULTS.trust.verifiedText;
+  const items = trust?.items?.length ? trust.items : HOME_DEFAULTS.trust.items;
 
   return (
     <section className="bg-white border-y border-gray-100 py-24 md:py-32">
@@ -14,19 +19,19 @@ export function Trust({ trust }: { trust: TrustSection }) {
               </svg>
             ))}
           </div>
-          <h2 className="text-3xl md:text-5xl font-serif text-[#1B1A17]">{trust.heading}</h2>
+          <h2 className="text-3xl md:text-5xl font-serif text-[#1B1A17]">{heading}</h2>
           <div className="flex flex-col sm:flex-row items-center sm:space-x-4 space-y-2 sm:space-y-0 text-sm md:text-base font-medium tracking-widest uppercase text-[#1B1A17]/60">
-            <span>{trust.rating} Rating</span>
+            <span>{rating} Rating</span>
             <span className="hidden sm:block">•</span>
-            <span>{trust.reviewCount} Reviews</span>
+            <span>{reviewCount} Reviews</span>
             <span className="hidden sm:block">•</span>
-            <span>{trust.verifiedText}</span>
+            <span>{verifiedText}</span>
           </div>
         </div>
 
-        {trust.items && trust.items.length > 0 && (
+        {items && items.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-16 w-full pt-12 border-t border-gray-100">
-            {trust.items.map((item) => (
+            {items.map((item) => (
               <div key={item.id} className="flex flex-col items-center space-y-4">
                 {item.icon && (
                   <div 

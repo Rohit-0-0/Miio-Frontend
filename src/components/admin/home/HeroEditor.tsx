@@ -91,8 +91,8 @@ export function HeroEditor({ initialData, onSave, onDirtyChange }: HeroEditorPro
 
         <div>
           <MultiImageUploader
-            values={hero.heroImages || []}
-            onChange={imgs => handleChange({ heroImages: imgs })}
+            values={hero.images || []}
+            onChange={imgs => handleChange({ images: imgs })}
             label="Hero Carousel Images"
           />
         </div>

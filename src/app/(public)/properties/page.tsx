@@ -3,7 +3,7 @@ import { staysPageService } from '@/services/stays-page.service';
 import { normalizePropertyQuery } from '@/lib/utils/search-params';
 import { SectionContainer } from '@/components/properties/SectionContainer';
 import { BrowseHeader } from '@/components/properties/BrowseHeader';
-import { BrowseFilters } from '@/components/properties/BrowseFilters';
+import { SearchWidget } from '@/components/shared/SearchWidget';
 import { PropertyGrid } from '@/components/properties/PropertyGrid';
 import { PropertyBrowseCard } from '@/components/properties/PropertyBrowseCard';
 import { EmptyState } from '@/components/properties/EmptyState';
@@ -88,7 +88,9 @@ export default async function PropertiesPage({
           introText={generalSettings.introText} 
         />
         
-        <BrowseFilters config={filterConfig} />
+        <div className="mb-10 pb-8 border-b border-gray-100">
+          <SearchWidget primaryCtaLabel="Update Search" />
+        </div>
 
         {hasError ? (
           <div className="text-center py-20 text-gray-500">
@@ -105,6 +107,8 @@ export default async function PropertiesPage({
                   id={property.id}
                   slug={property.slug}
                   name={property.title}
+                  nickname={property.nickname}
+                  unitType={property.unitType}
                   location={[property.location?.city, property.location?.country].filter(Boolean).join(', ') || 'Various Locations'}
                   guests={property.maxGuests || 2}
                   bedrooms={property.bedrooms || 1}
