@@ -89,7 +89,7 @@ export default async function PropertiesPage({
         />
         
         <div className="mb-10 pb-8 border-b border-gray-100">
-          <SearchWidget primaryCtaLabel="Update Search" />
+          <SearchWidget primaryCtaLabel="Search" />
         </div>
 
         {hasError ? (
