@@ -13,7 +13,7 @@ import { PropertySummary } from '@/types/property';
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
-    const staysPage = await staysPageService.get();
+    const staysPage = await staysPageService.get({ next: { revalidate: 300 } });
     if (staysPage.seo) {
       return {
         title: staysPage.seo.metaTitle,

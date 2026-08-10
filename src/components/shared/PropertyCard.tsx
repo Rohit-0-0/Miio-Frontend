@@ -47,6 +47,7 @@ export function PropertyCard({
   return (
     <Link 
       href={`/properties/${slug}${id ? `?id=${id}` : ''}`}
+      prefetch={true}
       className={`group flex flex-col space-y-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-4 rounded-sm ${className}`}
     >
       <div className="relative w-full aspect-[4/3] overflow-hidden bg-gray-100">

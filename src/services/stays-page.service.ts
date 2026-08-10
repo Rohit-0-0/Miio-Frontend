@@ -7,8 +7,8 @@ import type {
 } from '@/types/stays-page';
 
 export const staysPageService = {
-  get: async (): Promise<StaysPageData> => {
-    const response = await apiClient.get<{ success: boolean; data: StaysPageData }>('/stays-page');
+  get: async (options?: RequestInit): Promise<StaysPageData> => {
+    const response = await apiClient.get<{ success: boolean; data: StaysPageData }>('/stays-page', options);
     return response.data;
   },
 

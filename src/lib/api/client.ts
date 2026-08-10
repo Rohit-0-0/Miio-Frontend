@@ -53,12 +53,19 @@ export class ApiClient {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    let response = await fetch(url, {
+    const fetchOptions: RequestInit = {
       ...options,
       headers,
-      credentials: 'include', // Ensure cookies are sent for refresh
-      cache: 'no-store', // Disable aggressive Next.js caching to always fetch fresh data
-    });
+      credentials: 'include',
+    };
+
+    if (options.next) {
+      fetchOptions.next = options.next;
+    } else if (options.cache === undefined) {
+      fetchOptions.cache = 'no-store'; // Default to no-store if no caching strategy provided
+    }
+
+    let response = await fetch(url, fetchOptions);
 
     if (response.status === 401 && endpoint !== '/auth/refresh' && endpoint !== '/auth/login') {
       if (!this.refreshPromise) {
@@ -72,12 +79,19 @@ export class ApiClient {
       if (newAccessToken) {
         // Retry original request
         headers['Authorization'] = `Bearer ${newAccessToken}`;
-        response = await fetch(url, {
+        const retryOptions: RequestInit = {
           ...options,
           headers,
           credentials: 'include',
-          cache: 'no-store', // Disable aggressive Next.js caching
-        });
+        };
+
+        if (options.next) {
+          retryOptions.next = options.next;
+        } else if (options.cache === undefined) {
+          retryOptions.cache = 'no-store';
+        }
+
+        response = await fetch(url, retryOptions);
       } else {
         // Refresh failed, let it fall through and throw the 401
       }

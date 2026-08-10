@@ -11,7 +11,11 @@ interface JournalCardProps {
 export function JournalCard({ slug, category, title, excerpt }: JournalCardProps) {
   return (
     <div className="group flex flex-col h-full">
-      <Link href={`${ROUTES.JOURNAL}/${slug}`} className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 rounded-sm mb-6">
+    <Link 
+      href={`${ROUTES.JOURNAL}/${slug}`} 
+      prefetch={true}
+      className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 rounded-sm mb-6"
+    >
         <div className="relative w-full aspect-[4/3] md:aspect-[3/2] overflow-hidden rounded-sm bg-gray-100">
           <div className="absolute inset-0 bg-gray-200 w-full h-full flex items-center justify-center text-gray-400 transition-transform duration-500 group-hover:scale-105">
             <span>Placeholder Image</span>

@@ -1,10 +1,17 @@
 import { env } from '@/config/env';
 
-export async function getLocationBySlug(slug: string) {
+export async function getLocationBySlug(slug: string, options?: RequestInit) {
   try {
-    const res = await fetch(`${env.NEXT_PUBLIC_API_URL}/editorial/locations/${slug}`, {
-      next: { revalidate: 0 }
-    });
+    const fetchOptions: RequestInit = {
+      ...options,
+    };
+    if (options?.next) {
+      fetchOptions.next = options.next;
+    } else if (options?.cache === undefined) {
+      fetchOptions.next = { revalidate: 0 };
+    }
+
+    const res = await fetch(`${env.NEXT_PUBLIC_API_URL}/editorial/locations/${slug}`, fetchOptions);
     
     if (!res.ok) {
       if (res.status === 404) return null;
@@ -19,11 +26,18 @@ export async function getLocationBySlug(slug: string) {
   }
 }
 
-export async function getLocations() {
+export async function getLocations(options?: RequestInit) {
   try {
-    const res = await fetch(`${env.NEXT_PUBLIC_API_URL}/editorial/locations`, {
-      next: { revalidate: 0 }
-    });
+    const fetchOptions: RequestInit = {
+      ...options,
+    };
+    if (options?.next) {
+      fetchOptions.next = options.next;
+    } else if (options?.cache === undefined) {
+      fetchOptions.next = { revalidate: 0 };
+    }
+
+    const res = await fetch(`${env.NEXT_PUBLIC_API_URL}/editorial/locations`, fetchOptions);
     
     if (!res.ok) {
       throw new Error(`Failed to fetch locations: ${res.statusText}`);

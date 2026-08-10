@@ -24,7 +24,7 @@ export async function generateMetadata(
     return { title: 'Not Found | Miio' };
   }
 
-  const location = await getLocationBySlug(slug);
+  const location = await getLocationBySlug(slug, { next: { revalidate: 300 } });
   
   if (!location) {
     return { title: 'Not Found | Miio' };

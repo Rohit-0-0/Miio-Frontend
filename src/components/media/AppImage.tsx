@@ -36,7 +36,7 @@ export function AppImage({ image, alt, fallbackAlt = 'Image', className = '', ..
       suppressHydrationWarning
     >
       {isLoading && (
-        <div className="absolute inset-0 bg-gray-100 animate-pulse z-10" />
+        <div className="absolute inset-0 animate-shimmer z-10" />
       )}
       <Image
         src={url}

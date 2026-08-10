@@ -3,19 +3,27 @@ import { env } from '@/config/env';
 import { ApiResponse } from '@/types/api';
 import { HomepageDocument } from '@/types/homepage';
 
-export const getHomepage = cache(async (): Promise<HomepageDocument | null> => {
+export const getHomepage = cache(async (options?: RequestInit): Promise<HomepageDocument | null> => {
   const url = `${env.NEXT_PUBLIC_API_URL}/homepage`;
   
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
   };
 
+  const fetchOptions: RequestInit = {
+    method: 'GET',
+    headers,
+    ...options,
+  };
+
+  if (options?.next) {
+    fetchOptions.next = options.next;
+  } else if (options?.cache === undefined) {
+    fetchOptions.next = { revalidate: 0 }; // Default to dynamic
+  }
+
   try {
-    const response = await fetch(url, {
-      method: 'GET',
-      headers,
-      next: { revalidate: 0 } // Disable caching to see immediate Sanity Studio updates
-    });
+    const response = await fetch(url, fetchOptions);
 
     if (!response.ok) {
       console.error(`Failed to fetch homepage: ${response.statusText}`);

@@ -5,7 +5,7 @@ import { ApiResponse } from '@/types/api';
 class JournalService {
   private readonly basePath = '/journal';
 
-  async getJournalArticles(query?: JournalQuery): Promise<JournalListResponse> {
+  async getJournalArticles(query?: JournalQuery, options?: RequestInit): Promise<JournalListResponse> {
     const params = new URLSearchParams();
     
     if (query) {
@@ -23,11 +23,11 @@ class JournalService {
     const queryString = params.toString();
     const endpoint = queryString ? `${this.basePath}?${queryString}` : this.basePath;
     
-    return apiClient.get<JournalListResponse>(endpoint);
+    return apiClient.get<JournalListResponse>(endpoint, options);
   }
 
-  async getArticleBySlug(slug: string): Promise<ApiResponse<JournalArticle>> {
-    return apiClient.get<ApiResponse<JournalArticle>>(`${this.basePath}/${slug}`);
+  async getArticleBySlug(slug: string, options?: RequestInit): Promise<ApiResponse<JournalArticle>> {
+    return apiClient.get<ApiResponse<JournalArticle>>(`${this.basePath}/${slug}`, options);
   }
 
   async getArticleById(id: string): Promise<ApiResponse<JournalArticle>> {

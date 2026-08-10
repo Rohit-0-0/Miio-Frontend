@@ -11,3 +11,20 @@ body {
   background-color: #ffffff;
   color: #171717;
 }
+
+@layer utilities {
+  .animate-shimmer {
+    animation: shimmer 2.5s infinite linear;
+    background: linear-gradient(to right, #f8f7f5 4%, #edece9 25%, #f8f7f5 36%);
+    background-size: 1000px 100%;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}

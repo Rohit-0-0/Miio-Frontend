@@ -9,7 +9,7 @@ import { RichTextRenderer } from '@/components/ui/editor';
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   try {
-    const { data: article } = await journalService.getArticleBySlug(slug);
+    const { data: article } = await journalService.getArticleBySlug(slug, { next: { revalidate: 300 } });
     return {
       title: article.seo?.title || article.title,
       description: article.seo?.description || article.excerpt || '',

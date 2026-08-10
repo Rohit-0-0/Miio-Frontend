@@ -35,7 +35,7 @@ export async function generateMetadata(
   }
 
   try {
-    const response = await getPropertyById<PropertyDetails>(guestyId);
+    const response = await getPropertyById<PropertyDetails>(guestyId, { next: { revalidate: 300 } });
     const property = response.data;
     
     if (!property || property.lifecycleStatus !== LIFECYCLE_STATUS.PUBLISHED || !property.visibleOnWebsite) {

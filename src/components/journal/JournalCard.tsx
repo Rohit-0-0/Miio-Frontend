@@ -16,7 +16,11 @@ export function JournalCard({ article }: { article: JournalArticle }) {
 
   return (
     <article className="group flex flex-col h-full relative">
-      <Link href={`${ROUTES.JOURNAL}/${slugStr}`} className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 rounded-sm mb-6">
+    <Link 
+      href={`${ROUTES.JOURNAL}/${slugStr}`} 
+      prefetch={true}
+      className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 rounded-sm mb-6"
+    >
         <div className="relative w-full aspect-[4/3] md:aspect-[3/2] overflow-hidden rounded-sm bg-gray-100">
           <AppImage
             image={article.coverImage}

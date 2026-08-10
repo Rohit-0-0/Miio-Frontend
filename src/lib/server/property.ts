@@ -4,7 +4,8 @@ import { ApiResponse, PaginatedResponse } from '@/types/api';
 import { PropertyDocument } from '@/types/property';
 
 export async function getPropertyListing<T = PropertyDocument>(
-  params: Record<string, string | string[] | undefined>
+  params: Record<string, string | string[] | undefined>,
+  options?: RequestInit
 ): Promise<PaginatedResponse<T>> {
   const searchParams = new URLSearchParams();
 
@@ -28,11 +29,19 @@ export async function getPropertyListing<T = PropertyDocument>(
     headers['Authorization'] = `Bearer ${accessToken.value}`;
   }
 
-  const response = await fetch(url, {
+  const fetchOptions: RequestInit = {
     method: 'GET',
     headers,
-    cache: 'no-store', // Since we rely on authorization and real-time status
-  });
+    ...options,
+  };
+
+  if (options?.next) {
+    fetchOptions.next = options.next;
+  } else if (options?.cache === undefined) {
+    fetchOptions.cache = 'no-store';
+  }
+
+  const response = await fetch(url, fetchOptions);
 
   if (!response.ok) {
     throw new Error(`Failed to fetch properties: ${response.statusText}`);
@@ -66,7 +75,7 @@ export async function getPropertiesByIds(ids: string[]): Promise<ApiResponse<Pro
   return response.json();
 }
 
-export async function getPropertyById<T = PropertyDocument>(id: string): Promise<ApiResponse<T>> {
+export async function getPropertyById<T = PropertyDocument>(id: string, options?: RequestInit): Promise<ApiResponse<T>> {
   const url = `${env.NEXT_PUBLIC_API_URL}/properties/${id}`;
   
   const cookieStore = await cookies();
@@ -80,11 +89,19 @@ export async function getPropertyById<T = PropertyDocument>(id: string): Promise
     headers['Authorization'] = `Bearer ${accessToken.value}`;
   }
 
-  const response = await fetch(url, {
+  const fetchOptions: RequestInit = {
     method: 'GET',
     headers,
-    cache: 'no-store',
-  });
+    ...options,
+  };
+
+  if (options?.next) {
+    fetchOptions.next = options.next;
+  } else if (options?.cache === undefined) {
+    fetchOptions.cache = 'no-store';
+  }
+
+  const response = await fetch(url, fetchOptions);
 
   if (!response.ok) {
     if (response.status === 404) {
