@@ -7,6 +7,7 @@ import { DateSelector } from './DateSelector';
 import { GuestSelector } from './GuestSelector';
 import { BookingActions } from './BookingActions';
 import { ReserveButton } from './ReserveButton';
+import { CheckoutModal } from './CheckoutModal';
 import { apiClient } from '@/lib/api/client';
 
 interface BookingCardProps {
@@ -32,7 +33,9 @@ export function BookingCard({ listingId }: BookingCardProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [quote, setQuote] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  
+  // Checkout Modal State
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
   // When dates or guests change, if we have valid dates and guests, fetch a quote
   useEffect(() => {
@@ -41,7 +44,6 @@ export function BookingCard({ listingId }: BookingCardProps) {
     const fetchQuote = async () => {
       setIsLoading(true);
       setError(null);
-      setSuccess(null);
       setQuote(null);
       try {
         const response = await apiClient.post<any>('/booking/quotes', {
@@ -86,87 +88,66 @@ export function BookingCard({ listingId }: BookingCardProps) {
     return () => clearTimeout(debounceId);
   }, [listingId, checkIn, checkOut, adults, children, infants, pets]);
 
-  const handleReserve = async () => {
+  const handleBookNowClick = () => {
     if (!quote) return;
-    
-    setIsLoading(true);
     setError(null);
-    setSuccess(null);
-    try {
-      const availableRatePlans = quote.rates?.ratePlans || [];
-      const ratePlanId = quote.ratePlanId || (availableRatePlans.length > 0 ? availableRatePlans[0].ratePlan?._id : '') || quote._id;
-      
-      const res = await apiClient.post<any>('/booking/reservations', {
-        quoteId: quote._id,
-        ratePlanId,
-        guest: {
-          firstName: 'Guest',
-          lastName: 'User',
-          email: 'guest@example.com' // Mocking for now, normally you'd open a modal to collect this
-        }
-      });
-      if (res.success) {
-        setSuccess('Your booking request has been submitted. We\'ll confirm your stay shortly.');
-      } else {
-        setError('Failed to request reservation');
-      }
-    } catch (err: any) {
-      const msg = err.message || 'Failed to request reservation';
-      setError(msg);
-      if (msg.toLowerCase().includes('no longer valid')) {
-        setQuote(null);
-      }
-    } finally {
-      setIsLoading(false);
-    }
+    setIsCheckoutOpen(true);
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-xl shadow-gray-200/50 sticky top-32 z-10">
-      <PriceSummary 
-        isLoading={isLoading} 
-        quote={quote} 
-      />
-      
-      {error && (
-        <div className="text-red-500 text-sm mb-4 px-2 py-1 bg-red-50 rounded border border-red-100">
-          {error}
-        </div>
-      )}
-
-      {success && (
-        <div className="text-green-600 text-sm mb-4 px-2 py-1 bg-green-50 rounded border border-green-100">
-          {success}
-        </div>
-      )}
-      
-      <div className="w-full">
-        <DateSelector 
-          checkIn={checkIn}
-          checkOut={checkOut}
-          onChangeCheckIn={setCheckIn}
-          onChangeCheckOut={setCheckOut}
+    <>
+      <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-xl shadow-gray-200/50 sticky top-32 z-10">
+        <PriceSummary 
+          isLoading={isLoading} 
+          quote={quote} 
         />
-        <GuestSelector 
-          adults={adults}
-          children={children}
-          infants={infants}
-          pets={pets}
-          onChangeAdults={setAdults}
-          onChangeChildren={setChildren}
-          onChangeInfants={setInfants}
-          onChangePets={setPets}
-        />
+        
+        {error && (
+          <div className="text-red-500 text-sm mb-4 px-3 py-2 bg-red-50 rounded border border-red-100">
+            {error}
+          </div>
+        )}
+        
+        <div className="w-full">
+          <DateSelector 
+            checkIn={checkIn}
+            checkOut={checkOut}
+            onChangeCheckIn={setCheckIn}
+            onChangeCheckOut={setCheckOut}
+          />
+          <GuestSelector 
+            adults={adults}
+            children={children}
+            infants={infants}
+            pets={pets}
+            onChangeAdults={setAdults}
+            onChangeChildren={setChildren}
+            onChangeInfants={setInfants}
+            onChangePets={setPets}
+          />
+        </div>
+        
+        <BookingActions>
+          <ReserveButton 
+            disabled={!quote || isLoading} 
+            onClick={handleBookNowClick}
+            isLoading={isLoading}
+            label={!checkIn || !checkOut ? 'Select dates' : isLoading ? 'Checking...' : quote ? 'Book Now' : 'Unavailable'}
+          />
+        </BookingActions>
       </div>
-      
-      <BookingActions>
-        <ReserveButton 
-          disabled={!quote || isLoading} 
-          onClick={handleReserve}
-          isLoading={isLoading}
-          label={!checkIn || !checkOut ? 'Select dates' : isLoading ? (quote ? 'Submitting request...' : 'Checking...') : quote ? (success ? 'Request submitted' : 'Reserve') : 'Unavailable'}
-        />
-      </BookingActions>
-    </div>
+
+      <CheckoutModal 
+        isOpen={isCheckoutOpen}
+        onClose={() => setIsCheckoutOpen(false)}
+        quote={quote}
+        checkIn={checkIn || ''}
+        checkOut={checkOut || ''}
+        adults={adults}
+        children={children}
+        infants={infants}
+        pets={pets}
+      />
+    </>
   );
 }

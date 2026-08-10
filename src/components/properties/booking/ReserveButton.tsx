@@ -7,7 +7,7 @@ interface ReserveButtonProps {
   label?: string;
 }
 
-export function ReserveButton({ disabled, isLoading, onClick, label = 'Reserve' }: ReserveButtonProps) {
+export function ReserveButton({ disabled, isLoading, onClick, label = 'Enquire' }: ReserveButtonProps) {
   return (
     <button 
       disabled={disabled}

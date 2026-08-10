@@ -28,3 +28,10 @@ body {
     background-position: 1000px 0;
   }
 }
+
+/* Hide native date input spin buttons to prevent accidental onChange triggering during month/year navigation */
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-clear-button {
+  display: none;
+  -webkit-appearance: none;
+}
