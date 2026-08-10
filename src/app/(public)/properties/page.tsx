@@ -1,4 +1,4 @@
-import { getPropertyListing } from '@/lib/server/property';
+import { getPropertyListing, getPropertiesByIds } from '@/lib/server/property';
 import { staysPageService } from '@/services/stays-page.service';
 import { normalizePropertyQuery } from '@/lib/utils/search-params';
 import { SectionContainer } from '@/components/properties/SectionContainer';
@@ -38,44 +38,73 @@ export default async function PropertiesPage({
   const resolvedParams = await searchParams;
   const query = normalizePropertyQuery(resolvedParams);
 
-  // Enforce public rules
-  query.status = 'PUBLISHED';
-  query.visibleOnWebsite = 'true';
-  query.limit = query.limit || 12;
-
-  let response;
+  let properties: any[] = [];
   let staysPage;
-  let hasError = false;
+  let hasApiError = false;
+  let missingDates = false;
 
   try {
-    const [propRes, cmsRes] = await Promise.all([
-      getPropertyListing<PropertySummary>(query as Record<string, string | string[] | undefined>),
-      staysPageService.get(),
-    ]);
-    response = propRes;
-    staysPage = cmsRes;
+    staysPage = await staysPageService.get();
   } catch (error) {
-    console.error('Failed to fetch properties or stays page data:', error);
-    hasError = true;
+    console.error('Failed to fetch stays page data:', error);
   }
 
-  const properties = response?.data || [];
+  const checkIn = query.checkIn as string | undefined;
+  const checkOut = query.checkOut as string | undefined;
   
-  // Fallbacks if CMS is completely unreachable
+  try {
+    const adults = query.adults as string | undefined;
+    const children = query.children as string | undefined;
+    const infants = query.infants as string | undefined;
+    const pets = query.pets as string | undefined;
+    
+    const beSearchParams = new URLSearchParams();
+    if (checkIn) beSearchParams.append('checkIn', checkIn);
+    if (checkOut) beSearchParams.append('checkOut', checkOut);
+    if (adults) beSearchParams.append('adults', adults);
+    if (children) beSearchParams.append('children', children);
+    if (infants) beSearchParams.append('infants', infants);
+    if (pets) beSearchParams.append('pets', pets);
+
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
+    const endpoint = beSearchParams.toString() ? `/booking/search?${beSearchParams.toString()}` : `/booking/search`;
+    
+    console.log(`[Frontend] Fetching properties in ${checkIn && checkOut ? 'availability' : 'browse'} mode`);
+    const searchRes = await fetch(`${apiUrl}${endpoint}`, {
+      cache: 'no-store'
+    });
+    
+    if (searchRes.ok) {
+      const json = await searchRes.json();
+      properties = json.data || [];
+      console.log(`[Frontend] Received ${properties.length} listings from backend`);
+    } else {
+      console.warn(`[Frontend] Booking Engine Search failed with status: ${searchRes.status}`);
+      hasApiError = true;
+    }
+  } catch (error) {
+    console.error(`[Frontend] Failed to fetch properties from Booking Engine API:`, error);
+    hasApiError = true;
+  }
+
+  // Create a query string from the search params to pass to property cards
+  const searchParamsObj = new URLSearchParams();
+  Object.entries(resolvedParams).forEach(([key, val]) => {
+    if (val !== undefined) {
+      if (Array.isArray(val)) val.forEach(v => searchParamsObj.append(key, v));
+      else searchParamsObj.append(key, val);
+    }
+  });
+  const searchQueryString = searchParamsObj.toString();
+
   const generalSettings = staysPage?.general || {
     heading: 'All Stays',
     introText: 'Browse our carefully curated collection of homes designed for slower living.',
   };
-  const filterConfig = staysPage?.filters || {
-    showLocationFilter: true,
-    showGuestsFilter: true,
-    showPriceFilter: true,
-    enableMapButton: true,
-    defaultSort: 'recommended',
-  };
+
   const emptyStateConfig = staysPage?.emptyState || {
     heading: 'No stays available',
-    description: "We're currently updating our curated collection.",
+    description: "No stays available for these dates and guests.",
     ctaText: 'Return Home',
     ctaLink: '/',
   };
@@ -92,32 +121,65 @@ export default async function PropertiesPage({
           <SearchWidget primaryCtaLabel="Search" />
         </div>
 
-        {hasError ? (
+        {hasApiError ? (
           <div className="text-center py-20 text-gray-500">
-            <p>Something went wrong. Please try refreshing the page.</p>
+            <h3 className="text-xl font-serif text-gray-900 mb-2">Unavailable</h3>
+            <p>Unable to check availability right now.</p>
+          </div>
+        ) : missingDates ? (
+          <div className="text-center py-20 text-gray-500">
+            <h3 className="text-xl font-serif text-gray-900 mb-2">Select Dates</h3>
+            <p>Please select check-in and check-out dates to browse available properties.</p>
           </div>
         ) : properties.length === 0 ? (
-          <EmptyState config={emptyStateConfig} />
+          <EmptyState config={{
+            ...emptyStateConfig,
+            heading: 'No stays available',
+            description: 'No stays available for these dates and guests.',
+          }} />
         ) : (
           <>
             <PropertyGrid>
-              {properties.map((property) => (
-                <PropertyBrowseCard
-                  key={property.id}
-                  id={property.id}
-                  slug={property.slug}
-                  name={property.title}
-                  nickname={property.nickname}
-                  unitType={property.unitType}
-                  location={[property.location?.city, property.location?.country].filter(Boolean).join(', ') || 'Various Locations'}
-                  guests={property.maxGuests || 2}
-                  bedrooms={property.bedrooms || 1}
-                  price={'Enquire'}
-                  coverImage={property.gallery?.[0]}
-                />
-              ))}
+              {properties.map((property: any) => {
+                // Map Guesty fields to component props safely
+                const id = property._id || property.id;
+                const name = property.nickname || property.title || 'Unknown Property';
+                const location = [property.address?.city, property.address?.country].filter(Boolean).join(', ') || 'Various Locations';
+                const guests = property.accommodates || 2;
+                const bedrooms = property.bedrooms || 1;
+                const coverImage = property.picture?.large || property.picture?.regular || property.pictures?.[0]?.original || null;
+                
+                const currency = property.prices?.currency === 'AUD' ? '$' : (property.prices?.currency || '');
+                let price = 'Enquire';
+                let priceLabel = '/ night';
+                
+                if (property.prices?.totalPrice) {
+                  price = `${currency}${property.prices.totalPrice}`;
+                  priceLabel = 'total';
+                } else if (property.prices?.basePrice) {
+                  price = `${currency}${property.prices.basePrice}`;
+                  priceLabel = '/ night';
+                }
+                
+                return (
+                  <PropertyBrowseCard
+                    key={id}
+                    id={id}
+                    slug={id} // Using ID as slug since we don't have Sanity slugs
+                    name={name}
+                    nickname={property.nickname}
+                    unitType={property.propertyType || ''}
+                    location={location}
+                    guests={guests}
+                    bedrooms={bedrooms}
+                    price={price}
+                    priceLabel={priceLabel}
+                    coverImage={coverImage}
+                    searchQueryString={searchQueryString}
+                  />
+                );
+              })}
             </PropertyGrid>
-            {response?.pagination && <Pagination pagination={response.pagination} />}
           </>
         )}
       </SectionContainer>

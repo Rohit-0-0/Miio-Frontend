@@ -13,7 +13,9 @@ interface PropertyBrowseCardProps {
   guests: number;
   bedrooms: number;
   price: string;
-  coverImage?: ImageAsset;
+  priceLabel?: string;
+  coverImage?: ImageAsset | string;
+  searchQueryString?: string;
 }
 
 const formatUnitType = (type?: string) => {
@@ -34,21 +36,32 @@ export function PropertyBrowseCard({
   guests,
   bedrooms,
   price,
+  priceLabel = '/ night',
   coverImage,
+  searchQueryString,
 }: PropertyBrowseCardProps) {
   const formattedUnitType = formatUnitType(unitType);
+  const href = `/properties/${slug}?id=${id}${searchQueryString ? `&${searchQueryString}` : ''}`;
 
   return (
-    <Link href={`/properties/${slug}?id=${id}`} className="group block no-underline cursor-pointer">
+    <Link href={href} className="group block no-underline cursor-pointer">
       <div className="relative w-full aspect-[3/4] overflow-hidden rounded-sm bg-gray-100 mb-5">
         {coverImage ? (
-          <AppImage
-            image={coverImage}
-            alt={name}
-            fill
-            className="object-cover transition-transform duration-[520ms] ease-out group-hover:scale-[1.03]"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
+          typeof coverImage === 'string' ? (
+            <img
+              src={coverImage}
+              alt={name}
+              className="w-full h-full object-cover transition-transform duration-[520ms] ease-out group-hover:scale-[1.03]"
+            />
+          ) : (
+            <AppImage
+              image={coverImage}
+              alt={name}
+              fill
+              className="object-cover transition-transform duration-[520ms] ease-out group-hover:scale-[1.03]"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          )
         ) : (
           <div className="w-full h-full flex items-center justify-center text-gray-300">
             <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -81,7 +94,9 @@ export function PropertyBrowseCard({
           
           <div className="flex items-center gap-2 mt-2 md:mt-0 ml-auto md:ml-0 font-medium">
             <span className="text-gray-900">{price}</span>
-            <span className="text-gray-400 font-normal">/ night</span>
+            {price !== 'Enquire' && priceLabel && (
+              <span className="text-gray-400 font-normal">{priceLabel}</span>
+            )}
           </div>
         </div>
 

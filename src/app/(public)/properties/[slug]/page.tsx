@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { getPropertyById } from '@/lib/server/property';
 import { Container } from '@/components/ui/Container';
@@ -123,7 +124,9 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
 
           {/* Sidebar / Booking Card */}
           <div className="lg:col-span-1">
-            <BookingCard />
+            <Suspense fallback={<div className="bg-white border border-gray-200 rounded-xl p-6 shadow-xl h-[400px] animate-pulse"></div>}>
+              <BookingCard listingId={guestyId} />
+            </Suspense>
           </div>
           
         </div>

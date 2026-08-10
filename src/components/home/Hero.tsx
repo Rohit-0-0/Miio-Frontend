@@ -26,12 +26,12 @@ export function Hero({ hero }: { hero: HeroSection }) {
 
   return (
     <section 
-      className="relative w-full h-[100svh] flex flex-col justify-end pb-24 md:pb-32 overflow-hidden bg-[#1B1A17]"
+      className="relative w-full h-[100svh] flex flex-col justify-end pb-24 md:pb-32 bg-[#1B1A17]"
       role="banner"
       aria-label={hero.backgroundAlt || title}
     >
       {/* Background Images Carousel */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <CrossfadeCarousel 
           images={resolvedImages} 
           alt={hero.backgroundAlt || title} 
