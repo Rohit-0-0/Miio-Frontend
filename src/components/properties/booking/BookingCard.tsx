@@ -37,58 +37,68 @@ export function BookingCard({ listingId }: BookingCardProps) {
   // Checkout Modal State
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
+  const fetchQuote = async () => {
+    if (!checkIn || !checkOut || !listingId || adults < 1) return null;
+    
+    setIsLoading(true);
+    setError(null);
+    setQuote(null);
+    try {
+      const response = await apiClient.post<any>('/booking/quotes', {
+        listingId,
+        checkInDateLocalized: checkIn,
+        checkOutDateLocalized: checkOut,
+        guestsCount: adults + children + infants,
+        numberOfGuests: {
+          numberOfAdults: adults,
+          numberOfChildren: children,
+          numberOfInfants: infants,
+          numberOfPets: pets
+        }
+      });
+      
+      if (response.success && response.data) {
+        console.log(`[Quote] Generated\n  quoteId: ${response.data._id}`);
+        setQuote(response.data);
+        return response.data;
+      } else {
+        setError('Failed to fetch quote');
+        return null;
+      }
+    } catch (err: any) {
+      console.error(err);
+      
+      let msg = 'Unable to check availability right now.';
+      const errMsg = (err.message || '').toLowerCase();
+      const status = err.response?.status || err.statusCode;
+      
+      if (status === 404 || errMsg.includes('not available') || errMsg.includes('unavailable') || errMsg.includes('no quotes')) {
+        msg = 'This property is not available for your selected dates.';
+      } else if (status === 400 || errMsg.includes('invalid') || errMsg.includes('date')) {
+        msg = 'Please select valid check-in and check-out dates.';
+      }
+      
+      setError(msg);
+      setQuote(null);
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const debounceIdRef = React.useRef<NodeJS.Timeout | null>(null);
+
   // When dates or guests change, if we have valid dates and guests, fetch a quote
   useEffect(() => {
-    if (!checkIn || !checkOut || !listingId || adults < 1) return;
-
-    const fetchQuote = async () => {
-      setIsLoading(true);
-      setError(null);
-      setQuote(null);
-      try {
-        const response = await apiClient.post<any>('/booking/quotes', {
-          listingId,
-          checkInDateLocalized: checkIn,
-          checkOutDateLocalized: checkOut,
-          guestsCount: adults + children + infants, // Total humans
-          numberOfGuests: {
-            numberOfAdults: adults,
-            numberOfChildren: children,
-            numberOfInfants: infants,
-            numberOfPets: pets
-          }
-        });
-        
-        if (response.success && response.data) {
-          setQuote(response.data);
-        } else {
-          setError('Failed to fetch quote');
-        }
-      } catch (err: any) {
-        console.error(err);
-        
-        let msg = 'Unable to check availability right now.';
-        const errMsg = (err.message || '').toLowerCase();
-        const status = err.response?.status || err.statusCode;
-        
-        if (status === 404 || errMsg.includes('not available') || errMsg.includes('unavailable') || errMsg.includes('no quotes')) {
-          msg = 'This property is not available for your selected dates.';
-        } else if (status === 400 || errMsg.includes('invalid') || errMsg.includes('date')) {
-          msg = 'Please select valid check-in and check-out dates.';
-        }
-        
-        setError(msg);
-        setQuote(null);
-      } finally {
-        setIsLoading(false);
-      }
+    if (debounceIdRef.current) clearTimeout(debounceIdRef.current);
+    debounceIdRef.current = setTimeout(fetchQuote, 500);
+    return () => {
+      if (debounceIdRef.current) clearTimeout(debounceIdRef.current);
     };
-
-    const debounceId = setTimeout(fetchQuote, 500);
-    return () => clearTimeout(debounceId);
   }, [listingId, checkIn, checkOut, adults, children, infants, pets]);
 
   const handleBookNowClick = () => {
+    console.log(`[BookingCard] Active quote\n  quoteId: ${quote?._id}`);
     if (!quote) return;
     setError(null);
     setIsCheckoutOpen(true);
@@ -141,12 +151,14 @@ export function BookingCard({ listingId }: BookingCardProps) {
         isOpen={isCheckoutOpen}
         onClose={() => setIsCheckoutOpen(false)}
         quote={quote}
+        listingId={listingId}
         checkIn={checkIn || ''}
         checkOut={checkOut || ''}
         adults={adults}
         children={children}
         infants={infants}
         pets={pets}
+        onRefreshQuote={fetchQuote}
       />
     </>
   );

@@ -104,11 +104,16 @@ export class ApiClient {
       } catch {
         // Not a JSON response
       }
-      const errorMessage = typeof errorData?.message === 'string' ? errorData.message : `API error: ${response.statusText}`;
-      const apiError = new Error(errorMessage) as Error & { status?: number; details?: unknown; code?: unknown };
+      const errorMessage = typeof errorData?.message === 'string' 
+        ? errorData.message 
+        : typeof errorData?.error === 'string' 
+          ? errorData.error 
+          : `API error: ${response.statusText}`;
+      const apiError = new Error(errorMessage) as Error & { status?: number; details?: unknown; code?: unknown; errorCode?: unknown };
       apiError.status = response.status;
       apiError.details = errorData?.details;
-      apiError.code = errorData?.code;
+      apiError.code = errorData?.code || errorData?.errorCode;
+      apiError.errorCode = errorData?.errorCode;
       throw apiError;
     }
 
