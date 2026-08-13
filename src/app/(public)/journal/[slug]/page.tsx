@@ -5,6 +5,7 @@ import { journalService } from '@/services/journal.service';
 import { Container } from '@/components/ui/Container';
 import { ROUTES } from '@/constants/routes';
 import { RichTextRenderer } from '@/components/ui/editor';
+import { FloatingBackButton } from '@/components/ui/FloatingBackButton';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -104,6 +105,7 @@ export default async function JournalDetailPage({
           <RichTextRenderer html={article.content} />
         </div>
       </Container>
+      <FloatingBackButton />
     </article>
   );
 }

@@ -190,6 +190,8 @@ export interface PropertyDetails {
     city: string;
     state: string;
     country: string;
+    latitude?: number;
+    longitude?: number;
   };
   gallery: ImageAsset[];
   coverImageId?: string;

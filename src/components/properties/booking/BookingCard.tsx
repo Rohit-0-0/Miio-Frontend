@@ -104,47 +104,91 @@ export function BookingCard({ listingId }: BookingCardProps) {
     setIsCheckoutOpen(true);
   };
 
+  // Mobile expanded state
+  const [isMobileExpanded, setIsMobileExpanded] = useState(false);
+
   return (
     <>
-      <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-xl shadow-gray-200/50 sticky top-32 z-10">
-        <PriceSummary 
-          isLoading={isLoading} 
-          quote={quote} 
-        />
+      <div className={`bg-white border-t lg:border border-gray-200 lg:rounded-xl p-4 lg:p-6 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] lg:shadow-xl lg:shadow-gray-200/50 fixed lg:sticky bottom-0 lg:bottom-auto lg:top-32 left-0 right-0 z-40 lg:z-10 w-full transition-all duration-300 ${isMobileExpanded ? 'max-h-[90vh] rounded-t-2xl overflow-y-auto' : 'max-h-[85vh] overflow-visible'} lg:max-h-none lg:overflow-visible flex flex-col`}>
+        
+        {/* Mobile Drag Handle */}
+        {isMobileExpanded && (
+          <div className="lg:hidden flex justify-center pb-4 pt-1" onClick={() => setIsMobileExpanded(false)}>
+            <div className="w-12 h-1.5 bg-gray-300 rounded-full"></div>
+          </div>
+        )}
+
+        <div className="flex justify-between items-center lg:block">
+          <div className="flex-1" onClick={() => setIsMobileExpanded(true)}>
+            <PriceSummary 
+              isLoading={isLoading} 
+              quote={quote} 
+            />
+          </div>
+          
+          {/* Mobile "Edit" button for price summary if collapsed */}
+          {!isMobileExpanded && (
+            <button 
+              className="lg:hidden text-sm font-bold underline ml-4"
+              onClick={() => setIsMobileExpanded(true)}
+            >
+              Edit
+            </button>
+          )}
+        </div>
         
         {error && (
-          <div className="text-red-500 text-sm mb-4 px-3 py-2 bg-red-50 rounded border border-red-100">
+          <div className="text-red-500 text-sm mt-4 px-3 py-2 bg-red-50 rounded border border-red-100">
             {error}
           </div>
         )}
         
-        <div className="w-full">
-          <DateSelector 
-            checkIn={checkIn}
-            checkOut={checkOut}
-            onChangeCheckIn={setCheckIn}
-            onChangeCheckOut={setCheckOut}
-          />
-          <GuestSelector 
-            adults={adults}
-            children={children}
-            infants={infants}
-            pets={pets}
-            onChangeAdults={setAdults}
-            onChangeChildren={setChildren}
-            onChangeInfants={setInfants}
-            onChangePets={setPets}
-          />
+        <div className={`w-full mt-4 lg:mt-0 space-y-4 lg:space-y-0 ${isMobileExpanded ? 'block' : 'hidden lg:block'}`}>
+          <div className="pt-2">
+            <DateSelector 
+              checkIn={checkIn}
+              checkOut={checkOut}
+              onChangeCheckIn={setCheckIn}
+              onChangeCheckOut={setCheckOut}
+            />
+            <GuestSelector 
+              adults={adults}
+              children={children}
+              infants={infants}
+              pets={pets}
+              onChangeAdults={setAdults}
+              onChangeChildren={setChildren}
+              onChangeInfants={setInfants}
+              onChangePets={setPets}
+            />
+          </div>
+          
+          {isMobileExpanded && (
+            <button 
+              onClick={() => setIsMobileExpanded(false)}
+              className="lg:hidden w-full py-3 border border-black text-black font-bold rounded-lg mb-2"
+            >
+              Done Editing
+            </button>
+          )}
         </div>
         
-        <BookingActions>
-          <ReserveButton 
-            disabled={!quote || isLoading} 
-            onClick={handleBookNowClick}
-            isLoading={isLoading}
-            label={!checkIn || !checkOut ? 'Select dates' : isLoading ? 'Checking...' : quote ? 'Book Now' : 'Unavailable'}
-          />
-        </BookingActions>
+        <div className="mt-4">
+          <BookingActions>
+            <ReserveButton 
+              disabled={!quote || isLoading} 
+              onClick={() => {
+                if (!quote && !isMobileExpanded) {
+                  setIsMobileExpanded(true);
+                } else {
+                  handleBookNowClick();
+                }
+              }}
+              isLoading={isLoading}
+              label={!checkIn || !checkOut ? 'Select dates' : isLoading ? 'Checking...' : quote ? 'Book Now' : 'Check Availability'}
+            />
+          </BookingActions>
+        </div>
       </div>
 
       <CheckoutModal 

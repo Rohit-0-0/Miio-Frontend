@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
+import { getPropertyBySlug } from '@/lib/server/property';
 import { getPropertyById } from '@/lib/server/property';
 import { Container } from '@/components/ui/Container';
 import { LIFECYCLE_STATUS } from '@/types/property';
@@ -19,59 +20,40 @@ import { TrustSignals } from '@/components/properties/details/TrustSignals';
 import { FAQSection } from '@/components/properties/details/FAQSection';
 import { RelatedProperties } from '@/components/properties/details/RelatedProperties';
 import { BookingCard } from '@/components/properties/booking/BookingCard';
+import { PropertyMap } from '@/components/properties/details/PropertyMap';
+import { FloatingBackButton } from '@/components/ui/FloatingBackButton';
 
 type Props = {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ id?: string }>;
 };
 
-export async function generateMetadata(
-  { params, searchParams }: Props
-): Promise<Metadata> {
-  const resolvedSearchParams = await searchParams;
-  const guestyId = resolvedSearchParams.id;
-  
-  if (!guestyId) {
-    return { title: 'Not Found | Miio' };
-  }
-
-  try {
-    const response = await getPropertyById<PropertyDetails>(guestyId, { next: { revalidate: 300 } });
-    const property = response.data;
-    
-    if (!property || property.lifecycleStatus !== LIFECYCLE_STATUS.PUBLISHED || !property.visibleOnWebsite) {
-      return { title: 'Not Found | Miio' };
-    }
-
-    const seoTitle = property.editorial?.seo?.title || property.seoTitle || `${property.title} | Miio`;
-    const seoDesc = property.editorial?.seo?.description || property.seoDescription || property.shortDescription || `Stay at ${property.title} with Miio.`;
-
-    return {
-      title: seoTitle,
-      description: seoDesc,
-      openGraph: {
-        images: property.coverImageId
-          ? [buildImageUrl(property.coverImageId)!]
-          : []
-      }
-    };
-  } catch {
-    return { title: 'Miio' };
-  }
+// Use static metadata to prevent blocking navigation on Guesty/CMS APIs
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: 'Luxury Property | Miio',
+    description: 'Stay at one of our premium curated properties with Miio.',
+  };
 }
 
 export default async function PropertyDetailPage({ params, searchParams }: Props) {
+  const resolvedParams = await params;
   const resolvedSearchParams = await searchParams;
+  const slug = resolvedParams.slug;
   const guestyId = resolvedSearchParams.id;
 
-  if (!guestyId) {
-    notFound();
-  }
-
   let property: PropertyDetails | undefined;
+  
   try {
-    const response = await getPropertyById<PropertyDetails>(guestyId);
-    property = response.data;
+    // First try the local DB slug
+    let response = await getPropertyBySlug<PropertyDetails>(slug, { cache: 'no-store' });
+    
+    // If not found in local DB, and we have a guestyId or the slug is a guestyId, fallback to Guesty
+    if ((!response || !response.data) && (guestyId || /^[0-9a-fA-F]{24}$/.test(slug))) {
+      response = await getPropertyById<PropertyDetails>(guestyId || slug, { cache: 'no-store' });
+    }
+    
+    property = response?.data;
   } catch (error) {
     console.error('Failed to fetch property details:', error);
     notFound();
@@ -84,16 +66,15 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
 
   const location = [property.location?.city, property.location?.state, property.location?.country].filter(Boolean).join(', ');
   const editorial = property.editorial;
+  const actualGuestyId = guestyId || ( /^[0-9a-fA-F]{24}$/.test(slug) ? slug : undefined );
 
   return (
-    <article className="min-h-screen bg-white pb-20">
-      {/* Hero Gallery */}
+    <article className="min-h-screen bg-white pb-96 lg:pb-20">
       <HeroGallery images={property.gallery || []} />
 
       <Container className="mt-8 md:mt-16">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-20">
           
-          {/* Main Content Column */}
           <div className="lg:col-span-2">
             <PropertyHeader title={property.title} location={location} />
             <QuickInfo 
@@ -117,15 +98,28 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
 
             <MiioStandard standards={editorial?.miioStandard} />
 
-            <TrustSignals reviewCount={0} rating={0} /> {/* Mocked until Guesty integration */}
+            <TrustSignals reviewCount={0} rating={0} />
+
+            {property.location?.latitude && property.location?.longitude && (
+              <PropertyMap 
+                latitude={property.location.latitude}
+                longitude={property.location.longitude}
+                title={property.title}
+              />
+            )}
 
             <FAQSection faqs={editorial?.faq} />
           </div>
 
-          {/* Sidebar / Booking Card */}
           <div className="lg:col-span-1">
             <Suspense fallback={<div className="bg-white border border-gray-200 rounded-xl p-6 shadow-xl h-[400px] animate-pulse"></div>}>
-              <BookingCard listingId={guestyId} />
+              {actualGuestyId ? (
+                <BookingCard listingId={actualGuestyId} />
+              ) : (
+                <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-xl">
+                  Booking is unavailable for this property.
+                </div>
+              )}
             </Suspense>
           </div>
           
@@ -133,9 +127,9 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
       </Container>
       
       <Container>
-        {/* We mock RelatedProperties list for now since PropertyService needs an update to resolve related, or we just pass empty */}
         <RelatedProperties properties={[]} mode={editorial?.relatedProperties?.displayMode || 'OFF'} />
       </Container>
+      <FloatingBackButton />
     </article>
   );
 }

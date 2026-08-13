@@ -35,3 +35,9 @@ input[type="date"]::-webkit-clear-button {
   display: none;
   -webkit-appearance: none;
 }
+/* Hide spin buttons in date inputs to prevent accidental date selection via keyboard/arrows */
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

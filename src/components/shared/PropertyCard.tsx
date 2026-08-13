@@ -12,7 +12,7 @@ interface PropertyCardProps {
   guests?: number;
   bedrooms?: number;
   placeholderPrice?: string;
-  image?: ImageAsset;
+  image?: ImageAsset | string;
   className?: string;
 }
 
@@ -52,12 +52,20 @@ export function PropertyCard({
     >
       <div className="relative w-full aspect-[4/3] overflow-hidden bg-gray-100">
         {image ? (
-          <AppImage
-            image={image}
-            alt={title}
-            fill
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
-          />
+          typeof image === 'string' ? (
+            <img
+              src={image}
+              alt={title}
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+          ) : (
+            <AppImage
+              image={image}
+              alt={title}
+              fill
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+          )
         ) : (
           <div className="absolute inset-0 flex items-center justify-center bg-[#F8F5EF] text-[#1B1A17]/20">
             <span className="font-serif text-2xl tracking-widest uppercase">MiiO</span>

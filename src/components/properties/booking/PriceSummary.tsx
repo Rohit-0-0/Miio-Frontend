@@ -57,7 +57,10 @@ export function PriceSummary({ isLoading, quote }: PriceSummaryProps) {
         </div>
         <div 
           className="text-sm text-gray-500 underline cursor-pointer hover:text-gray-900 transition-colors"
-          onClick={() => setShowDetails(!showDetails)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowDetails(!showDetails);
+          }}
         >
           Price details
         </div>

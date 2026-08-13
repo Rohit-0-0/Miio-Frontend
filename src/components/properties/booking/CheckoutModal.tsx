@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { X, CheckCircle } from 'lucide-react';
 import { apiClient } from '@/lib/api/client';
 import { PaymentProviderType, PaymentToken } from '@/lib/payments/types';
@@ -76,15 +77,15 @@ const CheckoutForm = ({
         email,
         phone
       });
-      console.log(`[Payment Provider] Tokenization completed`);
+      console.log(`[Payment Verification] Tokenization completed`);
 
-      console.log(`[CheckoutModal] Submitting instant booking\n  quoteId: ${quote._id}`);
+      console.log(`[Payment Verification] Submitting instant-charge booking\n  quoteId: ${quote._id}`);
       
       // 2. Submit to backend instant booking endpoint
-      const response = await apiClient.post<any>('/booking/instant', {
+      const response = await apiClient.post<any>('/booking/instant-charge', {
         quoteId: quote._id,
         ratePlanId,
-        paymentToken: paymentToken.token,
+        confirmationToken: paymentToken.token,
         provider: paymentToken.provider,
         guest: { firstName, lastName, email, phone },
         acceptPolicies: true
@@ -95,6 +96,7 @@ const CheckoutForm = ({
       } else {
         throw new Error(response.error || "Payment could not be completed. Please try again.");
       }
+      
     } catch (err: any) {
       console.error(err);
       
@@ -194,7 +196,9 @@ const CheckoutForm = ({
           {providerType === 'stripe' && (
             <StripeProvider 
               ref={paymentProviderRef as any} 
-              providerAccountId={providerAccountId} 
+              providerAccountId={providerAccountId}
+              amount={total}
+              currency={currency}
             />
           )}
           
@@ -271,7 +275,10 @@ export function CheckoutModal({ isOpen, onClose, quote, listingId, checkIn, chec
     }
   }, [isOpen, listingId]);
 
-  if (!isOpen) return null;
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  if (!isOpen || !mounted) return null;
 
   const handleSuccess = (data: any, testMode: boolean = false) => {
     setSuccessData(data);
@@ -285,9 +292,9 @@ export function CheckoutModal({ isOpen, onClose, quote, listingId, checkIn, chec
     onClose();
   };
 
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200">
+  const modalContent = (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm md:p-4">
+      <div className="bg-white md:rounded-2xl shadow-2xl w-full h-full md:h-auto md:max-h-[90vh] max-w-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200">
         
         {/* Header */}
         <div className="flex justify-between items-center p-6 border-b border-gray-100">
@@ -395,4 +402,6 @@ export function CheckoutModal({ isOpen, onClose, quote, listingId, checkIn, chec
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }

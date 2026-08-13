@@ -18,8 +18,6 @@ export const getHomepage = cache(async (options?: RequestInit): Promise<Homepage
 
   if (options?.next) {
     fetchOptions.next = options.next;
-  } else if (options?.cache === undefined) {
-    fetchOptions.next = { revalidate: 0 }; // Default to dynamic
   }
 
   try {

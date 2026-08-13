@@ -1,4 +1,3 @@
-import { cookies } from 'next/headers';
 import { env } from '@/config/env';
 import { ApiResponse, PaginatedResponse } from '@/types/api';
 import { PropertyDocument } from '@/types/property';
@@ -17,17 +16,10 @@ export async function getPropertyListing<T = PropertyDocument>(
 
   const queryString = searchParams.toString();
   const url = `${env.NEXT_PUBLIC_API_URL}/properties${queryString ? `?${queryString}` : ''}`;
-  
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get('accessToken');
 
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
   };
-
-  if (accessToken) {
-    headers['Authorization'] = `Bearer ${accessToken.value}`;
-  }
 
   const fetchOptions: RequestInit = {
     method: 'GET',
@@ -37,8 +29,6 @@ export async function getPropertyListing<T = PropertyDocument>(
 
   if (options?.next) {
     fetchOptions.next = options.next;
-  } else if (options?.cache === undefined) {
-    fetchOptions.cache = 'no-store';
   }
 
   const response = await fetch(url, fetchOptions);
@@ -65,7 +55,6 @@ export async function getPropertiesByIds(ids: string[]): Promise<ApiResponse<Pro
   const response = await fetch(url, {
     method: 'GET',
     headers,
-    cache: 'no-store',
   });
 
   if (!response.ok) {
@@ -77,17 +66,10 @@ export async function getPropertiesByIds(ids: string[]): Promise<ApiResponse<Pro
 
 export async function getPropertyById<T = PropertyDocument>(id: string, options?: RequestInit): Promise<ApiResponse<T>> {
   const url = `${env.NEXT_PUBLIC_API_URL}/properties/${id}`;
-  
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get('accessToken');
 
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
   };
-
-  if (accessToken) {
-    headers['Authorization'] = `Bearer ${accessToken.value}`;
-  }
 
   const fetchOptions: RequestInit = {
     method: 'GET',
@@ -97,8 +79,6 @@ export async function getPropertyById<T = PropertyDocument>(id: string, options?
 
   if (options?.next) {
     fetchOptions.next = options.next;
-  } else if (options?.cache === undefined) {
-    fetchOptions.cache = 'no-store';
   }
 
   const response = await fetch(url, fetchOptions);
@@ -108,6 +88,35 @@ export async function getPropertyById<T = PropertyDocument>(id: string, options?
       return { success: false, message: 'Not found', data: null as unknown as T };
     }
     throw new Error(`Failed to fetch property by id: ${response.statusText}`);
+  }
+
+  return response.json();
+}
+
+export async function getPropertyBySlug<T = PropertyDocument>(slug: string, options?: RequestInit): Promise<ApiResponse<T>> {
+  const url = `${env.NEXT_PUBLIC_API_URL}/properties/slug/${slug}`;
+
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+
+  const fetchOptions: RequestInit = {
+    method: 'GET',
+    headers,
+    ...options,
+  };
+
+  if (options?.next) {
+    fetchOptions.next = options.next;
+  }
+
+  const response = await fetch(url, fetchOptions);
+
+  if (!response.ok) {
+    if (response.status === 404) {
+      return { success: false, message: 'Not found', data: null as unknown as T };
+    }
+    throw new Error(`Failed to fetch property by slug: ${response.statusText}`);
   }
 
   return response.json();

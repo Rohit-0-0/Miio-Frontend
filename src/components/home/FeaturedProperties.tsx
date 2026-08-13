@@ -41,9 +41,9 @@ export function FeaturedProperties({ properties, config }: FeaturedPropertiesPro
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-12">
-          {properties.map((property) => {
+          {properties.map((property: any) => {
             const coverAssetId = property.coverImageId || property.gallery?.[0]?.assetId;
-            const image = coverAssetId ? { assetId: coverAssetId } : undefined;
+            const image = property.guestyImageUrl ? property.guestyImageUrl : (coverAssetId ? { assetId: coverAssetId } : undefined);
 
             return (
               <PropertyCard

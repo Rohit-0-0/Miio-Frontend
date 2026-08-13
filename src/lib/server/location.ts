@@ -7,8 +7,6 @@ export async function getLocationBySlug(slug: string, options?: RequestInit) {
     };
     if (options?.next) {
       fetchOptions.next = options.next;
-    } else if (options?.cache === undefined) {
-      fetchOptions.next = { revalidate: 0 };
     }
 
     const res = await fetch(`${env.NEXT_PUBLIC_API_URL}/editorial/locations/${slug}`, fetchOptions);
@@ -33,8 +31,6 @@ export async function getLocations(options?: RequestInit) {
     };
     if (options?.next) {
       fetchOptions.next = options.next;
-    } else if (options?.cache === undefined) {
-      fetchOptions.next = { revalidate: 0 };
     }
 
     const res = await fetch(`${env.NEXT_PUBLIC_API_URL}/editorial/locations`, fetchOptions);

@@ -62,30 +62,6 @@ export function Footer() {
                 </li>
               </ul>
             </div>
-
-            <div className="flex flex-col space-y-6 col-span-2 md:col-span-1">
-              <h3 className="text-xs font-semibold text-[#1B1A17] tracking-[0.2em] uppercase">
-                Legal
-              </h3>
-              <ul className="flex flex-col space-y-4">
-                <li>
-                  <Link
-                    href="/terms"
-                    className="text-sm font-medium tracking-widest uppercase text-[#1B1A17]/80 hover:text-[#1B1A17] transition-colors focus-visible:outline-none focus-visible:underline rounded-sm"
-                  >
-                    Terms
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/privacy"
-                    className="text-sm font-medium tracking-widest uppercase text-[#1B1A17]/80 hover:text-[#1B1A17] transition-colors focus-visible:outline-none focus-visible:underline rounded-sm"
-                  >
-                    Privacy
-                  </Link>
-                </li>
-              </ul>
-            </div>
           </div>
         </div>
         
