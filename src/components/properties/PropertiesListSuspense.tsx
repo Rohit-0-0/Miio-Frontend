@@ -133,6 +133,9 @@ export async function PropertiesListSuspense({
             location={location}
             guests={guests}
             bedrooms={bedrooms}
+            bathrooms={property.bathrooms}
+            propertyType={property.propertyType}
+            reviews={property.reviews}
             price={price}
             priceLabel={priceLabel}
             coverImage={coverImage}

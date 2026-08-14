@@ -151,6 +151,9 @@ async function LocationDynamicProperties({ guestyCity, locationTitle }: { guesty
       location: { city: p.address?.city, country: p.address?.country },
       maxGuests: p.accommodates || 2,
       bedrooms: p.bedrooms || 1,
+      bathrooms: p.bathrooms,
+      propertyType: p.propertyType,
+      reviews: p.reviews,
       guestyImageUrl: rawImage // We will pass this and modify FeaturedProperties to use it
     };
   });

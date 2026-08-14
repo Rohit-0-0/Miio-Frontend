@@ -56,6 +56,9 @@ export function FeaturedProperties({ properties, config }: FeaturedPropertiesPro
                 location={[property.location?.city, property.location?.country].filter(Boolean).join(', ') || 'Various Locations'}
                 guests={property.maxGuests}
                 bedrooms={property.bedrooms}
+                bathrooms={property.bathrooms}
+                propertyType={property.propertyType}
+                reviews={property.reviews}
                 placeholderPrice={config.placeholderPrice}
                 image={image as any}
               />

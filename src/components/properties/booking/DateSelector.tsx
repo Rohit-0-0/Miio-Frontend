@@ -1,5 +1,6 @@
-import React, { useRef } from 'react';
-import { getNextDayStr, getTodayStr } from '@/lib/utils/dates';
+import React from 'react';
+import { DateRangePicker } from '../../shared/DateRangePicker';
+import { format, parseISO } from 'date-fns';
 
 interface DateSelectorProps {
   checkIn: string | null;
@@ -9,66 +10,37 @@ interface DateSelectorProps {
 }
 
 export function DateSelector({ checkIn, checkOut, onChangeCheckIn, onChangeCheckOut }: DateSelectorProps) {
-  const checkOutRef = useRef<HTMLInputElement>(null);
-
-  const handleCheckInChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newCheckIn = e.target.value;
-    onChangeCheckIn(newCheckIn);
-    
-    if (newCheckIn) {
-      if (!checkOut) {
-        // Automatically focus checkout if empty
-        if (checkOutRef.current) {
-          checkOutRef.current.focus();
-          try {
-            checkOutRef.current.showPicker?.();
-          } catch (err) {
-            // ignore if showPicker is unsupported
-          }
-        }
-      } else {
-        // Clear checkout if invalid and open picker
-        if (checkOut <= newCheckIn) {
-          onChangeCheckOut('');
-          // Re-focus checkout after clearing so user can select a valid date
-          setTimeout(() => {
-            if (checkOutRef.current) {
-              checkOutRef.current.focus();
-              try {
-                checkOutRef.current.showPicker?.();
-              } catch (err) {}
-            }
-          }, 0);
-        }
-      }
-    }
-  };
-
-  const minCheckOut = checkIn ? getNextDayStr(checkIn) : getNextDayStr(getTodayStr());
-
-  return (
-    <div className="flex border border-gray-300 rounded-t-md overflow-hidden divide-x divide-gray-300">
+  
+  const customTrigger = (
+    <div className="flex border border-gray-300 rounded-t-md overflow-hidden divide-x divide-gray-300 cursor-pointer">
       <div className="flex-1 p-3 hover:bg-gray-50 transition-colors relative">
         <div className="text-[10px] uppercase font-bold text-gray-900 tracking-wider">Check-in</div>
-        <input 
-          type="date" 
-          min={getTodayStr()}
-          value={checkIn || ''}
-          onChange={handleCheckInChange}
-          className="text-sm text-gray-900 mt-0.5 bg-transparent border-none p-0 outline-none w-full cursor-pointer"
-        />
+        <div className="text-sm text-gray-900 mt-0.5 min-h-[20px]">
+          {checkIn ? format(parseISO(checkIn), 'MM/dd/yyyy') : 'Add date'}
+        </div>
       </div>
       <div className="flex-1 p-3 hover:bg-gray-50 transition-colors relative">
         <div className="text-[10px] uppercase font-bold text-gray-900 tracking-wider">Check-out</div>
-        <input 
-          ref={checkOutRef}
-          type="date" 
-          min={minCheckOut}
-          value={checkOut || ''}
-          onChange={(e) => onChangeCheckOut(e.target.value)}
-          className="text-sm text-gray-900 mt-0.5 bg-transparent border-none p-0 outline-none w-full cursor-pointer"
-        />
+        <div className="text-sm text-gray-900 mt-0.5 min-h-[20px]">
+          {checkOut ? format(parseISO(checkOut), 'MM/dd/yyyy') : 'Add date'}
+        </div>
       </div>
+    </div>
+  );
+
+  return (
+    <div className="w-full relative">
+      <DateRangePicker
+        checkIn={checkIn || ''}
+        checkOut={checkOut || ''}
+        onChange={(inDate, outDate) => {
+          onChangeCheckIn(inDate || null);
+          onChangeCheckOut(outDate || null);
+        }}
+        className="w-full"
+        customTrigger={customTrigger}
+        popoverAlign="right"
+      />
     </div>
   );
 }

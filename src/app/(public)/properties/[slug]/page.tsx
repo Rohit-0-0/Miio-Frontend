@@ -98,7 +98,7 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
 
             <MiioStandard standards={editorial?.miioStandard} />
 
-            <TrustSignals reviewCount={0} rating={0} />
+            <TrustSignals reviewCount={property.reviews?.total || 0} rating={property.reviews?.avg || 0} />
 
             {property.location?.latitude && property.location?.longitude && (
               <PropertyMap 

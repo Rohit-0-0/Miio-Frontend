@@ -17,18 +17,21 @@ export function RelatedProperties({ properties, mode }: RelatedPropertiesProps) 
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {properties.map((property) => {
-          const locationStr = [property.location?.city, property.location?.state].filter(Boolean).join(', ');
           return (
             <PropertyCard 
-              key={property.id} 
+              key={property.id}
+              id={property.id}
               slug={property.slug}
               title={property.title}
               nickname={property.nickname}
               unitType={property.unitType}
-              location={locationStr}
+              location={property.location ? `${property.location.city}, ${property.location.country}` : undefined}
               guests={property.maxGuests}
               bedrooms={property.bedrooms}
-              image={property.gallery?.[0]}
+              bathrooms={property.bathrooms}
+              propertyType={property.propertyType}
+              reviews={property.reviews}
+              image={property.coverImageId ? { assetId: property.coverImageId } : (property.gallery?.[0] as any)}
             />
           );
         })}

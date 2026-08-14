@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { GuestSelector } from '../properties/booking/GuestSelector';
 import { getNextDayStr, getTodayStr } from '@/lib/utils/dates';
+import { DateRangePicker } from './DateRangePicker';
 
 export function SearchWidget({ primaryCtaLabel = 'Search' }: { primaryCtaLabel?: string }) {
   const router = useRouter();
@@ -92,29 +93,18 @@ export function SearchWidget({ primaryCtaLabel = 'Search' }: { primaryCtaLabel?:
   };
 
   return (
-    <div className="w-full bg-white/10 backdrop-blur-md rounded-sm p-2 flex flex-col md:flex-row gap-2 shadow-lg md:shadow-none md:bg-transparent md:backdrop-blur-none">
-      <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-2 bg-white rounded-sm overflow-visible shadow-sm border border-gray-100">
-        <div className="px-6 py-4 flex flex-col justify-center border-b md:border-b-0 md:border-r border-gray-100 relative group cursor-pointer hover:bg-gray-50 transition-colors">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Check In</span>
-          <input 
-            type="date" 
-            min={getTodayStr()}
-            value={checkIn}
-            onChange={handleCheckInChange}
-            className="text-sm font-medium text-gray-900 bg-transparent border-none p-0 focus:ring-0 w-full cursor-pointer outline-none" 
-          />
-        </div>
-        <div className="px-6 py-4 flex flex-col justify-center border-b md:border-b-0 md:border-r border-gray-100 relative group cursor-pointer hover:bg-gray-50 transition-colors">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Check Out</span>
-          <input 
-            ref={checkOutRef}
-            type="date" 
-            value={checkOut}
-            min={minCheckOut}
-            onChange={(e) => setCheckOut(e.target.value)}
-            className="text-sm font-medium text-gray-900 bg-transparent border-none p-0 focus:ring-0 w-full cursor-pointer outline-none" 
-          />
-        </div>
+    <div className="w-full bg-white/10 backdrop-blur-md rounded-sm p-2 flex flex-col md:flex-row gap-2 shadow-lg md:shadow-none md:bg-transparent md:backdrop-blur-none z-50 relative">
+      <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-2 bg-white rounded-sm overflow-visible shadow-sm border border-gray-100">
+        <DateRangePicker 
+          checkIn={checkIn}
+          checkOut={checkOut}
+          onChange={(inDate, outDate) => {
+            setCheckIn(inDate);
+            setCheckOut(outDate);
+          }}
+          className="relative"
+          triggerClassName="px-6 py-4 h-full flex flex-col justify-center border-b md:border-b-0 md:border-r border-gray-100 relative group cursor-pointer hover:bg-gray-50 transition-colors"
+        />
         <GuestSelector 
           adults={adults}
           children={children}

@@ -9,6 +9,7 @@ import { BookingActions } from './BookingActions';
 import { ReserveButton } from './ReserveButton';
 import { CheckoutModal } from './CheckoutModal';
 import { apiClient } from '@/lib/api/client';
+import { toast } from 'sonner';
 
 interface BookingCardProps {
   listingId: string;
@@ -62,23 +63,27 @@ export function BookingCard({ listingId }: BookingCardProps) {
         setQuote(response.data);
         return response.data;
       } else {
-        setError('Failed to fetch quote');
+        toast.error('We couldn\'t confirm availability for these dates. Please try adjusting your selection.');
         return null;
       }
     } catch (err: any) {
       console.error(err);
       
-      let msg = 'Unable to check availability right now.';
+      let msg = 'Oops! Something went wrong while checking dates. Please try again.';
+      const backendMsg = err.response?.data?.message;
       const errMsg = (err.message || '').toLowerCase();
       const status = err.response?.status || err.statusCode;
       
-      if (status === 404 || errMsg.includes('not available') || errMsg.includes('unavailable') || errMsg.includes('no quotes')) {
-        msg = 'This property is not available for your selected dates.';
+      if (backendMsg) {
+        // Use the clean message sent by our backend
+        msg = backendMsg;
+      } else if (status === 404 || errMsg.includes('not available') || errMsg.includes('unavailable') || errMsg.includes('no quotes') || errMsg.includes('minimum stay')) {
+        msg = 'Sorry, these dates are unavailable or do not meet the minimum stay requirements.';
       } else if (status === 400 || errMsg.includes('invalid') || errMsg.includes('date')) {
-        msg = 'Please select valid check-in and check-out dates.';
+        msg = 'Please select valid check-in and check-out dates to check availability.';
       }
       
-      setError(msg);
+      toast.error(msg);
       setQuote(null);
       return null;
     } finally {
@@ -136,12 +141,6 @@ export function BookingCard({ listingId }: BookingCardProps) {
             </button>
           )}
         </div>
-        
-        {error && (
-          <div className="text-red-500 text-sm mt-4 px-3 py-2 bg-red-50 rounded border border-red-100">
-            {error}
-          </div>
-        )}
         
         <div className={`w-full mt-4 lg:mt-0 space-y-4 lg:space-y-0 ${isMobileExpanded ? 'block' : 'hidden lg:block'}`}>
           <div className="pt-2">

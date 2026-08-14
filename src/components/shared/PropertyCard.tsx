@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ImageAsset } from '@/types/common';
 import { AppImage } from '@/components/media/AppImage';
+import { Star } from 'lucide-react';
 
 interface PropertyCardProps {
   id?: string;
@@ -11,6 +12,9 @@ interface PropertyCardProps {
   location?: string;
   guests?: number;
   bedrooms?: number;
+  bathrooms?: number;
+  propertyType?: string;
+  reviews?: { avg: number; total: number };
   placeholderPrice?: string;
   image?: ImageAsset | string;
   className?: string;
@@ -33,15 +37,13 @@ export function PropertyCard({
   location,
   guests,
   bedrooms,
+  bathrooms,
+  propertyType,
+  reviews,
   placeholderPrice,
   image,
   className = '',
 }: PropertyCardProps) {
-  const details = [
-    guests ? `${guests} Guests` : null,
-    bedrooms ? `${bedrooms} Beds` : null, // Assuming bedrooms maps to "Beds" based on user example: "4 Guests • 2 Beds"
-  ].filter(Boolean).join(' · ');
-
   const formattedUnitType = formatUnitType(unitType);
 
   return (
@@ -50,7 +52,7 @@ export function PropertyCard({
       prefetch={true}
       className={`group flex flex-col space-y-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-4 rounded-sm ${className}`}
     >
-      <div className="relative w-full aspect-[4/3] overflow-hidden bg-gray-100">
+      <div className="relative w-full aspect-[4/3] overflow-hidden bg-gray-100 rounded-lg">
         {image ? (
           typeof image === 'string' ? (
             <img
@@ -73,13 +75,26 @@ export function PropertyCard({
         )}
       </div>
       
-      <div className="flex flex-col space-y-2">
+      <div className="flex flex-col space-y-3">
         <div className="flex justify-between items-start gap-4">
-          <h3 className="text-xl md:text-2xl font-serif text-[#1B1A17]">{title}</h3>
-          {placeholderPrice && (
-            <span className="text-sm font-medium tracking-widest uppercase text-[#1B1A17] whitespace-nowrap mt-1">
-              {placeholderPrice}
-            </span>
+          <div className="flex flex-col space-y-1">
+            <h3 className="text-xl md:text-2xl font-serif text-[#1B1A17] line-clamp-2">{title}</h3>
+            {location && (
+              <div className="flex items-center text-sm font-light text-[#1B1A17]/60">
+                <svg className="w-3.5 h-3.5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                {location}
+              </div>
+            )}
+          </div>
+          
+          {reviews && reviews.total > 0 && (
+            <div className="flex flex-col items-end shrink-0 mt-1">
+              <div className="flex items-center space-x-1 bg-green-50 text-green-700 px-2 py-0.5 rounded text-sm font-medium">
+                <Star className="w-3.5 h-3.5 fill-current" />
+                <span>{reviews.avg}</span>
+              </div>
+              <span className="text-xs text-[#1B1A17]/50 mt-1 whitespace-nowrap">({reviews.total} reviews)</span>
+            </div>
           )}
         </div>
         
@@ -90,10 +105,34 @@ export function PropertyCard({
           </div>
         )}
         
-        {(location || details) && (
-          <div className="flex justify-between items-center text-sm font-light text-[#1B1A17]/60">
-            <span>{location}</span>
-            <span>{details}</span>
+        <div className="flex flex-wrap gap-2 pt-1">
+          {propertyType && (
+            <span className="px-2.5 py-1 bg-[#1B1A17]/5 text-[#1B1A17]/70 text-xs font-medium rounded-sm">
+              {propertyType}
+            </span>
+          )}
+          {guests && (
+            <span className="px-2.5 py-1 bg-[#1B1A17]/5 text-[#1B1A17]/70 text-xs font-medium rounded-sm">
+              {guests} Guests
+            </span>
+          )}
+          {bedrooms && (
+            <span className="px-2.5 py-1 bg-[#1B1A17]/5 text-[#1B1A17]/70 text-xs font-medium rounded-sm">
+              {bedrooms} Bedrooms
+            </span>
+          )}
+          {bathrooms && (
+            <span className="px-2.5 py-1 bg-[#1B1A17]/5 text-[#1B1A17]/70 text-xs font-medium rounded-sm">
+              {bathrooms} Bathrooms
+            </span>
+          )}
+        </div>
+
+        {placeholderPrice && (
+          <div className="flex justify-end pt-2">
+            <span className="text-base font-medium text-[#1B1A17]">
+              Total {placeholderPrice}
+            </span>
           </div>
         )}
       </div>

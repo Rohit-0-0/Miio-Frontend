@@ -138,6 +138,7 @@ export interface PropertyData {
   instantBook?: boolean;
   lifecycleStatus: LifecycleStatus;
   featured?: boolean;
+  reviews?: { avg: number; total: number };
   active?: boolean;
   visibleOnWebsite?: boolean;
   sortOrder?: number;
@@ -176,6 +177,7 @@ export interface PropertySummary {
   bathrooms: number;
   maxGuests: number;
   beds: number;
+  reviews?: { avg: number; total: number };
 }
 
 export interface PropertyDetails {
@@ -201,6 +203,7 @@ export interface PropertyDetails {
   maxGuests: number;
   beds: number;
   amenities: Amenity[];
+  reviews?: { avg: number; total: number };
   
   // Future fields for the Editorial merge
   editorial?: any;
