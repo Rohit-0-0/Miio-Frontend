@@ -23,6 +23,7 @@ interface CheckoutModalProps {
 
 const CheckoutForm = ({ 
   quote, 
+  listingId,
   providerType,
   providerAccountId,
   onSuccess, 
@@ -31,6 +32,7 @@ const CheckoutForm = ({
   onRefreshQuote 
 }: { 
   quote: any, 
+  listingId: string,
   providerType: PaymentProviderType,
   providerAccountId: string | null,
   onSuccess: (data: any, isTestMode?: boolean) => void, 
@@ -83,7 +85,8 @@ const CheckoutForm = ({
       
       // 2. Submit to backend instant booking endpoint
       const response = await apiClient.post<any>('/booking/instant-charge', {
-        quoteId: quote._id,
+        quoteId: quote._id || quote.id,
+        listingId,
         ratePlanId,
         confirmationToken: paymentToken.token,
         provider: paymentToken.provider,
@@ -343,6 +346,7 @@ export function CheckoutModal({ isOpen, onClose, quote, listingId, checkIn, chec
             ) : (
               <CheckoutForm 
                 quote={quote} 
+                listingId={listingId}
                 providerType={providerType as PaymentProviderType}
                 providerAccountId={providerAccountId}
                 onSuccess={handleSuccess} 
