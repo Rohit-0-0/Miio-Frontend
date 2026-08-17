@@ -34,6 +34,14 @@ export async function PropertiesListSuspense({
     if (children) beSearchParams.append('children', children);
     if (infants) beSearchParams.append('infants', infants);
     if (pets) beSearchParams.append('pets', pets);
+    
+    // Append advanced filters
+    if (query.propertyType) beSearchParams.append('propertyType', query.propertyType as string);
+    if (query.amenities) beSearchParams.append('amenities', query.amenities as string);
+    if (query.minBedrooms) beSearchParams.append('minBedrooms', query.minBedrooms as string);
+    if (query.minBathrooms) beSearchParams.append('minBathrooms', query.minBathrooms as string);
+    if (query.minPrice) beSearchParams.append('minPrice', query.minPrice as string);
+    if (query.maxPrice) beSearchParams.append('maxPrice', query.maxPrice as string);
 
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
     const endpoint = beSearchParams.toString() ? `/booking/search?${beSearchParams.toString()}` : `/booking/search`;

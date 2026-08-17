@@ -61,6 +61,11 @@ export function normalizePropertyQuery(
     checkIn: normalizeString(searchParams.checkIn),
     checkOut: normalizeString(searchParams.checkOut),
     guests: normalizeNumber(searchParams.guests),
+    minPrice: normalizeNumber(searchParams.minPrice),
+    maxPrice: normalizeNumber(searchParams.maxPrice),
+    minBedrooms: normalizeNumber(searchParams.minBedrooms),
+    minBathrooms: normalizeNumber(searchParams.minBathrooms),
+    amenities: normalizeString(searchParams.amenities),
   };
 
   const sortRaw = normalizeString(searchParams.sort);
