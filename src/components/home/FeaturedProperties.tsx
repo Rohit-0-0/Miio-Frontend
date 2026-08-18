@@ -1,4 +1,4 @@
-import { PropertyCard } from '@/components/shared/PropertyCard';
+import { PropertyBrowseCard } from '@/components/properties/PropertyBrowseCard';
 import { SectionHeader } from '@/components/shared/SectionHeader';
 import { PropertyDocument } from '@/types/property';
 import { FeaturedPropertiesSection } from '@/types/homepage';
@@ -45,22 +45,36 @@ export function FeaturedProperties({ properties, config }: FeaturedPropertiesPro
             const coverAssetId = property.coverImageId || property.gallery?.[0]?.assetId;
             const image = property.guestyImageUrl ? property.guestyImageUrl : (coverAssetId ? { assetId: coverAssetId } : undefined);
 
+            const currency = property.prices?.currency === 'AUD' ? '$' : (property.prices?.currency || '');
+            let price = config.placeholderPrice || '';
+            let priceLabel = '';
+            
+            if (property.prices?.totalPrice) {
+              price = `${currency}${property.prices.totalPrice}`;
+              priceLabel = 'total';
+            } else if (property.prices?.basePrice) {
+              price = `${currency}${property.prices.basePrice}`;
+              priceLabel = '/ night';
+            }
+
             return (
-              <PropertyCard
+              <PropertyBrowseCard
                 key={property.id}
                 id={property.id}
                 slug={property.slug}
-                title={property.title}
+                name={property.title}
                 nickname={property.nickname}
                 unitType={property.unitType}
                 location={[property.location?.city, property.location?.country].filter(Boolean).join(', ') || 'Various Locations'}
-                guests={property.maxGuests}
-                bedrooms={property.bedrooms}
+                guests={property.maxGuests || 2}
+                bedrooms={property.bedrooms || 1}
                 bathrooms={property.bathrooms}
                 propertyType={property.propertyType}
                 reviews={property.reviews}
-                placeholderPrice={config.placeholderPrice}
-                image={image as any}
+                price={price}
+                priceLabel={priceLabel}
+                coverImage={image as any}
+                imageAspectRatio="aspect-[4/3]"
               />
             );
           })}

@@ -24,10 +24,12 @@ export function SearchWidget({ primaryCtaLabel = 'Search' }: { primaryCtaLabel?:
   const [amenities, setAmenities] = useState<string[]>([]);
   const [bedrooms, setBedrooms] = useState<string>('All');
   const [bathrooms, setBathrooms] = useState<string>('All');
-  const [priceRange, setPriceRange] = useState<string>('All');
+  
+  const [minPrice, setMinPrice] = useState<string>('');
+  const [maxPrice, setMaxPrice] = useState<string>('');
 
-  const [isAmenitiesOpen, setIsAmenitiesOpen] = useState(false);
-  const amenitiesRef = useRef<HTMLDivElement>(null);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const filterRef = useRef<HTMLDivElement>(null);
 
   const toggleAmenity = (amenity: string) => {
     setAmenities(prev => 
@@ -37,8 +39,8 @@ export function SearchWidget({ primaryCtaLabel = 'Search' }: { primaryCtaLabel?:
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (amenitiesRef.current && !amenitiesRef.current.contains(e.target as Node)) {
-        setIsAmenitiesOpen(false);
+      if (filterRef.current && !filterRef.current.contains(e.target as Node)) {
+        setOpenDropdown(null);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -68,17 +70,15 @@ export function SearchWidget({ primaryCtaLabel = 'Search' }: { primaryCtaLabel?:
       if (pAmenities) setAmenities(pAmenities.split(',').filter(Boolean));
 
       const pBeds = searchParams.get('minBedrooms');
-      if (pBeds) setBedrooms(pBeds === '1' ? '1+' : pBeds === '2' ? '2+' : pBeds === '3' ? '3+' : pBeds === '4' ? '4+' : 'All');
+      if (pBeds) setBedrooms(pBeds === '1' ? '1+' : pBeds);
 
       const pBaths = searchParams.get('minBathrooms');
-      if (pBaths) setBathrooms(pBaths === '1' ? '1+' : pBaths === '2' ? '2+' : pBaths === '3' ? '3+' : pBaths === '4' ? '4+' : 'All');
+      if (pBaths) setBathrooms(pBaths === '1' ? '1+' : pBaths);
 
       const pMinPrice = searchParams.get('minPrice');
       const pMaxPrice = searchParams.get('maxPrice');
-      if (pMinPrice && pMaxPrice) setPriceRange(`$${pMinPrice} - $${pMaxPrice}`);
-      else if (pMinPrice) setPriceRange(`$${pMinPrice}+`);
-      else if (pMaxPrice) setPriceRange(`$0 - $${pMaxPrice}`);
-      else setPriceRange('All');
+      if (pMinPrice) setMinPrice(pMinPrice);
+      if (pMaxPrice) setMaxPrice(pMaxPrice);
     }
   }, [searchParams]);
 
@@ -88,7 +88,6 @@ export function SearchWidget({ primaryCtaLabel = 'Search' }: { primaryCtaLabel?:
     
     if (newCheckIn) {
       if (!checkOut) {
-        // Automatically focus checkout if empty
         if (checkOutRef.current) {
           checkOutRef.current.focus();
           try {
@@ -96,10 +95,8 @@ export function SearchWidget({ primaryCtaLabel = 'Search' }: { primaryCtaLabel?:
           } catch (err) {}
         }
       } else {
-        // Clear checkout if invalid and open picker
         if (checkOut <= newCheckIn) {
           setCheckOut('');
-          // Re-focus checkout after clearing so user can select a valid date
           setTimeout(() => {
             if (checkOutRef.current) {
               checkOutRef.current.focus();
@@ -113,12 +110,46 @@ export function SearchWidget({ primaryCtaLabel = 'Search' }: { primaryCtaLabel?:
     }
   };
 
-  const minCheckOut = checkIn ? getNextDayStr(checkIn) : getNextDayStr(getTodayStr());
+  const handleClearFilters = () => {
+    setCheckIn('');
+    setCheckOut('');
+    setAdults(1);
+    setChildren(0);
+    setInfants(0);
+    setPets(0);
+    setPropertyType('All');
+    setAmenities([]);
+    setBedrooms('All');
+    setBathrooms('All');
+    setMinPrice('');
+    setMaxPrice('');
+
+    // If we are on the properties page, remove query params
+    startTransition(() => {
+      const pathname = window.location.pathname;
+      if (pathname === '/properties') {
+        router.push('/properties');
+      }
+    });
+  };
+
+  const hasActiveFilters = 
+    checkIn !== '' || 
+    checkOut !== '' || 
+    adults > 1 || 
+    children > 0 || 
+    infants > 0 || 
+    pets > 0 || 
+    propertyType !== 'All' || 
+    amenities.length > 0 || 
+    bedrooms !== 'All' || 
+    bathrooms !== 'All' || 
+    minPrice !== '' || 
+    maxPrice !== '';
 
   const handleSearch = () => {
     const params = new URLSearchParams();
     
-    // Preserve existing params like pagination/sorting (from current URL if we are on properties page)
     if (searchParams) {
       searchParams.forEach((value, key) => {
         if (!['checkIn', 'checkOut', 'adults', 'children', 'infants', 'pets', 'guests', 'propertyType', 'amenities', 'minBedrooms', 'minBathrooms', 'minPrice', 'maxPrice'].includes(key)) {
@@ -140,20 +171,8 @@ export function SearchWidget({ primaryCtaLabel = 'Search' }: { primaryCtaLabel?:
     if (bedrooms !== 'All') params.append('minBedrooms', bedrooms.replace('+', ''));
     if (bathrooms !== 'All') params.append('minBathrooms', bathrooms.replace('+', ''));
 
-    if (priceRange !== 'All') {
-      if (priceRange === '$0 - $250') {
-        params.append('minPrice', '0');
-        params.append('maxPrice', '250');
-      } else if (priceRange === '$250 - $500') {
-        params.append('minPrice', '250');
-        params.append('maxPrice', '500');
-      } else if (priceRange === '$500 - $1000') {
-        params.append('minPrice', '500');
-        params.append('maxPrice', '1000');
-      } else if (priceRange === '$1000+') {
-        params.append('minPrice', '1000');
-      }
-    }
+    if (minPrice) params.append('minPrice', minPrice);
+    if (maxPrice) params.append('maxPrice', maxPrice);
 
     startTransition(() => {
       router.push(`/properties?${params.toString()}`);
@@ -206,62 +225,91 @@ export function SearchWidget({ primaryCtaLabel = 'Search' }: { primaryCtaLabel?:
         </button>
       </div>
 
-      <div className="flex flex-wrap items-center gap-3 mt-1 text-sm text-gray-700 bg-white/10 md:bg-transparent p-2 md:p-0 rounded-sm">
-        <div className="flex items-center gap-2 bg-white border border-gray-200 rounded px-3 py-2 cursor-pointer shadow-sm relative group">
-          <span className="text-gray-500 whitespace-nowrap">Price per night:</span>
-          <select 
-            value={priceRange} 
-            onChange={e => setPriceRange(e.target.value)}
-            className="bg-transparent border-none outline-none font-medium cursor-pointer appearance-none pr-4"
+      <div ref={filterRef} className="flex flex-wrap items-center gap-3 mt-4 text-sm text-gray-700 md:bg-transparent rounded-sm">
+        
+        {/* Price Dropdown */}
+        <div className="relative group">
+          <button 
+            onClick={() => setOpenDropdown(openDropdown === 'price' ? null : 'price')}
+            className="flex items-center gap-2 bg-white border border-gray-200 rounded-md px-4 py-2.5 cursor-pointer shadow-sm hover:border-gray-300 transition-colors"
           >
-            <option>All</option>
-            <option>$0 - $250</option>
-            <option>$250 - $500</option>
-            <option>$500 - $1000</option>
-            <option>$1000+</option>
-          </select>
-          <div className="absolute right-2 pointer-events-none">
+            <span className="text-gray-700 whitespace-nowrap">Price per night: {minPrice || maxPrice ? (minPrice ? `A$${minPrice}` : 'A$0') + (maxPrice ? ` - A$${maxPrice}` : '+') : 'All'}</span>
             <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2 bg-white border border-gray-200 rounded px-3 py-2 cursor-pointer shadow-sm relative group">
-          <span className="text-gray-500 whitespace-nowrap">Property type:</span>
-          <select 
-            value={propertyType} 
-            onChange={e => setPropertyType(e.target.value)}
-            className="bg-transparent border-none outline-none font-medium cursor-pointer appearance-none pr-4"
-          >
-            <option>All</option>
-            <option>Apartment</option>
-            <option>House</option>
-            <option>Villa</option>
-            <option>Studio</option>
-          </select>
-          <div className="absolute right-2 pointer-events-none">
-            <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-          </div>
-        </div>
-
-        <div ref={amenitiesRef} className="flex items-center gap-2 bg-white border border-gray-200 rounded px-3 py-2 cursor-pointer shadow-sm relative group">
-          <div onClick={() => setIsAmenitiesOpen(!isAmenitiesOpen)} className="flex items-center gap-2 w-full">
-            <span className="text-gray-500 whitespace-nowrap">Amenities:</span>
-            <span className="font-medium text-gray-900 pr-4 whitespace-nowrap">
-              {amenities.length === 0 ? 'All' : `${amenities.length} selected`}
-            </span>
-            <div className="absolute right-2 pointer-events-none">
-              <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          </button>
+          {openDropdown === 'price' && (
+            <div className="absolute top-full left-0 mt-2 w-72 bg-white border border-gray-200 rounded-lg shadow-xl z-50 p-4">
+              <div className="flex items-center gap-4">
+                <div className="flex-1 relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">A$</span>
+                  <input 
+                    type="number" 
+                    value={minPrice}
+                    onChange={(e) => setMinPrice(e.target.value)}
+                    placeholder="0"
+                    className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <span className="text-gray-400">-</span>
+                <div className="flex-1 relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">A$</span>
+                  <input 
+                    type="number" 
+                    value={maxPrice}
+                    onChange={(e) => setMaxPrice(e.target.value)}
+                    placeholder="Max"
+                    className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-          {isAmenitiesOpen && (
-            <div className="absolute top-full left-0 mt-1 w-48 bg-white border border-gray-100 rounded-md shadow-xl z-50 p-2 flex flex-col gap-1">
-              {['Pool', 'WiFi', 'Parking', 'Kitchen', 'Air Conditioning', 'Hot Tub', 'Gym'].map(am => (
-                <label key={am} className="flex items-center gap-2 px-2 py-1.5 hover:bg-gray-50 rounded cursor-pointer text-sm text-gray-700 select-none">
+          )}
+        </div>
+
+        {/* Property Type Dropdown */}
+        <div className="relative group">
+          <button 
+            onClick={() => setOpenDropdown(openDropdown === 'property' ? null : 'property')}
+            className="flex items-center gap-2 bg-white border border-gray-200 rounded-md px-4 py-2.5 cursor-pointer shadow-sm hover:border-gray-300 transition-colors"
+          >
+            <span className="text-gray-700 whitespace-nowrap">Property type: {propertyType}</span>
+            <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          </button>
+          {openDropdown === 'property' && (
+            <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-xl z-50 py-2">
+              {['All', 'House', 'Apartment', 'Villa', 'Studio'].map(type => (
+                <div 
+                  key={type}
+                  onClick={() => { setPropertyType(type); setOpenDropdown(null); }}
+                  className="px-4 py-2 hover:bg-gray-50 cursor-pointer flex items-center justify-between text-gray-700"
+                >
+                  <span>{type}</span>
+                  {propertyType === type && <svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Amenities Dropdown */}
+        <div className="relative group">
+          <button 
+            onClick={() => setOpenDropdown(openDropdown === 'amenities' ? null : 'amenities')}
+            className="flex items-center gap-2 bg-white border border-gray-200 rounded-md px-4 py-2.5 cursor-pointer shadow-sm hover:border-gray-300 transition-colors"
+          >
+            <span className="text-gray-700 whitespace-nowrap">
+              Amenities: {amenities.length === 0 ? 'All' : `${amenities.length} selected`}
+            </span>
+            <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          </button>
+          {openDropdown === 'amenities' && (
+            <div className="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-50 p-2 flex flex-col gap-1">
+              {['Wireless Internet', 'Swimming pool', 'Air conditioning', 'Heating', 'Kitchen', 'Hot Tub', 'Gym'].map(am => (
+                <label key={am} className="flex items-center gap-3 px-2 py-2 hover:bg-gray-50 rounded cursor-pointer text-sm text-gray-700 select-none">
                   <input 
                     type="checkbox" 
                     checked={amenities.includes(am)} 
                     onChange={() => toggleAmenity(am)} 
-                    className="rounded border-gray-300 text-gray-900 focus:ring-gray-900 w-4 h-4 cursor-pointer" 
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer" 
                   />
                   {am}
                 </label>
@@ -270,41 +318,67 @@ export function SearchWidget({ primaryCtaLabel = 'Search' }: { primaryCtaLabel?:
           )}
         </div>
 
-        <div className="flex items-center gap-2 bg-white border border-gray-200 rounded px-3 py-2 cursor-pointer shadow-sm relative group">
-          <span className="text-gray-500 whitespace-nowrap">Bedrooms:</span>
-          <select 
-            value={bedrooms} 
-            onChange={e => setBedrooms(e.target.value)}
-            className="bg-transparent border-none outline-none font-medium cursor-pointer appearance-none pr-4"
+        {/* Bedrooms Dropdown */}
+        <div className="relative group">
+          <button 
+            onClick={() => setOpenDropdown(openDropdown === 'bedrooms' ? null : 'bedrooms')}
+            className="flex items-center gap-2 bg-white border border-gray-200 rounded-md px-4 py-2.5 cursor-pointer shadow-sm hover:border-gray-300 transition-colors"
           >
-            <option>All</option>
-            <option>1+</option>
-            <option>2+</option>
-            <option>3+</option>
-            <option>4+</option>
-          </select>
-          <div className="absolute right-2 pointer-events-none">
+            <span className="text-gray-700 whitespace-nowrap">Bedrooms: {bedrooms}</span>
             <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-          </div>
+          </button>
+          {openDropdown === 'bedrooms' && (
+            <div className="absolute top-full left-0 mt-2 w-32 bg-white border border-gray-200 rounded-lg shadow-xl z-50 py-2">
+              {['All', '1', '2', '3', '4', '5'].map(num => (
+                <div 
+                  key={num}
+                  onClick={() => { setBedrooms(num); setOpenDropdown(null); }}
+                  className="px-4 py-2 hover:bg-gray-50 cursor-pointer flex items-center justify-between text-gray-700"
+                >
+                  <span>{num}</span>
+                  {bedrooms === num && <svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
-        <div className="flex items-center gap-2 bg-white border border-gray-200 rounded px-3 py-2 cursor-pointer shadow-sm relative group">
-          <span className="text-gray-500 whitespace-nowrap">Bathrooms:</span>
-          <select 
-            value={bathrooms} 
-            onChange={e => setBathrooms(e.target.value)}
-            className="bg-transparent border-none outline-none font-medium cursor-pointer appearance-none pr-4"
+        {/* Bathrooms Dropdown */}
+        <div className="relative group">
+          <button 
+            onClick={() => setOpenDropdown(openDropdown === 'bathrooms' ? null : 'bathrooms')}
+            className="flex items-center gap-2 bg-white border border-gray-200 rounded-md px-4 py-2.5 cursor-pointer shadow-sm hover:border-gray-300 transition-colors"
           >
-            <option>All</option>
-            <option>1+</option>
-            <option>2+</option>
-            <option>3+</option>
-            <option>4+</option>
-          </select>
-          <div className="absolute right-2 pointer-events-none">
+            <span className="text-gray-700 whitespace-nowrap">Bathrooms: {bathrooms}</span>
             <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-          </div>
+          </button>
+          {openDropdown === 'bathrooms' && (
+            <div className="absolute top-full left-0 mt-2 w-32 bg-white border border-gray-200 rounded-lg shadow-xl z-50 py-2">
+              {['All', '1', '2', '3', '4', '5'].map(num => (
+                <div 
+                  key={num}
+                  onClick={() => { setBathrooms(num); setOpenDropdown(null); }}
+                  className="px-4 py-2 hover:bg-gray-50 cursor-pointer flex items-center justify-between text-gray-700"
+                >
+                  <span>{num}</span>
+                  {bathrooms === num && <svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
+
+        {/* Clear Filters Text Button */}
+        {hasActiveFilters && (
+          <button 
+            onClick={handleClearFilters}
+            disabled={isPending}
+            className="ml-auto md:ml-4 text-gray-500 font-medium hover:text-gray-900 transition-colors"
+          >
+            Clear filters
+          </button>
+        )}
+
       </div>
     </div>
   );

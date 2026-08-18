@@ -26,7 +26,7 @@ export function Hero({ hero }: { hero: HeroSection }) {
 
   return (
     <section 
-      className="relative w-full h-[100svh] flex flex-col justify-end pb-24 md:pb-32 bg-[#1B1A17]"
+      className="relative w-full h-[100svh] flex flex-col justify-end pb-12 md:pb-24 bg-[#1B1A17]"
       role="banner"
       aria-label={hero.backgroundAlt || title}
     >
@@ -40,7 +40,7 @@ export function Hero({ hero }: { hero: HeroSection }) {
 
       {/* Gradient Overlay for Text Readability */}
       <div 
-        className="absolute inset-0 z-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10"
+        className="absolute inset-0 z-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10"
         style={{ opacity: hero.overlayOpacity ?? 1 }}
       />
 
@@ -48,21 +48,21 @@ export function Hero({ hero }: { hero: HeroSection }) {
       <div className="relative z-10 w-full px-6 md:px-10 lg:px-16 mx-auto max-w-7xl flex flex-col items-start animate-in slide-in-from-bottom-8 fade-in duration-1000 delay-300 fill-mode-both">
         
         {eyebrow && (
-          <span className="text-xs md:text-sm font-semibold uppercase tracking-[0.2em] text-white/80 mb-6 block">
+          <span className="text-xs md:text-sm font-semibold uppercase tracking-[0.2em] text-white/80 mb-4 block">
             {eyebrow}
           </span>
         )}
         
-        <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-medium tracking-wide text-white leading-[1.1] mb-6 max-w-4xl">
+        <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl font-medium tracking-wide text-white leading-[1.1] mb-4 max-w-4xl">
           {title}
         </h1>
         
-        <p className="text-lg md:text-xl font-light text-white/90 max-w-2xl leading-relaxed mb-12">
+        <p className="text-base md:text-lg font-light text-white/90 max-w-2xl leading-relaxed mb-6">
           {subtitle}
         </p>
         
         {/* Search Component */}
-        <div className="w-full max-w-4xl mt-12 bg-white/10 backdrop-blur-md rounded-sm p-2 flex flex-col md:flex-row gap-2">
+        <div className="w-full max-w-4xl mt-6 bg-white/10 backdrop-blur-md rounded-sm p-2 flex flex-col md:flex-row gap-2">
           <SearchWidget primaryCtaLabel={primaryCtaLabel} />
         </div>
       </div>

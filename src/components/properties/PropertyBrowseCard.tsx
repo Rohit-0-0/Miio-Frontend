@@ -20,6 +20,7 @@ interface PropertyBrowseCardProps {
   priceLabel?: string;
   coverImage?: ImageAsset | string;
   searchQueryString?: string;
+  imageAspectRatio?: string;
 }
 
 const formatUnitType = (type?: string) => {
@@ -46,13 +47,14 @@ export function PropertyBrowseCard({
   priceLabel = '/ night',
   coverImage,
   searchQueryString,
+  imageAspectRatio = 'aspect-[3/4]',
 }: PropertyBrowseCardProps) {
   const formattedUnitType = formatUnitType(unitType);
   const href = `/properties/${slug}?id=${id}${searchQueryString ? `&${searchQueryString}` : ''}`;
 
   return (
     <Link href={href} className="group block no-underline cursor-pointer">
-      <div className="relative w-full aspect-[3/4] overflow-hidden rounded-lg bg-gray-100 mb-5">
+      <div className={`relative w-full ${imageAspectRatio} overflow-hidden rounded-lg bg-gray-100 mb-5`}>
         {coverImage ? (
           typeof coverImage === 'string' ? (
             <img
@@ -129,12 +131,14 @@ export function PropertyBrowseCard({
           )}
         </div>
           
-        <div className="flex items-center gap-2 mt-3 font-medium">
-          <span className="text-gray-900">{price}</span>
-          {price !== 'Enquire' && priceLabel && (
-            <span className="text-gray-400 font-normal">{priceLabel}</span>
-          )}
-        </div>
+        {price && (
+          <div className="flex items-center gap-2 mt-3 font-medium">
+            <span className="text-gray-900">{price}</span>
+            {price !== 'Enquire' && priceLabel && (
+              <span className="text-gray-400 font-normal">{priceLabel}</span>
+            )}
+          </div>
+        )}
 
         <div className="mt-4 text-sm font-medium text-gray-900 flex items-center gap-2 group-hover:text-gray-600 transition-colors">
           View Stay
