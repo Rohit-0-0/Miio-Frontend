@@ -11,6 +11,7 @@ export function SearchWidget({ primaryCtaLabel = 'Search' }: { primaryCtaLabel?:
   const searchParams = useSearchParams();
   const checkOutRef = useRef<HTMLInputElement>(null);
   const [isPending, startTransition] = useTransition();
+  const [pendingAction, setPendingAction] = useState<'search' | 'filter' | null>(null);
 
   const [checkIn, setCheckIn] = useState('');
   const [checkOut, setCheckOut] = useState('');
@@ -111,12 +112,6 @@ export function SearchWidget({ primaryCtaLabel = 'Search' }: { primaryCtaLabel?:
   };
 
   const handleClearFilters = () => {
-    setCheckIn('');
-    setCheckOut('');
-    setAdults(1);
-    setChildren(0);
-    setInfants(0);
-    setPets(0);
     setPropertyType('All');
     setAmenities([]);
     setBedrooms('All');
@@ -124,22 +119,24 @@ export function SearchWidget({ primaryCtaLabel = 'Search' }: { primaryCtaLabel?:
     setMinPrice('');
     setMaxPrice('');
 
-    // If we are on the properties page, remove query params
+    // If we are on the properties page, update query params but preserve dates/guests
     startTransition(() => {
       const pathname = window.location.pathname;
       if (pathname === '/properties') {
-        router.push('/properties');
+        const params = new URLSearchParams();
+        if (checkIn) params.append('checkIn', checkIn);
+        if (checkOut) params.append('checkOut', checkOut);
+        params.append('adults', adults.toString());
+        if (children > 0) params.append('children', children.toString());
+        if (infants > 0) params.append('infants', infants.toString());
+        if (pets > 0) params.append('pets', pets.toString());
+        
+        router.push(`/properties?${params.toString()}`);
       }
     });
   };
 
   const hasActiveFilters = 
-    checkIn !== '' || 
-    checkOut !== '' || 
-    adults > 1 || 
-    children > 0 || 
-    infants > 0 || 
-    pets > 0 || 
     propertyType !== 'All' || 
     amenities.length > 0 || 
     bedrooms !== 'All' || 
@@ -147,7 +144,8 @@ export function SearchWidget({ primaryCtaLabel = 'Search' }: { primaryCtaLabel?:
     minPrice !== '' || 
     maxPrice !== '';
 
-  const handleSearch = () => {
+  const handleSearch = (action: 'search' | 'filter' = 'search') => {
+    setPendingAction(action);
     const params = new URLSearchParams();
     
     if (searchParams) {
@@ -207,11 +205,11 @@ export function SearchWidget({ primaryCtaLabel = 'Search' }: { primaryCtaLabel?:
           />
         </div>
         <button 
-          onClick={handleSearch}
+          onClick={() => handleSearch('search')}
           disabled={isPending}
           className="bg-[#1B1A17] text-white px-8 py-3 md:py-0 md:min-h-[64px] md:min-w-[140px] rounded-sm font-medium tracking-widest uppercase text-sm hover:opacity-90 transition-opacity whitespace-nowrap disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
-          {isPending ? (
+          {isPending && pendingAction === 'search' ? (
             <>
               <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
@@ -368,16 +366,36 @@ export function SearchWidget({ primaryCtaLabel = 'Search' }: { primaryCtaLabel?:
           )}
         </div>
 
-        {/* Clear Filters Text Button */}
-        {hasActiveFilters && (
+        {/* Apply and Clear Filters Buttons */}
+        <div className="ml-auto md:ml-4 flex items-center gap-4">
           <button 
-            onClick={handleClearFilters}
+            onClick={() => handleSearch('filter')}
             disabled={isPending}
-            className="ml-auto md:ml-4 text-gray-500 font-medium hover:text-gray-900 transition-colors"
+            className="text-[#1B1A17] font-medium hover:opacity-70 transition-opacity flex items-center gap-2"
           >
-            Clear filters
+            {isPending && pendingAction === 'filter' ? (
+              <>
+                <svg className="animate-spin h-4 w-4 text-[#1B1A17]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Applying...
+              </>
+            ) : (
+              'Apply filters'
+            )}
           </button>
-        )}
+          
+          {hasActiveFilters && (
+            <button 
+              onClick={handleClearFilters}
+              disabled={isPending}
+              className="text-gray-500 font-medium hover:text-gray-900 transition-colors"
+            >
+              Clear filters
+            </button>
+          )}
+        </div>
 
       </div>
     </div>
