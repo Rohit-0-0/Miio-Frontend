@@ -37,7 +37,7 @@ export default async function AboutPage() {
       <section className="pt-32 pb-20 md:pt-48 md:pb-32 px-6 max-w-7xl mx-auto w-full">
         <div className="flex flex-col items-center text-center">
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-light tracking-tight text-gray-900 leading-[1.1] max-w-4xl">
-            {(about.hero.title || '').split('<br/>').map((line, idx, arr) => (
+            {(about.hero.title || '').split(/\n|<br\s*\/?>/i).map((line, idx, arr) => (
               <React.Fragment key={idx}>
                 {line}
                 {idx < arr.length - 1 && <br />}
@@ -68,7 +68,7 @@ export default async function AboutPage() {
               {about.story.label}
             </span>
             <h2 className="text-3xl md:text-4xl font-light text-gray-900 mb-8 leading-tight">
-              {(about.story.heading || '').split('<br/>').map((line, idx, arr) => (
+              {(about.story.heading || '').split(/\n|<br\s*\/?>/i).map((line, idx, arr) => (
                 <React.Fragment key={idx}>
                   {line}
                   {idx < arr.length - 1 && <br />}
