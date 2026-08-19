@@ -11,6 +11,7 @@ import { Pagination } from '@/components/shared/Pagination';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { ErrorState } from '@/components/shared/ErrorState';
 import { normalizeJournalQuery } from '@/lib/utils/search-params';
+import { editorialService } from '@/services/about.service';
 
 export const metadata = {
   title: 'Journal',
@@ -26,10 +27,16 @@ export default async function JournalPage({
   const query = normalizeJournalQuery(resolvedParams);
 
   let response: JournalListResponse | undefined;
+  let pageData: any;
   let hasError = false;
 
   try {
-    response = await getJournalListing(resolvedParams);
+    const [listingRes, pageRes] = await Promise.all([
+      getJournalListing(resolvedParams),
+      editorialService.getJournalPage()
+    ]);
+    response = listingRes;
+    pageData = pageRes.data;
   } catch (error) {
     console.error('Failed to load journal articles:', error);
     hasError = true;
@@ -49,13 +56,13 @@ export default async function JournalPage({
         <Container>
           <div className="max-w-3xl">
             <span className="text-sm font-semibold uppercase tracking-widest text-gray-500 mb-4 block">
-              Journal
+              {pageData?.label || 'Journal'}
             </span>
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 mb-6">
-              Stories & Inspiration
+              {pageData?.title || 'Stories & Inspiration'}
             </h1>
             <p className="text-xl text-gray-600">
-              Thoughts, stories, travel inspiration, and local experiences from Miio.
+              {pageData?.description || 'Thoughts, stories, travel inspiration, and local experiences from Miio.'}
             </p>
           </div>
         </Container>

@@ -3,6 +3,7 @@ import { getLocations } from '@/lib/server/location';
 import { Container } from '@/components/ui/Container';
 import { EditorialCard } from '@/components/shared/EditorialCard';
 import { SectionHeader } from '@/components/shared/SectionHeader';
+import { editorialService } from '@/services/about.service';
 
 export const metadata: Metadata = {
   title: 'Locations | Miio',
@@ -10,15 +11,20 @@ export const metadata: Metadata = {
 };
 
 export default async function LocationsPage() {
-  const locations = await getLocations();
+  const [locations, pageRes] = await Promise.all([
+    getLocations(),
+    editorialService.getLocationsPage().catch(() => ({ data: null }))
+  ]);
+  
+  const pageData = pageRes?.data;
 
   return (
     <div className="min-h-screen bg-white pt-32 pb-24">
       <Container>
         <div className="mb-16">
-          <SectionHeader title="Locations" align="left" />
+          <SectionHeader title={pageData?.title || "Locations"} align="left" />
           <p className="text-xl text-gray-600 mt-6 max-w-2xl font-light">
-            Discover our exclusive properties in the world's most sought-after destinations.
+            {pageData?.description || "Discover our exclusive properties in the world's most sought-after destinations."}
           </p>
         </div>
 

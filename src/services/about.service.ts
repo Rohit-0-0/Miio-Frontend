@@ -15,6 +15,14 @@ class EditorialService {
   async getAbout(): Promise<ApiResponse<AboutDto>> {
     return apiClient.get<ApiResponse<AboutDto>>('/editorial/about');
   }
+
+  async getJournalPage(): Promise<ApiResponse<any>> {
+    return apiClient.get<ApiResponse<any>>('/editorial/journal-page');
+  }
+
+  async getLocationsPage(): Promise<ApiResponse<any>> {
+    return apiClient.get<ApiResponse<any>>('/editorial/locations-page');
+  }
 }
 
 export const editorialService = new EditorialService();

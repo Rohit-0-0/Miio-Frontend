@@ -14,12 +14,14 @@ import { home } from './singletons/home'
 import { about } from './singletons/about'
 
 import { propertyEditorial } from './documents/propertyEditorial'
-import { property } from './documents/property'
 import { journal } from './documents/journal'
 import { location } from './documents/location'
 import { faq } from './documents/faq'
 
 import { partnerWithUs } from './singletons/partnerWithUs'
+import { journalPage } from './singletons/journalPage'
+import { locationsPage } from './singletons/locationsPage'
+import { staysPage } from './singletons/staysPage'
 
 export const schemaTypes = [
   seo,
@@ -37,9 +39,11 @@ export const schemaTypes = [
   home,
   about,
   partnerWithUs,
+  journalPage,
+  locationsPage,
+  staysPage,
 
   propertyEditorial,
-  property,
   journal,
   location,
   faq
