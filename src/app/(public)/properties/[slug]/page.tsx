@@ -28,8 +28,39 @@ type Props = {
   searchParams: Promise<{ id?: string }>;
 };
 
-// Use static metadata to prevent blocking navigation on Guesty/CMS APIs
-export async function generateMetadata(): Promise<Metadata> {
+import { RelatedJournals } from '@/components/properties/details/RelatedJournals';
+
+// Dynamic metadata based on the property SEO from CMS
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
+  const resolvedParams = await params;
+  const resolvedSearchParams = await searchParams;
+  const slug = resolvedParams.slug;
+  const guestyId = resolvedSearchParams.id;
+  
+  try {
+    let response = await getPropertyBySlug<PropertyDetails>(slug, { next: { revalidate: 300 } });
+    if ((!response || !response.data) && (guestyId || /^[0-9a-fA-F]{24}$/.test(slug))) {
+      response = await getPropertyById<PropertyDetails>(guestyId || slug, { next: { revalidate: 300 } });
+    }
+    
+    const property = response?.data;
+    if (property?.editorial?.seo) {
+      return {
+        title: property.editorial.seo.title || property.title,
+        description: property.editorial.seo.description || property.shortDescription || '',
+      };
+    }
+    
+    if (property) {
+      return {
+        title: property.title,
+        description: property.shortDescription || '',
+      };
+    }
+  } catch (error) {
+    console.error('Failed to generate dynamic metadata for property:', error);
+  }
+
   return {
     title: 'Luxury Property | Miio',
     description: 'Stay at one of our premium curated properties with Miio.',
@@ -128,6 +159,7 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
       
       <Container>
         <RelatedProperties properties={[]} mode={editorial?.relatedProperties?.displayMode || 'OFF'} />
+        <RelatedJournals journals={editorial?.relatedJournals || []} />
       </Container>
       <FloatingBackButton />
     </article>

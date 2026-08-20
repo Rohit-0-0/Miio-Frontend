@@ -61,16 +61,29 @@ export const journal = defineType({
       initialValue: false,
     }),
     defineField({
-      name: 'relatedProperties',
-      title: 'Related Properties',
-      type: 'array',
-      of: [{ type: 'reference', to: [{ type: 'propertyEditorial' }] }]
+      name: 'relatedProperty',
+      title: 'Related Property',
+      type: 'reference',
+      to: [{ type: 'propertyEditorial' }],
+      description: 'The single property this journal is linked to.'
     }),
     defineField({
-      name: 'relatedLocations',
-      title: 'Related Locations',
-      type: 'array',
-      of: [{ type: 'reference', to: [{ type: 'location' }] }]
+      name: 'ctaTitle',
+      title: 'CTA Title',
+      type: 'string',
+      description: 'The heading text for the CTA block (e.g., "Experience this destination").'
+    }),
+    defineField({
+      name: 'ctaDescription',
+      title: 'CTA Description',
+      type: 'text',
+      description: 'The supporting text for the CTA block.'
+    }),
+    defineField({
+      name: 'ctaText',
+      title: 'CTA Button Text',
+      type: 'string',
+      description: 'The text for the button linking to the related property (e.g., "View The Bondi Estate"). If left blank, it defaults to "View Property".'
     })
   ],
   preview: {

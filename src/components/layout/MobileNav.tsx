@@ -117,7 +117,7 @@ export function MobileNav() {
 
             <div className="p-8 pb-12 w-full max-w-sm mx-auto animate-in slide-in-from-bottom-8 fade-in duration-700 delay-300 fill-mode-both">
               <Link
-                href={ROUTES.BOOKING}
+                href={ROUTES.PROPERTIES}
                 onClick={() => setIsOpen(false)}
                 className="flex w-full items-center justify-center rounded-sm bg-[#1B1A17] px-6 py-4 text-sm font-medium tracking-widest uppercase text-white hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2"
               >

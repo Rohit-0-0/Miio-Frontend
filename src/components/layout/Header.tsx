@@ -55,7 +55,7 @@ export function Header() {
             
             <div className="hidden md:block">
               <Link
-                href={ROUTES.BOOKING}
+                href={ROUTES.PROPERTIES}
                 className="inline-flex items-center justify-center rounded-md bg-gray-900 px-5 py-2 text-sm font-medium text-white transition-colors hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2"
               >
                 Book a Stay

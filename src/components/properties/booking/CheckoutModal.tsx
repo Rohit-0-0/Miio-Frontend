@@ -324,25 +324,10 @@ export function CheckoutModal({ isOpen, onClose, quote, listingId, checkIn, chec
             </div>
             
             {providerType === 'loading' ? (
-              (() => {
-                console.log(`[Payment Verification]\nCheckout spinner rendered\nreason: providerType === 'loading'\nstate: ${providerType}`);
-                return (
-                  <div className="flex-1 flex flex-col items-center justify-center p-12 text-gray-500">
-                    <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin mr-3 mb-4"></div>
-                    <p>Initializing secure checkout...</p>
-                    
-                    {process.env.NODE_ENV === 'development' && (
-                      <div className="mt-8 p-4 bg-yellow-50 text-yellow-800 text-xs rounded border border-yellow-200 max-w-xs break-all text-left">
-                        <strong>Payment initialization failed / stalled.</strong><br/><br/>
-                        Stage: Provider initialization<br/>
-                        Error: providerType is stuck in loading.<br/>
-                        listingIdPresent: {!!listingId ? 'true' : 'false'}<br/>
-                        quoteId: {quote?._id || 'none'}
-                      </div>
-                    )}
-                  </div>
-                );
-              })()
+              <div className="flex-1 flex flex-col items-center justify-center p-12 text-gray-500">
+                <div className="w-6 h-6 border-2 border-gray-300 border-t-black rounded-full animate-spin mr-3 mb-4"></div>
+                <p>Initializing secure checkout...</p>
+              </div>
             ) : (
               <CheckoutForm 
                 quote={quote} 

@@ -103,6 +103,24 @@ export default async function JournalDetailPage({
 
           {/* Content */}
           <RichTextRenderer html={article.content} />
+
+          {/* Related Property CTA */}
+          {article.relatedProperty && article.relatedProperty.guestyListingId && (
+            <div className="mt-16 bg-gray-50 rounded-2xl p-8 md:p-12 text-center border border-gray-100">
+              <h3 className="text-2xl font-serif text-gray-900 mb-4 tracking-tight">
+                {article.ctaTitle || 'Experience this destination'}
+              </h3>
+              <p className="text-gray-600 mb-8 max-w-lg mx-auto leading-relaxed">
+                {article.ctaDescription || 'Ready to turn this story into your own experience? Discover more details and book your stay.'}
+              </p>
+              <Link 
+                href={`/properties/${article.relatedProperty.guestyListingId}`}
+                className="inline-flex items-center justify-center rounded-full px-8 py-3 text-lg font-medium bg-gray-900 text-white hover:bg-gray-800 transition-colors"
+              >
+                {article.ctaText || 'View Property'}
+              </Link>
+            </div>
+          )}
         </div>
       </Container>
       <FloatingBackButton />

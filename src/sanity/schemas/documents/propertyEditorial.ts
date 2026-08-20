@@ -60,7 +60,8 @@ export const propertyEditorial = defineType({
       name: 'relatedJournals',
       title: 'Related Journals',
       type: 'array',
-      of: [{ type: 'reference', to: [{ type: 'journal' }] }]
+      of: [{ type: 'reference', to: [{ type: 'journal' }] }],
+      validation: Rule => Rule.unique()
     }),
     defineField({
       name: 'seo',

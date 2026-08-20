@@ -17,6 +17,10 @@ export interface JournalArticle extends BaseEntity {
   publishedAt?: string;
   readingTime?: number;
   seo?: SeoMetadata;
+  relatedProperty?: any;
+  ctaText?: string;
+  ctaTitle?: string;
+  ctaDescription?: string;
 }
 
 export interface JournalQuery {
