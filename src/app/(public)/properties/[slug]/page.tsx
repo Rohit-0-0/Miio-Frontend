@@ -67,6 +67,8 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   };
 }
 
+import { PropertyReviews } from '@/components/properties/details/PropertyReviews';
+
 export default async function PropertyDetailPage({ params, searchParams }: Props) {
   const resolvedParams = await params;
   const resolvedSearchParams = await searchParams;
@@ -160,6 +162,9 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
       <Container>
         <RelatedProperties properties={[]} mode={editorial?.relatedProperties?.displayMode || 'OFF'} />
         <RelatedJournals journals={editorial?.relatedJournals || []} />
+        {(actualGuestyId || property.guestyId || property.id) && (
+          <PropertyReviews propertyId={actualGuestyId || property.guestyId || property.id} />
+        )}
       </Container>
       <FloatingBackButton />
     </article>

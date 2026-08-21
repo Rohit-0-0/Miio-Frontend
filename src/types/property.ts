@@ -1,4 +1,24 @@
-import { BaseEntity, ImageAsset } from './common';
+import { BaseEntity, ImageAsset, SeoMetadata } from './common';
+import { PaginatedResponse } from '@/types/api';
+
+export interface PropertyReview {
+  _id: string;
+  listingId: string;
+  reviewerId: string;
+  publicReview: string;
+  reviewer: {
+    firstName: string;
+    lastName: string;
+    pictureUrl: string;
+  };
+  overallRating: number;
+  createdAt: string;
+}
+
+export interface PropertyReviewsResponse {
+  results: PropertyReview[];
+  count: number;
+}
 
 export const LIFECYCLE_STATUS = {
   DRAFT: 'DRAFT',
@@ -182,6 +202,7 @@ export interface PropertySummary {
 
 export interface PropertyDetails {
   id: string;
+  guestyId?: string;
   title: string;
   nickname?: string;
   unitType?: string;

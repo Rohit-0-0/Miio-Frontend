@@ -31,6 +31,10 @@ class PropertyService {
     return apiClient.put<ApiResponse<PropertyDocument>>(`${this.basePath}/${id}`, data);
   }
 
+  async getPropertyReviews(id: string): Promise<ApiResponse<{ results?: any[], data?: any[], count: number }>> {
+    return apiClient.get<ApiResponse<{ results?: any[], data?: any[], count: number }>>(`${this.basePath}/${id}/reviews`);
+  }
+
   async delete(id: string): Promise<ApiResponse<void>> {
     return apiClient.delete<ApiResponse<void>>(`${this.basePath}/${id}`);
   }
