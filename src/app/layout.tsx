@@ -7,6 +7,9 @@ import { Toaster } from 'sonner';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { env } from '@/config/env';
 
+import { MetaPixel } from '@/components/analytics/MetaPixel';
+import { Suspense } from 'react';
+
 const inter = Inter({
   variable: '--font-inter',
   subsets: ['latin'],
@@ -60,6 +63,9 @@ export default function RootLayout({
         {process.env.NODE_ENV === 'development' && env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
           <GoogleAnalytics gaId={env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
         )}
+        <Suspense fallback={null}>
+          <MetaPixel />
+        </Suspense>
       </body>
     </html>
   );
