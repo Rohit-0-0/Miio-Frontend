@@ -11,13 +11,15 @@ interface GuestSelectorProps {
   onChangePets: (val: number) => void;
   className?: string;
   triggerClassName?: string;
+  customTrigger?: React.ReactNode;
 }
 
 export function GuestSelector({ 
   adults, children, infants, pets, 
   onChangeAdults, onChangeChildren, onChangeInfants, onChangePets,
   className = "relative",
-  triggerClassName = "border border-gray-300 border-t-0 rounded-b-md p-3 cursor-pointer hover:bg-gray-50 transition-colors flex justify-between items-center"
+  triggerClassName = "border border-gray-300 border-t-0 rounded-b-md p-3 cursor-pointer hover:bg-gray-50 transition-colors flex justify-between items-center",
+  customTrigger
 }: GuestSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -51,16 +53,20 @@ export function GuestSelector({
   return (
     <div className={className} ref={containerRef}>
       <div 
-        className={triggerClassName}
+        className={customTrigger ? "" : triggerClassName}
         onClick={() => setIsOpen(!isOpen)}
       >
-        <div>
-          <div className="text-[10px] uppercase font-bold text-gray-900 tracking-wider">Guests</div>
-          <div className="text-sm text-gray-900 mt-0.5 truncate max-w-[200px]">{displayString}</div>
-        </div>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={`transform transition-transform ${isOpen ? 'rotate-180' : ''}`}>
-          <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
+        {customTrigger ? customTrigger : (
+          <>
+            <div>
+              <div className="text-[10px] uppercase font-bold text-gray-900 tracking-wider">Guests</div>
+              <div className="text-sm text-gray-900 mt-0.5 truncate max-w-[200px]">{displayString}</div>
+            </div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={`transform transition-transform ${isOpen ? 'rotate-180' : ''}`}>
+              <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </>
+        )}
       </div>
 
       {isOpen && (

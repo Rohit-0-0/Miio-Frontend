@@ -10,9 +10,16 @@ export function EditorialStatement({ statement }: { statement: EditorialStatemen
       <h2 className="text-3xl md:text-5xl font-serif text-[#1B1A17] leading-tight">
         {heading}
       </h2>
-      <p className="text-lg md:text-xl font-light text-[#1B1A17]/80 leading-relaxed max-w-md mx-auto">
+      <p className="text-lg md:text-xl font-light text-[#1B1A17]/80 leading-relaxed max-w-md mx-auto mb-8">
         {description}
       </p>
+      
+      <a 
+        href="/about" 
+        className="bg-[#1B1A17] text-white px-8 py-4 rounded-full font-medium tracking-widest uppercase text-sm hover:opacity-90 transition-opacity whitespace-nowrap inline-flex"
+      >
+        Learn more about Miio
+      </a>
     </div>
   );
 }

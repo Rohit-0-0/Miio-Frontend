@@ -31,6 +31,20 @@ export const hero = defineType({
       name: 'cta',
       title: 'Call to Action',
       type: 'cta',
+    }),
+    defineField({
+      name: 'searchWidgetLabels',
+      title: 'Search Widget Labels',
+      type: 'object',
+      fields: [
+        { name: 'whereTo', title: 'Where To Label', type: 'string', initialValue: 'WHERE TO?' },
+        { name: 'chooseLocation', title: 'Choose Location Placeholder', type: 'string', initialValue: 'Choose location' },
+        { name: 'dates', title: 'Dates Label', type: 'string', initialValue: 'DATES' },
+        { name: 'addDates', title: 'Add Dates Placeholder', type: 'string', initialValue: 'Add dates' },
+        { name: 'guests', title: 'Guests Label', type: 'string', initialValue: 'GUESTS' },
+        { name: 'addGuests', title: 'Add Guests Placeholder', type: 'string', initialValue: '2 adults' },
+        { name: 'searchButton', title: 'Search Button Text', type: 'string', initialValue: 'Search' }
+      ]
     })
   ],
   preview: {

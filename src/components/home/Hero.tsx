@@ -26,45 +26,45 @@ export function Hero({ hero }: { hero: HeroSection }) {
 
   return (
     <section 
-      className="relative w-full h-[100svh] flex flex-col justify-end pb-12 md:pb-24 bg-[#1B1A17]"
+      className="relative w-full z-40"
       role="banner"
       aria-label={hero.backgroundAlt || title}
     >
-      {/* Background Images Carousel */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <CrossfadeCarousel 
-          images={resolvedImages} 
-          alt={hero.backgroundAlt || title} 
-        />
-      </div>
-
-      {/* Gradient Overlay for Text Readability */}
-      <div 
-        className="absolute inset-0 z-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10"
-        style={{ opacity: hero.overlayOpacity ?? 1 }}
-      />
-
-      {/* Content */}
-      <div className="relative z-10 w-full px-6 md:px-10 lg:px-16 mx-auto max-w-7xl flex flex-col items-start animate-in slide-in-from-bottom-8 fade-in duration-1000 delay-300 fill-mode-both">
-        
-        {eyebrow && (
-          <span className="text-xs md:text-sm font-semibold uppercase tracking-[0.2em] text-white/80 mb-4 block">
-            {eyebrow}
-          </span>
-        )}
-        
-        <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl font-medium tracking-wide text-white leading-[1.1] mb-4 max-w-4xl">
-          {title}
-        </h1>
-        
-        <p className="text-base md:text-lg font-light text-white/90 max-w-2xl leading-relaxed mb-6">
-          {subtitle}
-        </p>
-        
-        {/* Search Component */}
-        <div className="w-full max-w-4xl mt-6 bg-white/10 backdrop-blur-md rounded-sm p-2 flex flex-col md:flex-row gap-2">
-          <SearchWidget primaryCtaLabel={primaryCtaLabel} />
+      <div className="relative w-full min-h-[673px] h-[calc(100vh-128px)] flex flex-col items-center justify-center">
+        {/* Background Images Carousel */}
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+          <CrossfadeCarousel 
+            images={resolvedImages} 
+            alt={hero.backgroundAlt || title} 
+          />
         </div>
+
+        {/* Overlay (Figma: #00000033) */}
+        <div 
+          className="absolute inset-0 z-0 bg-[#00000033] overflow-hidden"
+          style={{ opacity: hero.overlayOpacity ?? 1 }}
+        />
+
+        {/* Content */}
+        <div className="relative z-10 w-full max-w-[1440px] mx-auto flex flex-col items-center text-center px-4 animate-in slide-in-from-bottom-8 fade-in duration-1000 delay-300 fill-mode-both">
+          
+          <h1 className="font-serif text-4xl md:text-[56px] font-medium tracking-wide text-white leading-[1.1] mb-6 max-w-[636px]">
+            {title}
+          </h1>
+          
+          <p className="text-base md:text-lg font-light text-white max-w-[500px] leading-relaxed mb-10 md:mb-12">
+            {subtitle}
+          </p>
+
+          {/* Search Component (flowing below subtitle) */}
+          <div className="w-full max-w-[800px] flex justify-center z-20">
+            <SearchWidget 
+              primaryCtaLabel="Search"
+              labels={hero.searchWidgetLabels}
+            />
+          </div>
+        </div>
+
       </div>
     </section>
   );

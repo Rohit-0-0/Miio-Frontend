@@ -27,6 +27,21 @@ export const footer = defineType({
       }
     }),
     defineField({
+      name: 'partnerLogos',
+      title: 'Partner Logos',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'logo', title: 'Logo Image', type: 'image' },
+            { name: 'alt', title: 'Alt Text', type: 'string' }
+          ]
+        }
+      ],
+      description: 'Logos displayed at the bottom of the footer (e.g. Guesty, Stripe).'
+    }),
+    defineField({
       name: 'copyright',
       title: 'Copyright Text',
       type: 'string',

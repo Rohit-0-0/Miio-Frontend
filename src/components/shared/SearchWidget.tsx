@@ -6,13 +6,30 @@ import { GuestSelector } from '../properties/booking/GuestSelector';
 import { getNextDayStr, getTodayStr } from '@/lib/utils/dates';
 import { DateRangePicker } from './DateRangePicker';
 
-export function SearchWidget({ primaryCtaLabel = 'Search' }: { primaryCtaLabel?: string }) {
+interface SearchWidgetLabels {
+  whereTo?: string;
+  chooseLocation?: string;
+  dates?: string;
+  addDates?: string;
+  guests?: string;
+  addGuests?: string;
+  searchButton?: string;
+}
+
+export function SearchWidget({ 
+  primaryCtaLabel = 'Search',
+  labels 
+}: { 
+  primaryCtaLabel?: string;
+  labels?: SearchWidgetLabels;
+}) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const checkOutRef = useRef<HTMLInputElement>(null);
   const [isPending, startTransition] = useTransition();
   const [pendingAction, setPendingAction] = useState<'search' | 'filter' | null>(null);
 
+  const [location, setLocation] = useState<string>('');
   const [checkIn, setCheckIn] = useState('');
   const [checkOut, setCheckOut] = useState('');
   
@@ -178,9 +195,36 @@ export function SearchWidget({ primaryCtaLabel = 'Search' }: { primaryCtaLabel?:
   };
 
   return (
-    <div className="w-full flex flex-col gap-2 z-30 relative">
-      <div className="w-full bg-white/10 backdrop-blur-md rounded-sm p-2 flex flex-col md:flex-row gap-2 shadow-lg md:shadow-none md:bg-transparent md:backdrop-blur-none relative">
-        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-2 bg-white rounded-sm overflow-visible shadow-sm border border-gray-100">
+    <div className="w-full flex flex-col gap-2 z-30 relative shadow-2xl">
+      <div className="w-full bg-white rounded-full p-2 flex flex-col md:flex-row items-center justify-between gap-2 md:gap-0 relative">
+        <div className="flex-1 w-full grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-200 bg-transparent rounded-full md:rounded-none overflow-visible">
+          
+          {/* WHERE TO? */}
+          <div className="relative group flex-1 h-full">
+            <div 
+              onClick={() => setOpenDropdown(openDropdown === 'location' ? null : 'location')}
+              className="px-6 py-3 h-full w-full flex flex-col justify-center cursor-pointer hover:bg-gray-50 transition-colors md:rounded-l-full"
+            >
+              <span className="text-[10px] font-bold tracking-widest text-gray-800 uppercase mb-0.5">{labels?.whereTo || 'WHERE TO?'}</span>
+              <span className="text-sm text-gray-900 font-medium truncate">{location || labels?.chooseLocation || 'Choose location'}</span>
+            </div>
+            
+            {openDropdown === 'location' && (
+              <div className="absolute top-full left-0 mt-4 w-64 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 py-3 ml-2 md:ml-4">
+                {['Bondi', 'Vaucluse', 'Paddington', 'Sydney'].map(loc => (
+                  <div 
+                    key={loc}
+                    onClick={() => { setLocation(loc); setOpenDropdown(null); }}
+                    className="px-6 py-2.5 hover:bg-gray-50 cursor-pointer flex items-center justify-between text-gray-700 text-sm transition-colors"
+                  >
+                    <span>{loc}</span>
+                    {location === loc && <svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#1B1A17" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
           <DateRangePicker 
             checkIn={checkIn}
             checkOut={checkOut}
@@ -189,8 +233,19 @@ export function SearchWidget({ primaryCtaLabel = 'Search' }: { primaryCtaLabel?:
               setCheckOut(outDate);
             }}
             className="relative"
-            triggerClassName="px-6 py-4 h-full flex flex-col justify-center border-b md:border-b-0 md:border-r border-gray-100 relative group cursor-pointer hover:bg-gray-50 transition-colors"
+            triggerClassName="px-6 py-3 h-full flex flex-col justify-center relative group cursor-pointer hover:bg-gray-50 transition-colors"
+            customTrigger={
+              <div className="flex flex-col w-full px-6 py-3 h-full justify-center group cursor-pointer hover:bg-gray-50 transition-colors">
+                <span className="text-[10px] font-bold tracking-widest text-gray-800 uppercase mb-0.5">{labels?.dates || 'DATES'}</span>
+                <span className="text-sm text-gray-900 font-light truncate">
+                  {checkIn ? `${checkIn}${checkOut ? ` - ${checkOut}` : ' - Add Date'}` : (
+                    <span className="text-gray-500">{labels?.addDates || 'Add dates'}</span>
+                  )}
+                </span>
+              </div>
+            }
           />
+          
           <GuestSelector 
             adults={adults}
             children={children}
@@ -201,13 +256,24 @@ export function SearchWidget({ primaryCtaLabel = 'Search' }: { primaryCtaLabel?:
             onChangeInfants={setInfants}
             onChangePets={setPets}
             className="relative"
-            triggerClassName="px-6 py-4 h-full flex flex-col justify-center relative group cursor-pointer hover:bg-gray-50 transition-colors"
+            triggerClassName="px-6 py-3 h-full flex flex-col justify-center relative group cursor-pointer hover:bg-gray-50 transition-colors"
+            customTrigger={
+              <div className="flex flex-col w-full px-6 py-3 h-full justify-center group cursor-pointer hover:bg-gray-50 transition-colors md:rounded-r-full">
+                <span className="text-[10px] font-bold tracking-widest text-gray-800 uppercase mb-0.5">{labels?.guests || 'GUESTS'}</span>
+                <span className="text-sm text-gray-900 font-light truncate">
+                  {adults + children > 1 || infants > 0 || pets > 0 
+                    ? `${adults + children} guests` + (infants ? `, ${infants} inf` : '') + (pets ? `, ${pets} pets` : '')
+                    : (<span className="text-gray-500">{labels?.addGuests || '2 adults'}</span>)}
+                </span>
+              </div>
+            }
           />
         </div>
+        
         <button 
           onClick={() => handleSearch('search')}
           disabled={isPending}
-          className="bg-[#1B1A17] text-white px-8 py-3 md:py-0 md:min-h-[64px] md:min-w-[140px] rounded-sm font-medium tracking-widest uppercase text-sm hover:opacity-90 transition-opacity whitespace-nowrap disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="bg-[#949479] text-white px-8 py-4 md:py-0 md:h-[60px] md:min-w-[140px] rounded-full font-medium tracking-widest uppercase text-sm hover:opacity-90 transition-opacity whitespace-nowrap disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 w-full md:w-auto md:ml-2 shadow-sm"
         >
           {isPending && pendingAction === 'search' ? (
             <>
@@ -218,186 +284,14 @@ export function SearchWidget({ primaryCtaLabel = 'Search' }: { primaryCtaLabel?:
               Searching...
             </>
           ) : (
-            primaryCtaLabel
+            <>
+              Search <span className="ml-1">→</span>
+            </>
           )}
         </button>
       </div>
 
-      <div ref={filterRef} className="flex flex-wrap items-center gap-3 mt-4 text-sm text-gray-700 md:bg-transparent rounded-sm">
-        
-        {/* Price Dropdown */}
-        <div className="relative group">
-          <button 
-            onClick={() => setOpenDropdown(openDropdown === 'price' ? null : 'price')}
-            className="flex items-center gap-2 bg-white border border-gray-200 rounded-md px-4 py-2.5 cursor-pointer shadow-sm hover:border-gray-300 transition-colors"
-          >
-            <span className="text-gray-700 whitespace-nowrap">Price per night: {minPrice || maxPrice ? (minPrice ? `A$${minPrice}` : 'A$0') + (maxPrice ? ` - A$${maxPrice}` : '+') : 'All'}</span>
-            <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-          </button>
-          {openDropdown === 'price' && (
-            <div className="absolute top-full left-0 mt-2 w-72 bg-white border border-gray-200 rounded-lg shadow-xl z-50 p-4">
-              <div className="flex items-center gap-4">
-                <div className="flex-1 relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">A$</span>
-                  <input 
-                    type="number" 
-                    value={minPrice}
-                    onChange={(e) => setMinPrice(e.target.value)}
-                    placeholder="0"
-                    className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <span className="text-gray-400">-</span>
-                <div className="flex-1 relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">A$</span>
-                  <input 
-                    type="number" 
-                    value={maxPrice}
-                    onChange={(e) => setMaxPrice(e.target.value)}
-                    placeholder="Max"
-                    className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
 
-        {/* Property Type Dropdown */}
-        <div className="relative group">
-          <button 
-            onClick={() => setOpenDropdown(openDropdown === 'property' ? null : 'property')}
-            className="flex items-center gap-2 bg-white border border-gray-200 rounded-md px-4 py-2.5 cursor-pointer shadow-sm hover:border-gray-300 transition-colors"
-          >
-            <span className="text-gray-700 whitespace-nowrap">Property type: {propertyType}</span>
-            <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-          </button>
-          {openDropdown === 'property' && (
-            <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-xl z-50 py-2">
-              {['All', 'House', 'Apartment', 'Villa', 'Studio'].map(type => (
-                <div 
-                  key={type}
-                  onClick={() => { setPropertyType(type); setOpenDropdown(null); }}
-                  className="px-4 py-2 hover:bg-gray-50 cursor-pointer flex items-center justify-between text-gray-700"
-                >
-                  <span>{type}</span>
-                  {propertyType === type && <svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Amenities Dropdown */}
-        <div className="relative group">
-          <button 
-            onClick={() => setOpenDropdown(openDropdown === 'amenities' ? null : 'amenities')}
-            className="flex items-center gap-2 bg-white border border-gray-200 rounded-md px-4 py-2.5 cursor-pointer shadow-sm hover:border-gray-300 transition-colors"
-          >
-            <span className="text-gray-700 whitespace-nowrap">
-              Amenities: {amenities.length === 0 ? 'All' : `${amenities.length} selected`}
-            </span>
-            <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-          </button>
-          {openDropdown === 'amenities' && (
-            <div className="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-50 p-2 flex flex-col gap-1">
-              {['Wireless Internet', 'Swimming pool', 'Air conditioning', 'Heating', 'Kitchen', 'Hot Tub', 'Gym'].map(am => (
-                <label key={am} className="flex items-center gap-3 px-2 py-2 hover:bg-gray-50 rounded cursor-pointer text-sm text-gray-700 select-none">
-                  <input 
-                    type="checkbox" 
-                    checked={amenities.includes(am)} 
-                    onChange={() => toggleAmenity(am)} 
-                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer" 
-                  />
-                  {am}
-                </label>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Bedrooms Dropdown */}
-        <div className="relative group">
-          <button 
-            onClick={() => setOpenDropdown(openDropdown === 'bedrooms' ? null : 'bedrooms')}
-            className="flex items-center gap-2 bg-white border border-gray-200 rounded-md px-4 py-2.5 cursor-pointer shadow-sm hover:border-gray-300 transition-colors"
-          >
-            <span className="text-gray-700 whitespace-nowrap">Bedrooms: {bedrooms}</span>
-            <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-          </button>
-          {openDropdown === 'bedrooms' && (
-            <div className="absolute top-full left-0 mt-2 w-32 bg-white border border-gray-200 rounded-lg shadow-xl z-50 py-2">
-              {['All', '1', '2', '3', '4', '5'].map(num => (
-                <div 
-                  key={num}
-                  onClick={() => { setBedrooms(num); setOpenDropdown(null); }}
-                  className="px-4 py-2 hover:bg-gray-50 cursor-pointer flex items-center justify-between text-gray-700"
-                >
-                  <span>{num}</span>
-                  {bedrooms === num && <svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Bathrooms Dropdown */}
-        <div className="relative group">
-          <button 
-            onClick={() => setOpenDropdown(openDropdown === 'bathrooms' ? null : 'bathrooms')}
-            className="flex items-center gap-2 bg-white border border-gray-200 rounded-md px-4 py-2.5 cursor-pointer shadow-sm hover:border-gray-300 transition-colors"
-          >
-            <span className="text-gray-700 whitespace-nowrap">Bathrooms: {bathrooms}</span>
-            <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-          </button>
-          {openDropdown === 'bathrooms' && (
-            <div className="absolute top-full left-0 mt-2 w-32 bg-white border border-gray-200 rounded-lg shadow-xl z-50 py-2">
-              {['All', '1', '2', '3', '4', '5'].map(num => (
-                <div 
-                  key={num}
-                  onClick={() => { setBathrooms(num); setOpenDropdown(null); }}
-                  className="px-4 py-2 hover:bg-gray-50 cursor-pointer flex items-center justify-between text-gray-700"
-                >
-                  <span>{num}</span>
-                  {bathrooms === num && <svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Apply and Clear Filters Buttons */}
-        <div className="ml-auto md:ml-4 flex items-center gap-4">
-          <button 
-            onClick={() => handleSearch('filter')}
-            disabled={isPending}
-            className="text-[#1B1A17] font-medium hover:opacity-70 transition-opacity flex items-center gap-2"
-          >
-            {isPending && pendingAction === 'filter' ? (
-              <>
-                <svg className="animate-spin h-4 w-4 text-[#1B1A17]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Applying...
-              </>
-            ) : (
-              'Apply filters'
-            )}
-          </button>
-          
-          {hasActiveFilters && (
-            <button 
-              onClick={handleClearFilters}
-              disabled={isPending}
-              className="text-gray-500 font-medium hover:text-gray-900 transition-colors"
-            >
-              Clear filters
-            </button>
-          )}
-        </div>
-
-      </div>
     </div>
   );
 }

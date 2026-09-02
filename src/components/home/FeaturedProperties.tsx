@@ -1,4 +1,4 @@
-import { PropertyBrowseCard } from '@/components/properties/PropertyBrowseCard';
+import { MinimalPropertyCard } from '@/components/home/MinimalPropertyCard';
 import { SectionHeader } from '@/components/shared/SectionHeader';
 import { PropertyDocument } from '@/types/property';
 import { FeaturedPropertiesSection } from '@/types/homepage';
@@ -20,7 +20,7 @@ export function FeaturedProperties({ properties, config }: FeaturedPropertiesPro
   const ctaLink = config.ctaLink || HOME_DEFAULTS.editorialStatement.cta.href;
 
   return (
-    <div className="flex flex-col space-y-12">
+    <div className="flex flex-col gap-[32px]">
       <div className="flex flex-col md:flex-row justify-between items-end gap-8">
         <SectionHeader 
             title={title} 
@@ -32,7 +32,7 @@ export function FeaturedProperties({ properties, config }: FeaturedPropertiesPro
             <div className="hidden md:block pb-2">
               <Link
                 href={ctaLink}
-                className="text-sm font-medium tracking-widest uppercase text-[#1B1A17] hover:underline underline-offset-4 decoration-1 transition-all"
+                className="text-sm font-medium tracking-widest text-[#1B1A17] hover:opacity-70 transition-all"
               >
                 {ctaText} &rarr;
               </Link>
@@ -40,10 +40,9 @@ export function FeaturedProperties({ properties, config }: FeaturedPropertiesPro
           )}
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[32px]">
           {properties.map((property: any) => {
-            const coverAssetId = property.coverImageId || property.gallery?.[0]?.assetId;
-            const image = property.guestyImageUrl ? property.guestyImageUrl : (coverAssetId ? { assetId: coverAssetId } : undefined);
+            const image = property.guestyImageUrl || property.coverImageId || property.picture?.large || property.gallery?.[0]?.assetId || property.gallery?.[0];
 
             const currency = property.prices?.currency === 'AUD' ? '$' : (property.prices?.currency || '');
             let price = config.placeholderPrice || '';
@@ -58,10 +57,10 @@ export function FeaturedProperties({ properties, config }: FeaturedPropertiesPro
             }
 
             return (
-              <PropertyBrowseCard
+              <MinimalPropertyCard
                 key={property.id}
                 id={property.id}
-                slug={property.slug}
+                slug={property.slug || property.id}
                 name={property.title}
                 nickname={property.nickname}
                 unitType={property.unitType}

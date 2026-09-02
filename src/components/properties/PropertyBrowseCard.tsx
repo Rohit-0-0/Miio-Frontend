@@ -4,7 +4,7 @@ import { AppImage } from '../media/AppImage';
 import { ImageAsset } from '@/types/common';
 import { Star } from 'lucide-react';
 
-interface PropertyBrowseCardProps {
+export interface PropertyBrowseCardProps {
   id: string;
   slug: string;
   name: string;

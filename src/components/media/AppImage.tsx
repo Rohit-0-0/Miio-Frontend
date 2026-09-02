@@ -47,6 +47,7 @@ export function AppImage({ image, alt, fallbackAlt = 'Image', className = '', ..
           setError(true);
           setIsLoading(false);
         }}
+        unoptimized={url.includes('guesty.com')}
         {...props}
       />
     </div>

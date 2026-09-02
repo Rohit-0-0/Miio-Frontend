@@ -24,7 +24,7 @@ export function FinalCTA({ finalCta }: { finalCta: FinalCtaSection }) {
         <div className="pt-8">
           <Link
             href={buttonLink}
-            className="inline-flex items-center justify-center bg-white text-[#1B1A17] px-8 py-4 text-sm font-medium tracking-widest uppercase transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#1B1A17] rounded-sm"
+            className="inline-flex items-center justify-center bg-white text-[#1B1A17] px-8 py-4 text-sm font-medium tracking-widest uppercase transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#1B1A17] rounded-full"
           >
             {buttonText}
           </Link>

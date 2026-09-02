@@ -9,6 +9,8 @@ import { FinalCTA } from '@/components/home/FinalCTA';
 import { FeaturedPropertiesSuspense } from '@/components/home/FeaturedPropertiesSuspense';
 import { JournalPreviewSuspense } from '@/components/home/JournalPreviewSuspense';
 import { PropertyCardSkeleton, JournalCardSkeleton } from '@/components/ui/skeletons/CompositeSkeletons';
+import { StayBenefits } from '@/components/home/StayBenefits';
+import { Testimonials } from '@/components/home/Testimonials';
 
 export async function generateMetadata(): Promise<Metadata> {
   const homepage = await getHomepage({ next: { revalidate: 300 } });
@@ -48,31 +50,39 @@ export default async function HomePage() {
     <main className="w-full flex flex-col">
       {homepage.hero && <Hero hero={homepage.hero} />}
       
-      <section className="bg-white">
-        <div className="max-w-[1440px] mx-auto px-6 md:px-10 lg:px-16 py-24 md:py-32 flex flex-col lg:flex-row gap-16 xl:gap-24 items-stretch">
-          <div className="w-full lg:w-2/3">
-            {homepage.featuredProperties && (
-              <Suspense 
-                fallback={
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-x-8 gap-y-12">
-                    {Array.from({ length: 4 }).map((_, i) => (
-                      <PropertyCardSkeleton key={i} />
-                    ))}
-                  </div>
-                }
-              >
-                <FeaturedPropertiesSuspense config={homepage.featuredProperties as any} />
-              </Suspense>
-            )}
-          </div>
-          <div className="w-full lg:w-1/3 flex">
-            {homepage.editorialStatement && <EditorialStatement statement={homepage.editorialStatement} />}
-          </div>
+      {homepage.trust && <Trust trust={homepage.trust} />}
+      
+      <section className="w-full bg-[#FEF6EE] pt-8 md:pt-[64px] pb-8 md:pb-[64px]">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-[188px] flex flex-col gap-[32px]">
+          {homepage.featuredProperties && (
+            <Suspense 
+              fallback={
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[32px]">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <PropertyCardSkeleton key={i} />
+                  ))}
+                </div>
+              }
+            >
+              <FeaturedPropertiesSuspense config={homepage.featuredProperties as any} />
+            </Suspense>
+          )}
         </div>
       </section>
 
+      {homepage.editorialStatement && (
+        <section className="bg-[#F8F5EF] pb-24 md:pb-32 pt-12 md:pt-16">
+          <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-16 flex flex-col gap-24">
+            <EditorialStatement statement={homepage.editorialStatement} />
+          </div>
+        </section>
+      )}
+
+      {homepage.benefits && <StayBenefits benefits={homepage.benefits} />}
+      
       {homepage.locations && <Locations locations={homepage.locations} />}
-      {homepage.trust && <Trust trust={homepage.trust} />}
+      
+      {homepage.testimonials && <Testimonials testimonials={homepage.testimonials} />}
       
       {homepage.journal && (
         <Suspense

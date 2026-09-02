@@ -131,6 +131,64 @@ export const home = defineType({
       }
     }),
     defineField({
+      name: 'benefits',
+      title: 'Stay Benefits',
+      type: 'object',
+      fields: [
+        { name: 'backgroundImage', title: 'Background Image', type: 'image', options: { hotspot: true } },
+        {
+          name: 'items',
+          title: 'Benefits List',
+          type: 'array',
+          of: [
+            {
+              type: 'object',
+              fields: [
+                { name: 'icon', title: 'Icon (SVG or Emoji)', type: 'string' },
+                { name: 'title', title: 'Title', type: 'string' },
+                { name: 'description', title: 'Description', type: 'text' }
+              ]
+            }
+          ]
+        }
+      ],
+      preview: {
+        prepare() {
+          return { title: 'Stay Benefits', subtitle: 'Section Content' }
+        }
+      }
+    }),
+    defineField({
+      name: 'testimonials',
+      title: 'Curated Testimonials',
+      type: 'object',
+      fields: [
+        {
+          name: 'items',
+          title: 'Testimonials List',
+          type: 'array',
+          of: [
+            {
+              type: 'object',
+              fields: [
+                { name: 'quote', title: 'Quote', type: 'text' },
+                { name: 'author', title: 'Author', type: 'string' },
+                { name: 'date', title: 'Date (e.g. July 2026)', type: 'string' },
+                { name: 'location', title: 'Location (Legacy)', type: 'string' },
+                { name: 'source', title: 'Source (e.g. from Airbnb)', type: 'string' },
+                { name: 'sourceLogo', title: 'Source Logo (Optional icon/image)', type: 'image' }
+              ]
+            }
+          ]
+        }
+      ],
+      preview: {
+        prepare() {
+          return { title: 'Testimonials', subtitle: 'Section Content' }
+        }
+      }
+    }),
+    defineField({
       name: 'finalCta',
       title: 'Final CTA',
       type: 'object',

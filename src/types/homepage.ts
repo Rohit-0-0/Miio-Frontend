@@ -17,6 +17,15 @@ export interface HeroSection extends SectionMetadata {
   textAlignment?: 'left' | 'center' | 'right';
   heroHeight?: string;
   showScrollIndicator?: boolean;
+  searchWidgetLabels?: {
+    whereTo?: string;
+    chooseLocation?: string;
+    dates?: string;
+    addDates?: string;
+    guests?: string;
+    addGuests?: string;
+    searchButton?: string;
+  };
 }
 
 export type FeaturedPropertiesMode = 'MANUAL' | 'FEATURED' | 'LATEST' | 'COLLECTION';
@@ -89,6 +98,30 @@ export interface SeoSection extends SeoMetadata, SectionMetadata {
   metaRobots?: string;
 }
 
+export interface BenefitItem {
+  icon?: string;
+  title: string;
+  description: string;
+}
+
+export interface StayBenefitsSection extends SectionMetadata {
+  backgroundImage?: ImageAsset;
+  items: BenefitItem[];
+}
+
+export interface TestimonialItem {
+  quote: string;
+  author: string;
+  date?: string;
+  location?: string;
+  source?: string;
+  sourceLogo?: ImageAsset;
+}
+
+export interface TestimonialsSection extends SectionMetadata {
+  items: TestimonialItem[];
+}
+
 export interface HomepageData {
   version: number;
   analytics?: unknown;
@@ -96,12 +129,15 @@ export interface HomepageData {
   hero: HeroSection;
   featuredProperties?: FeaturedPropertiesSection;
   editorialStatement?: EditorialStatementSection;
+  benefits?: StayBenefitsSection;
   locations?: LocationsSection;
   trust?: TrustSection;
+  testimonials?: TestimonialsSection;
   journal?: JournalSection;
   finalCta?: FinalCtaSection;
   
   seo?: SeoSection;
+  footerLogos?: ImageAsset[];
 }
 
 export interface HomepageDocument extends HomepageData, BaseEntity {}
