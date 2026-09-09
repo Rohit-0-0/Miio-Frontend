@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ArrayOfPrimitivesInputProps, set, unset } from 'sanity';
 import { Box, Card, Flex, Stack, Text, Checkbox, Spinner, TextInput } from '@sanity/ui';
+import { env } from '@/config/env';
 
 interface Property {
   id: string;
@@ -16,8 +17,7 @@ export function PropertySelector(props: ArrayOfPrimitivesInputProps) {
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
 
-  // Normalize API URL from environment, fallback to localhost for development if missing
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
+  const API_URL = env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     async function fetchProperties() {

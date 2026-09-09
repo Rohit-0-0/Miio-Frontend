@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ArrayOfObjectsInputProps, set, unset } from 'sanity';
 import { Box, Card, Flex, Stack, Text, Checkbox, Spinner, TextInput, Button } from '@sanity/ui';
+import { env } from '@/config/env';
 
 interface ReviewItem {
   id: string;
@@ -30,7 +31,7 @@ export function ReviewSelector(props: ArrayOfObjectsInputProps) {
   const [skip, setSkip] = useState(0);
   const [hasMore, setHasMore] = useState(false);
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
+  const API_URL = env.NEXT_PUBLIC_API_URL;
 
   const fetchPage = useCallback(
     async (nextSkip: number, append: boolean) => {

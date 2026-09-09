@@ -2,6 +2,7 @@ import React from 'react';
 import { PropertiesView } from '@/components/properties/PropertiesView';
 import { EmptyState } from '@/components/properties/EmptyState';
 import { StaysFilterBar } from '@/components/properties/StaysFilterBar';
+import { env } from '@/config/env';
 
 interface PropertiesListSuspenseProps {
   query: any;
@@ -45,7 +46,7 @@ export async function PropertiesListSuspense({
     if (query.minPrice) beSearchParams.append('minPrice', query.minPrice as string);
     if (query.maxPrice) beSearchParams.append('maxPrice', query.maxPrice as string);
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
+    const apiUrl = env.NEXT_PUBLIC_API_URL;
     const endpoint = beSearchParams.toString() ? `/booking/search?${beSearchParams.toString()}` : `/booking/search`;
     
     console.log(`[Frontend] Fetching properties in ${checkIn && checkOut ? 'availability' : 'browse'} mode`);
