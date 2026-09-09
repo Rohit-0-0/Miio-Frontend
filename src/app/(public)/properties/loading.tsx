@@ -1,29 +1,28 @@
 import React from 'react';
-import { 
-  PropertyCardSkeleton, 
-  SearchWidgetSkeleton
-} from '@/components/ui/skeletons/CompositeSkeletons';
+import { PropertyCardSkeleton } from '@/components/ui/skeletons/CompositeSkeletons';
 import { Skeleton } from '@/components/ui/skeletons/Skeleton';
 
 export default function PropertiesLoading() {
   return (
-    <main className="w-full flex flex-col pt-32 pb-24 md:pb-32 animate-in fade-in duration-500 bg-[#F8F5EF] min-h-screen">
-      <div className="max-w-[1440px] mx-auto px-6 md:px-10 lg:px-16 w-full">
-        {/* Header & Search */}
-        <div className="flex flex-col space-y-8 mb-16">
-          <Skeleton className="h-12 w-64 md:w-96" />
-          <SearchWidgetSkeleton />
-        </div>
-        
-        {/* Filter/Sort Bar */}
-        <div className="flex justify-between items-center mb-8">
-          <Skeleton className="h-6 w-32" />
-          <Skeleton className="h-10 w-48" />
+    <main className="w-full flex flex-col pt-32 pb-24 md:pb-32 animate-in fade-in duration-500 bg-[#FEF6EE] min-h-screen">
+      <div className="max-w-[1920px] mx-auto px-6 md:px-12 xl:px-24 w-full">
+        <div className="max-w-3xl mb-10 md:mb-14 space-y-5">
+          <Skeleton className="h-12 md:h-14 w-72 md:w-96" />
+          <Skeleton className="h-4 w-full max-w-md" />
+          <Skeleton className="h-4 w-3/4 max-w-sm" />
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
-          {Array.from({ length: 9 }).map((_, i) => (
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
+          <div className="flex flex-wrap gap-2">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <Skeleton key={i} className="h-9 w-24 rounded-full" />
+            ))}
+          </div>
+          <Skeleton className="h-4 w-36" />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+          {Array.from({ length: 6 }).map((_, i) => (
             <PropertyCardSkeleton key={i} />
           ))}
         </div>

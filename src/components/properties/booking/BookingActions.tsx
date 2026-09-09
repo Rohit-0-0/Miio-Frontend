@@ -5,10 +5,5 @@ interface BookingActionsProps {
 }
 
 export function BookingActions({ children }: BookingActionsProps) {
-  return (
-    <div className="mt-4 text-center">
-      {children}
-      <p className="text-sm text-gray-500 mt-4">You won't be charged yet</p>
-    </div>
-  );
+  return <div className="mt-4 text-center">{children}</div>;
 }

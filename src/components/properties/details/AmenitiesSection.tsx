@@ -1,9 +1,22 @@
 'use client';
 
-import React, { useState } from 'react';
-import { 
-  Wifi, Utensils, Tv, Waves, Car, 
-  Coffee, Snowflake, Flame, CheckCircle, Briefcase, Shirt, Monitor
+import React from 'react';
+import {
+  Wifi,
+  Utensils,
+  Tv,
+  Waves,
+  Car,
+  Coffee,
+  Snowflake,
+  Flame,
+  Check,
+  Briefcase,
+  Shirt,
+  Monitor,
+  Trees,
+  Users,
+  Lock,
 } from 'lucide-react';
 
 interface Amenity {
@@ -15,91 +28,90 @@ interface Amenity {
 interface AmenitiesSectionProps {
   amenities?: Amenity[];
   featuredAmenityIds?: string[];
+  /** Icon grid near the description (top) vs checkmark list (lower section) */
+  variant?: 'icons' | 'list';
 }
 
 const getAmenityIcon = (label: string) => {
   const l = label.toLowerCase();
-  const iconProps = { className: "w-6 h-6", strokeWidth: 1 };
-  
+  const iconProps = { className: 'w-5 h-5 text-[#7D7975]', strokeWidth: 1.25 };
+
   if (l.includes('wifi') || l.includes('internet')) return <Wifi {...iconProps} />;
-  if (l.includes('kitchen') || l.includes('cook') || l.includes('oven') || l.includes('stove')) return <Utensils {...iconProps} />;
-  if (l.includes('air conditioning') || l.includes('ac ') || l.includes('cool')) return <Snowflake {...iconProps} />;
-  if (l.includes('heating') || l.includes('heater') || l.includes('fire') || l.includes('hot water')) return <Flame {...iconProps} />;
+  if (l.includes('kitchen') || l.includes('cook') || l.includes('oven') || l.includes('stove'))
+    return <Utensils {...iconProps} />;
+  if (l.includes('air conditioning') || l.includes('ac ') || l.includes('cool'))
+    return <Snowflake {...iconProps} />;
+  if (l.includes('heating') || l.includes('heater') || l.includes('fire') || l.includes('hot water'))
+    return <Flame {...iconProps} />;
   if (l.includes('tv') || l.includes('television') || l.includes('screen')) return <Tv {...iconProps} />;
-  if (l.includes('pool') || l.includes('hottub') || l.includes('spa') || l.includes('water')) return <Waves {...iconProps} />;
+  if (l.includes('pool') || l.includes('hottub') || l.includes('spa')) return <Waves {...iconProps} />;
   if (l.includes('parking') || l.includes('garage') || l.includes('car')) return <Car {...iconProps} />;
-  if (l.includes('coffee') || l.includes('espresso')) return <Coffee {...iconProps} />;
+  if (l.includes('coffee') || l.includes('espresso') || l.includes('nespresso'))
+    return <Coffee {...iconProps} />;
   if (l.includes('workspace') || l.includes('desk')) return <Briefcase {...iconProps} />;
-  if (l.includes('washer') || l.includes('dryer') || l.includes('laundry') || l.includes('iron') || l.includes('towels')) return <Shirt {...iconProps} />;
+  if (l.includes('washer') || l.includes('dryer') || l.includes('laundry') || l.includes('iron') || l.includes('linen') || l.includes('towel'))
+    return <Shirt {...iconProps} />;
   if (l.includes('computer') || l.includes('monitor')) return <Monitor {...iconProps} />;
-  
-  // generic default
-  return <CheckCircle {...iconProps} className="w-6 h-6 text-gray-400" strokeWidth={1} />;
+  if (l.includes('outdoor') || l.includes('garden') || l.includes('patio') || l.includes('beach'))
+    return <Trees {...iconProps} />;
+  if (l.includes('family') || l.includes('kid') || l.includes('child')) return <Users {...iconProps} />;
+  if (l.includes('lock') || l.includes('self check')) return <Lock {...iconProps} />;
+
+  return <Check {...iconProps} />;
 };
 
-export function AmenitiesSection({ amenities = [], featuredAmenityIds = [] }: AmenitiesSectionProps) {
-  const [modalOpen, setModalOpen] = useState(false);
-  
+function resolveDisplayAmenities(
+  amenities: Amenity[],
+  featuredAmenityIds: string[],
+  limit: number
+) {
+  if (featuredAmenityIds.length > 0) {
+    const featured = amenities
+      .filter((a) => featuredAmenityIds.includes(a.id))
+      .sort((a, b) => featuredAmenityIds.indexOf(a.id) - featuredAmenityIds.indexOf(b.id));
+    if (featured.length > 0) return featured.slice(0, limit);
+  }
+  return amenities.slice(0, limit);
+}
+
+export function AmenitiesSection({
+  amenities = [],
+  featuredAmenityIds = [],
+  variant = 'list',
+}: AmenitiesSectionProps) {
   if (amenities.length === 0) return null;
 
-  // Render featured amenities first if available, otherwise just grab the first 6
-  let displayAmenities = amenities;
-  if (featuredAmenityIds.length > 0) {
-    const featured = amenities.filter(a => featuredAmenityIds.includes(a.id));
-    // Sort them according to the featured order
-    displayAmenities = featured.sort((a, b) => featuredAmenityIds.indexOf(a.id) - featuredAmenityIds.indexOf(b.id));
-    if (displayAmenities.length === 0) {
-      displayAmenities = amenities.slice(0, 6);
-    }
-  } else {
-    displayAmenities = amenities.slice(0, 6);
-  }
-
-  return (
-    <section className="mb-12 pt-12 border-t border-gray-100">
-      <h2 className="text-2xl font-serif font-bold text-gray-900 mb-6">
-        What this place offers
-      </h2>
-      
-      <div className="grid grid-cols-2 gap-4 mb-6">
-        {displayAmenities.map(amenity => (
-          <div key={amenity.id} className="flex items-center space-x-4 text-gray-700">
-            <div className="w-6 h-6 flex-shrink-0 flex items-center justify-center text-gray-600">
-              {getAmenityIcon(amenity.label)}
-            </div>
-            <span className="text-lg">{amenity.label}</span>
+  if (variant === 'icons') {
+    const displayAmenities = resolveDisplayAmenities(amenities, featuredAmenityIds, 6);
+    return (
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-4 mb-10">
+        {displayAmenities.map((amenity) => (
+          <div key={amenity.id} className="flex items-center gap-3 text-[#1B1A17]">
+            <span className="shrink-0">{getAmenityIcon(amenity.label)}</span>
+            <span className="text-[14px] leading-snug">{amenity.label}</span>
           </div>
         ))}
       </div>
+    );
+  }
 
-      {amenities.length > displayAmenities.length && (
-        <button 
-          onClick={() => setModalOpen(true)}
-          className="px-6 py-3 border border-gray-900 text-gray-900 rounded-md font-medium hover:bg-gray-50 transition-colors"
-        >
-          Show all {amenities.length} amenities
-        </button>
-      )}
+  const displayAmenities = resolveDisplayAmenities(amenities, featuredAmenityIds, 6);
 
-      {/* Modal placeholder */}
-      {modalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-           <div className="bg-white p-8 rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto relative shadow-2xl">
-             <button onClick={() => setModalOpen(false)} className="absolute top-4 right-4 text-2xl text-gray-500 hover:text-gray-900">&times;</button>
-             <h3 className="text-2xl font-serif font-bold mb-6">All Amenities</h3>
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8">
-                {amenities.map(amenity => (
-                  <div key={amenity.id} className="flex items-center space-x-4 text-gray-700 py-3 border-b border-gray-100">
-                    <div className="w-5 h-5 flex-shrink-0 flex items-center justify-center text-gray-600">
-                      {getAmenityIcon(amenity.label)}
-                    </div>
-                    <span>{amenity.label}</span>
-                  </div>
-                ))}
-             </div>
-           </div>
-        </div>
-      )}
+  return (
+    <section className="py-2">
+      <h2 className="font-[family-name:var(--font-instrument-sans)] text-[16px] font-medium leading-[130%] text-[#241D19] mb-4 tracking-normal">
+        Amenities
+      </h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-3 max-w-[705px]">
+        {displayAmenities.map((amenity) => (
+          <div key={amenity.id} className="flex items-center gap-3">
+            <Check className="w-4 h-4 text-[#241D19] shrink-0" strokeWidth={1.5} />
+            <span className="font-[family-name:var(--font-instrument-sans)] text-[14px] font-normal leading-[140%] text-[#5F4E44]">
+              {amenity.label}
+            </span>
+          </div>
+        ))}
+      </div>
     </section>
   );
 }

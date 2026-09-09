@@ -3,7 +3,8 @@ import type {
   StaysPageData, 
   GeneralSettings, 
   FilterConfiguration, 
-  EmptyStateSettings 
+  EmptyStateSettings,
+  FinalCtaSettings,
 } from '@/types/stays-page';
 
 export const staysPageService = {
@@ -24,6 +25,11 @@ export const staysPageService = {
 
   updateEmptyState: async (data: Partial<EmptyStateSettings>): Promise<EmptyStateSettings> => {
     const response = await apiClient.patch<{ success: boolean; data: EmptyStateSettings }>('/stays-page/empty-state', data);
+    return response.data;
+  },
+
+  updateFinalCta: async (data: Partial<FinalCtaSettings>): Promise<FinalCtaSettings> => {
+    const response = await apiClient.patch<{ success: boolean; data: FinalCtaSettings }>('/stays-page/final-cta', data);
     return response.data;
   },
 

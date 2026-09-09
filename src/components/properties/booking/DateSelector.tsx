@@ -9,27 +9,31 @@ interface DateSelectorProps {
   onChangeCheckOut: (date: string | null) => void;
 }
 
-export function DateSelector({ checkIn, checkOut, onChangeCheckIn, onChangeCheckOut }: DateSelectorProps) {
-  
+export function DateSelector({
+  checkIn,
+  checkOut,
+  onChangeCheckIn,
+  onChangeCheckOut,
+}: DateSelectorProps) {
   const customTrigger = (
-    <div className="flex border border-gray-300 rounded-t-md overflow-hidden divide-x divide-gray-300 cursor-pointer">
-      <div className="flex-1 p-3 hover:bg-gray-50 transition-colors relative">
-        <div className="text-[10px] uppercase font-bold text-gray-900 tracking-wider">Check-in</div>
-        <div className="text-sm text-gray-900 mt-0.5 min-h-[20px]">
-          {checkIn ? format(parseISO(checkIn), 'MM/dd/yyyy') : 'Add date'}
+    <div className="flex gap-4 cursor-pointer">
+      <div className="flex-1 pb-2 border-b border-[#1B1A17]/20 hover:border-[#1B1A17]/40 transition-colors">
+        <div className="text-[10px] uppercase tracking-[0.12em] text-[#7D7975] mb-1">Check in</div>
+        <div className="text-[14px] text-[#1B1A17] min-h-[20px]">
+          {checkIn ? format(parseISO(checkIn), 'd MMM') : 'Add date'}
         </div>
       </div>
-      <div className="flex-1 p-3 hover:bg-gray-50 transition-colors relative">
-        <div className="text-[10px] uppercase font-bold text-gray-900 tracking-wider">Check-out</div>
-        <div className="text-sm text-gray-900 mt-0.5 min-h-[20px]">
-          {checkOut ? format(parseISO(checkOut), 'MM/dd/yyyy') : 'Add date'}
+      <div className="flex-1 pb-2 border-b border-[#1B1A17]/20 hover:border-[#1B1A17]/40 transition-colors">
+        <div className="text-[10px] uppercase tracking-[0.12em] text-[#7D7975] mb-1">Check out</div>
+        <div className="text-[14px] text-[#1B1A17] min-h-[20px]">
+          {checkOut ? format(parseISO(checkOut), 'd MMM') : 'Add date'}
         </div>
       </div>
     </div>
   );
 
   return (
-    <div className="w-full relative">
+    <div className="w-full relative mb-4">
       <DateRangePicker
         checkIn={checkIn || ''}
         checkOut={checkOut || ''}

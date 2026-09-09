@@ -6,20 +6,22 @@ export function EditorialStatement({ statement }: { statement: EditorialStatemen
   const description = statement?.description || HOME_DEFAULTS.editorialStatement.description;
 
   return (
-    <div className="bg-[#F8F5EF] h-full p-10 md:p-16 flex flex-col justify-center items-center text-center space-y-12">
-      <h2 className="text-3xl md:text-5xl font-serif text-[#1B1A17] leading-tight">
+    <div className="flex flex-col justify-center items-center text-center space-y-[35px]">
+      <h2 className="text-3xl md:text-[36px] font-serif text-[#1B1A17] leading-tight max-w-[800px] mx-auto">
         {heading}
       </h2>
-      <p className="text-lg md:text-xl font-light text-[#1B1A17]/80 leading-relaxed max-w-md mx-auto mb-8">
+      <p className="text-base md:text-[15px] font-light text-[#1B1A17] leading-relaxed max-w-[700px] mx-auto">
         {description}
       </p>
       
-      <a 
-        href="/about" 
-        className="bg-[#1B1A17] text-white px-8 py-4 rounded-full font-medium tracking-widest uppercase text-sm hover:opacity-90 transition-opacity whitespace-nowrap inline-flex"
-      >
-        Learn more about Miio
-      </a>
+      <div className="pt-6">
+        <a 
+          href="/properties" 
+          className="bg-[#1B1A17] text-white px-8 py-3 rounded-full font-medium text-[14px] hover:bg-black transition-colors whitespace-nowrap inline-flex items-center justify-center"
+        >
+          View all stays
+        </a>
+      </div>
     </div>
   );
 }

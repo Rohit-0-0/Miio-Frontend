@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, Playfair_Display, Montserrat, Cormorant_Garamond } from 'next/font/google';
+import { Inter, Playfair_Display, Montserrat, Cormorant_Garamond, Instrument_Sans } from 'next/font/google';
 import './globals.css';
 import { siteConfig } from '@/config/site';
 import { AuthProvider } from '@/components/providers/AuthProvider';
@@ -32,6 +32,12 @@ const cormorant = Cormorant_Garamond({
   style: ['normal', 'italic'],
 });
 
+const instrumentSans = Instrument_Sans({
+  variable: '--font-instrument-sans',
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+});
+
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
@@ -53,7 +59,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${playfair.variable} ${montserrat.variable} ${cormorant.variable} h-full antialiased`}
+      className={`${inter.variable} ${playfair.variable} ${montserrat.variable} ${cormorant.variable} ${instrumentSans.variable} h-full antialiased`}
     >
       <body className="font-sans text-gray-900 bg-white">
         <AuthProvider>

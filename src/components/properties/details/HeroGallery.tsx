@@ -21,28 +21,34 @@ export function HeroGallery({ images }: HeroGalleryProps) {
   return (
     <>
       <section className="w-full">
-        {/* Desktop and Tablet Grid - Mobile will just show the first image or a slider in a full implementation */}
         <div className="hidden md:block">
           <GalleryGrid images={images} onImageClick={handleImageClick} />
         </div>
-        
-        {/* Mobile View - Fallback to just the first image for now, later replaced by GalleryCarousel */}
-        <div className="block md:hidden h-[50vh]">
+
+        <div
+          className="block md:hidden h-[50vh] relative cursor-pointer overflow-hidden"
+          onClick={() => handleImageClick(0)}
+        >
           <CrossfadeCarousel images={images} alt="Location Gallery Image" intervalMs={6000} />
+          {images.length > 1 && (
+            <div className="absolute bottom-4 right-4 bg-black/50 text-white text-[12px] px-3 py-1.5 rounded-full">
+              +{images.length - 1} more photos
+            </div>
+          )}
         </div>
       </section>
 
-      {/* Lightbox Placeholder */}
       {lightboxOpen && (
         <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4">
-          <button 
+          <button
+            type="button"
             onClick={() => setLightboxOpen(false)}
             className="absolute top-6 right-6 text-white text-sm tracking-wider uppercase"
           >
             Close
           </button>
           <div className="text-white">
-            Fullscreen Gallery (Phase 2) - Image {initialIndex + 1}
+            Fullscreen Gallery — Image {initialIndex + 1} of {images.length || 1}
           </div>
         </div>
       )}

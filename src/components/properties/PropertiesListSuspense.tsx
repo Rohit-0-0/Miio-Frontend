@@ -1,6 +1,7 @@
 import React from 'react';
 import { PropertiesView } from '@/components/properties/PropertiesView';
 import { EmptyState } from '@/components/properties/EmptyState';
+import { StaysFilterBar } from '@/components/properties/StaysFilterBar';
 
 interface PropertiesListSuspenseProps {
   query: any;
@@ -25,8 +26,10 @@ export async function PropertiesListSuspense({
     const children = query.children as string | undefined;
     const infants = query.infants as string | undefined;
     const pets = query.pets as string | undefined;
+    const city = query.city as string | undefined;
     
     const beSearchParams = new URLSearchParams();
+    if (city) beSearchParams.append('city', city);
     if (checkIn) beSearchParams.append('checkIn', checkIn);
     if (checkOut) beSearchParams.append('checkOut', checkOut);
     if (adults) beSearchParams.append('adults', adults);
@@ -80,29 +83,38 @@ export async function PropertiesListSuspense({
 
   if (hasApiError) {
     return (
-      <div className="text-center py-20 text-gray-500">
-        <h3 className="text-xl font-serif text-gray-900 mb-2">Unavailable</h3>
-        <p>Unable to check availability right now.</p>
+      <div>
+        <StaysFilterBar resultLabel="—" />
+        <div className="text-center py-20 text-[#7D7975]">
+          <h3 className="text-xl font-serif text-[#1B1A17] mb-2">Unavailable</h3>
+          <p>Unable to check availability right now.</p>
+        </div>
       </div>
     );
   }
 
   if (missingDates) {
     return (
-      <div className="text-center py-20 text-gray-500">
-        <h3 className="text-xl font-serif text-gray-900 mb-2">Select Dates</h3>
-        <p>Please select check-in and check-out dates to browse available properties.</p>
+      <div>
+        <StaysFilterBar />
+        <div className="text-center py-20 text-[#7D7975]">
+          <h3 className="text-xl font-serif text-[#1B1A17] mb-2">Select Dates</h3>
+          <p>Please select check-in and check-out dates to browse available properties.</p>
+        </div>
       </div>
     );
   }
 
   if (properties.length === 0) {
     return (
-      <EmptyState config={{
-        ...emptyStateConfig,
-        heading: 'No stays available',
-        description: 'No stays available for these dates and guests.',
-      }} />
+      <div>
+        <StaysFilterBar resultLabel="0 properties" />
+        <EmptyState config={{
+          ...emptyStateConfig,
+          heading: 'No stays available',
+          description: 'No stays available for these dates and guests.',
+        }} />
+      </div>
     );
   }
 

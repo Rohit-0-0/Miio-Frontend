@@ -50,6 +50,23 @@ export const staysPage = defineType({
       ]
     }),
     defineField({
+      name: 'finalCta',
+      title: 'Final CTA',
+      type: 'object',
+      fields: [
+        { name: 'heading', title: 'Heading', type: 'string' },
+        { name: 'description', title: 'Description', type: 'text' },
+        { name: 'buttonText', title: 'Button Text', type: 'string' },
+        { name: 'buttonLink', title: 'Button Link', type: 'string' },
+      ],
+      preview: {
+        select: { title: 'heading' },
+        prepare({ title }) {
+          return { title: title || 'Final CTA', subtitle: 'Section Content' }
+        }
+      }
+    }),
+    defineField({
       name: 'seo',
       title: 'SEO Settings',
       type: 'seo'

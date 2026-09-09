@@ -3,6 +3,26 @@ export const structure: StructureResolver = (S) =>
   S.list()
     .title('Miio Editorial Content')
     .items([
+      // Global Configuration
+      S.listItem()
+        .title('Global Settings')
+        .child(
+          S.list()
+            .title('Global Settings')
+            .items([
+              S.listItem()
+                .title('Site Settings')
+                .child(S.document().schemaType('siteSettings').documentId('siteSettings')),
+              S.listItem()
+                .title('Navigation')
+                .child(S.document().schemaType('navigation').documentId('navigation')),
+              S.listItem()
+                .title('Footer')
+                .child(S.document().schemaType('footer').documentId('footer')),
+            ])
+        ),
+      S.divider(),
+      
       // Pages Group
       S.listItem()
         .title('Pages')
@@ -73,7 +93,7 @@ export const structure: StructureResolver = (S) =>
       // Hide all manually organized schemas from the main list
       ...S.documentTypeListItems().filter(
         (listItem) =>
-          !['siteSettings', 'navigation', 'footer', 'home', 'about', 'partnerWithUs', 'journalPage', 'locationsPage', 'staysPage', 'propertyEditorial', 'journal', 'location', 'faq'].includes(
+          !['siteSettings', 'navigation', 'footer', 'home', 'about', 'partnerWithUs', 'journalPage', 'locationsPage', 'staysPage', 'propertyEditorial', 'journal', 'location', 'review', 'faq'].includes(
             listItem.getId() as string
           )
       )

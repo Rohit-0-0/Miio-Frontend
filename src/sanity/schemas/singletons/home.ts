@@ -1,5 +1,6 @@
 import { defineField, defineType } from 'sanity'
 import { PropertySelector } from '../../components/PropertySelector'
+import { ReviewSelector } from '../../components/ReviewSelector'
 
 export const home = defineType({
   name: 'home',
@@ -144,7 +145,14 @@ export const home = defineType({
             {
               type: 'object',
               fields: [
-                { name: 'icon', title: 'Icon (SVG or Emoji)', type: 'string' },
+                { name: 'icon', title: 'Icon (Raw SVG or Emoji)', type: 'string' },
+                { 
+                  name: 'iconImage', 
+                  title: 'Icon (Image Upload)', 
+                  type: 'image', 
+                  options: { accept: 'image/svg+xml,image/png,image/jpeg' },
+                  description: 'Upload an SVG or image file. This will override the raw SVG/Emoji field if provided.'
+                },
                 { name: 'title', title: 'Title', type: 'string' },
                 { name: 'description', title: 'Description', type: 'text' }
               ]
@@ -159,34 +167,27 @@ export const home = defineType({
       }
     }),
     defineField({
-      name: 'testimonials',
-      title: 'Curated Testimonials',
-      type: 'object',
-      fields: [
+      name: 'featuredReviews',
+      title: 'Featured Guesty Reviews',
+      description:
+        'Select Guesty reviews to show on the public homepage. Same pattern as Selected Properties.',
+      type: 'array',
+      of: [
         {
-          name: 'items',
-          title: 'Testimonials List',
-          type: 'array',
-          of: [
-            {
-              type: 'object',
-              fields: [
-                { name: 'quote', title: 'Quote', type: 'text' },
-                { name: 'author', title: 'Author', type: 'string' },
-                { name: 'date', title: 'Date (e.g. July 2026)', type: 'string' },
-                { name: 'location', title: 'Location (Legacy)', type: 'string' },
-                { name: 'source', title: 'Source (e.g. from Airbnb)', type: 'string' },
-                { name: 'sourceLogo', title: 'Source Logo (Optional icon/image)', type: 'image' }
-              ]
-            }
-          ]
-        }
+          type: 'object',
+          name: 'featuredReviewRef',
+          fields: [
+            { name: 'reviewId', title: 'Guesty Review ID', type: 'string' },
+            { name: 'listingId', title: 'Guesty Listing ID', type: 'string' },
+          ],
+          preview: {
+            select: { title: 'reviewId', subtitle: 'listingId' },
+          },
+        },
       ],
-      preview: {
-        prepare() {
-          return { title: 'Testimonials', subtitle: 'Section Content' }
-        }
-      }
+      components: {
+        input: ReviewSelector,
+      },
     }),
     defineField({
       name: 'finalCta',

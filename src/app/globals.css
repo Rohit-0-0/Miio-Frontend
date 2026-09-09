@@ -5,6 +5,7 @@
   --font-serif: var(--font-playfair);
   --font-montserrat: var(--font-montserrat);
   --font-cormorant: var(--font-cormorant);
+  --font-instrument: var(--font-instrument-sans);
 }
 
 body {

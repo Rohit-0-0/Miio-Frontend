@@ -17,6 +17,7 @@ import { propertyEditorial } from './documents/propertyEditorial'
 import { journal } from './documents/journal'
 import { location } from './documents/location'
 import { faq } from './documents/faq'
+import { review } from './documents/review'
 
 import { partnerWithUs } from './singletons/partnerWithUs'
 import { journalPage } from './singletons/journalPage'
@@ -46,5 +47,6 @@ export const schemaTypes = [
   propertyEditorial,
   journal,
   location,
-  faq
+  faq,
+  review,
 ]

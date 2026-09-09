@@ -1,48 +1,59 @@
 import { notFound } from 'next/navigation';
 import { getLocationBySlug } from '@/lib/server/location';
-import { Container } from '@/components/ui/Container';
 import { Metadata } from 'next';
 import { buildImageUrl } from '@/lib/media/buildImageUrl';
-import { HeroGallery } from '@/components/properties/details/HeroGallery';
-import { PropertyHeader } from '@/components/properties/details/PropertyHeader';
-import { EditorialDescription } from '@/components/properties/details/EditorialDescription';
-import { FeaturedProperties } from '@/components/home/FeaturedProperties';
-import { JournalPreview } from '@/components/home/JournalPreview';
 import { env } from '@/config/env';
 import { Suspense } from 'react';
-import { FloatingBackButton } from '@/components/ui/FloatingBackButton';
+import Link from 'next/link';
+import { LocationHero } from '@/components/locations/LocationHero';
+import { LocationHighlights } from '@/components/locations/LocationHighlights';
+import { LocationLocalGuide } from '@/components/locations/LocationLocalGuide';
+import { LocationStayCard } from '@/components/locations/LocationStayCard';
+import { FinalCTA } from '@/components/home/FinalCTA';
+
+const LOCATION_FINAL_CTA_DEFAULTS = {
+  heading: 'A more direct way to stay',
+  description:
+    'Book directly for the best available rates and a more seamless experience.',
+  buttonText: 'Browse by location',
+  buttonLink: '/locations',
+};
 
 type Props = {
   params: Promise<{ slug: string }>;
 };
 
-export async function generateMetadata(
-  { params }: Props
-): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const resolvedParams = await params;
   const slug = resolvedParams.slug;
-  
+
   if (!slug) {
     return { title: 'Not Found | Miio' };
   }
 
   const location = await getLocationBySlug(slug, { cache: 'no-store' });
-  
+
   if (!location) {
     return { title: 'Not Found | Miio' };
   }
 
   const seoTitle = location.seo?.title || `${location.title} | Miio`;
-  const seoDesc = location.seo?.description || location.description || `Discover ${location.title} with Miio.`;
+  const seoDesc =
+    location.seo?.description ||
+    location.description ||
+    `Discover ${location.title} with Miio.`;
+
+  const ogImage =
+    location.heroImage?.asset?._ref ||
+    location.heroImage?.asset?._id ||
+    location.heroImage?.assetId;
 
   return {
     title: seoTitle,
     description: seoDesc,
     openGraph: {
-      images: location.heroImage?.asset?._ref
-        ? [buildImageUrl(location.heroImage.asset._ref)!]
-        : []
-    }
+      images: ogImage ? [buildImageUrl(ogImage)!].filter(Boolean) : [],
+    },
   };
 }
 
@@ -60,67 +71,108 @@ export default async function LocationDetailPage({ params }: Props) {
     notFound();
   }
 
-  const articles = (location.nearbyJournals || []).map((j: any) => ({
-    ...j,
-    slug: j.slug,
-  }));
+  const journalArticles = (location.nearbyJournals || []).filter(
+    (j: { slug?: string; title?: string }) => j?.slug && j?.title
+  );
+
+  // Prefer Nearby Journals from CMS; fall back to Local Guide Cards if none linked
+  const localGuideItems =
+    journalArticles.length > 0
+      ? journalArticles.map(
+          (journal: {
+            _id?: string;
+            slug: string;
+            title: string;
+            excerpt?: string;
+            author?: string;
+            heroImage?: unknown;
+          }) => ({
+            _key: journal._id || journal.slug,
+            title: journal.title,
+            description:
+              journal.excerpt ||
+              (journal.author ? `By ${journal.author}` : undefined),
+            image: journal.heroImage,
+            href: `/journal/${journal.slug}`,
+          })
+        )
+      : location.localGuideItems;
 
   return (
-    <article className="min-h-screen bg-white pb-20">
-      <HeroGallery images={location.heroImage ? [location.heroImage] : []} />
+    <article className="min-h-screen bg-[#FEF6EE]">
+      <LocationHero title={location.title} image={location.heroImage} />
 
-      <Container className="mt-8 md:mt-16">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-20">
-          <div className="lg:col-span-2 flex flex-col space-y-12">
-            <PropertyHeader title={location.title} location="Location" />
-
-            <EditorialDescription 
-              description={undefined} 
-              fallbackDescription={location.description} 
-            />
-
-            {location.guestyCity && (
-              <Suspense fallback={<div className="h-40 bg-gray-50 animate-pulse rounded-xl"></div>}>
-                <LocationDynamicProperties guestyCity={location.guestyCity} locationTitle={location.title} />
-              </Suspense>
-            )}
-
-            {location.journalContent && (
-              <section className="prose prose-lg max-w-none font-serif text-gray-700">
-                {/* Simplified rendering of portable text or markdown */}
-                <p>{location.journalContent}</p>
-              </section>
-            )}
-            
-          </div>
-
-          <div className="lg:col-span-1">
-            {/* Sidebar content */}
+      {/* Intro + highlights card (Figma: text left, white card right) */}
+      <section className="bg-[#FEF6EE]">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-[188px] py-12 md:py-16">
+          <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-10 lg:gap-16">
+            <p className="text-[15px] font-normal leading-[170%] text-[#5F4E44] max-w-[560px] flex-1 whitespace-pre-line">
+              {location.description}
+            </p>
+            <div className="shrink-0 lg:pt-1">
+              <LocationHighlights items={location.highlights} />
+            </div>
           </div>
         </div>
-      </Container>
-      
-      {articles.length > 0 && (
-        <JournalPreview 
-          journal={{ heading: 'Nearby Experiences' } as any}
-          articles={articles}
-        />
+      </section>
+
+      {/* Stays in {location} */}
+      {location.guestyCity && (
+        <section className="max-w-[1440px] mx-auto px-4 md:px-[188px] pb-16 md:pb-20">
+          <Suspense
+            fallback={
+              <div className="h-64 bg-[rgba(225,219,195,0.2)] animate-pulse rounded-xl" />
+            }
+          >
+            <LocationDynamicProperties
+              guestyCity={location.guestyCity}
+              locationTitle={location.guestyCity || location.title}
+            />
+          </Suspense>
+        </section>
       )}
-      <FloatingBackButton />
+
+      {/* Local guide — powered by Nearby Journals */}
+      <LocationLocalGuide
+        heading={location.localGuideHeading || 'Local guide'}
+        items={localGuideItems}
+        relatedJournalsCta={location.relatedJournalsCta || 'Related journal articles ->'}
+        journalHref="/journal"
+        showRelatedLink={journalArticles.length > 0 || !!location.relatedJournalsCta}
+      />
+
+      <FinalCTA
+        finalCta={location.finalCta}
+        defaults={LOCATION_FINAL_CTA_DEFAULTS}
+        className="bg-[#FEF6EE]"
+      />
+
+      <div className="py-8 flex justify-center md:hidden">
+        <Link href="/locations" className="text-[14px] text-[#5F4E44]">
+          Back to locations
+        </Link>
+      </div>
     </article>
   );
 }
 
-async function LocationDynamicProperties({ guestyCity, locationTitle }: { guestyCity: string, locationTitle: string }) {
-  let properties = [];
+async function LocationDynamicProperties({
+  guestyCity,
+  locationTitle,
+}: {
+  guestyCity: string;
+  locationTitle: string;
+}) {
+  let properties: any[] = [];
   try {
     const searchParams = new URLSearchParams();
     searchParams.set('city', guestyCity);
-    
-    const propertiesRes = await fetch(`${env.NEXT_PUBLIC_API_URL}/booking/search?${searchParams.toString()}`, {
-      cache: 'no-store'
-    });
-    
+
+    const propertiesRes = await fetch(
+      `${env.NEXT_PUBLIC_API_URL}/booking/search?${searchParams.toString()}`,
+      { cache: 'no-store' }
+    );
+
     if (propertiesRes.ok) {
       const data = await propertiesRes.json();
       properties = data.data || [];
@@ -131,41 +183,45 @@ async function LocationDynamicProperties({ guestyCity, locationTitle }: { guesty
 
   if (properties.length === 0) return null;
 
-  const mappedProperties = properties.map((p: any) => {
-    // Attempt to find an image URL from Guesty
-    const rawImage = p.picture?.large || p.picture?.regular || p.pictures?.[0]?.original;
-    // We hack the assetId to be the raw URL. 
-    // Wait, AppImage in PropertyCard uses buildImageUrl(image.assetId). 
-    // If we pass a raw URL to buildImageUrl, it will fail.
-    // Instead of doing that, let's just pass the raw URL to a new prop on PropertyCard, or 
-    // we can just use PropertyBrowseCard here directly instead of FeaturedProperties!
-    // But FeaturedProperties uses a specific grid and SectionHeader.
-    // Let's map it so FeaturedProperties can just render it. 
-    // BUT we need to modify FeaturedProperties/PropertyCard to support raw strings.
-    return {
-      id: p._id || p.id,
-      slug: p._id || p.id,
-      title: p.nickname || p.title || 'Unknown Property',
-      nickname: p.nickname,
-      unitType: p.propertyType,
-      location: { city: p.address?.city, country: p.address?.country },
-      maxGuests: p.accommodates || 2,
-      bedrooms: p.bedrooms || 1,
-      bathrooms: p.bathrooms,
-      propertyType: p.propertyType,
-      reviews: p.reviews,
-      guestyImageUrl: rawImage // We will pass this and modify FeaturedProperties to use it
-    };
-  });
-
   return (
-    <FeaturedProperties 
-      properties={mappedProperties as any} 
-      config={{
-        title: 'Featured Stays in ' + locationTitle,
-        displayMode: 'LATEST',
-        maxProperties: 3
-      } as any}
-    />
+    <div className="flex flex-col gap-8">
+      <h2 className="font-serif text-[28px] md:text-[32px] text-[#241D19]">
+        Stays in {locationTitle}
+      </h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10">
+        {properties.slice(0, 3).map((p: any) => {
+          const id = p._id || p.id;
+          const coverImage =
+            p.picture?.large || p.picture?.regular || p.pictures?.[0]?.original || null;
+          const currency = p.prices?.currency === 'AUD' ? '$' : p.prices?.currency || '';
+          let price = '';
+          let priceLabel = '/ night';
+          if (p.prices?.basePrice) {
+            price = `${currency}${p.prices.basePrice}`;
+          } else if (p.prices?.totalPrice) {
+            price = `${currency}${p.prices.totalPrice}`;
+            priceLabel = 'total';
+          }
+
+          return (
+            <LocationStayCard
+              key={id}
+              id={id}
+              slug={id}
+              name={p.nickname || p.title || 'Unknown Property'}
+              location={
+                [p.address?.city, p.address?.country].filter(Boolean).join(', ') ||
+                locationTitle
+              }
+              guests={p.accommodates || 2}
+              bedrooms={p.bedrooms || 1}
+              price={price}
+              priceLabel={priceLabel}
+              coverImage={coverImage}
+            />
+          );
+        })}
+      </div>
+    </div>
   );
 }

@@ -1,6 +1,6 @@
+import Link from 'next/link';
 import { LocationsSection } from '@/types/homepage';
-import { EditorialCard } from '@/components/shared/EditorialCard';
-import { SectionHeader } from '@/components/shared/SectionHeader';
+import { AppImage } from '@/components/media/AppImage';
 import { HOME_DEFAULTS } from '@/lib/defaults/home';
 
 export function Locations({ locations }: { locations: LocationsSection }) {
@@ -10,20 +10,42 @@ export function Locations({ locations }: { locations: LocationsSection }) {
   if (!items || items.length === 0) return null;
 
   return (
-    <section className="bg-white py-24 md:py-32">
-      <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-16 flex flex-col space-y-16">
-        <SectionHeader title={heading} align="center" />
+    <section className="bg-[#FEF6EE] py-[64px]">
+      <div className="max-w-[1440px] mx-auto px-4 md:px-[188px] flex flex-col space-y-[32px]">
+        <h2 className="text-3xl md:text-[36px] font-serif text-[#1B1A17] text-left">
+          {heading}
+        </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-[32px]">
           {items.map((location, i) => (
-            <EditorialCard
+            <Link 
               key={location.id || i}
-              title={location.name}
-              description={location.description}
-              image={location.image}
-              link={location.ctaLink || `/locations/${location.slug || location.id}`}
-              ctaText={location.ctaText || 'Explore Location'}
-            />
+              href={location.ctaLink || `/locations/${location.slug || location.id}`}
+              className="group flex flex-col space-y-[12px] cursor-pointer"
+            >
+              <div className="relative w-full aspect-[345/259] overflow-hidden bg-gray-100 mb-1">
+                {location.image ? (
+                  <AppImage
+                    image={location.image}
+                    alt={location.name}
+                    fill
+                    className="object-cover transition-transform duration-[520ms] ease-out group-hover:scale-[1.03]"
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center bg-[#F8F5EF] text-[#1B1A17]/20">
+                    <span className="font-serif text-2xl tracking-widest uppercase">MiiO</span>
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col space-y-1">
+                <h3 className="text-[17px] font-serif text-[#1B1A17]">{location.name}</h3>
+                {location.description && (
+                  <p className="text-[13px] font-light text-[#7D7975] line-clamp-2 leading-relaxed">
+                    {location.description}
+                  </p>
+                )}
+              </div>
+            </Link>
           ))}
         </div>
       </div>

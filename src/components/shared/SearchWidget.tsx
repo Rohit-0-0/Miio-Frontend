@@ -72,6 +72,9 @@ export function SearchWidget({
       if (pCheckIn) setCheckIn(pCheckIn);
       if (pCheckOut) setCheckOut(pCheckOut);
       
+      const pLocation = searchParams.get('city');
+      if (pLocation) setLocation(pLocation);
+      
       const pAdults = searchParams.get('adults');
       if (pAdults) setAdults(parseInt(pAdults, 10));
       const pChildren = searchParams.get('children');
@@ -167,7 +170,7 @@ export function SearchWidget({
     
     if (searchParams) {
       searchParams.forEach((value, key) => {
-        if (!['checkIn', 'checkOut', 'adults', 'children', 'infants', 'pets', 'guests', 'propertyType', 'amenities', 'minBedrooms', 'minBathrooms', 'minPrice', 'maxPrice'].includes(key)) {
+        if (!['city', 'checkIn', 'checkOut', 'adults', 'children', 'infants', 'pets', 'guests', 'propertyType', 'amenities', 'minBedrooms', 'minBathrooms', 'minPrice', 'maxPrice'].includes(key)) {
           params.append(key, value);
         }
       });
@@ -180,6 +183,7 @@ export function SearchWidget({
     if (infants > 0) params.append('infants', infants.toString());
     if (pets > 0) params.append('pets', pets.toString());
 
+    if (location) params.append('city', location);
     if (propertyType !== 'All') params.append('propertyType', propertyType);
     if (amenities.length > 0) params.append('amenities', amenities.join(','));
     
@@ -195,27 +199,30 @@ export function SearchWidget({
   };
 
   return (
-    <div className="w-full flex flex-col gap-2 z-30 relative shadow-2xl">
-      <div className="w-full bg-white rounded-full p-2 flex flex-col md:flex-row items-center justify-between gap-2 md:gap-0 relative">
-        <div className="flex-1 w-full grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-200 bg-transparent rounded-full md:rounded-none overflow-visible">
+    <div ref={filterRef} className="w-full flex flex-col gap-2 z-30 relative shadow-2xl">
+      <div className="w-full bg-[#FEF6EE] md:bg-white rounded-[16px] md:rounded-full p-4 md:p-2 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0 relative">
+        <div className="flex-1 w-full grid grid-cols-1 md:grid-cols-3 divide-y divide-[#1B1A17]/20 md:divide-y-0 md:divide-x md:divide-gray-200 bg-transparent rounded-[16px] md:rounded-none overflow-visible">
           
           {/* WHERE TO? */}
           <div className="relative group flex-1 h-full">
             <div 
               onClick={() => setOpenDropdown(openDropdown === 'location' ? null : 'location')}
-              className="px-6 py-3 h-full w-full flex flex-col justify-center cursor-pointer hover:bg-gray-50 transition-colors md:rounded-l-full"
+              className="px-2 md:px-6 py-4 md:py-3 h-full w-full flex justify-between items-center cursor-pointer hover:bg-black/5 transition-colors md:rounded-l-full"
             >
-              <span className="text-[10px] font-bold tracking-widest text-gray-800 uppercase mb-0.5">{labels?.whereTo || 'WHERE TO?'}</span>
-              <span className="text-sm text-gray-900 font-medium truncate">{location || labels?.chooseLocation || 'Choose location'}</span>
+              <div className="flex flex-col">
+                <span className="text-[10px] font-bold tracking-widest text-[#1B1A17] uppercase mb-1">{labels?.whereTo || 'WHERE TO?'}</span>
+                <span className="text-sm text-[#1B1A17]/70 font-medium truncate">{location || labels?.chooseLocation || 'Choose location'}</span>
+              </div>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1B1A17" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-60 hidden md:block lg:block sm:block xs:block"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
             </div>
             
             {openDropdown === 'location' && (
               <div className="absolute top-full left-0 mt-4 w-64 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 py-3 ml-2 md:ml-4">
-                {['Bondi', 'Vaucluse', 'Paddington', 'Sydney'].map(loc => (
+                {['Bondi', 'Vaucluse', 'Paddington'].map(loc => (
                   <div 
                     key={loc}
                     onClick={() => { setLocation(loc); setOpenDropdown(null); }}
-                    className="px-6 py-2.5 hover:bg-gray-50 cursor-pointer flex items-center justify-between text-gray-700 text-sm transition-colors"
+                    className="px-6 py-2.5 hover:bg-gray-50 cursor-pointer flex items-center justify-between text-[#1B1A17] text-sm transition-colors"
                   >
                     <span>{loc}</span>
                     {location === loc && <svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="#1B1A17" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}
@@ -233,15 +240,18 @@ export function SearchWidget({
               setCheckOut(outDate);
             }}
             className="relative"
-            triggerClassName="px-6 py-3 h-full flex flex-col justify-center relative group cursor-pointer hover:bg-gray-50 transition-colors"
+            triggerClassName="px-2 md:px-6 py-4 md:py-3 h-full flex flex-col justify-center relative group cursor-pointer hover:bg-black/5 transition-colors"
             customTrigger={
-              <div className="flex flex-col w-full px-6 py-3 h-full justify-center group cursor-pointer hover:bg-gray-50 transition-colors">
-                <span className="text-[10px] font-bold tracking-widest text-gray-800 uppercase mb-0.5">{labels?.dates || 'DATES'}</span>
-                <span className="text-sm text-gray-900 font-light truncate">
-                  {checkIn ? `${checkIn}${checkOut ? ` - ${checkOut}` : ' - Add Date'}` : (
-                    <span className="text-gray-500">{labels?.addDates || 'Add dates'}</span>
-                  )}
-                </span>
+              <div className="flex w-full px-2 md:px-6 py-4 md:py-3 h-full justify-between items-center group cursor-pointer hover:bg-black/5 transition-colors">
+                <div className="flex flex-col">
+                  <span className="text-[10px] font-bold tracking-widest text-[#1B1A17] uppercase mb-1">{labels?.dates || 'DATES'}</span>
+                  <span className="text-sm text-[#1B1A17]/70 font-light truncate">
+                    {checkIn ? `${checkIn}${checkOut ? ` - ${checkOut}` : ' - Add Date'}` : (
+                      <span>{labels?.addDates || 'Add dates'}</span>
+                    )}
+                  </span>
+                </div>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1B1A17" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-60 hidden md:block lg:block sm:block xs:block"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
               </div>
             }
           />
@@ -256,15 +266,18 @@ export function SearchWidget({
             onChangeInfants={setInfants}
             onChangePets={setPets}
             className="relative"
-            triggerClassName="px-6 py-3 h-full flex flex-col justify-center relative group cursor-pointer hover:bg-gray-50 transition-colors"
+            triggerClassName="px-2 md:px-6 py-4 md:py-3 h-full flex flex-col justify-center relative group cursor-pointer hover:bg-black/5 transition-colors"
             customTrigger={
-              <div className="flex flex-col w-full px-6 py-3 h-full justify-center group cursor-pointer hover:bg-gray-50 transition-colors md:rounded-r-full">
-                <span className="text-[10px] font-bold tracking-widest text-gray-800 uppercase mb-0.5">{labels?.guests || 'GUESTS'}</span>
-                <span className="text-sm text-gray-900 font-light truncate">
-                  {adults + children > 1 || infants > 0 || pets > 0 
-                    ? `${adults + children} guests` + (infants ? `, ${infants} inf` : '') + (pets ? `, ${pets} pets` : '')
-                    : (<span className="text-gray-500">{labels?.addGuests || '2 adults'}</span>)}
-                </span>
+              <div className="flex w-full px-2 md:px-6 py-4 md:py-3 h-full justify-between items-center group cursor-pointer hover:bg-black/5 transition-colors md:rounded-r-full">
+                <div className="flex flex-col">
+                  <span className="text-[10px] font-bold tracking-widest text-[#1B1A17] uppercase mb-1">{labels?.guests || 'GUESTS'}</span>
+                  <span className="text-sm text-[#1B1A17]/70 font-light truncate">
+                    {adults + children > 0 || infants > 0 || pets > 0 
+                      ? `${adults + children} ${adults + children === 1 ? 'guest' : 'guests'}` + (infants ? `, ${infants} inf` : '') + (pets ? `, ${pets} pets` : '')
+                      : (<span>{labels?.addGuests || 'Add guests'}</span>)}
+                  </span>
+                </div>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1B1A17" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-60 hidden md:block lg:block sm:block xs:block"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
               </div>
             }
           />

@@ -21,7 +21,7 @@ export function FeaturedProperties({ properties, config }: FeaturedPropertiesPro
 
   return (
     <div className="flex flex-col gap-[32px]">
-      <div className="flex flex-col md:flex-row justify-between items-end gap-8">
+      <div className="flex flex-row justify-between items-end gap-8">
         <SectionHeader 
             title={title} 
             subtitle={config.subtitle} 
@@ -29,12 +29,12 @@ export function FeaturedProperties({ properties, config }: FeaturedPropertiesPro
           />
           
           {ctaText && (
-            <div className="hidden md:block pb-2">
+            <div className="pb-2 shrink-0">
               <Link
                 href={ctaLink}
-                className="text-sm font-medium tracking-widest text-[#1B1A17] hover:opacity-70 transition-all"
+                className="text-[11px] md:text-sm font-medium tracking-widest text-[#1B1A17] hover:opacity-70 transition-all uppercase"
               >
-                {ctaText} &rarr;
+                {ctaText}
               </Link>
             </div>
           )}
@@ -73,22 +73,12 @@ export function FeaturedProperties({ properties, config }: FeaturedPropertiesPro
                 price={price}
                 priceLabel={priceLabel}
                 coverImage={image as any}
-                imageAspectRatio="aspect-[4/3]"
+                imageAspectRatio="aspect-[3/4]"
               />
             );
           })}
         </div>
 
-        {ctaText && (
-          <div className="md:hidden pt-8 flex justify-center">
-            <Link
-              href={ctaLink}
-              className="text-sm font-medium tracking-widest uppercase text-[#1B1A17] hover:underline underline-offset-4 decoration-1 transition-all"
-            >
-              {ctaText} &rarr;
-            </Link>
-          </div>
-        )}
       </div>
   );
 }

@@ -3,15 +3,14 @@ import { Skeleton, SkeletonText, SkeletonImage } from './Skeleton';
 
 export function PropertyCardSkeleton() {
   return (
-    <div className="flex flex-col space-y-4">
-      <SkeletonImage className="aspect-[4/3] rounded-sm" />
-      <div className="flex flex-col space-y-3">
-        <div className="flex justify-between items-start gap-4">
-          <Skeleton className="h-6 md:h-8 w-2/3" />
-          <Skeleton className="h-5 w-1/4 mt-1" />
+    <div className="flex flex-col gap-3 w-full">
+      <SkeletonImage className="aspect-[345/460] rounded-none" />
+      <div className="flex flex-col gap-1">
+        <div className="flex justify-between gap-3">
+          <Skeleton className="h-4 w-1/3" />
+          <Skeleton className="h-3 w-1/4" />
         </div>
-        <Skeleton className="h-4 w-1/2" />
-        <Skeleton className="h-4 w-1/3" />
+        <Skeleton className="h-3 w-1/2" />
       </div>
     </div>
   );

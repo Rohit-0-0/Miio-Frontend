@@ -52,8 +52,8 @@ export default async function HomePage() {
       
       {homepage.trust && <Trust trust={homepage.trust} />}
       
-      <section className="w-full bg-[#FEF6EE] pt-8 md:pt-[64px] pb-8 md:pb-[64px]">
-        <div className="max-w-[1440px] mx-auto px-4 md:px-[188px] flex flex-col gap-[32px]">
+      <section className="w-full bg-[#FEF6EE] pt-8 md:pt-[64px] pb-16 md:pb-[100px]">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-[188px] flex flex-col">
           {homepage.featuredProperties && (
             <Suspense 
               fallback={
@@ -71,8 +71,8 @@ export default async function HomePage() {
       </section>
 
       {homepage.editorialStatement && (
-        <section className="bg-[#F8F5EF] pb-24 md:pb-32 pt-12 md:pt-16">
-          <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-16 flex flex-col gap-24">
+        <section className="w-full bg-[#E1DBC3] py-[64px]">
+          <div className="max-w-[1440px] mx-auto px-4 md:px-[188px]">
             <EditorialStatement statement={homepage.editorialStatement} />
           </div>
         </section>
@@ -82,8 +82,9 @@ export default async function HomePage() {
       
       {homepage.locations && <Locations locations={homepage.locations} />}
       
-      {homepage.testimonials && <Testimonials testimonials={homepage.testimonials} />}
-      
+      {homepage.testimonials?.items?.length ? (
+        <Testimonials testimonials={homepage.testimonials} />
+      ) : null}      
       {homepage.journal && (
         <Suspense
           fallback={

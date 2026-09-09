@@ -8,22 +8,19 @@ interface EditorialDescriptionProps {
 }
 
 export function EditorialDescription({ description, fallbackDescription }: EditorialDescriptionProps) {
-  if (!description && !fallbackDescription) {
-    return (
-      <section className="mb-12">
-        <p className="text-gray-600">No description available.</p>
-      </section>
-    );
-  }
+  if (!description && !fallbackDescription) return null;
 
   return (
-    <section className="mb-12 max-w-4xl">
+    <section className="mb-2">
+      <h2 className="font-serif text-[18px] text-[#1B1A17] mb-3">Description</h2>
       {description ? (
-        <div className="prose prose-lg text-gray-600 prose-p:leading-relaxed">
+        <div className="prose prose-p:text-[15px] prose-p:leading-relaxed prose-p:text-[#1B1A17]/75 max-w-none">
           <RichTextRenderer html={description} />
         </div>
       ) : fallbackDescription ? (
-        <EditorialContentRenderer content={fallbackDescription} />
+        <div className="text-[15px] leading-relaxed text-[#1B1A17]/75">
+          <EditorialContentRenderer content={fallbackDescription} />
+        </div>
       ) : null}
     </section>
   );

@@ -7,7 +7,16 @@ import { StaysGeneralEditor } from '@/components/admin/stays/StaysGeneralEditor'
 import { StaysFilterEditor } from '@/components/admin/stays/StaysFilterEditor';
 import { StaysEmptyStateEditor } from '@/components/admin/stays/StaysEmptyStateEditor';
 import { StaysSeoEditor } from '@/components/admin/stays/StaysSeoEditor';
+import { FinalCtaEditor } from '@/components/admin/home/FinalCtaEditor';
 import { PageHeader } from '@/components/admin/PageHeader';
+import { FinalCtaSection } from '@/types/homepage';
+
+const STAYS_FINAL_CTA_DEFAULTS: FinalCtaSection = {
+  heading: 'A more direct way to stay',
+  description: 'Book directly for the best available rates and a more seamless experience.',
+  buttonText: 'Browse by location',
+  buttonLink: '/locations',
+};
 
 export default function StaysAdminPage() {
   const [data, setData] = useState<StaysPageData | null>(null);
@@ -42,6 +51,7 @@ export default function StaysAdminPage() {
   const handleGeneralDirty = useCallback((dirty: boolean) => handleDirtyChange('general', dirty), [handleDirtyChange]);
   const handleFiltersDirty = useCallback((dirty: boolean) => handleDirtyChange('filters', dirty), [handleDirtyChange]);
   const handleEmptyStateDirty = useCallback((dirty: boolean) => handleDirtyChange('emptyState', dirty), [handleDirtyChange]);
+  const handleFinalCtaDirty = useCallback((dirty: boolean) => handleDirtyChange('finalCta', dirty), [handleDirtyChange]);
   const handleSeoDirty = useCallback((dirty: boolean) => handleDirtyChange('seo', dirty), [handleDirtyChange]);
 
   const hasUnsavedChanges = Object.values(dirtyStates).some(Boolean);
@@ -72,7 +82,7 @@ export default function StaysAdminPage() {
     showGuestsFilter: true,
     showPriceFilter: true,
     enableMapButton: true,
-    defaultSort: 'recommended',
+    defaultSort: 'recommended' as const,
   };
   const initialEmptyState = data.emptyState || {
     heading: '',
@@ -80,6 +90,7 @@ export default function StaysAdminPage() {
     ctaText: '',
     ctaLink: '',
   };
+  const initialFinalCta = data.finalCta || STAYS_FINAL_CTA_DEFAULTS;
   const initialSeo = data.seo || {};
 
   return (
@@ -121,6 +132,15 @@ export default function StaysAdminPage() {
             setData((prev) => prev ? { ...prev, emptyState: result } : null);
           }}
           onDirtyChange={handleEmptyStateDirty}
+        />
+
+        <FinalCtaEditor
+          initialData={initialFinalCta}
+          onSave={async (ctaData) => {
+            const result = await staysPageService.updateFinalCta(ctaData);
+            setData((prev) => prev ? { ...prev, finalCta: result } : null);
+          }}
+          onDirtyChange={handleFinalCtaDirty}
         />
 
         <StaysSeoEditor 

@@ -30,10 +30,19 @@ export interface SeoSettings {
   metaRobots?: string;
 }
 
+export interface FinalCtaSettings {
+  heading: string;
+  description?: string;
+  buttonText: string;
+  buttonLink: string;
+  updatedAt?: string;
+}
+
 export interface StaysPageData {
   version: number;
   general: GeneralSettings;
   filters: FilterConfiguration;
   emptyState: EmptyStateSettings;
+  finalCta?: FinalCtaSettings;
   seo?: SeoSettings;
 }

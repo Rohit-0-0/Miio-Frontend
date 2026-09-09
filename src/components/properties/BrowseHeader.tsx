@@ -7,11 +7,11 @@ interface BrowseHeaderProps {
 
 export function BrowseHeader({ heading, introText }: BrowseHeaderProps) {
   return (
-    <div className="max-w-3xl mb-12 md:mb-16">
-      <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-gray-900 mb-6 tracking-tight">
+    <div className="max-w-[540px] mb-8 md:mb-10">
+      <h1 className="font-serif text-4xl md:text-[48px] lg:text-[56px] font-normal text-[#1B1A17] mb-4 tracking-tight leading-[1.1]">
         {heading}
       </h1>
-      <p className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-2xl">
+      <p className="text-[15px] md:text-[16px] font-light text-[#1B1A17]/65 leading-relaxed">
         {introText}
       </p>
     </div>

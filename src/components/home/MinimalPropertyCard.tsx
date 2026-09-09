@@ -16,15 +16,15 @@ export function MinimalPropertyCard({
   price,
   priceLabel,
   coverImage,
-  imageAspectRatio = 'aspect-[4/3]'
+  imageAspectRatio = 'aspect-[3/4]'
 }: PropertyBrowseCardProps) {
   const displayTitle = nickname || name;
   const displayLocation = location.split(',')[0]; // Just use city (e.g., "Bondi" instead of "Bondi, Australia")
 
   return (
-    <Link href={`/properties/${slug}?id=${id}`} className="group block no-underline cursor-pointer">
+    <Link href={`/properties/${slug}?id=${id}`} className="group block no-underline cursor-pointer w-full max-w-[345px] mx-auto">
       {/* Image Container */}
-      <div className={`relative w-full ${imageAspectRatio} overflow-hidden bg-[#EAE8E1] mb-4`}>
+      <div className={`relative w-full ${imageAspectRatio} overflow-hidden bg-[#EAE8E1] mb-[12px]`}>
         {coverImage ? (
           typeof coverImage === 'string' ? (
             <img
@@ -49,20 +49,20 @@ export function MinimalPropertyCard({
       </div>
 
       {/* Content */}
-      <div className="flex flex-col gap-1">
-        <h3 className="font-serif text-lg md:text-xl text-[#1B1A17] tracking-tight capitalize line-clamp-1">
+      <div className="flex flex-col gap-[8px]">
+        <h3 className="font-serif text-[20px] leading-tight text-[#1B1A17] capitalize line-clamp-1">
           {displayTitle}
         </h3>
         
-        <div className="flex justify-between items-center text-xs md:text-sm font-light mt-1">
+        <div className="flex justify-between items-center text-[13px] font-light mt-1">
           <div className="text-[#7D7975]">
             {displayLocation} &middot; {bedrooms} bed &middot; {guests} guests
           </div>
 
           {(price || priceLabel) && (
-            <div className="flex items-center gap-1 text-[#1B1A17]">
+            <div className="flex items-center gap-1 text-[#7D7975]">
               <span>From {price}</span>
-              {priceLabel && <span className="text-[#7D7975]">{priceLabel}</span>}
+              {priceLabel && <span>{priceLabel}</span>}
             </div>
           )}
         </div>
