@@ -1,5 +1,5 @@
 import React from 'react';
-import { RichTextRenderer } from '@/components/ui/editor';
+import { RichTextRenderer } from '@/components/ui/editor/RichTextRenderer';
 import { EditorialContentRenderer } from '@/components/ui/EditorialContentRenderer';
 
 interface EditorialDescriptionProps {

@@ -20,7 +20,7 @@ const DEFAULT_STANDARDS: MiioStandardItem[] = [
 
 function StandardIcon({ name }: { name: string }) {
   const props = { className: 'w-6 h-6 text-white', strokeWidth: 1.5 };
-  const key = name.toLowerCase();
+  const key = (name || '').toLowerCase();
   if (key.includes('lock') || key.includes('smart')) return <Lock {...props} />;
   if (key.includes('coffee') || key.includes('nespresso') || key.includes('bean'))
     return <Coffee {...props} />;

@@ -1,5 +1,5 @@
 import type { NextConfig } from "next";
-console.log("NEXT CONFIG LOADED");
+
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
@@ -17,6 +17,8 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Prevent accidental jsdom pulls (e.g. isomorphic-dompurify) from breaking Netlify SSR
+  serverExternalPackages: ['jsdom', 'isomorphic-dompurify'],
 };
 
 export default nextConfig;

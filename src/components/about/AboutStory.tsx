@@ -1,7 +1,7 @@
 import React from 'react';
 import { AppImage } from '@/components/media/AppImage';
 import { AboutData } from '@/types/about';
-import { RichTextRenderer } from '@/components/ui/editor';
+import { RichTextRenderer } from '@/components/ui/editor/RichTextRenderer';
 
 export function AboutStory({ story }: { story: AboutData['story'] }) {
   if (!story) return null;

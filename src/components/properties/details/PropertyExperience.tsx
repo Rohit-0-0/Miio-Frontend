@@ -1,5 +1,5 @@
 import React from 'react';
-import { RichTextRenderer } from '@/components/ui/editor';
+import { RichTextRenderer } from '@/components/ui/editor/RichTextRenderer';
 
 interface PropertyExperienceProps {
   experience?: string;

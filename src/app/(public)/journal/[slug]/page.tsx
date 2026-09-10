@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { journalService } from '@/services/journal.service';
 import { Container } from '@/components/ui/Container';
 import { ROUTES } from '@/constants/routes';
-import { RichTextRenderer } from '@/components/ui/editor';
+import { RichTextRenderer } from '@/components/ui/editor/RichTextRenderer';
 import { FloatingBackButton } from '@/components/ui/FloatingBackButton';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {

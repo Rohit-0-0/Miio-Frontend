@@ -85,9 +85,9 @@ export function AmenitiesSection({
     const displayAmenities = resolveDisplayAmenities(amenities, featuredAmenityIds, 6);
     return (
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-4 mb-10">
-        {displayAmenities.map((amenity) => (
-          <div key={amenity.id} className="flex items-center gap-3 text-[#1B1A17]">
-            <span className="shrink-0">{getAmenityIcon(amenity.label)}</span>
+        {displayAmenities.map((amenity, index) => (
+          <div key={amenity.id || `amenity-${index}`} className="flex items-center gap-3 text-[#1B1A17]">
+            <span className="shrink-0">{getAmenityIcon(amenity.label || '')}</span>
             <span className="text-[14px] leading-snug">{amenity.label}</span>
           </div>
         ))}
@@ -103,8 +103,8 @@ export function AmenitiesSection({
         Amenities
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-3 max-w-[705px]">
-        {displayAmenities.map((amenity) => (
-          <div key={amenity.id} className="flex items-center gap-3">
+        {displayAmenities.map((amenity, index) => (
+          <div key={amenity.id || `amenity-${index}`} className="flex items-center gap-3">
             <Check className="w-4 h-4 text-[#241D19] shrink-0" strokeWidth={1.5} />
             <span className="font-[family-name:var(--font-instrument-sans)] text-[14px] font-normal leading-[140%] text-[#5F4E44]">
               {amenity.label}

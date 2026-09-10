@@ -10,6 +10,16 @@ interface PropertiesViewProps {
   searchQueryString: string;
 }
 
+function toSlug(title?: string, fallback?: string): string {
+  if (!title) return fallback || '';
+  return title
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_-]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 export function PropertiesView({ properties, searchQueryString }: PropertiesViewProps) {
   const total = properties.length;
   const resultLabel =
@@ -23,15 +33,18 @@ export function PropertiesView({ properties, searchQueryString }: PropertiesView
         {properties.map((property: any) => {
           const id = property._id || property.id;
           const name = property.nickname || property.title || 'Unknown Property';
+          const slug = property.slug || toSlug(property.title, id);
           const location =
             [property.address?.city, property.address?.country].filter(Boolean).join(', ') ||
+            [property.location?.city, property.location?.country].filter(Boolean).join(', ') ||
             'Various Locations';
-          const guests = property.accommodates || 2;
+          const guests = property.accommodates || property.maxGuests || 2;
           const bedrooms = property.bedrooms || 1;
           const coverImage =
             property.picture?.large ||
             property.picture?.regular ||
             property.pictures?.[0]?.original ||
+            property.coverImageId ||
             null;
 
           const currency = property.prices?.currency === 'AUD' ? '$' : property.prices?.currency || '';
@@ -50,7 +63,7 @@ export function PropertiesView({ properties, searchQueryString }: PropertiesView
             <PropertyBrowseCard
               key={id}
               id={id}
-              slug={id}
+              slug={slug}
               name={name}
               nickname={property.nickname}
               unitType={property.propertyType || ''}

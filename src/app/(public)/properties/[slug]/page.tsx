@@ -30,6 +30,24 @@ const STAYS_FINAL_CTA_DEFAULTS = {
   buttonLink: '/locations',
 };
 
+async function resolveProperty(
+  slug: string,
+  guestyId: string | undefined,
+  options?: RequestInit
+): Promise<PropertyDetails | undefined> {
+  const isObjectId = /^[0-9a-fA-F]{24}$/.test(slug);
+  const idHint = guestyId || (isObjectId ? slug : undefined);
+
+  // Prefer Guesty id when present — slug lookup can miss until backend syncs
+  if (idHint) {
+    const byId = await getPropertyById<PropertyDetails>(idHint, options);
+    if (byId?.data) return byId.data;
+  }
+
+  const bySlug = await getPropertyBySlug<PropertyDetails>(slug, options);
+  return bySlug?.data || undefined;
+}
+
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const resolvedParams = await params;
   const resolvedSearchParams = await searchParams;
@@ -37,14 +55,8 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   const guestyId = resolvedSearchParams.id;
 
   try {
-    let response = await getPropertyBySlug<PropertyDetails>(slug, { next: { revalidate: 300 } });
-    if ((!response || !response.data) && (guestyId || /^[0-9a-fA-F]{24}$/.test(slug))) {
-      response = await getPropertyById<PropertyDetails>(guestyId || slug, {
-        next: { revalidate: 300 },
-      });
-    }
+    const property = await resolveProperty(slug, guestyId, { next: { revalidate: 300 } });
 
-    const property = response?.data;
     if (property?.editorial?.seo) {
       return {
         title: property.editorial.seo.title || property.title,
@@ -77,28 +89,24 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
   let property: PropertyDetails | undefined;
 
   try {
-    let response = await getPropertyBySlug<PropertyDetails>(slug, { cache: 'no-store' });
-
-    if ((!response || !response.data) && (guestyId || /^[0-9a-fA-F]{24}$/.test(slug))) {
-      response = await getPropertyById<PropertyDetails>(guestyId || slug, { cache: 'no-store' });
-    }
-
-    property = response?.data;
+    property = await resolveProperty(slug, guestyId, { cache: 'no-store' });
   } catch (error) {
     console.error('Failed to fetch property details:', error);
     notFound();
   }
 
-  if (
-    !property ||
-    property.lifecycleStatus !== LIFECYCLE_STATUS.PUBLISHED ||
-    !property.visibleOnWebsite
-  ) {
+  // Guesty-mapped details always set these; treat missing as published for id-based fetches
+  const isPublished =
+    !property?.lifecycleStatus || property.lifecycleStatus === LIFECYCLE_STATUS.PUBLISHED;
+  const isVisible = property?.visibleOnWebsite !== false;
+
+  if (!property || !isPublished || !isVisible) {
     notFound();
   }
 
   const editorial = property.editorial;
-  const actualGuestyId = guestyId || (/^[0-9a-fA-F]{24}$/.test(slug) ? slug : undefined);
+  const actualGuestyId =
+    guestyId || property.guestyId || property.id || (/^[0-9a-fA-F]{24}$/.test(slug) ? slug : undefined);
 
   let finalCta = STAYS_FINAL_CTA_DEFAULTS;
   try {
