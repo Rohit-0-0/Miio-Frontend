@@ -40,7 +40,7 @@ export function Locations({ locations }: { locations: LocationsSection }) {
               <div className="flex flex-col space-y-1">
                 <h3 className="text-[17px] font-serif text-[#1B1A17]">{location.name}</h3>
                 {location.description && (
-                  <p className="text-[13px] font-light text-[#7D7975] line-clamp-2 leading-relaxed">
+                  <p className="font-sans text-[13px] font-light text-[#7D7975] line-clamp-2 leading-relaxed">
                     {location.description}
                   </p>
                 )}

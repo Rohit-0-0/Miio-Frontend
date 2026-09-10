@@ -15,7 +15,7 @@ export function RichTextRenderer({ html, className = '' }: RichTextRendererProps
 
   return (
     <div
-      className={`prose prose-gray max-w-none font-light leading-relaxed prose-headings:font-serif prose-a:text-blue-600 hover:prose-a:text-blue-800 ${className}`}
+      className={`font-sans prose prose-gray max-w-none font-light leading-relaxed prose-headings:font-serif prose-p:font-sans prose-li:font-sans prose-a:text-blue-600 hover:prose-a:text-blue-800 ${className}`}
       dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
     />
   );

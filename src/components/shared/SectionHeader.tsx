@@ -24,7 +24,7 @@ export function SectionHeader({
       </h2>
       {subtitle && (
         <p
-          className={`text-lg md:text-xl font-light max-w-2xl ${dark ? 'text-white/80' : 'text-[#1B1A17]/70'}`}
+          className={`font-sans text-lg md:text-xl font-light max-w-2xl ${dark ? 'text-white/80' : 'text-[#1B1A17]/70'}`}
         >
           {subtitle}
         </p>

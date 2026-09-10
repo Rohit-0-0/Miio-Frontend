@@ -22,7 +22,7 @@ export async function Footer() {
         {partnerTags && partnerTags.length > 0 && (
           <div className="order-2 md:order-1 md:col-span-2 flex flex-wrap justify-center md:justify-between items-center gap-3 md:gap-4 pb-2">
             {partnerTags.map((tag: string, idx: number) => (
-              <div key={idx} className="px-6 py-2 border border-[#FEF6EE]/20 rounded-full text-[11px] uppercase tracking-widest text-[#FEF6EE]">
+              <div key={idx} className="font-sans px-6 py-2 border border-[#FEF6EE]/20 rounded-full text-[11px] uppercase tracking-widest text-[#FEF6EE]">
                 {tag}
               </div>
             ))}
@@ -36,7 +36,7 @@ export async function Footer() {
               <ul key={idx} className="flex flex-col space-y-4">
                 {col.links.map((link: any, lidx: number) => (
                   <li key={lidx}>
-                    <Link href={link.href} className="text-[13px] text-[#FEF6EE] hover:opacity-80 transition-opacity">
+                    <Link href={link.href} className="font-sans text-[13px] text-[#FEF6EE] hover:opacity-80 transition-opacity">
                       {link.label}
                     </Link>
                   </li>
@@ -47,28 +47,28 @@ export async function Footer() {
             <>
               <ul className="flex flex-col space-y-4">
                 <li>
-                  <Link href="/sitemap" className="text-[13px] text-[#FEF6EE] hover:opacity-80 transition-opacity">Site map</Link>
+                  <Link href="/sitemap" className="font-sans text-[13px] text-[#FEF6EE] hover:opacity-80 transition-opacity">Site map</Link>
                 </li>
                 <li>
-                  <Link href="/stays" className="text-[13px] text-[#FEF6EE] hover:opacity-80 transition-opacity">Stays</Link>
+                  <Link href="/stays" className="font-sans text-[13px] text-[#FEF6EE] hover:opacity-80 transition-opacity">Stays</Link>
                 </li>
                 <li>
-                  <Link href="/locations" className="text-[13px] text-[#FEF6EE] hover:opacity-80 transition-opacity">Locations</Link>
+                  <Link href="/locations" className="font-sans text-[13px] text-[#FEF6EE] hover:opacity-80 transition-opacity">Locations</Link>
                 </li>
                 <li>
-                  <Link href="/journal" className="text-[13px] text-[#FEF6EE] hover:opacity-80 transition-opacity">Journal</Link>
+                  <Link href="/journal" className="font-sans text-[13px] text-[#FEF6EE] hover:opacity-80 transition-opacity">Journal</Link>
                 </li>
                 <li>
-                  <Link href="/about" className="text-[13px] text-[#FEF6EE] hover:opacity-80 transition-opacity">About</Link>
+                  <Link href="/about" className="font-sans text-[13px] text-[#FEF6EE] hover:opacity-80 transition-opacity">About</Link>
                 </li>
               </ul>
 
               <ul className="flex flex-col space-y-4">
                 <li>
-                  <Link href="/owners" className="text-[13px] text-[#FEF6EE] hover:opacity-80 transition-opacity">Owners</Link>
+                  <Link href="/owners" className="font-sans text-[13px] text-[#FEF6EE] hover:opacity-80 transition-opacity">Owners</Link>
                 </li>
                 <li>
-                  <Link href="/partner" className="text-[13px] text-[#FEF6EE] hover:opacity-80 transition-opacity">Partner With Us</Link>
+                  <Link href="/partner" className="font-sans text-[13px] text-[#FEF6EE] hover:opacity-80 transition-opacity">Partner With Us</Link>
                 </li>
               </ul>
             </>
@@ -90,7 +90,7 @@ export async function Footer() {
           
         {/* Bottom Row */}
         <div className="order-4 md:col-span-2 flex flex-col items-center justify-center pt-4">
-          <p className="text-[13px] text-[#FEF6EE]/80">
+          <p className="font-sans text-[13px] text-[#FEF6EE]/80">
             &copy; Stay with Miio. All rights reserved.
           </p>
         </div>

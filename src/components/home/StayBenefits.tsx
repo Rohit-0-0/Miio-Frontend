@@ -92,7 +92,7 @@ export function StayBenefits({ benefits }: { benefits: StayBenefitsSection }) {
                 <h3 className="text-[17px] font-serif text-[#241D19] leading-snug">
                   {item.title}
                 </h3>
-                <p className="text-[13px] font-normal text-[#5F4E44] leading-relaxed">
+                <p className="font-sans text-[13px] font-normal text-[#5F4E44] leading-relaxed">
                   {item.description}
                 </p>
               </div>

@@ -52,7 +52,7 @@ export function Hero({ hero }: { hero: HeroSection }) {
             {title}
           </h1>
           
-          <p className="text-base md:text-lg font-light text-white max-w-[500px] leading-relaxed mb-10 md:mb-12">
+          <p className="font-sans text-base md:text-lg font-light text-white max-w-[500px] leading-relaxed mb-10 md:mb-12">
             {subtitle}
           </p>
 

@@ -38,7 +38,7 @@ export function EditorialCard({
       </div>
       <div className="flex flex-col space-y-3">
         <h3 className="text-2xl md:text-3xl font-serif text-[#1B1A17]">{title}</h3>
-        {description && <p className="text-[#1B1A17]/70 font-light leading-relaxed">{description}</p>}
+        {description && <p className="font-sans text-[#1B1A17]/70 font-light leading-relaxed">{description}</p>}
         {link && (
           <span className="text-sm font-medium tracking-widest uppercase text-[#1B1A17] group-hover:underline underline-offset-4 decoration-1 transition-all">
             {ctaText} &rarr;

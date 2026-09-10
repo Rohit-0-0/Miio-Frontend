@@ -32,7 +32,7 @@ export function FeaturedProperties({ properties, config }: FeaturedPropertiesPro
             <div className="pb-2 shrink-0">
               <Link
                 href={ctaLink}
-                className="text-[11px] md:text-sm font-medium tracking-widest text-[#1B1A17] hover:opacity-70 transition-all uppercase"
+                className="font-sans text-[11px] md:text-sm font-medium tracking-widest text-[#1B1A17] hover:opacity-70 transition-all uppercase"
               >
                 {ctaText}
               </Link>

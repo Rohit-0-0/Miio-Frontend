@@ -23,7 +23,7 @@ export default async function LocationsPage() {
       <Container>
         <div className="mb-16">
           <SectionHeader title={pageData?.title || "Locations"} align="left" />
-          <p className="text-xl text-gray-600 mt-6 max-w-2xl font-light">
+          <p className="font-sans text-xl text-gray-600 mt-6 max-w-2xl font-light">
             {pageData?.description || "Discover our exclusive properties in the world's most sought-after destinations."}
           </p>
         </div>

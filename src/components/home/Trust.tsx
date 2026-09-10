@@ -11,7 +11,7 @@ export function Trust({ trust }: { trust: TrustSection }) {
   return (
     <section className="w-full bg-[#E1DBC3] border-y border-[#5F4E442E]">
       <div className="max-w-[1440px] mx-auto h-[54px] flex items-center justify-center px-4 md:px-[187.5px]">
-        <div className="flex flex-col md:flex-row items-center gap-[16px] text-[#1B1A17]">
+        <div className="font-sans flex flex-col md:flex-row items-center gap-[16px] text-[#1B1A17]">
           <span className="font-bold text-sm tracking-wide">Rated {rating}</span>
           
           <div className="flex items-center gap-1">

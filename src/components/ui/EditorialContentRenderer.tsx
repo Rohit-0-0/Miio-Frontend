@@ -121,7 +121,7 @@ export function EditorialContentRenderer({ content, className = '' }: EditorialC
   const nodes = parseEditorialContent(content);
 
   return (
-    <div className={`editorial-content ${className}`}>
+    <div className={`editorial-content font-sans ${className}`}>
       {nodes.map((node, index) => {
         if (node.type === 'heading') {
           return (
@@ -138,7 +138,7 @@ export function EditorialContentRenderer({ content, className = '' }: EditorialC
           return (
             <p 
               key={index} 
-              className="text-lg text-gray-600 leading-relaxed mb-6 font-light"
+              className="font-sans text-lg text-gray-600 leading-relaxed mb-6 font-light"
             >
               {node.text}
             </p>
@@ -147,7 +147,7 @@ export function EditorialContentRenderer({ content, className = '' }: EditorialC
 
         if (node.type === 'list') {
           return (
-            <ul key={index} className="list-disc list-outside ml-5 mb-8 space-y-2 text-lg text-gray-600 font-light">
+            <ul key={index} className="font-sans list-disc list-outside ml-5 mb-8 space-y-2 text-lg text-gray-600 font-light">
               {node.items.map((item, i) => (
                 <li key={i} className="pl-2 leading-relaxed">
                   {item}

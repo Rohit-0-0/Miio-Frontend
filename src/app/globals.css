@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: var(--font-inter);
+  /* Body / UI: Instrument Sans (free). Display headings stay font-serif until Brillante Var is licensed. */
+  --font-sans: var(--font-instrument-sans);
   --font-serif: var(--font-playfair);
   --font-montserrat: var(--font-montserrat);
   --font-cormorant: var(--font-cormorant);
@@ -11,6 +12,7 @@
 body {
   background-color: #ffffff;
   color: #171717;
+  font-family: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer utilities {

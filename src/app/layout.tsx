@@ -61,7 +61,7 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${playfair.variable} ${montserrat.variable} ${cormorant.variable} ${instrumentSans.variable} h-full antialiased`}
     >
-      <body className="font-sans text-gray-900 bg-white">
+      <body className="font-sans text-gray-900 bg-white antialiased">
         <AuthProvider>
           {children}
           <Toaster richColors position="top-right" />

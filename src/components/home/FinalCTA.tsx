@@ -38,7 +38,7 @@ export function FinalCTA({
         </h2>
 
         {description && (
-          <p className="text-base md:text-[17px] font-light text-[#1B1A17]/80 max-w-2xl leading-relaxed">
+          <p className="font-sans text-base md:text-[17px] font-light text-[#1B1A17]/80 max-w-2xl leading-relaxed">
             {description}
           </p>
         )}
@@ -46,7 +46,7 @@ export function FinalCTA({
         <div className="pt-6">
           <Link
             href={buttonLink}
-            className="inline-flex items-center justify-center bg-[#1B1A17] text-white px-8 py-3.5 text-[15px] font-medium transition-colors hover:bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1B1A17] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FEF6EE] rounded-full"
+            className="font-sans inline-flex items-center justify-center bg-[#1B1A17] text-white px-8 py-3.5 text-[15px] font-medium transition-colors hover:bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1B1A17] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FEF6EE] rounded-full"
           >
             {buttonText}
           </Link>

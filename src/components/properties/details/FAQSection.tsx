@@ -30,13 +30,13 @@ export function FAQSection({ faqs }: FAQSectionProps) {
                 onClick={() => setOpenIndex(isOpen ? null : index)}
                 className="w-full flex justify-between items-center gap-4 text-left py-5 focus:outline-none"
               >
-                <span className="text-[15px] md:text-[16px] text-[#1B1A17]">{faq.question}</span>
+                <span className="font-sans text-[15px] md:text-[16px] text-[#1B1A17]">{faq.question}</span>
                 <span className="shrink-0 w-7 h-7 rounded-full border border-[#1B1A17]/20 flex items-center justify-center text-[#1B1A17]">
                   {isOpen ? <Minus className="w-3.5 h-3.5" strokeWidth={1.5} /> : <Plus className="w-3.5 h-3.5" strokeWidth={1.5} />}
                 </span>
               </button>
               {isOpen && (
-                <div className="pb-5 pr-10 text-[15px] text-[#1B1A17]/70 leading-relaxed">
+                <div className="font-sans pb-5 pr-10 text-[15px] text-[#1B1A17]/70 leading-relaxed">
                   {faq.answer}
                 </div>
               )}

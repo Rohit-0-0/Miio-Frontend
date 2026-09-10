@@ -61,7 +61,7 @@ export default async function JournalPage({
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 mb-6">
               {pageData?.title || 'Stories & Inspiration'}
             </h1>
-            <p className="text-xl text-gray-600">
+            <p className="font-sans text-xl text-gray-600">
               {pageData?.description || 'Thoughts, stories, travel inspiration, and local experiences from Miio.'}
             </p>
           </div>

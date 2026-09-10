@@ -16,7 +16,7 @@ export function EmptyState({ config }: EmptyStateProps) {
         </div>
       )}
       <h3 className="font-serif text-3xl text-gray-900 mb-4">{config.heading}</h3>
-      <p className="text-gray-500 max-w-md mx-auto mb-10 text-lg leading-relaxed">
+      <p className="font-sans text-gray-500 max-w-md mx-auto mb-10 text-lg leading-relaxed">
         {config.description}
       </p>
       {config.ctaLink && config.ctaText && (

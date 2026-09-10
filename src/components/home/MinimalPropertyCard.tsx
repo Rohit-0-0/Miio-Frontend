@@ -54,7 +54,7 @@ export function MinimalPropertyCard({
           {displayTitle}
         </h3>
         
-        <div className="flex justify-between items-center text-[13px] font-light mt-1">
+        <div className="font-sans flex justify-between items-center text-[13px] font-light mt-1">
           <div className="text-[#7D7975]">
             {displayLocation} &middot; {bedrooms} bed &middot; {guests} guests
           </div>

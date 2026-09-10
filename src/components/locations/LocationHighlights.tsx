@@ -48,7 +48,7 @@ export function LocationHighlights({ items }: { items?: LocationHighlightItem[] 
               )}
             </div>
             <span
-              className="flex-1 min-w-0 font-[family-name:var(--font-instrument-sans)] text-[16px] font-medium leading-[130%] text-[#241D19]"
+              className="flex-1 min-w-0 font-sans text-[16px] font-medium leading-[130%] text-[#241D19]"
             >
               {item.text}
             </span>

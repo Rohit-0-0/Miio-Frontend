@@ -51,7 +51,7 @@ export function JournalCard({ article }: { article: JournalArticle }) {
         </h3>
         
         {article.excerpt && (
-          <p className="text-sm text-gray-600 mb-6 flex-grow line-clamp-3">
+          <p className="font-sans text-sm text-gray-600 mb-6 flex-grow line-clamp-3">
             {article.excerpt}
           </p>
         )}

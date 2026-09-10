@@ -48,7 +48,7 @@ export function JournalPreview({ journal, articles = [] }: JournalPreviewProps) 
                   <div className="flex flex-col space-y-1">
                     <h3 className="text-[15px] font-serif text-[#1B1A17]">{article.title}</h3>
                     {/* Assuming the tag/category is mapped to article.category or similar, we fallback to a placeholder if not present */}
-                    <p className="text-[13px] font-light text-[#7D7975] leading-relaxed">
+                    <p className="font-sans text-[13px] font-light text-[#7D7975] leading-relaxed">
                       {article.category?.name || article.category?.title || 'Journal entry'}
                     </p>
                   </div>

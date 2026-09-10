@@ -54,7 +54,7 @@ export function LocationLocalGuide({
                     {item.title}
                   </h3>
                   {item.description ? (
-                    <p className="text-[13px] font-normal text-[#5F4E44] leading-snug mt-1">
+                    <p className="font-sans text-[13px] font-normal text-[#5F4E44] leading-snug mt-1">
                       {item.description}
                     </p>
                   ) : null}

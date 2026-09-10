@@ -106,7 +106,7 @@ export default async function LocationDetailPage({ params }: Props) {
       <section className="bg-[#FEF6EE]">
         <div className="max-w-[1440px] mx-auto px-4 md:px-[188px] py-12 md:py-16">
           <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-10 lg:gap-16">
-            <p className="text-[15px] font-normal leading-[170%] text-[#5F4E44] max-w-[560px] flex-1 whitespace-pre-line">
+            <p className="font-sans text-[15px] font-normal leading-[170%] text-[#5F4E44] max-w-[560px] flex-1 whitespace-pre-line">
               {location.description}
             </p>
             <div className="shrink-0 lg:pt-1">

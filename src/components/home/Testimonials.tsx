@@ -44,7 +44,7 @@ export function Testimonials({ testimonials }: { testimonials: TestimonialsSecti
                         </svg>
                       ))}
                     </div>
-                    <span className="inline-flex items-center rounded-full bg-[#99583D] text-white text-[11px] font-medium px-3 py-1">
+                    <span className="font-sans inline-flex items-center rounded-full bg-[#99583D] text-white text-[11px] font-medium px-3 py-1">
                       Verified stay
                     </span>
                   </div>
@@ -55,7 +55,7 @@ export function Testimonials({ testimonials }: { testimonials: TestimonialsSecti
                 </div>
 
                 <div className="flex items-end justify-between gap-4">
-                  <div className="flex flex-col gap-0.5 min-w-0">
+                  <div className="font-sans flex flex-col gap-0.5 min-w-0">
                     <span className="text-[14px] font-medium text-[#241D19]">
                       {item.author}
                       {item.date ? `, ${item.date}` : ''}
