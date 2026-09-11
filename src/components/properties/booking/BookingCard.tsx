@@ -11,24 +11,47 @@ import { CheckoutModal } from './CheckoutModal';
 import { apiClient } from '@/lib/api/client';
 import { toast } from 'sonner';
 
+import { buildImageUrl } from '@/lib/media/buildImageUrl';
+
 interface BookingCardProps {
   listingId: string;
+  paymentTrustImages?: any[];
 }
 
-function PaymentTrustRow() {
+function PaymentTrustRow({ images }: { images?: any[] }) {
+  if (images && images.length > 0) {
+    return (
+      <div className="mt-5 flex flex-wrap items-center justify-center gap-2 w-full">
+        {images.map((img: any, idx: number) => {
+          const src = buildImageUrl(img?.asset?._ref);
+          if (!src) return null;
+          return (
+            <div key={idx} className="flex justify-center" style={{ flex: '0 0 calc(20% - 0.4rem)' }}>
+              <img 
+                src={src} 
+                alt={img.alt || 'Payment Trust'} 
+                className="max-h-6 max-w-full object-contain" 
+              />
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
   return (
-    <div className="mt-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-[9px] tracking-[0.08em] uppercase text-[#7D7975]">
-      <span className="font-medium">Secure checkout</span>
-      <span className="opacity-40">·</span>
-      <span>Apple Pay</span>
-      <span>Amex</span>
-      <span>Mastercard</span>
-      <span>Visa</span>
+    <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-[9px] tracking-[0.08em] uppercase text-[#7D7975] w-full">
+      <span className="font-medium shrink-0">Secure checkout</span>
+      <span className="opacity-40 shrink-0">·</span>
+      <span className="shrink-0">Apple Pay</span>
+      <span className="shrink-0">Amex</span>
+      <span className="shrink-0">Mastercard</span>
+      <span className="shrink-0">Visa</span>
     </div>
   );
 }
 
-export function BookingCard({ listingId }: BookingCardProps) {
+export function BookingCard({ listingId, paymentTrustImages }: BookingCardProps) {
   const searchParams = useSearchParams();
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -176,7 +199,7 @@ export function BookingCard({ listingId }: BookingCardProps) {
             label={reserveLabel}
           />
         </BookingActions>
-        <PaymentTrustRow />
+        <PaymentTrustRow images={paymentTrustImages} />
       </div>
 
       <CheckoutModal

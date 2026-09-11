@@ -55,6 +55,13 @@ export const siteSettings = defineType({
       name: 'defaultSeo',
       title: 'Default SEO',
       type: 'seo',
+    }),
+    defineField({
+      name: 'paymentTrustImages',
+      title: 'Payment Trust Images (Booking Card)',
+      description: 'Upload the secure checkout and payment method logos here.',
+      type: 'array',
+      of: [{ type: 'customImage' }]
     })
   ],
   // __experimental_actions: ['update', 'publish'],

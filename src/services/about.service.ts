@@ -23,6 +23,10 @@ class EditorialService {
   async getLocationsPage(): Promise<ApiResponse<any>> {
     return apiClient.get<ApiResponse<any>>('/editorial/locations-page');
   }
+
+  async getSiteSettings(): Promise<ApiResponse<any>> {
+    return apiClient.get<ApiResponse<any>>('/editorial/site-settings');
+  }
 }
 
 export const editorialService = new EditorialService();

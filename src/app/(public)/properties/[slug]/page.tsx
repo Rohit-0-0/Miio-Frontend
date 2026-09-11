@@ -123,6 +123,17 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
     // keep defaults
   }
 
+  let siteSettings: any = null;
+  try {
+    const { editorialService } = await import('@/services/about.service');
+    const settingsReq = await editorialService.getSiteSettings();
+    if (settingsReq?.success) {
+      siteSettings = settingsReq.data;
+    }
+  } catch (err) {
+    console.error('Failed to fetch site settings:', err);
+  }
+
   return (
     <article className="min-h-screen bg-[#FEF6EE] pb-0">
       <div className="max-w-[1440px] mx-auto px-4 md:px-[188px] pt-10 md:pt-10">
@@ -157,7 +168,10 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
               }
             >
               {actualGuestyId ? (
-                <BookingCard listingId={actualGuestyId} />
+                <BookingCard 
+                  listingId={actualGuestyId} 
+                  paymentTrustImages={siteSettings?.paymentTrustImages} 
+                />
               ) : (
                 <div className="bg-white border border-[#1B1A17]/10 rounded-xl p-6 text-[#7D7975]">
                   Booking is unavailable for this property.
