@@ -104,14 +104,7 @@ export function MobileNav() {
                 </Link>
               ))}
 
-              <Link
-                href="/partner-with-us"
-                onClick={() => setIsOpen(false)}
-                className="text-4xl font-serif text-gray-900 tracking-wide hover:text-gray-600 transition-colors animate-in slide-in-from-bottom-4 fade-in duration-500"
-                style={{ animationDelay: `${NAVIGATION.length * 100}ms`, animationFillMode: 'both' }}
-              >
-                Partner With Us
-              </Link>
+
 
             </nav>
 

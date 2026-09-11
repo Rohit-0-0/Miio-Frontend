@@ -19,12 +19,7 @@ export function DesktopNav() {
         </Link>
       ))}
 
-      <Link
-        href="/partner-with-us"
-        className="text-sm font-medium text-current opacity-80 hover:opacity-100 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-2 rounded-sm"
-      >
-        Partner With Us
-      </Link>
+
 
     </nav>
   );

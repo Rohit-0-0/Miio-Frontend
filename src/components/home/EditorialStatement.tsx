@@ -10,7 +10,7 @@ export function EditorialStatement({ statement }: { statement: EditorialStatemen
       <h2 className="text-3xl md:text-[36px] font-serif text-[#1B1A17] leading-tight max-w-[800px] mx-auto">
         {heading}
       </h2>
-      <p className="font-sans text-base md:text-[15px] font-light text-[#1B1A17] leading-relaxed max-w-[700px] mx-auto">
+      <p className="font-sans text-base md:text-[15px] font-normal text-[#1B1A17] leading-relaxed max-w-[700px] mx-auto">
         {description}
       </p>
       
