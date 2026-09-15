@@ -71,8 +71,8 @@ export default async function HomePage() {
       </section>
 
       {homepage.editorialStatement && (
-        <section className="w-full bg-[#E1DBC3] py-[64px]">
-          <div className="max-w-[1440px] mx-auto px-4 md:px-[188px]">
+        <section className="w-full bg-[#E1DBC3] py-[40px] md:py-[64px]">
+          <div className="max-w-[1440px] mx-auto px-5 md:px-[188px]">
             <EditorialStatement statement={homepage.editorialStatement} />
           </div>
         </section>
