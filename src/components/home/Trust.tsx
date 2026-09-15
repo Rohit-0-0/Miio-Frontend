@@ -11,8 +11,8 @@ export function Trust({ trust }: { trust: TrustSection }) {
   return (
     <section className="w-full bg-[#E1DBC3] border-y border-[#5F4E442E]">
       <div className="max-w-[1440px] mx-auto h-[54px] flex items-center justify-center px-4 md:px-[187.5px]">
-        <div className="font-sans flex flex-col md:flex-row items-center gap-[16px] text-[#1B1A17]">
-          <span className="font-bold text-sm tracking-wide">Rated {rating}</span>
+        <div className="font-sans flex flex-row items-center justify-center gap-2 md:gap-[16px] text-[#1B1A17] flex-wrap">
+          <span className="font-medium text-sm tracking-wide">Rated {rating}</span>
           
           <div className="flex items-center gap-1">
             {[1, 2, 3, 4, 5].map((star) => (
@@ -22,7 +22,7 @@ export function Trust({ trust }: { trust: TrustSection }) {
             ))}
           </div>
           
-          <span className="text-sm font-medium">{reviewCount} reviews</span>
+          <span className="hidden md:inline text-sm font-medium">{reviewCount}</span>
           
           <div className="flex items-center">
             <span className="text-xs bg-white/50 px-3 py-1 rounded-full border border-[#5F4E442E]">

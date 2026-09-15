@@ -22,7 +22,7 @@ export function MinimalPropertyCard({
   const displayLocation = location.split(',')[0]; // Just use city (e.g., "Bondi" instead of "Bondi, Australia")
 
   return (
-    <Link href={`/properties/${slug}?id=${id}`} className="group block no-underline cursor-pointer w-full max-w-[345px] mx-auto">
+    <Link href={`/properties/${slug}?id=${id}`} className="group block no-underline cursor-pointer w-full max-w-[350px] mx-auto px-4 md:px-0">
       {/* Image Container */}
       <div className={`relative w-full ${imageAspectRatio} overflow-hidden bg-[#EAE8E1] mb-[12px]`}>
         {coverImage ? (
@@ -49,13 +49,13 @@ export function MinimalPropertyCard({
       </div>
 
       {/* Content */}
-      <div className="flex flex-col gap-[8px]">
-        <h3 className="font-serif text-[20px] leading-tight text-[#1B1A17] capitalize line-clamp-1">
+      <div className="flex flex-col gap-0">
+        <h3 className="font-sans text-[16px] leading-tight text-[#1B1A17] font-medium capitalize line-clamp-1">
           {displayTitle}
         </h3>
         
-        <div className="font-sans flex justify-between items-center text-[13px] font-light mt-1">
-          <div className="text-[#7D7975]">
+        <div className="font-sans flex justify-between items-center text-[13px] font-normal">
+          <div className="text-[#5F4E44]">
             {displayLocation} &middot; {bedrooms} bed &middot; {guests} guests
           </div>
 

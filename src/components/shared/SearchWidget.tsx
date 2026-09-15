@@ -199,25 +199,25 @@ export function SearchWidget({
   };
 
   return (
-    <div ref={filterRef} className="w-full flex flex-col gap-2 z-30 relative shadow-2xl">
-      <div className="w-full bg-[#FEF6EE] md:bg-white rounded-[16px] md:rounded-full p-4 md:p-2 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0 relative">
-        <div className="flex-1 w-full grid grid-cols-1 md:grid-cols-3 divide-y divide-[#1B1A17]/20 md:divide-y-0 md:divide-x md:divide-gray-200 bg-transparent rounded-[16px] md:rounded-none overflow-visible">
+    <div ref={filterRef} className="w-full flex flex-col gap-2 z-30 relative shadow-2xl md:shadow-2xl">
+      <div className="w-full max-w-[350px] md:max-w-none mx-auto bg-[#FEF6EE] md:bg-white rounded-[10px] md:rounded-full p-4 md:p-2 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0 relative shadow-[0_4px_4px_rgba(0,0,0,0.25)] md:shadow-none">
+        <div className="flex-1 w-full grid grid-cols-1 md:grid-cols-3 divide-y divide-[#1B1A17]/20 md:divide-y-0 md:divide-x md:divide-gray-200 bg-transparent rounded-[10px] md:rounded-none overflow-visible">
           
           {/* WHERE TO? */}
           <div className="relative group flex-1 h-full">
             <div 
               onClick={() => setOpenDropdown(openDropdown === 'location' ? null : 'location')}
-              className="px-2 md:px-6 py-4 md:py-3 h-full w-full flex justify-between items-center cursor-pointer hover:bg-black/5 transition-colors md:rounded-l-full"
+              className="px-4 md:px-6 py-2.5 md:py-3 h-full w-full flex justify-between items-center cursor-pointer hover:bg-black/5 transition-colors md:rounded-l-full font-sans"
             >
-              <div className="flex flex-col">
-                <span className="text-[10px] font-bold tracking-widest text-[#1B1A17] uppercase mb-1">{labels?.whereTo || 'WHERE TO?'}</span>
-                <span className="text-sm text-[#1B1A17]/70 font-medium truncate">{location || labels?.chooseLocation || 'Choose location'}</span>
+              <div className="flex flex-col items-start justify-center">
+                <span className="text-[10px] text-[#1B1A17] uppercase leading-tight">{labels?.whereTo || 'WHERE TO?'}</span>
+                <span className="text-sm text-[#1B1A17]/70 font-normal truncate leading-tight mt-[2px]">{location || labels?.chooseLocation || 'Choose location'}</span>
               </div>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1B1A17" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-60 hidden md:block lg:block sm:block xs:block"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1B1A17" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-60 block"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
             </div>
             
             {openDropdown === 'location' && (
-              <div className="absolute top-full left-0 mt-4 w-64 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 py-3 ml-2 md:ml-4">
+              <div className="absolute top-full left-0 mt-4 w-64 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 py-3 ml-2 md:ml-4 font-sans">
                 {['Bondi', 'Vaucluse', 'Paddington'].map(loc => (
                   <div 
                     key={loc}
@@ -239,22 +239,22 @@ export function SearchWidget({
               setCheckIn(inDate);
               setCheckOut(outDate);
             }}
-            className="relative"
-            triggerClassName="px-2 md:px-6 py-4 md:py-3 h-full flex flex-col justify-center relative group cursor-pointer hover:bg-black/5 transition-colors"
+            className="relative font-sans"
+            triggerClassName="px-4 md:px-6 py-2.5 md:py-3 h-full flex flex-col justify-center relative group cursor-pointer hover:bg-black/5 transition-colors"
             customTrigger={
               <div 
                 onClick={() => setOpenDropdown(null)}
-                className="flex w-full px-2 md:px-6 py-4 md:py-3 h-full justify-between items-center group cursor-pointer hover:bg-black/5 transition-colors"
+                className="flex w-full px-4 md:px-6 py-2.5 md:py-3 h-full justify-between items-center group cursor-pointer hover:bg-black/5 transition-colors font-sans"
               >
-                <div className="flex flex-col">
-                  <span className="text-[10px] font-bold tracking-widest text-[#1B1A17] uppercase mb-1">{labels?.dates || 'DATES'}</span>
-                  <span className="text-sm text-[#1B1A17]/70 font-light truncate">
+                <div className="flex flex-col items-start justify-center">
+                  <span className="text-[10px] text-[#1B1A17] uppercase leading-tight">{labels?.dates || 'DATES'}</span>
+                  <span className="text-sm text-[#1B1A17]/70 font-normal truncate leading-tight mt-[2px]">
                     {checkIn ? `${checkIn}${checkOut ? ` - ${checkOut}` : ' - Add Date'}` : (
                       <span>{labels?.addDates || 'Add dates'}</span>
                     )}
                   </span>
                 </div>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1B1A17" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-60 hidden md:block lg:block sm:block xs:block"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1B1A17" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-60 block"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
               </div>
             }
           />
@@ -268,22 +268,22 @@ export function SearchWidget({
             onChangeChildren={setChildren}
             onChangeInfants={setInfants}
             onChangePets={setPets}
-            className="relative"
-            triggerClassName="px-2 md:px-6 py-4 md:py-3 h-full flex flex-col justify-center relative group cursor-pointer hover:bg-black/5 transition-colors"
+            className="relative border-b border-[#1B1A17]/20 md:border-b-0 font-sans"
+            triggerClassName="px-4 md:px-6 py-2.5 md:py-3 h-full flex flex-col justify-center relative group cursor-pointer hover:bg-black/5 transition-colors"
             customTrigger={
               <div 
                 onClick={() => setOpenDropdown(null)}
-                className="flex w-full px-2 md:px-6 py-4 md:py-3 h-full justify-between items-center group cursor-pointer hover:bg-black/5 transition-colors md:rounded-r-full"
+                className="flex w-full px-4 md:px-6 py-2.5 md:py-3 h-full justify-between items-center group cursor-pointer hover:bg-black/5 transition-colors md:rounded-r-full font-sans"
               >
-                <div className="flex flex-col">
-                  <span className="text-[10px] font-bold tracking-widest text-[#1B1A17] uppercase mb-1">{labels?.guests || 'GUESTS'}</span>
-                  <span className="text-sm text-[#1B1A17]/70 font-light truncate">
+                <div className="flex flex-col items-start justify-center">
+                  <span className="text-[10px] text-[#1B1A17] uppercase leading-tight">{labels?.guests || 'GUESTS'}</span>
+                  <span className="text-sm text-[#1B1A17]/70 font-normal truncate leading-tight mt-[2px]">
                     {adults + children > 0 || infants > 0 || pets > 0 
                       ? `${adults + children} ${adults + children === 1 ? 'guest' : 'guests'}` + (infants ? `, ${infants} inf` : '') + (pets ? `, ${pets} pets` : '')
                       : (<span>{labels?.addGuests || 'Add guests'}</span>)}
                   </span>
                 </div>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1B1A17" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-60 hidden md:block lg:block sm:block xs:block"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1B1A17" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-60 block"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
               </div>
             }
           />
@@ -292,7 +292,7 @@ export function SearchWidget({
         <button 
           onClick={() => handleSearch('search')}
           disabled={isPending}
-          className="bg-[#C3BA8D] text-black px-8 py-4 md:py-0 md:h-[60px] md:min-w-[140px] rounded-full font-medium tracking-widest uppercase text-sm hover:opacity-90 transition-opacity whitespace-nowrap disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 w-full md:w-auto md:ml-2 shadow-sm"
+          className="bg-[#C3BA8D] text-black px-8 h-[56px] md:h-[60px] md:min-w-[140px] rounded-full font-sans font-normal normal-case tracking-normal md:tracking-widest md:uppercase text-sm hover:opacity-90 transition-opacity whitespace-nowrap disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 w-full md:w-auto md:ml-2 shadow-sm"
         >
           {isPending && pendingAction === 'search' ? (
             <>
@@ -304,7 +304,9 @@ export function SearchWidget({
             </>
           ) : (
             <>
-              Search <span className="ml-1">→</span>
+              Search 
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="md:hidden"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>
+              <span className="hidden md:inline ml-1">→</span>
             </>
           )}
         </button>

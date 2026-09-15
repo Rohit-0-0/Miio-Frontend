@@ -20,25 +20,22 @@ export function FeaturedProperties({ properties, config }: FeaturedPropertiesPro
   const ctaLink = config.ctaLink || HOME_DEFAULTS.editorialStatement.cta.href;
 
   return (
-    <div className="flex flex-col gap-[32px]">
-      <div className="flex flex-row justify-between items-end gap-8">
-        <SectionHeader 
-            title={title} 
-            subtitle={config.subtitle} 
-            align="left" 
-          />
+    <div className="flex flex-col gap-[16px] md:gap-[32px]">
+      <div className="flex flex-row justify-between items-center px-4 md:px-0">
+        <h2 className="text-[24px] font-serif font-bold text-[#1B1A17] m-0 leading-tight">
+          {title}
+        </h2>
           
-          {ctaText && (
-            <div className="pb-2 shrink-0">
-              <Link
-                href={ctaLink}
-                className="font-sans text-[11px] md:text-sm font-medium tracking-widest text-[#1B1A17] hover:opacity-70 transition-all uppercase"
-              >
-                {ctaText}
-              </Link>
-            </div>
-          )}
-        </div>
+        {ctaText && (
+          <Link
+            href={ctaLink}
+            className="font-sans text-[13px] font-normal text-[#5F4E44] hover:opacity-70 transition-all flex items-center gap-1"
+          >
+            {ctaText}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>
+          </Link>
+        )}
+      </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[32px]">
           {properties.map((property: any) => {
@@ -73,7 +70,7 @@ export function FeaturedProperties({ properties, config }: FeaturedPropertiesPro
                 price={price}
                 priceLabel={priceLabel}
                 coverImage={image as any}
-                imageAspectRatio="aspect-[3/4]"
+                imageAspectRatio="aspect-[35/46]"
               />
             );
           })}

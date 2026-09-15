@@ -115,7 +115,7 @@ export function TrustEditor({ initialData, onSave, onDirtyChange }: TrustEditorP
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Review Count</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Review Text (e.g. 300+ reviews)</label>
           <input 
             className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" 
             value={data.reviewCount} 

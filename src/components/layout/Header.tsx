@@ -39,7 +39,7 @@ export function Header() {
       {/* Utility Bar */}
       <div className="w-full bg-[#241D19] text-[#F8F5EF]">
         <Container>
-          <div className="flex justify-center md:justify-end items-center h-10 space-x-6 text-[10px] md:text-xs font-semibold tracking-widest uppercase">
+          <div className="flex justify-center md:justify-end items-center h-8 md:h-10 space-x-6 text-[10px] md:text-xs font-semibold tracking-widest uppercase">
             <Link href="/login" className="hover:text-white transition-colors">Guest Login</Link>
             <Link href="/partner-with-us" className="hover:text-white transition-colors">Partner With Us</Link>
           </div>
@@ -47,7 +47,7 @@ export function Header() {
       </div>
 
       <Container>
-        <div className="flex h-[88px] items-center justify-between">
+        <div className="flex h-[56px] md:h-[88px] items-center justify-between">
           <Logo />
           
           <div className="flex items-center space-x-8">
