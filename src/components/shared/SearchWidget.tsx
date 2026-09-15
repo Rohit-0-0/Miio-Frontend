@@ -242,7 +242,10 @@ export function SearchWidget({
             className="relative"
             triggerClassName="px-2 md:px-6 py-4 md:py-3 h-full flex flex-col justify-center relative group cursor-pointer hover:bg-black/5 transition-colors"
             customTrigger={
-              <div className="flex w-full px-2 md:px-6 py-4 md:py-3 h-full justify-between items-center group cursor-pointer hover:bg-black/5 transition-colors">
+              <div 
+                onClick={() => setOpenDropdown(null)}
+                className="flex w-full px-2 md:px-6 py-4 md:py-3 h-full justify-between items-center group cursor-pointer hover:bg-black/5 transition-colors"
+              >
                 <div className="flex flex-col">
                   <span className="text-[10px] font-bold tracking-widest text-[#1B1A17] uppercase mb-1">{labels?.dates || 'DATES'}</span>
                   <span className="text-sm text-[#1B1A17]/70 font-light truncate">
@@ -268,7 +271,10 @@ export function SearchWidget({
             className="relative"
             triggerClassName="px-2 md:px-6 py-4 md:py-3 h-full flex flex-col justify-center relative group cursor-pointer hover:bg-black/5 transition-colors"
             customTrigger={
-              <div className="flex w-full px-2 md:px-6 py-4 md:py-3 h-full justify-between items-center group cursor-pointer hover:bg-black/5 transition-colors md:rounded-r-full">
+              <div 
+                onClick={() => setOpenDropdown(null)}
+                className="flex w-full px-2 md:px-6 py-4 md:py-3 h-full justify-between items-center group cursor-pointer hover:bg-black/5 transition-colors md:rounded-r-full"
+              >
                 <div className="flex flex-col">
                   <span className="text-[10px] font-bold tracking-widest text-[#1B1A17] uppercase mb-1">{labels?.guests || 'GUESTS'}</span>
                   <span className="text-sm text-[#1B1A17]/70 font-light truncate">
