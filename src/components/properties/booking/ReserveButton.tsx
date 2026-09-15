@@ -19,8 +19,8 @@ export function ReserveButton({
       onClick={onClick}
       className={`w-full font-medium py-3.5 px-6 rounded-full transition-opacity flex justify-center items-center text-[15px] ${
         disabled
-          ? 'bg-[#C2B991]/50 text-white/70 cursor-not-allowed'
-          : 'bg-[#C2B991] text-white hover:opacity-90'
+          ? 'bg-[#C3BA8D]/50 text-white/70 cursor-not-allowed'
+          : 'bg-[#C3BA8D] text-white hover:opacity-90'
       }`}
     >
       {isLoading && (

@@ -292,7 +292,7 @@ export function SearchWidget({
         <button 
           onClick={() => handleSearch('search')}
           disabled={isPending}
-          className="bg-[#949479] text-white px-8 py-4 md:py-0 md:h-[60px] md:min-w-[140px] rounded-full font-medium tracking-widest uppercase text-sm hover:opacity-90 transition-opacity whitespace-nowrap disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 w-full md:w-auto md:ml-2 shadow-sm"
+          className="bg-[#C3BA8D] text-white px-8 py-4 md:py-0 md:h-[60px] md:min-w-[140px] rounded-full font-medium tracking-widest uppercase text-sm hover:opacity-90 transition-opacity whitespace-nowrap disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 w-full md:w-auto md:ml-2 shadow-sm"
         >
           {isPending && pendingAction === 'search' ? (
             <>
