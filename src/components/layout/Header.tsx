@@ -56,7 +56,7 @@ export function Header() {
             <div className="hidden md:block">
               <Link
                 href={ROUTES.PROPERTIES}
-                className="inline-flex items-center justify-center rounded-full px-8 py-3 text-sm font-semibold tracking-widest uppercase transition-colors hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 bg-[#C3BA8D] text-white focus-visible:ring-[#C3BA8D]"
+                className="inline-flex items-center justify-center rounded-full px-8 py-3 text-sm font-semibold tracking-widest uppercase transition-colors hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 bg-[#C3BA8D] text-black focus-visible:ring-[#C3BA8D]"
               >
                 Reserve
               </Link>
