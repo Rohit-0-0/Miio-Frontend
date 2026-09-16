@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import Link from 'next/link';
 import { HeroSection } from '@/types/homepage';
 import { SearchWidget } from '@/components/shared/SearchWidget';
@@ -7,15 +8,17 @@ import { HOME_DEFAULTS } from '@/lib/defaults/home';
 import { CrossfadeCarousel } from '@/components/shared/CrossfadeCarousel';
 
 export function Hero({ hero }: { hero: HeroSection }) {
-  let resolvedImages: any[] = (hero?.images || []).map((img: any) => ({
-    assetId: img.assetId || img.asset?._ref || img._ref || '',
-    alt: img.alt || hero.title,
-  }));
+  const resolvedImages = React.useMemo(() => {
+    let images: any[] = (hero?.images || []).map((img: any) => ({
+      assetId: img.assetId || img.asset?._ref || img._ref || '',
+      alt: img.alt || hero.title,
+    }));
 
-  // Provide the original default fallback to prevent black background
-  if (resolvedImages.length === 0) {
-    resolvedImages = [HOME_DEFAULTS.hero.backgroundImage];
-  }
+    if (images.length === 0) {
+      images = [HOME_DEFAULTS.hero.backgroundImage];
+    }
+    return images;
+  }, [hero]);
 
   if (!hero) return null;
 

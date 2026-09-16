@@ -33,5 +33,5 @@ export function buildImageUrl(assetId?: string | null): string | null {
     filename = filename.substring(0, lastDashIndex) + '.' + filename.substring(lastDashIndex + 1);
   }
 
-  return `https://cdn.sanity.io/images/${projectId}/${dataset}/${filename}`;
+  return `https://cdn.sanity.io/images/${projectId}/${dataset}/${filename}?auto=format&w=1080&q=75`;
 }
