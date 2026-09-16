@@ -35,19 +35,13 @@ export function AppImage({ image, alt, fallbackAlt = 'Image', className = '', ..
       className={`relative overflow-hidden ${props.fill ? 'w-full h-full' : ''} ${className}`}
       suppressHydrationWarning
     >
-      {isLoading && (
-        <div className="absolute inset-0 animate-shimmer z-10" />
-      )}
+
       <Image
         src={url}
         alt={finalAlt}
-        className={`transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'} ${props.fill ? 'object-cover' : ''}`}
-        onLoad={() => setIsLoading(false)}
-        onError={() => {
-          setError(true);
-          setIsLoading(false);
-        }}
-        unoptimized={url.includes('guesty.com')}
+        className={props.fill ? 'object-cover' : ''}
+        onError={() => setError(true)}
+        unoptimized={true}
         {...props}
       />
     </div>
