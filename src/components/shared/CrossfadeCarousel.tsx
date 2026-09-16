@@ -9,13 +9,15 @@ interface CrossfadeCarouselProps {
   alt?: string;
   intervalMs?: number;
   className?: string;
+  priority?: boolean;
 }
 
 export function CrossfadeCarousel({ 
   images, 
   alt = 'Image', 
   intervalMs = 8000,
-  className = ''
+  className = '',
+  priority = false
 }: CrossfadeCarouselProps) {
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -39,6 +41,7 @@ export function CrossfadeCarousel({
           image={images[0]} 
           alt={alt}
           fill
+          priority={priority}
           className="object-cover"
         />
       </div>
@@ -57,6 +60,7 @@ export function CrossfadeCarousel({
             image={img} 
             alt={alt}
             fill
+            priority={priority && index === 0}
             className="object-cover animate-in fade-in zoom-in-105 duration-[2000ms] ease-out fill-mode-both"
           />
         </div>

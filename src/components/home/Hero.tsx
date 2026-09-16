@@ -36,6 +36,7 @@ export function Hero({ hero }: { hero: HeroSection }) {
           <CrossfadeCarousel 
             images={resolvedImages} 
             alt={hero.backgroundAlt || title} 
+            priority={true}
           />
         </div>
 

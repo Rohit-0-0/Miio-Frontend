@@ -29,6 +29,7 @@ export function Locations({ locations }: { locations: LocationsSection }) {
                     image={location.image}
                     alt={location.name}
                     fill
+                    priority={true}
                     className="object-cover transition-transform duration-[520ms] ease-out group-hover:scale-[1.03]"
                   />
                 ) : (
