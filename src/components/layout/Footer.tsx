@@ -16,7 +16,7 @@ export async function Footer() {
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
-      <div className="max-w-[1440px] mx-auto px-5 md:px-[188px] w-full">
+      <div className="max-w-[1440px] mx-auto px-5 md:px-10 xl:px-[188px] w-full">
         
         {/* === MOBILE LAYOUT === */}
         <div className="flex md:hidden flex-col gap-[38px] w-full">

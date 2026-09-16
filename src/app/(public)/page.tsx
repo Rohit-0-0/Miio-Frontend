@@ -53,7 +53,7 @@ export default async function HomePage() {
       {homepage.trust && <Trust trust={homepage.trust} />}
       
       <section className="w-full bg-[#FEF6EE] pt-8 md:pt-[64px] pb-16 md:pb-[100px]">
-        <div className="max-w-[1440px] mx-auto px-4 md:px-[188px] flex flex-col">
+        <div className="max-w-[1440px] mx-auto px-5 md:px-10 xl:px-[188px] flex flex-col">
           {homepage.featuredProperties && (
             <Suspense 
               fallback={
@@ -72,7 +72,7 @@ export default async function HomePage() {
 
       {homepage.editorialStatement && (
         <section className="w-full bg-[#E1DBC3] py-[40px] md:py-[64px]">
-          <div className="max-w-[1440px] mx-auto px-5 md:px-[188px]">
+          <div className="max-w-[1440px] mx-auto px-5 md:px-10 xl:px-[188px]">
             <EditorialStatement statement={homepage.editorialStatement} />
           </div>
         </section>
@@ -89,7 +89,7 @@ export default async function HomePage() {
         <Suspense
           fallback={
             <section className="bg-white pb-24 md:pb-32">
-              <div className="max-w-[1440px] mx-auto px-6 md:px-10 lg:px-16">
+              <div className="max-w-[1440px] mx-auto px-5 md:px-10 xl:px-[188px]">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   {Array.from({ length: 3 }).map((_, i) => (
                     <JournalCardSkeleton key={i} />

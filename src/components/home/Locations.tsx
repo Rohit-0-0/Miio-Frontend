@@ -11,7 +11,7 @@ export function Locations({ locations }: { locations: LocationsSection }) {
 
   return (
     <section className="bg-[#FEF6EE] py-[40px] md:py-[64px]">
-      <div className="max-w-[1440px] mx-auto px-5 md:px-[188px] flex flex-col gap-[24px] md:gap-[32px]">
+      <div className="max-w-[1440px] mx-auto px-5 md:px-10 xl:px-[188px] flex flex-col gap-[24px] md:gap-[32px]">
         <h2 className="text-[24px] md:text-[36px] font-serif text-[#1B1A17] text-center md:text-left leading-tight">
           {heading}
         </h2>

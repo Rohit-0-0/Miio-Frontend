@@ -15,7 +15,7 @@ export function JournalPreview({ journal, articles = [] }: JournalPreviewProps) 
 
   return (
     <section className="bg-[#FEF6EE] py-[65px]">
-      <div className="max-w-[1440px] mx-auto px-4 md:px-[188px] flex flex-col space-y-[32px]">
+      <div className="max-w-[1440px] mx-auto px-5 md:px-10 xl:px-[188px] flex flex-col space-y-[32px]">
         <h2 className="text-[24px] font-serif font-bold text-[#241D19] text-left">
           {heading}
         </h2>

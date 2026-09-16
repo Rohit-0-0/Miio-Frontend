@@ -32,7 +32,7 @@ export function FinalCTA({
 
   return (
     <section className={sectionClassName}>
-      <div className="max-w-[1440px] mx-auto px-5 md:px-[188px] flex flex-col items-center text-center gap-[16px] md:gap-[24px]">
+      <div className="max-w-[1440px] mx-auto px-5 md:px-10 xl:px-[188px] flex flex-col items-center text-center gap-[16px] md:gap-[24px]">
         <h2 className="text-[24px] md:text-[44px] font-serif font-normal text-[#241D19] leading-[108%] m-0">
           {heading}
         </h2>

@@ -25,7 +25,7 @@ function TestimonialCard({ item }: { item: any }) {
   const isLong = item.quote && item.quote.length > 130;
 
   return (
-    <article className="bg-[#FEF6EE] rounded-2xl p-7 md:p-10 shadow-[0_4px_24px_rgba(0,0,0,0.06)] flex flex-col justify-between gap-8 h-full min-h-[280px]">
+    <article className="bg-[#FEF6EE] rounded-[10px] p-6 md:p-8 shadow-[0_4px_24px_rgba(0,0,0,0.06)] flex flex-col justify-between gap-8 h-full min-h-[280px]">
       <div className="flex flex-col gap-5">
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-0.5 text-[#241D19]">
@@ -99,7 +99,7 @@ export function Testimonials({ testimonials }: { testimonials: TestimonialsSecti
 
   return (
     <section className="w-full bg-[#E1DBC3] py-14 md:py-[72px]">
-      <div className="max-w-[1440px] mx-auto px-4 md:px-[188px]">
+      <div className="max-w-[1440px] mx-auto px-5 md:px-10 xl:px-[188px]">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 items-start">
           {items.map((item, index) => (
             <TestimonialCard key={`${item.author}-${index}`} item={item} />

@@ -73,12 +73,12 @@ export function StayBenefits({ benefits }: { benefits: StayBenefitsSection }) {
         </div>
       )}
 
-      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 md:px-[188px]">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[40px]">
+      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-5 md:px-10 xl:px-[188px]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[24px]">
           {benefits.items.map((item, index) => (
             <div
               key={index}
-              className="bg-[#FEF6EE] p-8 md:p-10 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] flex flex-col items-center text-center gap-5"
+              className="bg-[#FEF6EE] p-6 md:p-8 rounded-[10px] shadow-[0_4px_24px_rgba(0,0,0,0.06)] flex flex-col items-center text-center gap-4 h-full"
             >
               {(item.iconImage || item.icon) && (
                 <BenefitIcon
@@ -88,8 +88,8 @@ export function StayBenefits({ benefits }: { benefits: StayBenefitsSection }) {
                 />
               )}
 
-              <div className="flex flex-col gap-3">
-                <h3 className="text-[17px] font-serif text-[#241D19] leading-snug">
+              <div className="flex flex-col gap-2 mt-2">
+                <h3 className="text-[15px] font-sans font-medium text-[#241D19] leading-snug">
                   {item.title}
                 </h3>
                 <p className="font-sans text-[13px] font-normal text-[#5F4E44] leading-relaxed">
