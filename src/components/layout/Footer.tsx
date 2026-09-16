@@ -53,7 +53,7 @@ export async function Footer() {
                   <ul className="flex flex-col gap-[12px]">
                     {allLinks.map((link: any, lidx: number) => (
                       <li key={lidx}>
-                        <Link href={link.href || '#'} className="font-sans text-[14px] text-white hover:opacity-80 transition-opacity">
+                        <Link href={link.href || '#'} className="font-sans text-[14px] leading-[18px] text-white hover:opacity-80 transition-opacity">
                           {link.label}
                         </Link>
                       </li>
@@ -63,13 +63,13 @@ export async function Footer() {
               }
               return (
                 <ul className="flex flex-col gap-[12px]">
-                  <li><Link href="/sitemap" className="font-sans text-[14px] text-white hover:opacity-80 transition-opacity">Site map</Link></li>
-                  <li><Link href="/stays" className="font-sans text-[14px] text-white hover:opacity-80 transition-opacity">Stays</Link></li>
-                  <li><Link href="/locations" className="font-sans text-[14px] text-white hover:opacity-80 transition-opacity">Locations</Link></li>
-                  <li><Link href="/journal" className="font-sans text-[14px] text-white hover:opacity-80 transition-opacity">Journal</Link></li>
-                  <li><Link href="/about" className="font-sans text-[14px] text-white hover:opacity-80 transition-opacity">About</Link></li>
-                  <li><Link href="/owners" className="font-sans text-[14px] text-white hover:opacity-80 transition-opacity">Owners</Link></li>
-                  <li><Link href="/partner" className="font-sans text-[14px] text-white hover:opacity-80 transition-opacity">Partner With Us</Link></li>
+                  <li><Link href="/sitemap" className="font-sans text-[14px] leading-[18px] text-white hover:opacity-80 transition-opacity">Site map</Link></li>
+                  <li><Link href="/stays" className="font-sans text-[14px] leading-[18px] text-white hover:opacity-80 transition-opacity">Stays</Link></li>
+                  <li><Link href="/locations" className="font-sans text-[14px] leading-[18px] text-white hover:opacity-80 transition-opacity">Locations</Link></li>
+                  <li><Link href="/journal" className="font-sans text-[14px] leading-[18px] text-white hover:opacity-80 transition-opacity">Journal</Link></li>
+                  <li><Link href="/about" className="font-sans text-[14px] leading-[18px] text-white hover:opacity-80 transition-opacity">About</Link></li>
+                  <li><Link href="/owners" className="font-sans text-[14px] leading-[18px] text-white hover:opacity-80 transition-opacity">Owners</Link></li>
+                  <li><Link href="/partner" className="font-sans text-[14px] leading-[18px] text-white hover:opacity-80 transition-opacity">Partner With Us</Link></li>
                 </ul>
               );
             })()}
@@ -91,7 +91,7 @@ export async function Footer() {
             <div key={`empty-tag-${i}`} className="col-span-1"></div>
           ))}
 
-          {/* Row 2: Links (Col 1 & 2) and Newsletter (Col 4-6) */}
+          {/* Row 2: Links (Col 1-3) and Newsletter (Col 4-6) */}
           {(() => {
             const allLinks = homepage?.footerColumns?.flatMap((col: any) => col.links) || [];
             const hasLinks = allLinks.length > 0;
@@ -107,38 +107,32 @@ export async function Footer() {
               { label: 'Partner With Us', href: '/partner' }
             ];
 
-            const col1 = hasLinks ? allLinks.slice(0, Math.ceil(allLinks.length / 2)) : fallbackCol1;
-            const col2 = hasLinks ? allLinks.slice(Math.ceil(allLinks.length / 2)) : fallbackCol2;
+            const col1 = hasLinks ? allLinks.slice(0, 5) : fallbackCol1;
+            const col2 = hasLinks ? allLinks.slice(5) : fallbackCol2;
 
             return (
-              <>
+              <div className="col-span-3 flex gap-[64px] justify-start">
                 {/* Link Column 1 */}
-                <div className="col-span-1 flex justify-start">
-                  <ul className="flex flex-col gap-[16px]">
-                    {col1.map((link: any, i: number) => (
-                      <li key={i}>
-                        <Link href={link.href || '#'} className="font-sans text-[14px] text-white hover:opacity-80 transition-opacity">
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                <ul className="flex flex-col gap-[12px]">
+                  {col1.map((link: any, i: number) => (
+                    <li key={i}>
+                      <Link href={link.href || '#'} className="font-sans text-[14px] leading-[18px] text-white hover:opacity-80 transition-opacity whitespace-nowrap">
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
                 {/* Link Column 2 */}
-                <div className="col-span-1 flex justify-start">
-                  <ul className="flex flex-col gap-[16px]">
-                    {col2.map((link: any, i: number) => (
-                      <li key={i}>
-                        <Link href={link.href || '#'} className="font-sans text-[14px] text-white hover:opacity-80 transition-opacity">
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                {/* Empty Col 3 */}
-                <div className="col-span-1"></div>
-              </>
+                <ul className="flex flex-col gap-[12px]">
+                  {col2.map((link: any, i: number) => (
+                    <li key={i}>
+                      <Link href={link.href || '#'} className="font-sans text-[14px] leading-[18px] text-white hover:opacity-80 transition-opacity whitespace-nowrap">
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             );
           })()}
 
