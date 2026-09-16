@@ -26,27 +26,27 @@ export function FinalCTA({
 
   // Default bg for Home / Properties. Pass `className` to override on a single page.
   const sectionClassName = [
-    'py-[60px] md:py-[120px]',
+    'py-[40px] md:py-[120px]',
     className || 'bg-[#E1DBC3]',
   ].join(' ');
 
   return (
     <section className={sectionClassName}>
-      <div className="max-w-[1440px] mx-auto px-4 md:px-[188px] flex flex-col items-center text-center space-y-6">
-        <h2 className="text-4xl md:text-[44px] font-serif text-[#1B1A17] leading-tight">
+      <div className="max-w-[1440px] mx-auto px-5 md:px-[188px] flex flex-col items-center text-center gap-[16px] md:gap-[24px]">
+        <h2 className="text-[24px] md:text-[44px] font-serif font-normal text-[#241D19] leading-[108%] m-0">
           {heading}
         </h2>
 
         {description && (
-          <p className="font-sans text-base md:text-[17px] font-light text-[#1B1A17]/80 max-w-2xl leading-relaxed">
+          <p className="font-sans text-[14px] md:text-[17px] font-normal text-[#5F4E44] max-w-2xl leading-[140%] m-0 px-2 md:px-0">
             {description}
           </p>
         )}
 
-        <div className="pt-6">
+        <div>
           <Link
             href={buttonLink}
-            className="font-sans inline-flex items-center justify-center bg-[#1B1A17] text-white px-8 py-3.5 text-[15px] font-medium transition-colors hover:bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1B1A17] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FEF6EE] rounded-full"
+            className="font-sans inline-flex items-center justify-center bg-[#241D19] text-[#FEF6EE] px-[32px] py-[16px] text-[14px] font-medium transition-colors hover:bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#241D19] focus-visible:ring-offset-2 focus-visible:ring-offset-[#E1DBC3] rounded-full"
           >
             {buttonText}
           </Link>

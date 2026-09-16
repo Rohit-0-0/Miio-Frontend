@@ -3,9 +3,9 @@ import { Footer } from './Footer';
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="w-full">
       <Header />
-      <main className="flex-1 w-full flex flex-col">{children}</main>
+      <main className="w-full">{children}</main>
       <Footer />
     </div>
   );

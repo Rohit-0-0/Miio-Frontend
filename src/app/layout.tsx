@@ -59,7 +59,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${playfair.variable} ${montserrat.variable} ${cormorant.variable} ${instrumentSans.variable} h-full antialiased`}
+      className={`${inter.variable} ${playfair.variable} ${montserrat.variable} ${cormorant.variable} ${instrumentSans.variable} antialiased`}
     >
       <body className="font-sans text-gray-900 bg-white antialiased">
         <AuthProvider>
