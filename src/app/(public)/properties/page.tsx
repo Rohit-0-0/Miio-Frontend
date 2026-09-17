@@ -65,7 +65,7 @@ export default async function PropertiesPage({
 
   return (
     <div className="min-h-screen bg-[#FEF6EE]">
-      <section className="pt-10 pb-16 md:pb-24 px-4 md:px-[188px] mx-auto max-w-[1440px]">
+      <section className="pt-[48px] pb-16 md:pb-24 px-4 md:px-10 xl:px-[188px] mx-auto max-w-[1440px]">
         <BrowseHeader
           heading={generalSettings.heading}
           introText={generalSettings.introText}

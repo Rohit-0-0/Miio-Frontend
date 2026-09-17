@@ -31,16 +31,15 @@ export function LocationHighlights({ items }: { items?: LocationHighlightItem[] 
         return (
           <div key={item._key || index} className="flex items-center gap-3 w-full">
             <div
-              className="w-8 h-8 rounded-[16px] flex items-center justify-center shrink-0 overflow-hidden"
-              style={{ backgroundColor: '#99583D' }}
+              className={`w-8 h-8 rounded-[16px] flex items-center justify-center shrink-0 overflow-hidden ${item.icon ? '' : 'bg-[#99583D]'}`}
             >
               {item.icon ? (
-                <div className="relative w-4 h-4">
+                <div className="relative w-8 h-8">
                   <AppImage
                     image={item.icon}
                     alt=""
                     fill
-                    className="object-contain brightness-0 invert"
+                    className="object-contain"
                   />
                 </div>
               ) : (

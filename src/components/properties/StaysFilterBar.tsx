@@ -118,11 +118,11 @@ export function StaysFilterBar({ resultLabel }: StaysFilterBarProps) {
   return (
     <div
       ref={filterRef}
-      className={`flex flex-row items-center justify-between gap-4 mb-8 ${
+      className={`flex flex-col items-start md:flex-row md:items-center md:justify-between gap-4 mb-8 ${
         isPending ? 'opacity-70' : ''
       }`}
     >
-      <div className="flex flex-nowrap items-center gap-2 overflow-x-auto">
+      <div className="flex flex-wrap items-center gap-2 w-full">
         {/* Location */}
         <div className="relative">
           <button

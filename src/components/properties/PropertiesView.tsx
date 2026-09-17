@@ -81,6 +81,14 @@ export function PropertiesView({ properties, searchQueryString }: PropertiesView
           );
         })}
       </PropertyGrid>
+
+      {total > 0 && (
+        <div className="mt-12 flex justify-center">
+          <p className="text-[13px] text-[#7D7975] whitespace-nowrap">
+            {resultLabel}
+          </p>
+        </div>
+      )}
     </div>
   );
 }

@@ -147,11 +147,6 @@ export default async function LocationDetailPage({ params }: Props) {
         className="bg-[#FEF6EE]"
       />
 
-      <div className="py-8 flex justify-center md:hidden">
-        <Link href="/locations" className="text-[14px] text-[#5F4E44]">
-          Back to locations
-        </Link>
-      </div>
     </article>
   );
 }
