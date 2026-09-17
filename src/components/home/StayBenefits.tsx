@@ -39,9 +39,9 @@ function BenefitIcon({
         <Image
           src={src}
           alt={title || 'Benefit icon'}
-          width={20}
-          height={20}
-          className="object-contain brightness-0 invert"
+          width={40}
+          height={40}
+          className="w-full h-full object-contain"
           unoptimized
         />
       ) : icon ? (
@@ -78,7 +78,7 @@ export function StayBenefits({ benefits }: { benefits: StayBenefitsSection }) {
           {benefits.items.map((item, index) => (
             <div
               key={index}
-              className="bg-[#FEF6EE] p-6 md:p-8 rounded-[10px] shadow-[0_4px_24px_rgba(0,0,0,0.06)] flex flex-col items-center text-center gap-4 h-full"
+              className="bg-[#FEF6EE] px-4 py-8 md:px-5 md:py-8 rounded-[10px] shadow-[0_4px_24px_rgba(0,0,0,0.06)] flex flex-col items-center text-center gap-4 h-full"
             >
               {(item.iconImage || item.icon) && (
                 <BenefitIcon
@@ -88,7 +88,7 @@ export function StayBenefits({ benefits }: { benefits: StayBenefitsSection }) {
                 />
               )}
 
-              <div className="flex flex-col gap-2 mt-2">
+              <div className="flex flex-col gap-2 mt-2 w-full">
                 <h3 className="text-[15px] font-sans font-medium text-[#241D19] leading-snug">
                   {item.title}
                 </h3>
