@@ -11,18 +11,7 @@ export const navigation = defineType({
       type: 'array',
       of: [{ type: 'navigationItem' }]
     }),
-    defineField({
-      name: 'footerNav',
-      title: 'Footer Navigation',
-      type: 'array',
-      of: [{ type: 'navigationItem' }]
-    }),
-    defineField({
-      name: 'legalNav',
-      title: 'Legal Navigation',
-      type: 'array',
-      of: [{ type: 'navigationItem' }]
-    })
+
   ],
   // __experimental_actions: ['update', 'publish'],
   preview: {

@@ -5,13 +5,19 @@ import { usePathname } from 'next/navigation';
 import { NAVIGATION } from '@/constants/routes';
 import { useAuth } from '@/components/providers/AuthProvider';
 
-export function DesktopNav() {
+interface DesktopNavProps {
+  navItems?: { label: string; href: string; isExternal?: boolean }[];
+}
+
+export function DesktopNav({ navItems }: DesktopNavProps = {}) {
   const { user, logout } = useAuth();
   const pathname = usePathname();
 
+  const itemsToRender = navItems && navItems.length > 0 ? navItems : NAVIGATION;
+
   return (
     <nav className="hidden md:flex items-center space-x-8" aria-label="Main Navigation">
-      {NAVIGATION.map((item) => {
+      {itemsToRender.map((item) => {
         // Active if exact match or if we are on a sub-route (e.g. /properties/123)
         const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
         
@@ -19,6 +25,8 @@ export function DesktopNav() {
           <Link
             key={item.href}
             href={item.href}
+            target={item.isExternal ? '_blank' : undefined}
+            rel={item.isExternal ? 'noopener noreferrer' : undefined}
             className={`text-sm font-medium text-current transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-2 rounded-sm py-1 border-b-2 ${
               isActive ? 'opacity-100 border-current' : 'opacity-80 hover:opacity-100 border-transparent hover:border-current/30'
             }`}

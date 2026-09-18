@@ -6,10 +6,16 @@ import Link from 'next/link';
 import { NAVIGATION, ROUTES } from '@/constants/routes';
 import { useAuth } from '@/components/providers/AuthProvider';
 
-export function MobileNav() {
+export interface MobileNavProps {
+  navItems?: { label: string; href: string; isExternal?: boolean }[];
+}
+
+export function MobileNav({ navItems }: MobileNavProps = {}) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const { user, logout } = useAuth();
+  
+  const itemsToRender = navItems && navItems.length > 0 ? navItems : NAVIGATION;
 
   // Lock body scroll when open
   useEffect(() => {
@@ -92,12 +98,14 @@ export function MobileNav() {
               className="flex-1 flex flex-col justify-center items-center space-y-8 p-8"
               ref={menuRef}
             >
-              {NAVIGATION.map((item, i) => (
+              {itemsToRender.map((item, i) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   onClick={() => setIsOpen(false)}
-                  className="text-4xl font-serif text-gray-900 tracking-wide hover:text-gray-600 transition-colors animate-in slide-in-from-bottom-4 fade-in duration-500"
+                  target={item.isExternal ? '_blank' : undefined}
+                  rel={item.isExternal ? 'noopener noreferrer' : undefined}
+                  className="text-4xl font-serif text-gray-900 tracking-wide hover:text-gray-600 transition-colors animate-in slide-in-from-bottom-4 fade-in duration-500 text-center"
                   style={{ animationDelay: `${i * 100}ms`, animationFillMode: 'both' }}
                 >
                   {item.label}

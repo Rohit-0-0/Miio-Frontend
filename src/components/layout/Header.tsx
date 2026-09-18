@@ -9,7 +9,12 @@ import { Logo } from './Logo';
 import { DesktopNav } from './DesktopNav';
 import { MobileNav } from './MobileNav';
 
-export function Header() {
+interface HeaderProps {
+  logo?: any;
+  navItems?: { label: string; href: string; isExternal?: boolean }[];
+}
+
+export function Header({ logo, navItems }: HeaderProps = {}) {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const isHomepage = pathname === ROUTES.HOME;
@@ -48,10 +53,10 @@ export function Header() {
 
       <Container>
         <div className="flex h-[56px] md:h-[88px] items-center justify-between">
-          <Logo />
+          <Logo image={logo} />
           
           <div className="flex items-center space-x-8">
-            <DesktopNav />
+            <DesktopNav navItems={navItems} />
             
             <div className="hidden md:block">
               <Link
@@ -62,7 +67,7 @@ export function Header() {
               </Link>
             </div>
             
-            <MobileNav />
+            <MobileNav navItems={navItems} />
           </div>
         </div>
       </Container>
