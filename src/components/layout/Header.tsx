@@ -1,9 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { ROUTES } from '@/constants/routes';
+import { ROUTES, NavItem } from '@/constants/routes';
 import { Container } from '@/components/ui/Container';
 import { Logo } from './Logo';
 import { DesktopNav } from './DesktopNav';
@@ -11,32 +9,11 @@ import { MobileNav } from './MobileNav';
 
 interface HeaderProps {
   logo?: any;
-  navItems?: { label: string; href: string; isExternal?: boolean }[];
+  navItems?: NavItem[];
 }
 
 export function Header({ logo, navItems }: HeaderProps = {}) {
-  const [scrolled, setScrolled] = useState(false);
-  const pathname = usePathname();
-  const isHomepage = pathname === ROUTES.HOME;
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 80) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    // Check initial position
-    handleScroll();
-
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   // The user requested the header nav to match Figma: bg #FEF6EE, border #E6E6E6, height 88px.
-  // We remove the transparent logic to ensure it matches the solid design.
   const headerClasses = 'sticky top-0 z-50 w-full bg-[#FEF6EE] text-[#1B1A17] transition-all duration-300 border-b border-[#E6E6E6]';
 
   return (

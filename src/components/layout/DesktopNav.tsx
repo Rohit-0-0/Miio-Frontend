@@ -2,18 +2,16 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { NAVIGATION } from '@/constants/routes';
-import { useAuth } from '@/components/providers/AuthProvider';
+import { NAVIGATION, NavItem } from '@/constants/routes';
 
 interface DesktopNavProps {
-  navItems?: { label: string; href: string; isExternal?: boolean }[];
+  navItems?: NavItem[];
 }
 
 export function DesktopNav({ navItems }: DesktopNavProps = {}) {
-  const { user, logout } = useAuth();
   const pathname = usePathname();
 
-  const itemsToRender = navItems && navItems.length > 0 ? navItems : NAVIGATION;
+  const itemsToRender: NavItem[] = navItems && navItems.length > 0 ? navItems : NAVIGATION;
 
   return (
     <nav className="hidden md:flex items-center space-x-8" aria-label="Main Navigation">

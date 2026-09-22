@@ -10,7 +10,13 @@ export const ROUTES = {
   ADMIN: '/admin',
 } as const;
 
-export const NAVIGATION = [
+export interface NavItem {
+  label: string;
+  href: string;
+  isExternal?: boolean;
+}
+
+export const NAVIGATION: NavItem[] = [
   { label: 'STAYS', href: ROUTES.PROPERTIES },
   { label: 'LOCATIONS', href: ROUTES.LOCATIONS },
   { label: 'JOURNAL', href: ROUTES.JOURNAL },
