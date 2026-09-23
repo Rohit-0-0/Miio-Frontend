@@ -1,6 +1,9 @@
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 import { getHomepage } from '@/lib/server/homepage';
+import { preload } from 'react-dom';
+import { buildImageUrl } from '@/lib/media/buildImageUrl';
+import { HOME_DEFAULTS } from '@/lib/defaults/home';
 import { Hero } from '@/components/home/Hero';
 import { EditorialStatement } from '@/components/home/EditorialStatement';
 import { Locations } from '@/components/home/Locations';
@@ -44,6 +47,20 @@ export default async function HomePage() {
     return (
       <div className="py-24 text-center">Homepage content unavailable.</div>
     );
+  }
+
+  // Preload the LCP Hero image right into the document <head> using React 18+ Server preloading
+  const images = homepage.hero?.images && homepage.hero.images.length > 0 
+    ? homepage.hero.images 
+    : [HOME_DEFAULTS.hero.backgroundImage];
+    
+  const firstImage = images[0];
+  const assetId = firstImage?.assetId || (firstImage as any)?.asset?._ref || (firstImage as any)?._ref;
+  if (assetId) {
+    const url = buildImageUrl(assetId);
+    if (url) {
+      preload(url, { as: 'image', fetchPriority: 'high' });
+    }
   }
 
   return (

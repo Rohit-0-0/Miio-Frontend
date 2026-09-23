@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation';
 import { getPropertyBySlug, getPropertyById } from '@/lib/server/property';
 import { LIFECYCLE_STATUS, PropertyDetails } from '@/types/property';
 import { Metadata } from 'next';
+import { preload } from 'react-dom';
+import { buildImageUrl } from '@/lib/media/buildImageUrl';
 import { staysPageService } from '@/services/stays-page.service';
 
 import { HeroGallery } from '@/components/properties/details/HeroGallery';
@@ -102,6 +104,18 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
 
   if (!property || !isPublished || !isVisible) {
     notFound();
+  }
+
+  // Preload the LCP Hero image right into the document <head> using React 18+ Server preloading
+  if (property.gallery && property.gallery.length > 0) {
+    const firstImage = property.gallery[0];
+    const assetId = firstImage.assetId || (firstImage as any).asset?._ref || (firstImage as any).asset?._id;
+    if (assetId) {
+      const url = buildImageUrl(assetId);
+      if (url) {
+        preload(url, { as: 'image', fetchPriority: 'high' });
+      }
+    }
   }
 
   const editorial = property.editorial;
