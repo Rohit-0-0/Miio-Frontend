@@ -42,6 +42,7 @@ export function AppImage({ image, alt, fallbackAlt = 'Image', className = '', ..
         onError={() => setError(true)}
         unoptimized={true}
         loading={props.priority ? "eager" : undefined}
+        fetchPriority={props.priority ? "high" : undefined}
         {...props}
       />
     </div>
