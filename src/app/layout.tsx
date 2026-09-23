@@ -3,7 +3,7 @@ import { Inter, Playfair_Display, Montserrat, Cormorant_Garamond, Instrument_San
 import './globals.css';
 import { siteConfig } from '@/config/site';
 import { AuthProvider } from '@/components/providers/AuthProvider';
-import { Toaster } from 'sonner';
+import { Toaster } from '@/components/ui/Toaster';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { env } from '@/config/env';
 

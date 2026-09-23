@@ -135,7 +135,7 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
   }
 
   return (
-    <article className="min-h-screen bg-[#FEF6EE] pb-0">
+    <article className="min-h-screen bg-[#FEF6EE]">
       <div className="max-w-[1440px] mx-auto px-4 md:px-[188px] pt-10 md:pt-10">
         <PropertyBackLink />
 
@@ -143,25 +143,76 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
           <HeroGallery images={property.gallery || []} />
         </div>
 
-        {/* Figma mobile: booking after amenity icons; desktop: sticky right column */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_345px] gap-8 lg:gap-10 items-start">
-          <div className="lg:col-start-1">
-            <PropertyHeader title={property.nickname || property.title} />
-            <QuickInfo
-              guests={property.maxGuests}
-              bedrooms={property.bedrooms}
-              bathrooms={property.bathrooms}
-              beds={property.beds}
+        {/* Content Row: Left Column (all content) + Right Column (sticky booking card) */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_345px] gap-8 lg:gap-14 items-start relative pb-16 md:pb-20">
+          {/* Left Column: contains all content sections so right column can stick across entire page */}
+          <div className="min-w-0 flex flex-col gap-10 md:gap-12">
+            <div>
+              <PropertyHeader title={property.nickname || property.title} />
+              <QuickInfo
+                guests={property.maxGuests}
+                bedrooms={property.bedrooms}
+                bathrooms={property.bathrooms}
+                beds={property.beds}
+              />
+
+              <AmenitiesSection
+                amenities={property.amenities}
+                featuredAmenityIds={editorial?.featuredAmenityIds}
+                variant="icons"
+              />
+            </div>
+
+            {/* Mobile Only: Inline booking card placed right after amenity icons as per Figma */}
+            <div className="lg:hidden">
+              <Suspense
+                fallback={
+                  <div className="bg-white border border-[#1B1A17]/10 rounded-xl p-6 h-[337px] animate-pulse" />
+                }
+              >
+                {actualGuestyId ? (
+                  <BookingCard 
+                    listingId={actualGuestyId} 
+                    paymentTrustImages={siteSettings?.paymentTrustImages} 
+                  />
+                ) : (
+                  <div className="bg-white border border-[#1B1A17]/10 rounded-xl p-6 text-[#7D7975]">
+                    Booking is unavailable for this property.
+                  </div>
+                )}
+              </Suspense>
+            </div>
+
+            <EditorialDescription
+              description={editorial?.description}
+              fallbackDescription={property.longDescription || property.shortDescription}
             />
+
+            <div className="hidden lg:block">
+              <MiioStandard standards={editorial?.miioStandard} />
+            </div>
+
+            <PropertyExperience experience={editorial?.experience} />
 
             <AmenitiesSection
               amenities={property.amenities}
               featuredAmenityIds={editorial?.featuredAmenityIds}
-              variant="icons"
+              variant="list"
             />
+
+            {(actualGuestyId || property.guestyId || property.id) && (
+              <PropertyReviews propertyId={actualGuestyId || property.guestyId || property.id} />
+            )}
+
+            <FAQSection faqs={editorial?.faq} />
+            
+            <div className="lg:hidden">
+              <MiioStandard standards={editorial?.miioStandard} />
+            </div>
           </div>
 
-          <div className="w-full lg:w-[345px] lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:sticky lg:top-28">
+          {/* Desktop Only: Sticky Right Column */}
+          <div className="hidden lg:block lg:sticky lg:top-[144px] self-start w-[345px] shrink-0">
             <Suspense
               fallback={
                 <div className="bg-white border border-[#1B1A17]/10 rounded-xl p-6 h-[337px] animate-pulse" />
@@ -171,6 +222,7 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
                 <BookingCard 
                   listingId={actualGuestyId} 
                   paymentTrustImages={siteSettings?.paymentTrustImages} 
+                  hideMobileSticky
                 />
               ) : (
                 <div className="bg-white border border-[#1B1A17]/10 rounded-xl p-6 text-[#7D7975]">
@@ -179,28 +231,6 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
               )}
             </Suspense>
           </div>
-
-          <div className="lg:col-start-1">
-            <EditorialDescription
-              description={editorial?.description}
-              fallbackDescription={property.longDescription || property.shortDescription}
-            />
-
-            <MiioStandard standards={editorial?.miioStandard} />
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-10 md:gap-12 mt-14 md:mt-16 pb-16 md:pb-20">
-          <PropertyExperience experience={editorial?.experience} />
-          <AmenitiesSection
-            amenities={property.amenities}
-            featuredAmenityIds={editorial?.featuredAmenityIds}
-            variant="list"
-          />
-          {(actualGuestyId || property.guestyId || property.id) && (
-            <PropertyReviews propertyId={actualGuestyId || property.guestyId || property.id} />
-          )}
-          <FAQSection faqs={editorial?.faq} />
         </div>
       </div>
 

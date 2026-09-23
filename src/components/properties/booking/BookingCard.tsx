@@ -16,6 +16,7 @@ import { buildImageUrl } from '@/lib/media/buildImageUrl';
 interface BookingCardProps {
   listingId: string;
   paymentTrustImages?: any[];
+  hideMobileSticky?: boolean;
 }
 
 function PaymentTrustRow({ images }: { images?: any[] }) {
@@ -51,7 +52,7 @@ function PaymentTrustRow({ images }: { images?: any[] }) {
   );
 }
 
-export function BookingCard({ listingId, paymentTrustImages }: BookingCardProps) {
+export function BookingCard({ listingId, paymentTrustImages, hideMobileSticky = false }: BookingCardProps) {
   const searchParams = useSearchParams();
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -151,12 +152,29 @@ export function BookingCard({ listingId, paymentTrustImages }: BookingCardProps)
 
   const reserveLabel =
     !checkIn || !checkOut
-      ? 'Select dates'
+      ? 'Check availability'
       : isLoading
         ? 'Checking...'
         : quote
           ? 'Book now'
           : 'Check availability';
+
+  const datesLabel = checkIn && checkOut ? `${checkIn} – ${checkOut}` : 'Select dates';
+
+  const ratePlanItem = quote?.rates?.ratePlans?.[0];
+  const money = ratePlanItem?.ratePlan?.money;
+  const currency = money?.currency || quote?.currency || '$';
+
+  let nightlyPrice = '';
+  if (ratePlanItem) {
+    const days = ratePlanItem.days || [];
+    if (days.length > 0) {
+      const rate = days[0].price || days[0].basePrice || 0;
+      if (typeof rate === 'number') {
+        nightlyPrice = `${currency}${rate.toFixed(0)}`;
+      }
+    }
+  }
 
   return (
     <>
@@ -201,6 +219,48 @@ export function BookingCard({ listingId, paymentTrustImages }: BookingCardProps)
         </BookingActions>
         <PaymentTrustRow images={paymentTrustImages} />
       </div>
+
+      {/* Mobile Sticky Checkout Bar */}
+      {!hideMobileSticky && (
+        <div className="fixed bottom-0 left-0 right-0 z-[100] bg-[#FEF6EE] sm:bg-white border-t border-[#1B1A17]/10 px-5 py-3.5 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] backdrop-blur-md lg:hidden flex items-center justify-between">
+          <div className="flex flex-col">
+            <div className="flex items-baseline gap-1">
+              <span className="text-[17px] font-semibold text-[#1B1A17]">
+                {isLoading ? (
+                  <span className="animate-pulse bg-[#EAE8E1] h-5 w-16 inline-block rounded" />
+                ) : nightlyPrice ? (
+                  `From ${nightlyPrice}`
+                ) : (
+                  'From $000'
+                )}
+              </span>
+              <span className="text-xs text-[#7D7975]">/ night</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }}
+              className="text-[12px] text-[#7D7975] underline font-medium text-left hover:text-[#1B1A17] transition-colors"
+            >
+              {datesLabel}
+            </button>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleBookNowClick}
+            disabled={isLoading || (!!checkIn && !!checkOut && !quote)}
+            className={`font-semibold py-2.5 px-6 rounded-full text-xs uppercase tracking-wider transition-all flex items-center justify-center ${
+              isLoading || (!!checkIn && !!checkOut && !quote)
+                ? 'bg-[#C3BA8D]/60 text-black/60 cursor-not-allowed'
+                : 'bg-[#C3BA8D] text-black hover:opacity-90 active:scale-95 shadow-md shadow-black/10'
+            }`}
+          >
+            {reserveLabel}
+          </button>
+        </div>
+      )}
 
       <CheckoutModal
         isOpen={isCheckoutOpen}

@@ -23,6 +23,7 @@ const nextConfig: NextConfig = {
   },
   // Prevent accidental jsdom pulls (e.g. isomorphic-dompurify) from breaking Netlify SSR
   serverExternalPackages: ['jsdom', 'isomorphic-dompurify'],
+  transpilePackages: ['sonner'],
 };
 
 export default nextConfig;
