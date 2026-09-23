@@ -43,8 +43,7 @@ export function Header({ logo, navItems }: HeaderProps = {}) {
                 Reserve
               </Link>
             </div>
-            
-            <MobileNav navItems={navItems} />
+            <MobileNav navItems={navItems} logo={logo} />
           </div>
         </div>
       </Container>

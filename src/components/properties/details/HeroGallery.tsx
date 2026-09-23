@@ -30,11 +30,6 @@ export function HeroGallery({ images }: HeroGalleryProps) {
           onClick={() => handleImageClick(0)}
         >
           <CrossfadeCarousel images={images} alt="Location Gallery Image" intervalMs={6000} />
-          {images.length > 1 && (
-            <div className="absolute bottom-4 right-4 bg-black/50 text-white text-[12px] px-3 py-1.5 rounded-full">
-              +{images.length - 1} more photos
-            </div>
-          )}
         </div>
       </section>
 
