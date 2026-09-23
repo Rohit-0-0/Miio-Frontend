@@ -29,7 +29,7 @@ export function HeroGallery({ images }: HeroGalleryProps) {
           className="block md:hidden h-[50vh] relative cursor-pointer overflow-hidden"
           onClick={() => handleImageClick(0)}
         >
-          <CrossfadeCarousel images={images} alt="Location Gallery Image" intervalMs={6000} />
+          <CrossfadeCarousel images={images} alt="Location Gallery Image" intervalMs={6000} priority={true} />
         </div>
       </section>
 

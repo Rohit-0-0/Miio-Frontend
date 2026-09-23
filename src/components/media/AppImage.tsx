@@ -35,13 +35,13 @@ export function AppImage({ image, alt, fallbackAlt = 'Image', className = '', ..
       className={`relative overflow-hidden ${props.fill ? 'w-full h-full' : ''} ${className}`}
       suppressHydrationWarning
     >
-
       <Image
         src={url}
         alt={finalAlt}
         className={props.fill ? 'object-cover' : ''}
         onError={() => setError(true)}
         unoptimized={true}
+        loading={props.priority ? "eager" : undefined}
         {...props}
       />
     </div>

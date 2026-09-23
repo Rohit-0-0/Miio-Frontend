@@ -30,6 +30,7 @@ export function GalleryGrid({ images, onImageClick }: GalleryGridProps) {
           image={mainImage}
           alt="Main Property Image"
           fill
+          priority={true}
           className="object-cover transition-transform duration-700 hover:scale-[1.02]"
           sizes="(max-width: 768px) 100vw, 66vw"
         />
@@ -51,6 +52,7 @@ export function GalleryGrid({ images, onImageClick }: GalleryGridProps) {
                   image={img}
                   alt={`Property Image ${i + 2}`}
                   fill
+                  priority={i === 0}
                   className="object-cover transition-transform duration-700 hover:scale-[1.02]"
                   sizes="33vw"
                 />
