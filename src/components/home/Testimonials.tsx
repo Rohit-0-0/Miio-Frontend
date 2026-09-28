@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
+
+import Link from 'next/link';
 import { TestimonialsSection } from '@/types/homepage';
 
 function sourceLabel(source?: string, location?: string) {
@@ -104,6 +106,11 @@ export function Testimonials({ testimonials }: { testimonials: TestimonialsSecti
           {items.map((item, index) => (
             <TestimonialCard key={`${item.author}-${index}`} item={item} />
           ))}
+        </div>
+        <div className="mt-5 flex justify-end">
+          <Link href="/reviews" className="font-sans font-normal text-[14px] leading-[1.4] text-[#5F4E44] hover:text-[#1B1A17] transition-colors">
+            Read all reviews &rarr;
+          </Link>
         </div>
       </div>
     </section>
