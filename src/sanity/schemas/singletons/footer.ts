@@ -27,16 +27,28 @@ export const footer = defineType({
       }
     }),
     defineField({
-      name: 'partnerTags',
-      title: 'Partner Tags',
-      type: 'array',
-      of: [{ type: 'string' }],
-      description: 'Tags displayed at the top of the footer (e.g. GUESTY, STRIPE).'
-    }),
-    defineField({
       name: 'copyright',
       title: 'Copyright Text',
       type: 'string',
+    }),
+    defineField({
+      name: 'partnerLogos',
+      title: 'Payment Trust Images (Footer)',
+      description: 'Upload the white versions of secure checkout and payment method logos here for the dark background Footer.',
+      type: 'array',
+      of: [
+        {
+          type: 'image',
+          options: { hotspot: true },
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Alternative text',
+            }
+          ]
+        }
+      ]
     })
   ],
   // __experimental_actions: ['update', 'publish'],

@@ -19,38 +19,7 @@ interface BookingCardProps {
   hideMobileSticky?: boolean;
 }
 
-function PaymentTrustRow({ images }: { images?: any[] }) {
-  if (images && images.length > 0) {
-    return (
-      <div className="mt-5 flex flex-wrap items-center justify-center gap-2 w-full">
-        {images.map((img: any, idx: number) => {
-          const src = buildImageUrl(img?.asset?._ref);
-          if (!src) return null;
-          return (
-            <div key={idx} className="flex justify-center" style={{ flex: '0 0 calc(20% - 0.4rem)' }}>
-              <img 
-                src={src} 
-                alt={img.alt || 'Payment Trust'} 
-                className="max-h-6 max-w-full object-contain" 
-              />
-            </div>
-          );
-        })}
-      </div>
-    );
-  }
-
-  return (
-    <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-[9px] tracking-[0.08em] uppercase text-[#7D7975] w-full">
-      <span className="font-medium shrink-0">Secure checkout</span>
-      <span className="opacity-40 shrink-0">·</span>
-      <span className="shrink-0">Apple Pay</span>
-      <span className="shrink-0">Amex</span>
-      <span className="shrink-0">Mastercard</span>
-      <span className="shrink-0">Visa</span>
-    </div>
-  );
-}
+import { PaymentLogos } from '@/components/layout/PaymentLogos';
 
 export function BookingCard({ listingId, paymentTrustImages, hideMobileSticky = false }: BookingCardProps) {
   const searchParams = useSearchParams();
@@ -217,7 +186,7 @@ export function BookingCard({ listingId, paymentTrustImages, hideMobileSticky = 
             label={reserveLabel}
           />
         </BookingActions>
-        <PaymentTrustRow images={paymentTrustImages} />
+        <PaymentLogos images={paymentTrustImages} />
       </div>
 
       {/* Mobile Sticky Checkout Bar */}

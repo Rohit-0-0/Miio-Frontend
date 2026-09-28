@@ -139,8 +139,8 @@ export interface HomepageData {
   finalCta?: FinalCtaSection;
   
   seo?: SeoSection;
-  footerLogos?: ImageAsset[];
   footerTags?: string[];
+  footerLogos?: ImageAsset[];
   footerColumns?: {
     title: string;
     links: { label: string; href: string }[];

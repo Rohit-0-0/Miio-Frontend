@@ -16,50 +16,9 @@ export const siteSettings = defineType({
       type: 'customImage',
     }),
     defineField({
-      name: 'contact',
-      title: 'Contact Information',
-      type: 'object',
-      fields: [
-        { name: 'email', title: 'Email', type: 'string' },
-        { name: 'phone', title: 'Phone', type: 'string' },
-        { name: 'address', title: 'Address', type: 'text' }
-      ],
-      preview: {
-        select: { title: 'email' },
-        prepare({ title }) {
-          return { title: title || 'Contact Information', subtitle: 'Section Content' }
-        }
-      }
-    }),
-    defineField({
-      name: 'socialLinks',
-      title: 'Social Links',
-      type: 'array',
-      of: [{ type: 'socialLink' }]
-    }),
-    defineField({
-      name: 'analytics',
-      title: 'Analytics IDs',
-      type: 'object',
-      fields: [
-        { name: 'googleAnalyticsId', title: 'Google Analytics ID', type: 'string' }
-      ],
-      preview: {
-        select: { title: 'googleAnalyticsId' },
-        prepare({ title }) {
-          return { title: title || 'Analytics IDs', subtitle: 'Section Content' }
-        }
-      }
-    }),
-    defineField({
-      name: 'defaultSeo',
-      title: 'Default SEO',
-      type: 'seo',
-    }),
-    defineField({
       name: 'paymentTrustImages',
-      title: 'Payment Trust Images (Booking Card)',
-      description: 'Upload the secure checkout and payment method logos here.',
+      title: 'Payment Trust Images (Checkout Modal)',
+      description: 'Upload the secure checkout and payment method logos here for the light background Checkout Modal.',
       type: 'array',
       of: [{ type: 'customImage' }]
     })
