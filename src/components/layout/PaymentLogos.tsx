@@ -10,14 +10,14 @@ interface PaymentLogosProps {
   isFooter?: boolean;
 }
 
-export function PaymentLogos({ 
-  images, 
-  className = '', 
+export function PaymentLogos({
+  images,
+  className = '',
   iconClassName = '',
   textColorClass = 'text-[#7D7975]',
   isFooter = false
 }: PaymentLogosProps) {
-  
+
   if (images && images.length > 0) {
     return (
       <div className={`flex flex-wrap items-center w-full ${isFooter ? 'gap-4 md:gap-6 justify-center md:justify-start' : 'gap-3 justify-center mt-5'} ${className}`}>
@@ -30,16 +30,16 @@ export function PaymentLogos({
           if (!src) return null;
 
           return (
-            <div 
-              key={idx} 
+            <div
+              key={idx}
               className={isFooter ? 'flex items-center justify-center' : 'flex justify-center'}
               style={!isFooter ? { flex: '0 0 calc(20% - 0.4rem)' } : undefined}
             >
-              <img 
-                src={src} 
-                alt={img.alt || `Payment Logo ${idx + 1}`} 
-                className={isFooter 
-                  ? (idx === 0 ? 'h-[27px] w-auto object-contain' : 'h-[52px] w-auto object-contain') 
+              <img
+                src={src}
+                alt={img.alt || `Payment Logo ${idx + 1}`}
+                className={isFooter
+                  ? (idx === 0 ? 'h-[27px] w-auto object-contain' : 'h-[52px] w-auto object-contain')
                   : (idx === 0 ? 'h-[20px] w-auto object-contain' : 'h-[38px] w-auto object-contain')
                 }
               />
