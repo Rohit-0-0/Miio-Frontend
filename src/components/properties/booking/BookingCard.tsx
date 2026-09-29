@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { PriceSummary } from './PriceSummary';
 import { DateSelector } from './DateSelector';
 import { GuestSelector } from './GuestSelector';
@@ -38,80 +38,25 @@ export function BookingCard({ listingId, paymentTrustImages, hideMobileSticky = 
   const [infants, setInfants] = useState<number>(parseGuestCount(searchParams?.get('infants'), 0));
   const [pets, setPets] = useState<number>(parseGuestCount(searchParams?.get('pets'), 0));
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [quote, setQuote] = useState<any>(null);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
-  const fetchQuote = async () => {
-    if (!checkIn || !checkOut || !listingId || adults < 1) return null;
-
-    setIsLoading(true);
-    setQuote(null);
-    try {
-      const response = await apiClient.post<any>('/booking/quotes', {
-        listingId,
-        checkInDateLocalized: checkIn,
-        checkOutDateLocalized: checkOut,
-        guestsCount: adults + children + infants,
-        numberOfGuests: {
-          numberOfAdults: adults,
-          numberOfChildren: children,
-          numberOfInfants: infants,
-          numberOfPets: pets,
-        },
-      });
-
-      if (response.success && response.data) {
-        setQuote(response.data);
-        return response.data;
-      }
-      toast.error(
-        "We couldn't confirm availability for these dates. Please try adjusting your selection."
-      );
-      return null;
-    } catch (err: any) {
-      let msg = 'Oops! Something went wrong while checking dates. Please try again.';
-      const backendMsg = err.response?.data?.message;
-      const errMsg = (err.message || '').toLowerCase();
-      const status = err.response?.status || err.statusCode;
-
-      if (backendMsg) msg = backendMsg;
-      else if (
-        status === 404 ||
-        errMsg.includes('not available') ||
-        errMsg.includes('unavailable') ||
-        errMsg.includes('no quotes') ||
-        errMsg.includes('minimum stay')
-      ) {
-        msg = 'Sorry, these dates are unavailable or do not meet the minimum stay requirements.';
-      } else if (status === 400 || errMsg.includes('invalid') || errMsg.includes('date')) {
-        msg = 'Please select valid check-in and check-out dates to check availability.';
-      }
-
-      toast.error(msg);
-      setQuote(null);
-      return null;
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const debounceIdRef = React.useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    if (debounceIdRef.current) clearTimeout(debounceIdRef.current);
-    debounceIdRef.current = setTimeout(fetchQuote, 500);
-    return () => {
-      if (debounceIdRef.current) clearTimeout(debounceIdRef.current);
-    };
-  }, [listingId, checkIn, checkOut, adults, children, infants, pets]);
+  const router = useRouter();
 
   const handleBookNowClick = () => {
-    if (!quote) {
+    if (!checkIn || !checkOut) {
       cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
-    setIsCheckoutOpen(true);
+    const params = new URLSearchParams({
+      propertyId: listingId,
+      checkIn: checkIn,
+      checkOut: checkOut,
+      adults: adults.toString(),
+      children: children.toString(),
+      infants: infants.toString(),
+      pets: pets.toString(),
+    });
+    router.push(`/checkout?${params.toString()}`);
   };
 
   const guestLabel =
@@ -119,31 +64,9 @@ export function BookingCard({ listingId, paymentTrustImages, hideMobileSticky = 
     (children > 0 ? `, ${children} child${children === 1 ? '' : 'ren'}` : '') +
     (infants > 0 ? `, ${infants} infant${infants === 1 ? '' : 's'}` : '');
 
-  const reserveLabel =
-    !checkIn || !checkOut
-      ? 'Check availability'
-      : isLoading
-        ? 'Checking...'
-        : quote
-          ? 'Book now'
-          : 'Check availability';
+  const reserveLabel = !checkIn || !checkOut ? 'Select dates' : 'Book now';
 
   const datesLabel = checkIn && checkOut ? `${checkIn} – ${checkOut}` : 'Select dates';
-
-  const ratePlanItem = quote?.rates?.ratePlans?.[0];
-  const money = ratePlanItem?.ratePlan?.money;
-  const currency = money?.currency || quote?.currency || '$';
-
-  let nightlyPrice = '';
-  if (ratePlanItem) {
-    const days = ratePlanItem.days || [];
-    if (days.length > 0) {
-      const rate = days[0].price || days[0].basePrice || 0;
-      if (typeof rate === 'number') {
-        nightlyPrice = `${currency}${rate.toFixed(0)}`;
-      }
-    }
-  }
 
   return (
     <>
@@ -153,7 +76,7 @@ export function BookingCard({ listingId, paymentTrustImages, hideMobileSticky = 
         id="property-booking-card"
         className="bg-white rounded-xl p-5 lg:p-6 border border-[#1B1A17]/10 shadow-[0_4px_16px_rgba(0,0,0,0.06)] w-full lg:max-w-[345px]"
       >
-        <PriceSummary isLoading={isLoading} quote={quote} />
+        <PriceSummary isLoading={false} quote={null} />
 
         <DateSelector
           checkIn={checkIn}
@@ -180,9 +103,9 @@ export function BookingCard({ listingId, paymentTrustImages, hideMobileSticky = 
 
         <BookingActions>
           <ReserveButton
-            disabled={isLoading || (!!checkIn && !!checkOut && !quote)}
+            disabled={!checkIn || !checkOut}
             onClick={handleBookNowClick}
-            isLoading={isLoading}
+            isLoading={false}
             label={reserveLabel}
           />
         </BookingActions>
@@ -195,15 +118,8 @@ export function BookingCard({ listingId, paymentTrustImages, hideMobileSticky = 
           <div className="flex flex-col">
             <div className="flex items-baseline gap-1">
               <span className="text-[17px] font-semibold text-[#1B1A17]">
-                {isLoading ? (
-                  <span className="animate-pulse bg-[#EAE8E1] h-5 w-16 inline-block rounded" />
-                ) : nightlyPrice ? (
-                  `From ${nightlyPrice}`
-                ) : (
-                  'From $000'
-                )}
+                Check dates for prices
               </span>
-              <span className="text-xs text-[#7D7975]">/ night</span>
             </div>
             <button
               type="button"
@@ -219,9 +135,9 @@ export function BookingCard({ listingId, paymentTrustImages, hideMobileSticky = 
           <button
             type="button"
             onClick={handleBookNowClick}
-            disabled={isLoading || (!!checkIn && !!checkOut && !quote)}
+            disabled={!checkIn || !checkOut}
             className={`font-semibold py-2.5 px-6 rounded-full text-xs uppercase tracking-wider transition-all flex items-center justify-center ${
-              isLoading || (!!checkIn && !!checkOut && !quote)
+              !checkIn || !checkOut
                 ? 'bg-[#C3BA8D]/60 text-black/60 cursor-not-allowed'
                 : 'bg-[#C3BA8D] text-black hover:opacity-90 active:scale-95 shadow-md shadow-black/10'
             }`}
@@ -230,20 +146,6 @@ export function BookingCard({ listingId, paymentTrustImages, hideMobileSticky = 
           </button>
         </div>
       )}
-
-      <CheckoutModal
-        isOpen={isCheckoutOpen}
-        onClose={() => setIsCheckoutOpen(false)}
-        quote={quote}
-        listingId={listingId}
-        checkIn={checkIn || ''}
-        checkOut={checkOut || ''}
-        adults={adults}
-        children={children}
-        infants={infants}
-        pets={pets}
-        onRefreshQuote={fetchQuote}
-      />
     </>
   );
 }

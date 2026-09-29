@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { DayPicker, DateRange } from 'react-day-picker';
 import { format, parseISO, isBefore, startOfToday } from 'date-fns';
-import 'react-day-picker/dist/style.css';
+import 'react-day-picker/style.css';
 
 interface DateRangePickerProps {
   checkIn: string; // YYYY-MM-DD
@@ -13,6 +13,7 @@ interface DateRangePickerProps {
   triggerClassName?: string;
   customTrigger?: React.ReactNode;
   popoverAlign?: 'left' | 'right';
+  inline?: boolean;
 }
 
 export function DateRangePicker({
@@ -22,7 +23,8 @@ export function DateRangePicker({
   className = "relative",
   triggerClassName = "px-6 py-4 flex flex-col justify-center relative group cursor-pointer hover:bg-gray-50 transition-colors",
   customTrigger,
-  popoverAlign = 'left'
+  popoverAlign = 'left',
+  inline = false
 }: DateRangePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -82,9 +84,36 @@ export function DateRangePicker({
     // Allow manual closing only (via click outside)
   };
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile(); // Check on initial mount
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   const displayString = checkIn 
     ? `${format(parseISO(checkIn), 'MMM dd')}${checkOut ? ` - ${format(parseISO(checkOut), 'MMM dd')}` : ' - Add Date'}` 
     : 'Add Dates';
+
+  if (inline) {
+    return (
+      <div className={`${className} flex justify-center pb-4`}>
+        <div style={{ '--rdp-cell-size': inline ? '32px' : '40px' } as React.CSSProperties}>
+          <DayPicker
+            mode="range"
+            selected={selectedRange}
+            onSelect={handleSelect}
+            numberOfMonths={isMobile ? 1 : 2}
+            pagedNavigation
+            disabled={{ before: startOfToday() }}
+            showOutsideDays={false}
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={className} ref={containerRef}>
@@ -104,48 +133,17 @@ export function DateRangePicker({
 
       {isOpen && (
         <div className={`absolute top-full ${popoverAlign === 'right' ? 'right-0' : 'left-0'} mt-2 bg-white border border-gray-200 rounded-lg shadow-2xl p-4 z-[100] md:w-max`}>
-          <style>{`
-            .rdp {
-              --rdp-cell-size: 40px;
-              --rdp-accent-color: #000000;
-              --rdp-background-color: #f3f4f6;
-              --rdp-accent-color-dark: #333333;
-              --rdp-background-color-dark: #e5e7eb;
-              --rdp-outline: 2px solid var(--rdp-accent-color);
-              --rdp-outline-selected: 2px solid rgba(0, 0, 0, 0.3);
-              margin: 0;
-            }
-            .rdp-months {
-              display: flex;
-              flex-direction: column;
-              gap: 1.5rem;
-            }
-            @media (min-width: 768px) {
-              .rdp-months {
-                flex-direction: row;
-              }
-            }
-            .rdp-day_selected, .rdp-day_selected:focus-visible, .rdp-day_selected:hover {
-              background-color: var(--rdp-accent-color);
-              color: white;
-            }
-            .rdp-day_selected.rdp-day_range_middle {
-              background-color: var(--rdp-background-color);
-              color: var(--rdp-accent-color);
-            }
-            .rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
-              background-color: var(--rdp-background-color);
-            }
-          `}</style>
-          <DayPicker
-            mode="range"
-            selected={selectedRange}
-            onSelect={handleSelect}
-            numberOfMonths={2}
-            pagedNavigation
-            disabled={{ before: startOfToday() }}
-            showOutsideDays={false}
-          />
+          <div style={{ '--rdp-cell-size': '40px' } as React.CSSProperties}>
+            <DayPicker
+              mode="range"
+              selected={selectedRange}
+              onSelect={handleSelect}
+              numberOfMonths={isMobile ? 1 : 2}
+              pagedNavigation
+              disabled={{ before: startOfToday() }}
+              showOutsideDays={false}
+            />
+          </div>
         </div>
       )}
     </div>

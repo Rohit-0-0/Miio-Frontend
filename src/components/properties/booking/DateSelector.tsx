@@ -7,6 +7,7 @@ interface DateSelectorProps {
   checkOut: string | null;
   onChangeCheckIn: (date: string | null) => void;
   onChangeCheckOut: (date: string | null) => void;
+  inline?: boolean;
 }
 
 export function DateSelector({
@@ -14,6 +15,7 @@ export function DateSelector({
   checkOut,
   onChangeCheckIn,
   onChangeCheckOut,
+  inline,
 }: DateSelectorProps) {
   const customTrigger = (
     <div className="flex gap-4 cursor-pointer">
@@ -44,6 +46,7 @@ export function DateSelector({
         className="w-full"
         customTrigger={customTrigger}
         popoverAlign="right"
+        inline={inline}
       />
     </div>
   );

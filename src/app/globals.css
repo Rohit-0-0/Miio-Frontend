@@ -44,3 +44,37 @@ input[type="date"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+/* React Day Picker Global Overrides for MIIO Theme (v10) */
+.rdp-root {
+  --rdp-accent-color: #C3BA8D !important;
+  --rdp-accent-background-color: #E1DBC3 !important;
+  --rdp-range_middle-background-color: #E1DBC3 !important;
+  
+  --rdp-today-color: #C3BA8D !important;
+  --rdp-selected-border: 2px solid transparent !important;
+  
+  /* Make standard selected (not range) match the olive color */
+  --rdp-selected-color: #1B1A17 !important;
+}
+
+.rdp-selected .rdp-day_button {
+  color: #1B1A17 !important;
+}
+
+.rdp-range_start .rdp-day_button,
+.rdp-range_end .rdp-day_button {
+  color: #1B1A17 !important;
+}
+
+.rdp-months {
+  display: flex !important;
+  justify-content: flex-start !important;
+}
+
+@media (min-width: 768px) {
+  .rdp-months {
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+  }
+}
