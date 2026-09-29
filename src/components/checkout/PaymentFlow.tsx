@@ -121,9 +121,9 @@ function PaymentForm({
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-12 md:gap-24 w-full justify-between items-start">
+    <div className="grid grid-cols-1 lg:grid-cols-[1fr_345px] gap-12 lg:gap-32 relative">
       {/* Left Column - Payment Form */}
-      <div className="flex-1 w-full max-w-[630px]">
+      <div className="flex flex-col gap-8 order-2 lg:order-1">
         <h2 className="text-[32px] font-serif text-[#1B1A17] mb-12">Payment</h2>
         
         <form onSubmit={handlePaymentSubmit} className="flex flex-col gap-8">
@@ -253,7 +253,7 @@ function PaymentForm({
       </div>
 
       {/* Right Column - Booking Summary Card */}
-      <div className="w-full md:w-[400px] lg:w-[440px] shrink-0 sticky top-24">
+      <div className="w-full max-w-[400px] lg:max-w-none mx-auto lg:mx-0 order-1 lg:order-2 self-start sticky top-24">
         <div className="bg-white rounded-[4px] shadow-[0_4px_24px_rgba(0,0,0,0.06)] border border-[#1B1A17]/5 overflow-hidden flex flex-col">
           {(() => {
             const imgRef = property.gallery?.[0]?.assetId || property.gallery?.[0]?.asset?._ref || property.heroImage?.asset?._ref;
