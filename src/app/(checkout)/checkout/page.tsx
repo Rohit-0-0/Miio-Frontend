@@ -53,19 +53,29 @@ export default async function CheckoutPage({ searchParams }: Props) {
       {/* Checkout Header */}
       <header className="w-full bg-[#FEF6EE] pt-8 pb-4">
         <div className="flex justify-center mb-6">
-          <Logo image={siteSettings?.logo} className="text-[#1B1A17]" />
+          <Logo image={siteSettings?.logo} className="text-[#1B1A17]" isLink={false} />
         </div>
         <div className="border-t border-[#1B1A17]/10">
           <div className="max-w-[1440px] mx-auto px-4 md:px-[188px] flex justify-between items-center py-4 text-xs tracking-wider">
-            <a href={`/properties/${property.slug}`} className="text-[#7D7975] hover:text-black transition-colors uppercase">
+            <a 
+              href={`/properties/${property.slug}?${new URLSearchParams({
+                checkIn: (resolvedParams.checkIn as string) || '',
+                checkOut: (resolvedParams.checkOut as string) || '',
+                adults: (resolvedParams.adults as string) || '1',
+                children: (resolvedParams.children as string) || '0',
+                infants: (resolvedParams.infants as string) || '0',
+                pets: (resolvedParams.pets as string) || '0',
+              }).toString()}`} 
+              className="text-[#7D7975] hover:text-black transition-colors uppercase font-medium"
+            >
               &larr; Back to {property.nickname || property.title}
             </a>
-            <div className="flex items-center gap-4 text-[#7D7975] uppercase">
-              <span className="text-[#1B1A17] font-bold">1 Dates</span>
-              <span className="opacity-40">-</span>
-              <span className="opacity-50">2 Details</span>
-              <span className="opacity-40">-</span>
-              <span className="opacity-50">3 Pay</span>
+            <div className="flex items-center gap-3 uppercase">
+              <span className="text-[#1B1A17] font-semibold">1 Dates</span>
+              <span className="opacity-30 text-[#1B1A17]">—</span>
+              <span className="opacity-40 text-[#7D7975]">2 Details</span>
+              <span className="opacity-30 text-[#1B1A17]">—</span>
+              <span className="opacity-40 text-[#7D7975]">3 Pay</span>
             </div>
           </div>
         </div>

@@ -52,18 +52,28 @@ export default async function PaymentPage({ searchParams }: Props) {
       {/* Checkout Header (Step 3 Active) */}
       <header className="w-full pt-8 pb-4">
         <div className="flex justify-center mb-6">
-          <Logo image={siteSettings?.logo} className="text-[#1B1A17]" />
+          <Logo image={siteSettings?.logo} className="text-[#1B1A17]" isLink={false} />
         </div>
         <div className="border-t border-[#1B1A17]/10">
           <div className="max-w-[1440px] mx-auto px-4 md:px-[188px] flex justify-between items-center py-4 text-xs tracking-wider">
-            <a href={`/checkout/details?${new URLSearchParams(resolvedParams as any).toString()}`} className="text-[#7D7975] hover:text-black transition-colors uppercase">
-              ← Back to {property.nickname || property.title}
+            <a 
+              href={`/properties/${property.slug}?${new URLSearchParams({
+                checkIn: (resolvedParams.checkIn as string) || '',
+                checkOut: (resolvedParams.checkOut as string) || '',
+                adults: (resolvedParams.adults as string) || '1',
+                children: (resolvedParams.children as string) || '0',
+                infants: (resolvedParams.infants as string) || '0',
+                pets: (resolvedParams.pets as string) || '0',
+              }).toString()}`} 
+              className="text-[#7D7975] hover:text-black transition-colors uppercase font-medium"
+            >
+              &larr; Back to {property.nickname || property.title}
             </a>
-            <div className="flex gap-2 text-[10px] md:text-[12px] uppercase">
+            <div className="flex items-center gap-3 uppercase">
               <a href={`/checkout?${new URLSearchParams(resolvedParams as any).toString()}`} className="text-[#7D7975] hover:text-black transition-colors">1 Dates</a>
-              <span className="text-[#1B1A17]/30">—</span>
+              <span className="opacity-30 text-[#1B1A17]">—</span>
               <a href={`/checkout/details?${new URLSearchParams(resolvedParams as any).toString()}`} className="text-[#7D7975] hover:text-black transition-colors">2 Details</a>
-              <span className="text-[#1B1A17]/30">—</span>
+              <span className="opacity-30 text-[#1B1A17]">—</span>
               <span className="text-[#1B1A17] font-semibold">3 Pay</span>
             </div>
           </div>
@@ -84,7 +94,7 @@ export default async function PaymentPage({ searchParams }: Props) {
       <footer className="w-full bg-[#1B1A17] text-white py-6">
         <div className="max-w-[1440px] mx-auto px-4 md:px-[188px] flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="text-[10px] text-white/50 tracking-wider">
-            © Stay with Miio. All rights reserved. <a href="/terms" className="ml-4 hover:text-white transition-colors">Terms</a> <a href="/privacy" className="ml-4 hover:text-white transition-colors">Privacy</a>
+            © Stay with Miio. All rights reserved. <a href="/terms" target="_blank" rel="noopener noreferrer" className="ml-4 hover:text-white transition-colors">Terms</a> <a href="/privacy" target="_blank" rel="noopener noreferrer" className="ml-4 hover:text-white transition-colors">Privacy</a>
           </div>
           {footerLogos.length > 0 && (
             <div className="flex gap-4 items-center">

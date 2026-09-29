@@ -53,19 +53,29 @@ export default async function DetailsPage({ searchParams }: Props) {
       {/* Checkout Header (Step 2 Active) */}
       <header className="w-full pt-8 pb-4">
         <div className="flex justify-center mb-6">
-          <Logo image={siteSettings?.logo} className="text-[#1B1A17]" />
+          <Logo image={siteSettings?.logo} className="text-[#1B1A17]" isLink={false} />
         </div>
         <div className="border-t border-[#1B1A17]/10">
           <div className="max-w-[1440px] mx-auto px-4 md:px-[188px] flex justify-between items-center py-4 text-xs tracking-wider">
-            <a href={`/checkout?${new URLSearchParams(resolvedParams as any).toString()}`} className="text-[#7D7975] hover:text-black transition-colors uppercase">
+            <a 
+              href={`/properties/${property.slug}?${new URLSearchParams({
+                checkIn: (resolvedParams.checkIn as string) || '',
+                checkOut: (resolvedParams.checkOut as string) || '',
+                adults: (resolvedParams.adults as string) || '1',
+                children: (resolvedParams.children as string) || '0',
+                infants: (resolvedParams.infants as string) || '0',
+                pets: (resolvedParams.pets as string) || '0',
+              }).toString()}`} 
+              className="text-[#7D7975] hover:text-black transition-colors uppercase font-medium"
+            >
               &larr; Back to {property.nickname || property.title}
             </a>
-            <div className="flex items-center gap-4 uppercase">
+            <div className="flex items-center gap-3 uppercase">
               <a href={`/checkout?${new URLSearchParams(resolvedParams as any).toString()}`} className="text-[#7D7975] hover:text-black transition-colors">1 Dates</a>
-              <span className="opacity-40 text-[#7D7975]">-</span>
-              <span className="text-[#1B1A17] font-bold">2 Details</span>
-              <span className="opacity-40 text-[#7D7975]">-</span>
-              <span className="opacity-50 text-[#7D7975]">3 Pay</span>
+              <span className="opacity-30 text-[#1B1A17]">—</span>
+              <span className="text-[#1B1A17] font-semibold">2 Details</span>
+              <span className="opacity-30 text-[#1B1A17]">—</span>
+              <span className="opacity-40 text-[#7D7975]">3 Pay</span>
             </div>
           </div>
         </div>
@@ -88,8 +98,8 @@ export default async function DetailsPage({ searchParams }: Props) {
         <div className="max-w-[1440px] mx-auto px-4 md:px-[188px] flex flex-col md:flex-row justify-between items-center text-xs">
           <div className="flex gap-4 text-white/60 mb-4 md:mb-0">
             <span>© Stay with Miio. All rights reserved.</span>
-            <a href="/terms" className="hover:text-white">Terms</a>
-            <a href="/privacy" className="hover:text-white">Privacy</a>
+            <a href="/terms" target="_blank" rel="noopener noreferrer" className="hover:text-white">Terms</a>
+            <a href="/privacy" target="_blank" rel="noopener noreferrer" className="hover:text-white">Privacy</a>
           </div>
           <div className="flex items-center gap-4">
             <div className="flex gap-2 [&_img]:!h-[20px] [&_img:first-child]:!h-[20px]">

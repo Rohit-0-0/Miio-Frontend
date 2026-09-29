@@ -43,6 +43,20 @@ export const siteSettings = defineType({
           title: 'Flexible Payment Logos (Afterpay, Klarna, etc)', 
           type: 'array', 
           of: [{ type: 'customImage' }]
+        },
+        {
+          name: 'miioClubCouponCode',
+          title: 'Miio Club Coupon Code (Trigger)',
+          description: 'The exact coupon code that triggers the custom label (e.g., MIIOCLUB)',
+          type: 'string',
+          initialValue: 'MIIOCLUB'
+        },
+        {
+          name: 'miioClubCouponLabel',
+          title: 'Miio Club Coupon Display Label',
+          description: 'The text to show when this code is applied (e.g., Miio Club (10%))',
+          type: 'string',
+          initialValue: 'Miio Club (10%)'
         }
       ]
     })

@@ -22,6 +22,7 @@ interface CheckoutFlowProps {
     children?: string;
     infants?: string;
     pets?: string;
+    [key: string]: string | undefined;
   };
   paymentTrustImages?: any[];
   cmsContent?: {
@@ -161,6 +162,9 @@ export function DetailsFlow({ property, searchParams, paymentTrustImages, cmsCon
               className="flex flex-col gap-10 w-full max-w-[630px]"
               onSubmit={(e) => {
                 e.preventDefault();
+                if (marketing && typeof window !== 'undefined' && (window as any).dataLayer) {
+                  (window as any).dataLayer.push({ event: 'checkout_newsletter_signup', email });
+                }
                 const params = new URLSearchParams(searchParams as any);
                 if (firstName) params.set('firstName', firstName);
                 if (lastName) params.set('lastName', lastName);
@@ -365,70 +369,20 @@ export function DetailsFlow({ property, searchParams, paymentTrustImages, cmsCon
     );
   }
 
-  // STATE 2: NOT AVAILABLE
+  // STATE 2: NOT AVAILABLE / EXPIRED
   return (
-    <div className="flex flex-col gap-12 max-w-4xl relative">
-      {isLoading && <LoadingOverlay />}
-      
-      <div className="flex flex-col gap-2">
-        <h2 className="text-4xl font-serif text-[#1B1A17]">{cmsContent?.datesHeading || 'Dates'}</h2>
-        <p className="text-[14px] text-[#7D7975]">{leftDatesStr}, {nights} {cmsContent?.nightsText || 'nights'}</p>
+    <div className="flex flex-col gap-6 max-w-2xl">
+      <div className="bg-[#E1DBC3] px-6 py-4 rounded-[8px]">
+        <p className="text-[14px] text-[#1B1A17]">
+          The selected dates are no longer available for {propertyTitle}. Please return to step 1 to choose available dates.
+        </p>
       </div>
-
-      {alternatives.length > 0 ? (
-        <>
-          <div className="bg-[#E1DBC3] px-6 py-3 rounded-[8px] inline-flex self-start">
-            <p className="text-[14px] text-[#1B1A17]">
-              These dates are booked for {propertyTitle} — but these Miio homes are available:
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl">
-            {alternatives.map(alt => (
-              <MinimalPropertyCard
-                key={alt._id || alt.id}
-                id={alt._id || alt.id}
-                slug={alt.id || alt._id}
-                name={alt.title || alt.nickname}
-                nickname={alt.nickname}
-                unitType={alt.unitType}
-                location={alt.address?.city || 'Various Locations'}
-                guests={alt.accommodates || 2}
-                bedrooms={alt.bedrooms || 1}
-                bathrooms={alt.bathrooms}
-                propertyType={alt.propertyType}
-                reviews={0}
-                price={alt.prices?.basePrice ? `$${Math.round(alt.prices.basePrice).toLocaleString()}` : undefined} 
-                priceLabel={alt.prices?.basePrice ? "/ night" : undefined}
-                coverImage={alt.picture?.large || alt.thumbnail}
-              />
-            ))}
-          </div>
-        </>
-      ) : (
-        <div className="bg-[#E1DBC3] px-6 py-3 rounded-[8px] inline-flex self-start">
-          <p className="text-[14px] text-[#1B1A17]">
-            These dates are booked for {propertyTitle}. No other homes are available for these exact dates.
-          </p>
-        </div>
-      )}
-
-      <div className="pt-8 border-t border-[#1B1A17]/10 mt-4">
-        <div className="bg-[#E1DBC3] px-6 py-3 rounded-[8px] inline-flex self-start mb-8">
-          <p className="text-[14px] text-[#1B1A17]">
-            Other available dates for {propertyTitle}:
-          </p>
-        </div>
-        
-        <div className="rounded-xl relative">
-           <DateSelector
-              checkIn={checkInState}
-              checkOut={checkOutState}
-              onChangeCheckIn={setCheckInState}
-              onChangeCheckOut={setCheckOutState}
-              inline={true} 
-            />
-        </div>
-      </div>
+      <Link 
+        href={`/checkout?${new URLSearchParams(searchParams as any).toString()}`}
+        className="inline-block bg-[#1B1A17] text-white px-6 py-3 rounded-full text-[13px] font-semibold self-start hover:bg-black/80"
+      >
+        &larr; Back to Dates
+      </Link>
     </div>
   );
 }

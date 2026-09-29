@@ -425,8 +425,8 @@ export function CheckoutFlow({ property, searchParams, paymentTrustImages, cmsCo
                 bedrooms={alt.bedrooms || 1}
                 bathrooms={alt.bathrooms}
                 propertyType={alt.propertyType}
-                reviews={0}
-                price={alt.prices?.basePrice ? `$${Math.round(alt.prices.basePrice).toLocaleString()}` : undefined} 
+                reviews={undefined}
+                price={alt.prices?.basePrice ? `$${Math.round(alt.prices.basePrice).toLocaleString()}` : '$0'} 
                 priceLabel={alt.prices?.basePrice ? "/ night" : undefined}
                 coverImage={alt.picture?.large || alt.thumbnail}
               />
