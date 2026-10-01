@@ -9,6 +9,7 @@ interface DateSelectorProps {
   onChangeCheckOut: (date: string | null) => void;
   inline?: boolean;
   guestyId?: string;
+  blockUnavailableDates?: boolean;
 }
 
 export function DateSelector({
@@ -18,6 +19,7 @@ export function DateSelector({
   onChangeCheckOut,
   inline,
   guestyId,
+  blockUnavailableDates = false,
 }: DateSelectorProps) {
   const customTrigger = (
     <div className="flex gap-4 cursor-pointer">
@@ -50,6 +52,7 @@ export function DateSelector({
         popoverAlign="right"
         inline={inline}
         guestyId={guestyId}
+        blockUnavailableDates={blockUnavailableDates}
       />
     </div>
   );

@@ -15,6 +15,7 @@ interface DateRangePickerProps {
   popoverAlign?: 'left' | 'right';
   inline?: boolean;
   guestyId?: string;
+  blockUnavailableDates?: boolean;
 }
 
 export function DateRangePicker({
@@ -26,7 +27,8 @@ export function DateRangePicker({
   customTrigger,
   popoverAlign = 'left',
   inline = false,
-  guestyId
+  guestyId,
+  blockUnavailableDates = false
 }: DateRangePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -42,7 +44,7 @@ export function DateRangePicker({
   }, [checkIn, checkOut]);
 
   useEffect(() => {
-    if (!guestyId) return;
+    if (!guestyId || !blockUnavailableDates) return;
 
     const fetchCalendar = async () => {
       try {
@@ -160,6 +162,8 @@ export function DateRangePicker({
     // Disable past dates
     if (isBefore(date, startOfToday())) return true;
     
+    if (!blockUnavailableDates) return false;
+
     // Disable dates explicitly blocked from Guesty
     const dateStr = format(date, 'yyyy-MM-dd');
     const dayInfo = calendarDays.find(d => d.date === dateStr);

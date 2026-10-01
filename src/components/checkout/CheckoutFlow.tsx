@@ -230,6 +230,7 @@ export function CheckoutFlow({ property, searchParams, paymentTrustImages, cmsCo
               onChangeCheckOut={setCheckOutState}
               inline={true} 
               guestyId={actualGuestyId}
+              blockUnavailableDates={true}
             />
           </div>
 
@@ -485,6 +486,7 @@ export function CheckoutFlow({ property, searchParams, paymentTrustImages, cmsCo
               onChangeCheckOut={setCheckOutState}
               inline={true} 
               guestyId={actualGuestyId}
+              blockUnavailableDates={true}
             />
         </div>
       </div>
