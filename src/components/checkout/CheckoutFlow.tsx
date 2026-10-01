@@ -46,6 +46,7 @@ export function CheckoutFlow({ property, searchParams, paymentTrustImages, cmsCo
   const [isLoading, setIsLoading] = useState(true);
   const [quote, setQuote] = useState<any>(null);
   const [alternatives, setAlternatives] = useState<any[]>([]);
+  const [minNightsError, setMinNightsError] = useState<number | null>(null);
   
   // Date states for the calendar
   const [checkInState, setCheckInState] = useState<string | null>(searchParams.checkIn || null);
@@ -107,6 +108,26 @@ export function CheckoutFlow({ property, searchParams, paymentTrustImages, cmsCo
         }
       } catch (err: any) {
         console.warn('Quote failed, fetching alternatives');
+        
+        let foundMinNights = null;
+        if (err.details?.error?.data?.moreDetails?.notApplicableRatePlans?.[0]?.notApplicable?.minNights) {
+          try {
+            const endDateObj = new Date(checkIn);
+            endDateObj.setDate(endDateObj.getDate() + 2);
+            const calRes = await apiClient.get<any>(`/booking/calendar/${actualGuestyId}?startDate=${checkIn}&endDate=${format(endDateObj, 'yyyy-MM-dd')}`);
+            if (calRes.success && calRes.data) {
+              let days = calRes.data.data || calRes.data.days || calRes.data;
+              if (Array.isArray(days)) {
+                const dayInfo = days.find(d => d.date === checkIn);
+                if (dayInfo && dayInfo.minNights) {
+                  foundMinNights = dayInfo.minNights;
+                }
+              }
+            }
+          } catch(e) {}
+        }
+        
+        setMinNightsError(foundMinNights);
         setQuote(null);
         await fetchAlternatives();
       } finally {
@@ -205,6 +226,7 @@ export function CheckoutFlow({ property, searchParams, paymentTrustImages, cmsCo
               onChangeCheckIn={setCheckInState}
               onChangeCheckOut={setCheckOutState}
               inline={true} 
+              guestyId={actualGuestyId}
             />
           </div>
 
@@ -259,19 +281,19 @@ export function CheckoutFlow({ property, searchParams, paymentTrustImages, cmsCo
         </div>
 
         {/* Right Side: Summary Card */}
-        <div className="bg-white rounded-[4px] shadow-[0_4px_24px_rgba(0,0,0,0.06)] border border-[#1B1A17]/5 overflow-hidden self-start order-1 lg:order-2 w-full max-w-[400px] lg:max-w-none mx-auto lg:mx-0">
+        <div className="bg-white rounded-lg lg:rounded-[4px] shadow-[0_4px_24px_rgba(0,0,0,0.06)] border border-[#1B1A17]/5 overflow-hidden self-start order-1 lg:order-2 w-full max-w-[400px] lg:max-w-none mx-auto lg:mx-0 p-3 lg:p-0 flex flex-row lg:flex-col items-center lg:items-start gap-4 lg:gap-0 mb-4 lg:mb-0">
           {coverImageUrl && (
-            <div className="h-[220px] w-full overflow-hidden p-3 pb-0">
-              <img src={coverImageUrl} alt={propertyTitle} className="w-full h-full object-cover rounded-t-[8px]" />
+            <div className="w-[84px] h-[64px] lg:h-[220px] lg:w-full overflow-hidden lg:p-3 lg:pb-0 shrink-0">
+              <img src={coverImageUrl} alt={propertyTitle} className="w-full h-full object-cover rounded-[6px] lg:rounded-t-[8px] lg:rounded-b-none" />
             </div>
           )}
-          <div className="px-5 py-5 flex flex-col gap-4">
+          <div className="lg:px-5 lg:py-5 flex flex-col lg:gap-4 w-full">
             <div>
-              <h3 className="text-[17px] font-serif text-[#1B1A17]">{propertyTitle}</h3>
-              <p className="text-[12px] text-[#7D7975] mt-1">{property.location?.city}</p>
+              <h3 className="text-[14px] lg:text-[17px] font-serif text-[#1B1A17] leading-tight">{propertyTitle}</h3>
+              <p className="text-[10px] lg:text-[12px] text-[#7D7975] mt-0.5 lg:mt-1">{property.location?.city}</p>
             </div>
 
-            <div className="border-t border-[#1B1A17]/10 pt-4 flex flex-col gap-2 text-[12px]">
+            <div className="hidden lg:flex border-t border-[#1B1A17]/10 pt-4 flex-col gap-2 text-[12px]">
               <div className="flex justify-between">
                 <span className="text-[#7D7975]">{cmsContent?.datesHeading || 'Dates'}</span>
                 <span className="text-[#1B1A17] text-right max-w-[120px]">{rightDatesStr}</span>
@@ -408,7 +430,9 @@ export function CheckoutFlow({ property, searchParams, paymentTrustImages, cmsCo
         <>
           <div className="bg-[#E1DBC3] px-6 py-3 rounded-[8px] inline-flex self-start">
             <p className="text-[14px] text-[#1B1A17]">
-              These dates are booked for {propertyTitle} — but these Miio homes are available:
+              {minNightsError 
+                ? `Please try selecting at least ${minNightsError} nights for ${propertyTitle}. Here are some available homes:` 
+                : `These dates are booked for ${propertyTitle} — but these Miio homes are available:`}
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl">
@@ -436,7 +460,9 @@ export function CheckoutFlow({ property, searchParams, paymentTrustImages, cmsCo
       ) : (
         <div className="bg-[#E1DBC3] px-6 py-3 rounded-[8px] inline-flex self-start">
           <p className="text-[14px] text-[#1B1A17]">
-            These dates are booked for {propertyTitle}. No other homes are available for these exact dates.
+            {minNightsError 
+              ? `Please try selecting at least ${minNightsError} nights for ${propertyTitle}. No other homes are available for these exact dates.`
+              : `These dates are booked for ${propertyTitle}. No other homes are available for these exact dates.`}
           </p>
         </div>
       )}
@@ -455,6 +481,7 @@ export function CheckoutFlow({ property, searchParams, paymentTrustImages, cmsCo
               onChangeCheckIn={setCheckInState}
               onChangeCheckOut={setCheckOutState}
               inline={true} 
+              guestyId={actualGuestyId}
             />
         </div>
       </div>

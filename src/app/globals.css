@@ -62,6 +62,12 @@ input[type="date"]::-webkit-outer-spin-button {
   color: #1B1A17 !important;
 }
 
+.rdp-disabled {
+  color: #A3A3A3 !important;
+  opacity: 0.7 !important;
+  text-decoration: line-through !important;
+}
+
 .rdp-range_start .rdp-day_button,
 .rdp-range_end .rdp-day_button {
   color: #1B1A17 !important;

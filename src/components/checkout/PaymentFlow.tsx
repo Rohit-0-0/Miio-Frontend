@@ -111,32 +111,50 @@ function PaymentForm({
     setIsProcessing(true);
     
     try {
-      // Create PaymentMethod using the split elements
-      const cardElement = elements.getElement(CardNumberElement);
-      if (!cardElement) {
-        alert("Payment fields not loaded properly. Please refresh.");
-        setIsProcessing(false);
-        return;
+      let confirmationToken: any;
+
+      if (paymentMethod === 'card') {
+        // Create PaymentMethod using the split elements
+        const cardElement = elements.getElement(CardNumberElement);
+        if (!cardElement) {
+          alert("Payment fields not loaded properly. Please refresh.");
+          setIsProcessing(false);
+          return;
+        }
+
+        const { error, paymentMethod: pm } = await stripe.createPaymentMethod({
+          type: 'card',
+          card: cardElement,
+        });
+        
+        if (error) {
+          alert(error.message);
+          setIsProcessing(false);
+          return;
+        }
+        confirmationToken = pm;
+      } else if (paymentMethod === 'paylater') {
+        const { error, paymentMethod: pm } = await stripe.createPaymentMethod({
+          type: 'afterpay_clearpay',
+          billing_details: {
+            name: `${searchParams.firstName || ''} ${searchParams.lastName || ''}`.trim(),
+            email: (searchParams.email as string) || '',
+          },
+        });
+        
+        if (error) {
+          alert(error.message);
+          setIsProcessing(false);
+          return;
+        }
+        confirmationToken = pm;
       }
 
-      const { error, paymentMethod } = await stripe.createPaymentMethod({
-        type: 'card',
-        card: cardElement,
-      });
-      
-      if (error) {
-        alert(error.message);
-        setIsProcessing(false);
-        return;
-      }
-
-      if (!paymentMethod) {
+      if (!confirmationToken) {
         alert("Failed to generate payment token.");
         setIsProcessing(false);
         return;
       }
-
-      const confirmationToken = paymentMethod;
 
       const guest = {
         firstName: typeof searchParams.firstName === 'string' ? searchParams.firstName : '',
@@ -162,8 +180,23 @@ function PaymentForm({
         if (typeof window !== 'undefined' && (window as any).dataLayer) {
           (window as any).dataLayer.push({ event: 'Booking completed', transaction_id: response.data._id || response.data.id, value: total, currency: 'AUD' });
         }
-        alert('Booking Confirmed! Reservation ID: ' + (response.data._id || response.data.id));
-        // TODO: Redirect to a success page
+        
+        // Build the URL parameters for the success page
+        const successParams = new URLSearchParams({
+          bookingId: response.data._id || response.data.id,
+          confirmationCode: response.data.confirmationCode,
+          propertyId: property?.guestyId || property?._id || property?.id || '',
+          firstName: typeof searchParams.firstName === 'string' ? searchParams.firstName : '',
+          email: typeof searchParams.email === 'string' ? searchParams.email : '',
+          checkIn: typeof searchParams.checkIn === 'string' ? searchParams.checkIn : '',
+          checkOut: typeof searchParams.checkOut === 'string' ? searchParams.checkOut : '',
+          adults: typeof searchParams.adults === 'string' ? searchParams.adults : '1',
+          children: typeof searchParams.children === 'string' ? searchParams.children : '0',
+          infants: typeof searchParams.infants === 'string' ? searchParams.infants : '0',
+          pets: typeof searchParams.pets === 'string' ? searchParams.pets : '0',
+        });
+        
+        window.location.href = `/checkout/success?${successParams.toString()}`;
       } else {
         alert(response.error || 'Payment failed. Please try again.');
       }
@@ -313,7 +346,6 @@ function PaymentForm({
               </div>
             </label>
           </div>
-
           <div className="mt-4 flex flex-col gap-6">
             <label className="flex items-center gap-3 cursor-pointer group">
               <div className={`w-4 h-4 rounded-[3px] border border-[#1B1A17] flex items-center justify-center transition-colors ${agreedToPolicies ? 'bg-[#1B1A17]' : 'group-hover:border-[#1B1A17]/60'}`}>
@@ -362,23 +394,29 @@ function PaymentForm({
       </div>
 
       {/* Right Column - Booking Summary Card */}
-      <div className="w-full max-w-[400px] lg:max-w-none mx-auto lg:mx-0 order-1 lg:order-2 self-start sticky top-24">
-        <div className="bg-white rounded-[4px] shadow-[0_4px_24px_rgba(0,0,0,0.06)] border border-[#1B1A17]/5 overflow-hidden flex flex-col">
-          {(() => {
-            const imgRef = property.gallery?.[0]?.assetId || property.gallery?.[0]?.asset?._ref || property.heroImage?.asset?._ref;
-            const src = buildImageUrl(imgRef);
-            return src ? (
-              <div className="h-[220px] w-full overflow-hidden p-3 pb-0">
-                <img src={src} alt={property.nickname || property.title} className="w-full h-full object-cover rounded-t-[8px]" />
+      <div className="w-full max-w-[400px] lg:max-w-none mx-auto lg:mx-0 order-1 lg:order-2 self-start sticky lg:top-24 mb-6 lg:mb-0">
+        <div className="bg-white rounded-lg lg:rounded-[4px] shadow-[0_4px_24px_rgba(0,0,0,0.06)] border border-[#1B1A17]/5 overflow-hidden flex flex-col">
+          
+          {/* Header block: Horizontal on mobile, vertical on desktop */}
+          <div className="flex flex-row lg:flex-col items-center lg:items-start gap-4 lg:gap-0 p-3 lg:p-0">
+            {(() => {
+              const imgRef = property.gallery?.[0]?.assetId || property.gallery?.[0]?.asset?._ref || property.heroImage?.asset?._ref;
+              const src = buildImageUrl(imgRef);
+              return src ? (
+                <div className="w-[84px] h-[64px] lg:h-[220px] lg:w-full overflow-hidden lg:p-3 lg:pb-0 shrink-0">
+                  <img src={src} alt={property.nickname || property.title} className="w-full h-full object-cover rounded-[6px] lg:rounded-t-[8px] lg:rounded-b-none" />
+                </div>
+              ) : null;
+            })()}
+            <div className="lg:px-5 lg:pt-5 lg:pb-0 flex flex-col w-full">
+              <div>
+                <h3 className="text-[14px] lg:text-[17px] font-serif text-[#1B1A17] leading-tight">{property.nickname || property.title}</h3>
+                <p className="text-[10px] lg:text-[12px] text-[#7D7975] mt-0.5 lg:mt-1">{property.location?.city || property.tagline}</p>
               </div>
-            ) : null;
-          })()}
-          <div className="px-5 py-5 flex flex-col gap-4">
-            <div>
-              <h3 className="text-[17px] font-serif text-[#1B1A17]">{property.nickname || property.title}</h3>
-              <p className="text-[12px] text-[#7D7975] mt-1">{property.location?.city || property.tagline}</p>
             </div>
+          </div>
 
+          <div className="px-5 pb-5 flex flex-col gap-4">
           {/* Booking Info */}
           <div className="py-6 border-b border-[#1B1A17]/10 flex flex-col gap-4 text-[14px]">
             <div className="flex justify-between items-start">

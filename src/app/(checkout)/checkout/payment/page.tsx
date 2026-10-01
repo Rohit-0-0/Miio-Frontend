@@ -55,7 +55,7 @@ export default async function PaymentPage({ searchParams }: Props) {
           <Logo image={siteSettings?.logo} className="text-[#1B1A17]" isLink={false} />
         </div>
         <div className="border-t border-[#1B1A17]/10">
-          <div className="max-w-[1440px] mx-auto px-4 md:px-[188px] flex justify-between items-center py-4 text-xs tracking-wider">
+          <div className="max-w-[1440px] mx-auto px-4 md:px-[188px] flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 py-4 text-[10px] sm:text-xs tracking-wider">
             <a 
               href={`/properties/${property.slug}?${new URLSearchParams({
                 checkIn: (resolvedParams.checkIn as string) || '',
@@ -65,16 +65,16 @@ export default async function PaymentPage({ searchParams }: Props) {
                 infants: (resolvedParams.infants as string) || '0',
                 pets: (resolvedParams.pets as string) || '0',
               }).toString()}`} 
-              className="text-[#7D7975] hover:text-black transition-colors uppercase font-medium"
+              className="text-[#7D7975] hover:text-black transition-colors uppercase font-medium text-center sm:text-left w-full sm:w-auto"
             >
               &larr; Back to {property.nickname || property.title}
             </a>
-            <div className="flex items-center gap-3 uppercase">
-              <a href={`/checkout?${new URLSearchParams(resolvedParams as any).toString()}`} className="text-[#7D7975] hover:text-black transition-colors">1 Dates</a>
-              <span className="opacity-30 text-[#1B1A17]">—</span>
-              <a href={`/checkout/details?${new URLSearchParams(resolvedParams as any).toString()}`} className="text-[#7D7975] hover:text-black transition-colors">2 Details</a>
-              <span className="opacity-30 text-[#1B1A17]">—</span>
-              <span className="text-[#1B1A17] font-semibold">3 Pay</span>
+            <div className="flex items-center justify-between sm:justify-center w-full sm:w-auto gap-2 sm:gap-3 uppercase text-[9px] sm:text-[10px]">
+              <a href={`/checkout?${new URLSearchParams(resolvedParams as any).toString()}`} className="text-[#7D7975] hover:text-black transition-colors whitespace-nowrap">1 Dates</a>
+              <div className="h-[1px] bg-[#1B1A17]/20 flex-1 sm:w-8 sm:flex-none"></div>
+              <a href={`/checkout/details?${new URLSearchParams(resolvedParams as any).toString()}`} className="text-[#7D7975] hover:text-black transition-colors whitespace-nowrap">2 Details</a>
+              <div className="h-[1px] bg-[#1B1A17]/20 flex-1 sm:w-8 sm:flex-none"></div>
+              <span className="text-[#1B1A17] font-semibold whitespace-nowrap">3 Pay</span>
             </div>
           </div>
         </div>

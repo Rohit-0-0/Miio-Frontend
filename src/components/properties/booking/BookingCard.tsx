@@ -83,6 +83,7 @@ export function BookingCard({ listingId, paymentTrustImages, hideMobileSticky = 
           checkOut={checkOut}
           onChangeCheckIn={setCheckIn}
           onChangeCheckOut={setCheckOut}
+          guestyId={listingId}
         />
         <GuestSelector
           adults={adults}

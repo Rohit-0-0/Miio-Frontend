@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { DayPicker, DateRange } from 'react-day-picker';
-import { format, parseISO, isBefore, startOfToday } from 'date-fns';
+import { format, parseISO, isBefore, startOfToday, differenceInCalendarDays } from 'date-fns';
 import 'react-day-picker/style.css';
 
 interface DateRangePickerProps {
@@ -14,6 +14,7 @@ interface DateRangePickerProps {
   customTrigger?: React.ReactNode;
   popoverAlign?: 'left' | 'right';
   inline?: boolean;
+  guestyId?: string;
 }
 
 export function DateRangePicker({
@@ -24,10 +25,13 @@ export function DateRangePicker({
   triggerClassName = "px-6 py-4 flex flex-col justify-center relative group cursor-pointer hover:bg-gray-50 transition-colors",
   customTrigger,
   popoverAlign = 'left',
-  inline = false
+  inline = false,
+  guestyId
 }: DateRangePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [blockedDates, setBlockedDates] = useState<Date[]>([]);
+  const [calendarDays, setCalendarDays] = useState<any[]>([]);
 
   // Convert string YYYY-MM-DD to Date objects for DayPicker
   const selectedRange: DateRange | undefined = React.useMemo(() => {
@@ -36,6 +40,61 @@ export function DateRangePicker({
     const to = checkOut ? parseISO(checkOut) : undefined;
     return { from, to };
   }, [checkIn, checkOut]);
+
+  useEffect(() => {
+    if (!guestyId) return;
+
+    const fetchCalendar = async () => {
+      try {
+        const today = new Date();
+        const startDate = format(today, 'yyyy-MM-dd');
+        // Fetch up to 1 year ahead
+        const end = new Date(today);
+        end.setFullYear(end.getFullYear() + 1);
+        const endDate = format(end, 'yyyy-MM-dd');
+
+        // Need to import apiClient if not already imported
+        const { apiClient } = await import('@/lib/api/client');
+        const res = await apiClient.get<any>(`/booking/calendar/${guestyId}?startDate=${startDate}&endDate=${endDate}`);
+        
+        if (res.success && res.data) {
+          // Find the array of days. Depending on Guesty's API response structure:
+          // it might be res.data.data, res.data.days, etc.
+          let days = res.data.data || res.data.days || res.data;
+          if (!Array.isArray(days)) {
+            // It might be nested if data is an object with a days property
+            if (res.data.data && Array.isArray(res.data.data.days)) {
+              days = res.data.data.days;
+            } else if (res.data.data && Array.isArray(res.data.data.data)) {
+              days = res.data.data.data;
+            }
+          }
+
+          if (Array.isArray(days)) {
+            setCalendarDays(days);
+            
+            const disabled: Date[] = [];
+            days.forEach((day: any) => {
+              if (day.status !== 'available') {
+                try {
+                  const d = parseISO(day.date);
+                  // Ensure we add valid dates
+                  if (!isNaN(d.getTime())) {
+                    disabled.push(d);
+                  }
+                } catch(e) {}
+              }
+            });
+            setBlockedDates(disabled);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch calendar for DateRangePicker', err);
+      }
+    };
+    
+    fetchCalendar();
+  }, [guestyId]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -97,6 +156,21 @@ export function DateRangePicker({
     ? `${format(parseISO(checkIn), 'MMM dd')}${checkOut ? ` - ${format(parseISO(checkOut), 'MMM dd')}` : ' - Add Date'}` 
     : 'Add Dates';
 
+  const disabledDates = React.useCallback((date: Date) => {
+    // Disable past dates
+    if (isBefore(date, startOfToday())) return true;
+    
+    // Disable dates explicitly blocked from Guesty
+    const dateStr = format(date, 'yyyy-MM-dd');
+    const dayInfo = calendarDays.find(d => d.date === dateStr);
+    
+    if (dayInfo && dayInfo.status !== 'available') {
+      return true;
+    }
+    
+    return false;
+  }, [calendarDays, selectedRange]);
+
   if (inline) {
     return (
       <div className={`${className} flex justify-center pb-4`}>
@@ -107,7 +181,7 @@ export function DateRangePicker({
             onSelect={handleSelect}
             numberOfMonths={isMobile ? 1 : 2}
             pagedNavigation
-            disabled={{ before: startOfToday() }}
+            disabled={disabledDates}
             showOutsideDays={false}
           />
         </div>
@@ -140,7 +214,7 @@ export function DateRangePicker({
               onSelect={handleSelect}
               numberOfMonths={isMobile ? 1 : 2}
               pagedNavigation
-              disabled={{ before: startOfToday() }}
+              disabled={disabledDates}
               showOutsideDays={false}
             />
           </div>
