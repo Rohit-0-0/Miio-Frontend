@@ -67,6 +67,9 @@ export function CheckoutFlow({ property, searchParams, paymentTrustImages, cmsCo
   useEffect(() => {
     // If the user selects new dates in the calendar, update the URL to trigger a re-fetch of the quote
     if ((checkInState && checkInState !== checkIn) || (checkOutState && checkOutState !== checkOut)) {
+      if (checkInState && checkOutState) {
+        setIsLoading(true);
+      }
       const params = new URLSearchParams({
         ...searchParams,
         checkIn: checkInState || '',
