@@ -17,11 +17,13 @@ interface BookingCardProps {
   listingId: string;
   paymentTrustImages?: any[];
   hideMobileSticky?: boolean;
+  isCheckout?: boolean;
+  hideSubmit?: boolean;
 }
 
 import { PaymentLogos } from '@/components/layout/PaymentLogos';
 
-export function BookingCard({ listingId, paymentTrustImages, hideMobileSticky = false }: BookingCardProps) {
+export function BookingCard({ listingId, paymentTrustImages, hideMobileSticky = false, isCheckout = false, hideSubmit = false }: BookingCardProps) {
   const searchParams = useSearchParams();
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -102,14 +104,16 @@ export function BookingCard({ listingId, paymentTrustImages, hideMobileSticky = 
           }
         />
 
-        <BookingActions>
-          <ReserveButton
-            disabled={!checkIn || !checkOut}
-            onClick={handleBookNowClick}
-            isLoading={false}
-            label={reserveLabel}
-          />
-        </BookingActions>
+        {!hideSubmit && (
+          <BookingActions>
+            <ReserveButton
+              disabled={!checkIn || !checkOut}
+              onClick={handleBookNowClick}
+              isLoading={false}
+              label={reserveLabel}
+            />
+          </BookingActions>
+        )}
         <PaymentLogos images={paymentTrustImages} />
       </div>
 

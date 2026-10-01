@@ -123,10 +123,10 @@ export default async function SuccessPage({ searchParams }: Props) {
           {/* Right Column */}
           <div>
             <BookingCard 
-              property={property} 
-              searchParams={resolvedParams as any} 
+              listingId={property.guestyId || property.id}
               isCheckout={true}
               hideSubmit={true} 
+              hideMobileSticky={true}
             />
           </div>
         </div>
