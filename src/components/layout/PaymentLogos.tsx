@@ -51,20 +51,7 @@ export function PaymentLogos({
 
   return (
     <div className={`flex flex-wrap items-center w-full uppercase ${isFooter ? 'justify-center md:justify-start gap-4 md:gap-6 text-xs font-sans text-white/70' : `justify-center gap-3 text-[9px] tracking-[0.08em] ${textColorClass} mt-5`} ${className}`}>
-      {isFooter ? (
-        <div className="flex items-center gap-1.5 text-white mr-2">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-          <span className="font-semibold tracking-wider text-[10px]">SECURE CHECKOUT</span>
-        </div>
-      ) : (
-        <>
-          <span className="font-medium shrink-0">Secure checkout</span>
-          <span className="opacity-40 shrink-0">·</span>
-        </>
-      )}
+      {isFooter ? null : null}
       <div className={isFooter ? "flex items-center h-[28px] text-[10px] font-bold text-white" : "shrink-0"}>Apple Pay</div>
       <div className={isFooter ? "flex items-center h-[28px] text-[10px] font-bold text-blue-400" : "shrink-0"}>Amex</div>
       <div className={isFooter ? "flex items-center h-[28px] text-[10px] font-bold text-red-400" : "shrink-0"}>Mastercard</div>

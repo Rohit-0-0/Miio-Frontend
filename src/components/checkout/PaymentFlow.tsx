@@ -213,10 +213,10 @@ function PaymentForm({
     style: {
       base: {
         fontSize: '14px',
-        color: '#1B1A17',
+        color: '#5F4E44',
         fontFamily: 'var(--font-instrument-sans), sans-serif',
         '::placeholder': {
-          color: 'rgba(27, 26, 23, 0.2)',
+          color: 'rgba(95, 78, 68, 0.6)',
         },
       },
       invalid: {
@@ -252,7 +252,7 @@ function PaymentForm({
             {paymentMethod === 'card' && (
               <div className="flex flex-col gap-6">
                 <div className="flex flex-col gap-1">
-                  <label className="text-[10px] uppercase tracking-[0.12em] text-[#7D7975]">Card Number</label>
+                  <label className="text-[11px] uppercase tracking-[0.08em] text-[#241D19] font-normal">Card Number</label>
                   <div className="border-b border-[#1B1A17]/10 pb-2">
                     <CardNumberElement options={CARD_ELEMENT_OPTIONS} />
                   </div>
@@ -260,13 +260,13 @@ function PaymentForm({
                 
                 <div className="grid grid-cols-2 gap-8">
                   <div className="flex flex-col gap-1">
-                    <label className="text-[10px] uppercase tracking-[0.12em] text-[#7D7975]">Expiry</label>
+                    <label className="text-[11px] uppercase tracking-[0.08em] text-[#241D19] font-normal">Expiry</label>
                     <div className="border-b border-[#1B1A17]/10 pb-2">
                       <CardExpiryElement options={CARD_ELEMENT_OPTIONS} />
                     </div>
                   </div>
                   <div className="flex flex-col gap-1">
-                    <label className="text-[10px] uppercase tracking-[0.12em] text-[#7D7975]">CVC</label>
+                    <label className="text-[11px] uppercase tracking-[0.08em] text-[#241D19] font-normal">CVC</label>
                     <div className="border-b border-[#1B1A17]/10 pb-2">
                       <CardCvcElement options={CARD_ELEMENT_OPTIONS} />
                     </div>
@@ -274,8 +274,8 @@ function PaymentForm({
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <label className="text-[10px] uppercase tracking-[0.12em] text-[#7D7975]">Name on Card</label>
-                  <input type="text" placeholder="Emma Walsh" className="border-b border-[#1B1A17]/10 pb-2 text-[14px] text-[#1B1A17] focus:outline-none focus:border-[#1B1A17]/30 bg-transparent placeholder:text-[#1B1A17]/20" />
+                  <label className="text-[11px] uppercase tracking-[0.08em] text-[#241D19] font-normal">Name on Card</label>
+                  <input type="text" placeholder="Emma Walsh" className="border-b border-[#1B1A17]/10 pb-2 text-[14px] text-[#5F4E44] focus:outline-none focus:border-[#1B1A17]/30 bg-transparent placeholder:text-[#5F4E44]/60" />
                 </div>
               </div>
             )}
@@ -377,12 +377,6 @@ function PaymentForm({
               
               {(!paymentRequest || paymentMethod !== 'applepay') && (
                 <div className="flex flex-col gap-2">
-                  <div className="flex items-center gap-1.5 text-[10px] text-[#7D7975] font-semibold tracking-wider">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    SECURE CHECKOUT
-                  </div>
                   {cmsContent?.paymentTrustImages && cmsContent.paymentTrustImages.length > 0 && (
                     <PaymentLogos images={cmsContent.paymentTrustImages} isFooter={false} />
                   )}

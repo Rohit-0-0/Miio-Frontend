@@ -205,109 +205,40 @@ export function CheckoutFlow({ property, searchParams, paymentTrustImages, cmsCo
 
   const nights = Math.max(1, Math.floor((parseISO(checkOut || new Date().toISOString()).getTime() - parseISO(checkIn || new Date().toISOString()).getTime()) / (1000 * 60 * 60 * 24)));
 
-  if (quote) {
-    // STATE 1: AVAILABLE
-    const ratePlanItem = quote?.rates?.ratePlans?.[0];
-    const money = ratePlanItem?.ratePlan?.money;
-    const total = money?.subTotalPrice || 0;
+  const ratePlanItem = quote?.rates?.ratePlans?.[0];
+  const money = ratePlanItem?.ratePlan?.money;
+  const total = money?.subTotalPrice || 0;
 
-    return (
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_345px] gap-8 lg:gap-32 relative">
-        {isLoading && <LoadingOverlay />}
-        
-        {/* Left Side: Calendar / Dates */}
-        <div className="flex flex-col gap-8 order-2 lg:order-1">
-          <div>
-            <h2 className="text-2xl lg:text-4xl font-serif text-[#1B1A17] mb-1 lg:mb-2">{cmsContent?.datesHeading || 'Dates'}</h2>
-            <p className="text-[12px] lg:text-sm text-[#7D7975]">{leftDatesStr}, {quote?.rates?.ratePlans?.[0]?.days?.length || 1} {cmsContent?.nightsText || 'nights'}</p>
-          </div>
-          
-          <div className="rounded-xl mt-4">
-            <DateSelector
-              checkIn={checkInState}
-              checkOut={checkOutState}
-              onChangeCheckIn={setCheckInState}
-              onChangeCheckOut={setCheckOutState}
-              inline={true} 
-              guestyId={actualGuestyId}
-              blockUnavailableDates={true}
-            />
-          </div>
+  const summaryCard = (
+    <div className="bg-white rounded-lg lg:rounded-[4px] shadow-[0_4px_24px_rgba(0,0,0,0.06)] border border-[#1B1A17]/5 overflow-hidden self-start order-1 lg:order-2 w-full max-w-[400px] lg:max-w-none mx-auto lg:mx-0 p-4 lg:p-0 flex flex-row lg:flex-col items-center lg:items-start gap-4 lg:gap-0 mb-0 lg:mb-0">
+      {coverImageUrl && (
+        <div className="w-[84px] h-[64px] lg:h-[220px] lg:w-full overflow-hidden lg:p-3 lg:pb-0 shrink-0">
+          <img src={coverImageUrl} alt={propertyTitle} className="w-full h-full object-cover rounded-[6px] lg:rounded-t-[8px] lg:rounded-b-none" />
+        </div>
+      )}
+      <div className="lg:px-5 lg:py-5 flex flex-col lg:gap-4 w-full">
+        <div>
+          <h3 className="text-[14px] lg:text-[17px] font-serif text-[#1B1A17] leading-tight">{propertyTitle}</h3>
+          <p className="text-[10px] lg:text-[12px] text-[#7D7975] mt-0.5 lg:mt-1">{property.location?.city}</p>
+        </div>
 
-          <div className="mt-2">
-            <GuestSelector
-              adults={adults}
-              children={children}
-              infants={infants}
-              pets={pets}
-              onChangeAdults={(val) => {
-                const params = new URLSearchParams(searchParams as any);
-                params.set('adults', val.toString());
-                router.push(`/checkout?${params.toString()}`, { scroll: false });
-              }}
-              onChangeChildren={(val) => {
-                const params = new URLSearchParams(searchParams as any);
-                params.set('children', val.toString());
-                router.push(`/checkout?${params.toString()}`, { scroll: false });
-              }}
-              onChangeInfants={(val) => {
-                const params = new URLSearchParams(searchParams as any);
-                params.set('infants', val.toString());
-                router.push(`/checkout?${params.toString()}`, { scroll: false });
-              }}
-              onChangePets={(val) => {
-                const params = new URLSearchParams(searchParams as any);
-                params.set('pets', val.toString());
-                router.push(`/checkout?${params.toString()}`, { scroll: false });
-              }}
-              customTrigger={
-                <div className="cursor-pointer group">
-                  <div className="text-[10px] uppercase tracking-[0.12em] text-[#7D7975] mb-2 group-hover:text-black transition-colors">{cmsContent?.guestsHeading || 'GUESTS'}</div>
-                  <div className="text-[14px] text-[#1B1A17] pb-6 border-b border-[#1B1A17]/10 mb-8 group-hover:border-[#1B1A17]/30 transition-colors flex justify-between items-center">
-                    <span>{guestLabel}</span>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="opacity-50">
-                       <path d="M6 9L12 15L18 9" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
-                </div>
-              }
-            />
-             <button 
-                onClick={() => {
-                  const params = new URLSearchParams(searchParams as any);
-                  router.push(`/checkout/details?${params.toString()}`);
-                }}
-                className="w-full lg:w-auto bg-[#1B1A17] text-white py-3 px-8 rounded-full font-semibold hover:bg-black/80 transition-colors text-[14px]"
-              >
-                {cmsContent?.continueButton || 'Continue to details'}
-              </button>
+        <div className="hidden lg:flex border-t border-[#1B1A17]/10 pt-4 flex-col gap-2 text-[12px]">
+          <div className="flex justify-between">
+            <span className="text-[#7D7975]">{cmsContent?.datesHeading || 'Dates'}</span>
+            {quote ? (
+              <span className="text-[#1B1A17] text-right max-w-[120px]">{rightDatesStr}</span>
+            ) : (
+              <span className="text-[#1B1A17] text-right max-w-[120px] underline cursor-pointer hover:text-black">Choose new dates</span>
+            )}
+          </div>
+          <div className="flex justify-between mt-1">
+            <span className="text-[#7D7975]">{cmsContent?.guestsHeading || 'Guests'}</span>
+            <span className="text-[#1B1A17] text-right max-w-[120px]">{guestLabel}</span>
           </div>
         </div>
 
-        {/* Right Side: Summary Card */}
-        <div className="bg-white rounded-lg lg:rounded-[4px] shadow-[0_4px_24px_rgba(0,0,0,0.06)] border border-[#1B1A17]/5 overflow-hidden self-start order-1 lg:order-2 w-full max-w-[400px] lg:max-w-none mx-auto lg:mx-0 p-4 lg:p-0 flex flex-row lg:flex-col items-center lg:items-start gap-4 lg:gap-0 mb-0 lg:mb-0">
-          {coverImageUrl && (
-            <div className="w-[84px] h-[64px] lg:h-[220px] lg:w-full overflow-hidden lg:p-3 lg:pb-0 shrink-0">
-              <img src={coverImageUrl} alt={propertyTitle} className="w-full h-full object-cover rounded-[6px] lg:rounded-t-[8px] lg:rounded-b-none" />
-            </div>
-          )}
-          <div className="lg:px-5 lg:py-5 flex flex-col lg:gap-4 w-full">
-            <div>
-              <h3 className="text-[14px] lg:text-[17px] font-serif text-[#1B1A17] leading-tight">{propertyTitle}</h3>
-              <p className="text-[10px] lg:text-[12px] text-[#7D7975] mt-0.5 lg:mt-1">{property.location?.city}</p>
-            </div>
-
-            <div className="hidden lg:flex border-t border-[#1B1A17]/10 pt-4 flex-col gap-2 text-[12px]">
-              <div className="flex justify-between">
-                <span className="text-[#7D7975]">{cmsContent?.datesHeading || 'Dates'}</span>
-                <span className="text-[#1B1A17] text-right max-w-[120px]">{rightDatesStr}</span>
-              </div>
-              <div className="flex justify-between mt-1">
-                <span className="text-[#7D7975]">{cmsContent?.guestsHeading || 'Guests'}</span>
-                <span className="text-[#1B1A17] text-right max-w-[120px]">{guestLabel}</span>
-              </div>
-            </div>
-
+        {quote ? (
+          <>
             <div className="hidden lg:flex border-t border-[#1B1A17]/10 pt-4 flex-col gap-2 text-[12px]">
               <div className="flex justify-between">
                 <span className="text-[#7D7975]">
@@ -414,72 +345,36 @@ export function CheckoutFlow({ property, searchParams, paymentTrustImages, cmsCo
                 {cmsContent?.freeCancellationText || 'Free cancellation until 7 days before check-in.'}
               </div>
             </div>
+          </>
+        ) : (
+          <div className="hidden lg:flex border-t border-[#1B1A17]/10 pt-4 flex-col gap-4">
+            <div className="text-[12px] text-[#7D7975]">
+              The total updates once new dates are chosen.
+            </div>
+            <div className="text-[10px] text-[#7D7975] mt-1">
+              {cmsContent?.freeCancellationText || 'Free cancellation until 7 days before check-in.'}
+            </div>
           </div>
-        </div>
+        )}
       </div>
-    );
-  }
+    </div>
+  );
 
-  // STATE 2: NOT AVAILABLE
-  return (
-    <div className="flex flex-col gap-8 lg:gap-12 max-w-4xl relative">
-      {isLoading && <LoadingOverlay />}
-      
-      <div className="flex flex-col gap-1 lg:gap-2">
-        <h2 className="text-2xl lg:text-4xl font-serif text-[#1B1A17]">{cmsContent?.datesHeading || 'Dates'}</h2>
-        <p className="text-[12px] lg:text-[14px] text-[#7D7975]">{leftDatesStr}, {nights} {cmsContent?.nightsText || 'nights'}</p>
-      </div>
-
-      {alternatives.length > 0 ? (
-        <>
-          <div className="bg-[#E1DBC3] px-6 py-3 rounded-[8px] inline-flex self-start">
-            <p className="text-[14px] text-[#1B1A17]">
-              {minNightsError 
-                ? `Please try selecting at least ${minNightsError} nights for ${propertyTitle}. Here are some available homes:` 
-                : `These dates are booked for ${propertyTitle} — but these Miio homes are available:`}
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl">
-            {alternatives.map(alt => (
-              <MinimalPropertyCard
-                key={alt._id || alt.id}
-                id={alt._id || alt.id}
-                slug={alt.id || alt._id}
-                name={alt.title || alt.nickname}
-                nickname={alt.nickname}
-                unitType={alt.unitType}
-                location={alt.address?.city || 'Various Locations'}
-                guests={alt.accommodates || 2}
-                bedrooms={alt.bedrooms || 1}
-                bathrooms={alt.bathrooms}
-                propertyType={alt.propertyType}
-                reviews={undefined}
-                price={alt.prices?.basePrice ? `$${Math.round(alt.prices.basePrice).toLocaleString()}` : '$0'} 
-                priceLabel={alt.prices?.basePrice ? "/ night" : undefined}
-                coverImage={alt.picture?.large || alt.thumbnail}
-              />
-            ))}
-          </div>
-        </>
-      ) : (
-        <div className="bg-[#E1DBC3] px-6 py-3 rounded-[8px] inline-flex self-start">
-          <p className="text-[14px] text-[#1B1A17]">
-            {minNightsError 
-              ? `Please try selecting at least ${minNightsError} nights for ${propertyTitle}. No other homes are available for these exact dates.`
-              : `These dates are booked for ${propertyTitle}. No other homes are available for these exact dates.`}
-          </p>
-        </div>
-      )}
-
-      <div className="pt-8 border-t border-[#1B1A17]/10 mt-4">
-        <div className="bg-[#E1DBC3] px-6 py-3 rounded-[8px] inline-flex self-start mb-8">
-          <p className="text-[14px] text-[#1B1A17]">
-            Other available dates for {propertyTitle}:
-          </p>
-        </div>
+  if (quote) {
+    // STATE 1: AVAILABLE
+    return (
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_345px] gap-8 lg:gap-32 relative">
+        {isLoading && <LoadingOverlay />}
         
-        <div className="rounded-xl relative">
-           <DateSelector
+        {/* Left Side: Calendar / Dates */}
+        <div className="flex flex-col gap-8 order-2 lg:order-1">
+          <div>
+            <h2 className="text-2xl lg:text-4xl font-serif text-[#1B1A17] mb-1 lg:mb-2">{cmsContent?.datesHeading || 'Dates'}</h2>
+            <p className="text-[12px] lg:text-sm text-[#7D7975]">{leftDatesStr}, {quote?.rates?.ratePlans?.[0]?.days?.length || 1} {cmsContent?.nightsText || 'nights'}</p>
+          </div>
+          
+          <div className="rounded-xl mt-4">
+            <DateSelector
               checkIn={checkInState}
               checkOut={checkOutState}
               onChangeCheckIn={setCheckInState}
@@ -488,8 +383,140 @@ export function CheckoutFlow({ property, searchParams, paymentTrustImages, cmsCo
               guestyId={actualGuestyId}
               blockUnavailableDates={true}
             />
+          </div>
+
+          <div className="mt-2">
+            <GuestSelector
+              adults={adults}
+              children={children}
+              infants={infants}
+              pets={pets}
+              onChangeAdults={(val) => {
+                const params = new URLSearchParams(searchParams as any);
+                params.set('adults', val.toString());
+                router.push(`/checkout?${params.toString()}`, { scroll: false });
+              }}
+              onChangeChildren={(val) => {
+                const params = new URLSearchParams(searchParams as any);
+                params.set('children', val.toString());
+                router.push(`/checkout?${params.toString()}`, { scroll: false });
+              }}
+              onChangeInfants={(val) => {
+                const params = new URLSearchParams(searchParams as any);
+                params.set('infants', val.toString());
+                router.push(`/checkout?${params.toString()}`, { scroll: false });
+              }}
+              onChangePets={(val) => {
+                const params = new URLSearchParams(searchParams as any);
+                params.set('pets', val.toString());
+                router.push(`/checkout?${params.toString()}`, { scroll: false });
+              }}
+              customTrigger={
+                <div className="cursor-pointer group">
+                  <div className="text-[10px] uppercase tracking-[0.12em] text-[#7D7975] mb-2 group-hover:text-black transition-colors">{cmsContent?.guestsHeading || 'GUESTS'}</div>
+                  <div className="text-[14px] text-[#1B1A17] pb-6 border-b border-[#1B1A17]/10 mb-8 group-hover:border-[#1B1A17]/30 transition-colors flex justify-between items-center">
+                    <span>{guestLabel}</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="opacity-50">
+                       <path d="M6 9L12 15L18 9" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                </div>
+              }
+            />
+             <button 
+                onClick={() => {
+                  const params = new URLSearchParams(searchParams as any);
+                  router.push(`/checkout/details?${params.toString()}`);
+                }}
+                className="w-full lg:w-auto bg-[#1B1A17] text-white py-3 px-8 rounded-full font-semibold hover:bg-black/80 transition-colors text-[14px]"
+              >
+                {cmsContent?.continueButton || 'Continue to details'}
+              </button>
+          </div>
+        </div>
+
+        {/* Right Side: Summary Card */}
+        {summaryCard}
+      </div>
+    );
+  }
+
+  // STATE 2: NOT AVAILABLE
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-[1fr_345px] gap-8 lg:gap-32 relative">
+      {isLoading && <LoadingOverlay />}
+      
+      {/* Left Side: Alternatives */}
+      <div className="flex flex-col gap-8 lg:gap-12 order-2 lg:order-1 max-w-4xl relative">
+        <div className="flex flex-col gap-1 lg:gap-2">
+          <h2 className="text-2xl lg:text-4xl font-serif text-[#1B1A17]">{cmsContent?.datesHeading || 'Dates'}</h2>
+          <p className="text-[12px] lg:text-[14px] text-[#7D7975]">{leftDatesStr}, {nights} {cmsContent?.nightsText || 'nights'}</p>
+        </div>
+
+        {alternatives.length > 0 ? (
+          <>
+            <div className="bg-[#E1DBC3] px-6 py-3 rounded-[8px] inline-flex self-start">
+              <p className="text-[14px] text-[#1B1A17]">
+                {minNightsError 
+                  ? `Please try selecting at least ${minNightsError} nights for ${propertyTitle}. Here are some available homes:` 
+                  : `These dates are booked for ${propertyTitle} — but these Miio homes are available:`}
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl">
+              {alternatives.map(alt => (
+                <MinimalPropertyCard
+                  key={alt._id || alt.id}
+                  id={alt._id || alt.id}
+                  slug={alt.id || alt._id}
+                  name={alt.title || alt.nickname}
+                  nickname={alt.nickname}
+                  unitType={alt.unitType}
+                  location={alt.address?.city || 'Various Locations'}
+                  guests={alt.accommodates || 2}
+                  bedrooms={alt.bedrooms || 1}
+                  bathrooms={alt.bathrooms}
+                  propertyType={alt.propertyType}
+                  reviews={undefined}
+                  price={alt.prices?.basePrice ? `$${Math.round(alt.prices.basePrice).toLocaleString()}` : '$0'} 
+                  priceLabel={alt.prices?.basePrice ? "/ night" : undefined}
+                  coverImage={alt.picture?.large || alt.thumbnail}
+                />
+              ))}
+            </div>
+          </>
+        ) : (
+          <div className="bg-[#E1DBC3] px-6 py-3 rounded-[8px] inline-flex self-start">
+            <p className="text-[14px] text-[#1B1A17]">
+              {minNightsError 
+                ? `Please try selecting at least ${minNightsError} nights for ${propertyTitle}. No other homes are available for these exact dates.`
+                : `These dates are booked for ${propertyTitle}. No other homes are available for these exact dates.`}
+            </p>
+          </div>
+        )}
+
+        <div className="pt-8 border-t border-[#1B1A17]/10 mt-4">
+          <div className="bg-[#E1DBC3] px-6 py-3 rounded-[8px] inline-flex self-start mb-8">
+            <p className="text-[14px] text-[#1B1A17]">
+              Other available dates for {propertyTitle}:
+            </p>
+          </div>
+          
+          <div className="rounded-xl relative">
+             <DateSelector
+                checkIn={checkInState}
+                checkOut={checkOutState}
+                onChangeCheckIn={setCheckInState}
+                onChangeCheckOut={setCheckOutState}
+                inline={true} 
+                guestyId={actualGuestyId}
+                blockUnavailableDates={true}
+              />
+          </div>
         </div>
       </div>
+
+      {/* Right Side: Summary Card */}
+      {summaryCard}
     </div>
   );
 }
