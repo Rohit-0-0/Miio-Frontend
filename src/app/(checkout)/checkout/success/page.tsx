@@ -135,16 +135,16 @@ export default async function SuccessPage({ searchParams }: Props) {
       {/* Footer */}
       <footer className="w-full bg-[#1B1A17] text-white py-8 mt-auto">
         <div className="max-w-[1440px] mx-auto px-4 md:px-[188px] flex flex-col md:flex-row justify-between items-center text-xs">
-          <div className="flex items-center gap-4 text-white/50">
-            <span>Stay with Miio. All rights reserved.</span>
-            <a href="/terms" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Terms</a>
-            <a href="/privacy" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Privacy</a>
-          </div>
-          
-          <div className="mt-6 md:mt-0 opacity-50 flex items-center justify-center">
-            {/* The PaymentLogos component can be included here if needed, or we can just render the logos */}
+          <div className="mt-6 md:mt-0 opacity-50 flex items-center justify-center order-1 md:order-2 mb-6 md:mb-0">
             <div className="flex items-center gap-2">
               <span className="mr-2">SECURE PAYMENT</span>
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 text-white/50 order-2 md:order-1">
+            <span>Stay with Miio. All rights reserved.</span>
+            <div className="flex gap-4 mt-1 md:mt-0">
+              <a href="/terms" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Terms</a>
+              <a href="/privacy" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Privacy</a>
             </div>
           </div>
         </div>

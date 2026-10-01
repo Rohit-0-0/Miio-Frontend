@@ -212,14 +212,14 @@ export function CheckoutFlow({ property, searchParams, paymentTrustImages, cmsCo
     const total = money?.subTotalPrice || 0;
 
     return (
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_345px] gap-12 lg:gap-32 relative">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_345px] gap-8 lg:gap-32 relative">
         {isLoading && <LoadingOverlay />}
         
         {/* Left Side: Calendar / Dates */}
         <div className="flex flex-col gap-8 order-2 lg:order-1">
           <div>
-            <h2 className="text-4xl font-serif text-[#1B1A17] mb-2">{cmsContent?.datesHeading || 'Dates'}</h2>
-            <p className="text-sm text-[#7D7975]">{leftDatesStr}, {quote?.rates?.ratePlans?.[0]?.days?.length || 1} {cmsContent?.nightsText || 'nights'}</p>
+            <h2 className="text-2xl lg:text-4xl font-serif text-[#1B1A17] mb-1 lg:mb-2">{cmsContent?.datesHeading || 'Dates'}</h2>
+            <p className="text-[12px] lg:text-sm text-[#7D7975]">{leftDatesStr}, {quote?.rates?.ratePlans?.[0]?.days?.length || 1} {cmsContent?.nightsText || 'nights'}</p>
           </div>
           
           <div className="rounded-xl mt-4">
@@ -284,7 +284,7 @@ export function CheckoutFlow({ property, searchParams, paymentTrustImages, cmsCo
         </div>
 
         {/* Right Side: Summary Card */}
-        <div className="bg-white rounded-lg lg:rounded-[4px] shadow-[0_4px_24px_rgba(0,0,0,0.06)] border border-[#1B1A17]/5 overflow-hidden self-start order-1 lg:order-2 w-full max-w-[400px] lg:max-w-none mx-auto lg:mx-0 p-3 lg:p-0 flex flex-row lg:flex-col items-center lg:items-start gap-4 lg:gap-0 mb-4 lg:mb-0">
+        <div className="bg-white rounded-lg lg:rounded-[4px] shadow-[0_4px_24px_rgba(0,0,0,0.06)] border border-[#1B1A17]/5 overflow-hidden self-start order-1 lg:order-2 w-full max-w-[400px] lg:max-w-none mx-auto lg:mx-0 p-4 lg:p-0 flex flex-row lg:flex-col items-center lg:items-start gap-4 lg:gap-0 mb-0 lg:mb-0">
           {coverImageUrl && (
             <div className="w-[84px] h-[64px] lg:h-[220px] lg:w-full overflow-hidden lg:p-3 lg:pb-0 shrink-0">
               <img src={coverImageUrl} alt={propertyTitle} className="w-full h-full object-cover rounded-[6px] lg:rounded-t-[8px] lg:rounded-b-none" />
@@ -307,7 +307,7 @@ export function CheckoutFlow({ property, searchParams, paymentTrustImages, cmsCo
               </div>
             </div>
 
-            <div className="border-t border-[#1B1A17]/10 pt-4 flex flex-col gap-2 text-[12px]">
+            <div className="hidden lg:flex border-t border-[#1B1A17]/10 pt-4 flex-col gap-2 text-[12px]">
               <div className="flex justify-between">
                 <span className="text-[#7D7975]">
                   ${Math.round((money?.fareAccommodation || 0) / (quote?.rates?.ratePlans?.[0]?.days?.length || 1)).toLocaleString()} × {quote?.rates?.ratePlans?.[0]?.days?.length || 1} {cmsContent?.nightsText || 'nights'}
@@ -384,7 +384,7 @@ export function CheckoutFlow({ property, searchParams, paymentTrustImages, cmsCo
               )}
             </div>
 
-            <div className="border-t border-[#1B1A17]/10 pt-4 flex flex-col gap-4">
+            <div className="hidden lg:flex border-t border-[#1B1A17]/10 pt-4 flex-col gap-4">
               <div className="flex justify-between text-[14px] font-bold text-[#1B1A17]">
                 <span>{cmsContent?.totalLabel || 'Total (AUD)'}</span>
                 <span>${(total).toLocaleString()}</span>
@@ -421,12 +421,12 @@ export function CheckoutFlow({ property, searchParams, paymentTrustImages, cmsCo
 
   // STATE 2: NOT AVAILABLE
   return (
-    <div className="flex flex-col gap-12 max-w-4xl relative">
+    <div className="flex flex-col gap-8 lg:gap-12 max-w-4xl relative">
       {isLoading && <LoadingOverlay />}
       
-      <div className="flex flex-col gap-2">
-        <h2 className="text-4xl font-serif text-[#1B1A17]">{cmsContent?.datesHeading || 'Dates'}</h2>
-        <p className="text-[14px] text-[#7D7975]">{leftDatesStr}, {nights} {cmsContent?.nightsText || 'nights'}</p>
+      <div className="flex flex-col gap-1 lg:gap-2">
+        <h2 className="text-2xl lg:text-4xl font-serif text-[#1B1A17]">{cmsContent?.datesHeading || 'Dates'}</h2>
+        <p className="text-[12px] lg:text-[14px] text-[#7D7975]">{leftDatesStr}, {nights} {cmsContent?.nightsText || 'nights'}</p>
       </div>
 
       {alternatives.length > 0 ? (

@@ -51,12 +51,12 @@ export default async function DetailsPage({ searchParams }: Props) {
   return (
     <div className="flex flex-col min-h-screen bg-[#FEF6EE]">
       {/* Checkout Header (Step 2 Active) */}
-      <header className="w-full pt-8 pb-4">
+      <header className="w-full pt-6 pb-0 md:pt-8 md:pb-4">
         <div className="flex justify-center mb-6">
           <Logo image={siteSettings?.logo} className="text-[#1B1A17]" isLink={false} />
         </div>
         <div className="border-t border-[#1B1A17]/10">
-          <div className="max-w-[1440px] mx-auto px-4 md:px-[188px] flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 py-4 text-[10px] sm:text-xs tracking-wider">
+          <div className="max-w-[1440px] mx-auto px-5 md:px-[188px] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 pt-4 pb-0 md:py-4 text-[10px] sm:text-xs tracking-wider">
             <a 
               href={`/properties/${property.slug}?${new URLSearchParams({
                 checkIn: (resolvedParams.checkIn as string) || '',
@@ -66,7 +66,7 @@ export default async function DetailsPage({ searchParams }: Props) {
                 infants: (resolvedParams.infants as string) || '0',
                 pets: (resolvedParams.pets as string) || '0',
               }).toString()}`} 
-              className="text-[#7D7975] hover:text-black transition-colors uppercase font-medium text-center sm:text-left w-full sm:w-auto"
+              className="text-[#7D7975] hover:text-black transition-colors uppercase font-medium text-left w-full sm:w-auto"
             >
               &larr; Back to {property.nickname || property.title}
             </a>
@@ -83,7 +83,7 @@ export default async function DetailsPage({ searchParams }: Props) {
 
       {/* Main Content scaffold */}
       <main className="flex-1">
-        <div className="max-w-[1440px] mx-auto px-4 md:px-[188px] pt-12 pb-24">
+        <div className="max-w-[1440px] mx-auto px-5 md:px-[188px] pt-8 pb-24 md:pt-12 md:pb-24">
           <DetailsFlow 
             property={property as any}
             searchParams={resolvedParams as any}
@@ -96,14 +96,16 @@ export default async function DetailsPage({ searchParams }: Props) {
       {/* Checkout Footer */}
       <footer className="w-full bg-[#1B1A17] text-white py-8 mt-auto">
         <div className="max-w-[1440px] mx-auto px-4 md:px-[188px] flex flex-col md:flex-row justify-between items-center text-xs">
-          <div className="flex gap-4 text-white/60 mb-4 md:mb-0">
-            <span>© Stay with Miio. All rights reserved.</span>
-            <a href="/terms" target="_blank" rel="noopener noreferrer" className="hover:text-white">Terms</a>
-            <a href="/privacy" target="_blank" rel="noopener noreferrer" className="hover:text-white">Privacy</a>
-          </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 order-1 md:order-2 mb-6 md:mb-0">
             <div className="flex gap-2 [&_img]:!h-[20px] [&_img:first-child]:!h-[20px]">
                <PaymentLogos images={footerLogos} isFooter={true} />
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 text-white/60 order-2 md:order-1">
+            <span>© Stay with Miio. All rights reserved.</span>
+            <div className="flex gap-4 mt-1 md:mt-0">
+              <a href="/terms" target="_blank" rel="noopener noreferrer" className="hover:text-white">Terms</a>
+              <a href="/privacy" target="_blank" rel="noopener noreferrer" className="hover:text-white">Privacy</a>
             </div>
           </div>
         </div>
