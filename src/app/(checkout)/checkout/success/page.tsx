@@ -114,7 +114,7 @@ export default async function SuccessPage({ searchParams }: Props) {
 
             <div className="mt-8 flex items-center gap-8 text-sm">
               <button className="text-[#7D7975] hover:text-[#1B1A17] transition-colors">Add to calendar</button>
-              <a href={`/locations/${property.location?.slug || ''}`} className="text-[#7D7975] hover:text-[#1B1A17] transition-colors flex items-center gap-1">
+              <a href={`/locations/${(property.location as any)?.slug || ''}`} className="text-[#7D7975] hover:text-[#1B1A17] transition-colors flex items-center gap-1">
                 Things to do in {property.location?.city || 'the area'} <span className="text-lg leading-none">&rarr;</span>
               </a>
             </div>
