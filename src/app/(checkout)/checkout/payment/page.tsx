@@ -24,21 +24,29 @@ export default async function PaymentPage({ searchParams }: Props) {
   }
 
   let property: PropertyDetails | null = null;
+  let apiError: string = '';
   try {
     const res = await getPropertyById<PropertyDetails>(propertyId);
     if (res?.data) {
       property = res.data;
+    } else {
+      apiError = 'Response was ok but no data found';
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error('Failed to fetch property details:', error);
+    apiError = error?.message || String(error);
   }
 
   if (!property) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
+      <div className="flex flex-col items-center justify-center min-h-screen p-8 text-center gap-4">
         <h1 className="text-xl font-bold">Property Not Found</h1>
         <p>Could not load property details for ID: {propertyId}</p>
-        <p>Please check if the API is returning the property correctly on the live server.</p>
+        <div className="bg-red-50 p-4 rounded text-red-800 text-sm text-left max-w-2xl w-full">
+          <p><strong>API URL (Server):</strong> {(await import('@/config/env')).env.NEXT_PUBLIC_API_URL}</p>
+          <p><strong>Error message:</strong> {apiError}</p>
+        </div>
+        <p>Please check your Vercel Environment Variables (NEXT_PUBLIC_API_URL) and ensure the Live Backend is accessible.</p>
       </div>
     );
   }
