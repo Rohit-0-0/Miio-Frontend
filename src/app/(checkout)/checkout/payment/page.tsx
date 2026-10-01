@@ -14,7 +14,13 @@ export default async function PaymentPage({ searchParams }: Props) {
   const propertyId = typeof resolvedParams.propertyId === 'string' ? resolvedParams.propertyId : undefined;
 
   if (!propertyId) {
-    notFound();
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <h1 className="text-xl font-bold">Missing Property ID</h1>
+        <p>The property ID was not passed in the URL parameters.</p>
+        <p>Current searchParams: {JSON.stringify(resolvedParams)}</p>
+      </div>
+    );
   }
 
   let property: PropertyDetails | null = null;
@@ -28,7 +34,13 @@ export default async function PaymentPage({ searchParams }: Props) {
   }
 
   if (!property) {
-    notFound();
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <h1 className="text-xl font-bold">Property Not Found</h1>
+        <p>Could not load property details for ID: {propertyId}</p>
+        <p>Please check if the API is returning the property correctly on the live server.</p>
+      </div>
+    );
   }
 
   let siteSettings: any = null;
