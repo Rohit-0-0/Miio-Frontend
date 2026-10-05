@@ -22,7 +22,6 @@ export function Header({ logo, navItems }: HeaderProps = {}) {
       <div className="w-full bg-[#241D19] text-[#F8F5EF]">
         <Container>
           <div className="flex justify-center md:justify-end items-center h-8 md:h-10 space-x-6 text-[10px] md:text-xs font-semibold tracking-widest uppercase">
-            <Link href="/login" className="hover:text-white transition-colors">Guest Login</Link>
             <Link href="/partner-with-us" className="hover:text-white transition-colors">Partner With Us</Link>
           </div>
         </Container>

@@ -311,10 +311,18 @@ export function DetailsFlow({ property, searchParams, paymentTrustImages, cmsCon
             
             <form 
               className="flex flex-col gap-10 w-full max-w-[630px]"
-              onSubmit={(e) => {
+              onSubmit={async (e) => {
                 e.preventDefault();
-                if (marketing && typeof window !== 'undefined' && (window as any).dataLayer) {
-                  (window as any).dataLayer.push({ event: 'checkout_newsletter_signup', email });
+                if (marketing && email) {
+                  if (typeof window !== 'undefined' && (window as any).dataLayer) {
+                    (window as any).dataLayer.push({ event: 'checkout_newsletter_signup', email });
+                  }
+                  // Hit our Klaviyo API directly
+                  try {
+                    await apiClient.post('/newsletter/subscribe', { email });
+                  } catch (err) {
+                    console.error('Failed to subscribe during checkout', err);
+                  }
                 }
                 const params = new URLSearchParams(searchParams as any);
                 if (firstName) params.set('firstName', firstName);
