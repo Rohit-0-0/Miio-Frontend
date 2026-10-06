@@ -63,6 +63,21 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
       return {
         title: property.editorial.seo.title || property.title,
         description: property.editorial.seo.description || property.shortDescription || '',
+        alternates: {
+          canonical: `/properties/${slug}`,
+        },
+        openGraph: {
+          title: property.editorial.seo.title || property.title,
+          description: property.editorial.seo.description || property.shortDescription || '',
+          url: `/properties/${slug}`,
+          images: property.gallery?.[0] ? [buildImageUrl(property.gallery[0].assetId || (property.gallery[0] as any).asset?._ref || '')].filter((url): url is string => Boolean(url)) : [],
+        },
+        twitter: {
+          card: 'summary_large_image',
+          title: property.editorial.seo.title || property.title,
+          description: property.editorial.seo.description || property.shortDescription || '',
+          images: property.gallery?.[0] ? [buildImageUrl(property.gallery[0].assetId || (property.gallery[0] as any).asset?._ref || '')].filter((url): url is string => Boolean(url)) : [],
+        }
       };
     }
 
@@ -70,6 +85,21 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
       return {
         title: property.title,
         description: property.shortDescription || '',
+        alternates: {
+          canonical: `/properties/${slug}`,
+        },
+        openGraph: {
+          title: property.title,
+          description: property.shortDescription || '',
+          url: `/properties/${slug}`,
+          images: property.gallery?.[0] ? [buildImageUrl(property.gallery[0].assetId || (property.gallery[0] as any).asset?._ref || '')].filter((url): url is string => Boolean(url)) : [],
+        },
+        twitter: {
+          card: 'summary_large_image',
+          title: property.title,
+          description: property.shortDescription || '',
+          images: property.gallery?.[0] ? [buildImageUrl(property.gallery[0].assetId || (property.gallery[0] as any).asset?._ref || '')].filter((url): url is string => Boolean(url)) : [],
+        }
       };
     }
   } catch (error) {

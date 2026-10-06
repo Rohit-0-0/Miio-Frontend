@@ -9,6 +9,7 @@ function normalizeApiUrl(raw: string | undefined): string {
 
 export const env = {
   NEXT_PUBLIC_API_URL: normalizeApiUrl(process.env.NEXT_PUBLIC_API_URL),
+  NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL || 'https://www.miio.com.au',
   NEXT_PUBLIC_SANITY_PROJECT_ID: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '',
   NEXT_PUBLIC_SANITY_DATASET: process.env.NEXT_PUBLIC_SANITY_DATASET || '',
   NEXT_PUBLIC_GA_MEASUREMENT_ID: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || '',

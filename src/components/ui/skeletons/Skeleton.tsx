@@ -5,9 +5,12 @@ interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function Skeleton({ className = '', ...props }: SkeletonProps) {
+  // If no background color is provided in className, default to #EAE8E1
+  const hasBgClass = className.includes('bg-');
+  const bgClass = hasBgClass ? '' : 'bg-[#EAE8E1]';
   return (
     <div
-      className={`animate-shimmer rounded-md ${className}`}
+      className={`animate-shimmer rounded-md ${bgClass} ${className}`}
       {...props}
     />
   );
