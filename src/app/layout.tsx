@@ -89,7 +89,7 @@ export default function RootLayout({
           {children}
           <Toaster richColors position="top-right" />
         </AuthProvider>
-        {process.env.NODE_ENV === 'development' && env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+        {env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
           <GoogleAnalytics gaId={env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
         )}
         <Suspense fallback={null}>

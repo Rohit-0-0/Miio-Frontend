@@ -7,7 +7,7 @@ import { sendGAEvent } from '@next/third-parties/google';
  */
 
 export const isAnalyticsEnabled = () => {
-  return typeof window !== 'undefined' && process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && process.env.NODE_ENV === 'development';
+  return typeof window !== 'undefined' && Boolean(process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID);
 };
 
 export const trackEvent = (eventName: string, params?: Record<string, any>) => {
