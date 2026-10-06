@@ -4,6 +4,9 @@ import { Elements, CardNumberElement, CardExpiryElement, CardCvcElement, Payment
 import { buildImageUrl } from '@/lib/media/buildImageUrl';
 import { PaymentLogos } from '@/components/layout/PaymentLogos';
 import { PropertyDetails } from '@/types/property';
+import { trackEvent } from '@/lib/analytics';
+import * as meta from '@/lib/analytics/meta';
+
 interface PaymentFlowProps {
   property: PropertyDetails;
   searchParams: { [key: string]: string | string[] | undefined };
@@ -86,7 +89,27 @@ function PaymentForm({
             if (typeof window !== 'undefined' && (window as any).dataLayer) {
               (window as any).dataLayer.push({ event: 'Booking completed', transaction_id: response.data._id || response.data.id, value: total, currency: 'AUD' });
             }
-            alert('Booking Confirmed! Reservation ID: ' + (response.data._id || response.data.id));
+            
+            const transactionId = response.data._id || response.data.id;
+            const propertyId = property?.guestyId || (property as any)?._id || property?.id;
+            trackEvent('purchase', {
+              transaction_id: transactionId,
+              value: total,
+              currency: 'AUD',
+              items: [{
+                item_id: propertyId,
+                item_name: property?.nickname || property?.title,
+                price: total
+              }]
+            });
+            meta.event('Purchase', {
+              content_ids: [propertyId],
+              content_type: 'product',
+              value: total,
+              currency: 'AUD'
+            });
+
+            alert('Booking Confirmed! Reservation ID: ' + transactionId);
           } else {
             ev.complete('fail');
             alert(response.error || 'Payment failed.');
@@ -180,6 +203,25 @@ function PaymentForm({
         if (typeof window !== 'undefined' && (window as any).dataLayer) {
           (window as any).dataLayer.push({ event: 'Booking completed', transaction_id: response.data._id || response.data.id, value: total, currency: 'AUD' });
         }
+        
+        const transactionId = response.data._id || response.data.id;
+        const propertyId = property?.guestyId || (property as any)?._id || property?.id;
+        trackEvent('purchase', {
+          transaction_id: transactionId,
+          value: total,
+          currency: 'AUD',
+          items: [{
+            item_id: propertyId,
+            item_name: property?.nickname || property?.title,
+            price: total
+          }]
+        });
+        meta.event('Purchase', {
+          content_ids: [propertyId],
+          content_type: 'product',
+          value: total,
+          currency: 'AUD'
+        });
         
         // Build the URL parameters for the success page
         const successParams = new URLSearchParams({

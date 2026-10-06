@@ -12,6 +12,7 @@ import { PropertyHeader } from '@/components/properties/details/PropertyHeader';
 import { QuickInfo } from '@/components/properties/details/QuickInfo';
 import { EditorialDescription } from '@/components/properties/details/EditorialDescription';
 import { PropertyExperience } from '@/components/properties/details/PropertyExperience';
+import { TrackPropertyView } from '@/components/analytics/TrackPropertyView';
 import { AmenitiesSection } from '@/components/properties/details/AmenitiesSection';
 import { MiioStandard } from '@/components/properties/details/MiioStandard';
 import { FAQSection } from '@/components/properties/details/FAQSection';
@@ -182,6 +183,7 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
     <article className="min-h-screen bg-[#FEF6EE]">
       <div className="max-w-[1440px] mx-auto px-4 md:px-[188px] pt-10 md:pt-10">
         <PropertyBackLink />
+        <TrackPropertyView propertyId={actualGuestyId!} title={property.nickname || property.title} />
 
         <div className="mb-8 md:mb-10">
           <HeroGallery images={property.gallery || []} />

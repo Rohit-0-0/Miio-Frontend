@@ -1,6 +1,8 @@
 'use client';
 
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { trackEvent } from '@/lib/analytics';
+import * as meta from '@/lib/analytics/meta';
 
 export function JournalSearch({ defaultValue = '' }: { defaultValue?: string }) {
   const router = useRouter();
@@ -15,6 +17,10 @@ export function JournalSearch({ defaultValue = '' }: { defaultValue?: string }) 
     const params = new URLSearchParams(searchParams);
     if (search) {
       params.set('search', search);
+      
+      // Track Search event
+      trackEvent('search', { search_term: search });
+      meta.event('Search', { search_string: search, content_category: 'journal' });
     } else {
       params.delete('search');
     }

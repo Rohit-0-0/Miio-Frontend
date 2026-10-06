@@ -12,6 +12,7 @@ import { GuestSelector } from '@/components/properties/booking/GuestSelector';
 import { DateRangePicker } from '@/components/shared/DateRangePicker';
 import { PaymentLogos } from '@/components/layout/PaymentLogos';
 import { format, parseISO } from 'date-fns';
+import { TrackCheckoutView } from '@/components/analytics/TrackCheckoutView';
 
 interface CheckoutFlowProps {
   property: PropertyDetails;
@@ -364,6 +365,7 @@ export function CheckoutFlow({ property, searchParams, paymentTrustImages, cmsCo
     // STATE 1: AVAILABLE
     return (
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_345px] gap-8 lg:gap-32 relative">
+        <TrackCheckoutView propertyId={actualGuestyId!} title={propertyTitle} price={total} />
         {isLoading && <LoadingOverlay />}
         
         {/* Left Side: Calendar / Dates */}

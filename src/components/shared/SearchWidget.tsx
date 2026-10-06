@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { GuestSelector } from '../properties/booking/GuestSelector';
 import { getNextDayStr, getTodayStr } from '@/lib/utils/dates';
 import { DateRangePicker } from './DateRangePicker';
+import { trackEvent } from '@/lib/analytics';
+import * as meta from '@/lib/analytics/meta';
 
 interface SearchWidgetLabels {
   whereTo?: string;
@@ -192,6 +194,19 @@ export function SearchWidget({
 
     if (minPrice) params.append('minPrice', minPrice);
     if (maxPrice) params.append('maxPrice', maxPrice);
+
+    // Track Search event
+    trackEvent('search', {
+      search_term: location || 'All',
+      check_in: checkIn || '',
+      check_out: checkOut || '',
+      adults: adults,
+      children: children
+    });
+    meta.event('Search', {
+      search_string: location || 'All',
+      content_category: propertyType !== 'All' ? propertyType : undefined
+    });
 
     startTransition(() => {
       router.push(`/properties?${params.toString()}`);
