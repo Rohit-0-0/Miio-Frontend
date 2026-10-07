@@ -148,7 +148,14 @@ export interface HomepageData {
   newsletter?: {
     heading: string;
     description?: string;
+    icon?: ImageAsset;
   };
+  socialLinks?: {
+    platform: string;
+    url: string;
+    icon?: ImageAsset;
+  }[];
+  whatsappNumber?: string;
 }
 
 export interface HomepageDocument extends HomepageData, BaseEntity {}
