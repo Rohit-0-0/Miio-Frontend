@@ -148,12 +148,12 @@ export interface HomepageData {
   newsletter?: {
     heading: string;
     description?: string;
-    icon?: ImageAsset;
+    icon?: { asset?: { _ref?: string } };
   };
   socialLinks?: {
     platform: string;
     url: string;
-    icon?: ImageAsset;
+    icon?: { asset?: { _ref?: string } };
   }[];
   whatsappNumber?: string;
 }
