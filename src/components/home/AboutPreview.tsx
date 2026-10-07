@@ -17,7 +17,7 @@ export function AboutPreview() {
           
           {/* Text Column */}
           <div className="flex flex-col space-y-6">
-            <h2 className="font-serif text-3xl md:text-4xl font-bold tracking-tight text-gray-900">
+            <h2 className="font-serif text-3xl md:text-4xl font-normal tracking-tight text-gray-900">
               Redefining the <br className="hidden lg:block" /> Art of Living
             </h2>
             

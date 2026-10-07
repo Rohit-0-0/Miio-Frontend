@@ -82,7 +82,7 @@ export function SingletonEditor<T>({ title, fetchData, updateData, children }: S
   return (
     <div className="space-y-6 max-w-5xl">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-serif font-bold text-gray-900">{title}</h1>
+        <h1 className="text-2xl font-serif font-normal text-gray-900">{title}</h1>
       </div>
 
       {error && (

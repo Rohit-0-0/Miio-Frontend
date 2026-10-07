@@ -15,8 +15,14 @@ export function PropertyExperience({ experience }: PropertyExperienceProps) {
         The experience
       </h2>
       {/* Figma Body/Small: Instrument Sans 400 / 14px / 140% / #5F4E44 / max ~705px */}
-      <div className="font-sans max-w-[705px] text-[14px] font-normal leading-[140%] text-[#5F4E44] [&_p]:font-sans [&_p]:text-[14px] [&_p]:leading-[140%] [&_p]:text-[#5F4E44] [&_p]:font-normal [&_p]:m-0">
-        <RichTextRenderer html={experience} className="font-sans" />
+      <div className="font-sans max-w-[705px] text-[14px] font-normal leading-[140%] text-[#5F4E44] space-y-3 [&_p]:font-sans [&_p]:text-[14px] [&_p]:leading-[140%] [&_p]:text-[#5F4E44] [&_p]:font-normal [&_p]:m-0">
+        {/<[a-z][\s\S]*>/i.test(experience) ? (
+          <RichTextRenderer html={experience} className="font-sans" />
+        ) : (
+          experience.split(/\n+/).map((line, idx) => (
+            line.trim() ? <p key={idx}>{line}</p> : null
+          ))
+        )}
       </div>
     </section>
   );

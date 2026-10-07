@@ -32,60 +32,44 @@ export default async function AboutPage() {
   const imageSrc = buildImageUrl(imageRef) || 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80';
 
   return (
-    <main className="flex flex-col min-h-screen bg-white font-montserrat">
+    <main className="flex flex-col min-h-screen bg-[#FEF6EE] font-sans">
       {/* Hero */}
-      <section className="pt-32 pb-20 md:pt-48 md:pb-32 px-6 max-w-7xl mx-auto w-full">
-        <div className="flex flex-col items-center text-center">
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-light tracking-tight text-gray-900 leading-[1.1] max-w-4xl">
-            {(about.hero.title || '').split(/\n|<br\s*\/?>/i).map((line, idx, arr) => (
-              <React.Fragment key={idx}>
-                {line}
-                {idx < arr.length - 1 && <br />}
-              </React.Fragment>
-            ))}
+      <section className="pt-[48px] pb-16 md:pb-24 px-6 max-w-7xl mx-auto w-full">
+        <div className="flex flex-col text-left mb-8 border-b border-[#1B1A17]/10 pb-12">
+          <h1 className="font-serif text-[40px] md:text-[56px] text-[#1B1A17] tracking-tight leading-tight mb-4">
+            {(about.hero.title || '').replace(/\n|<br\s*\/?>/gi, ' ')}
           </h1>
-          <p className="mt-12 text-lg md:text-xl text-gray-500 font-light max-w-xl mx-auto leading-relaxed">
+          <p className="font-sans text-[15px] md:text-[16px] text-[#5F4E44] w-full font-light leading-[1.6]">
             {about.hero.subtitle}
           </p>
         </div>
       </section>
 
-      {/* Intro */}
-      <section className="py-20 md:py-32 px-6 max-w-3xl mx-auto w-full text-center">
-        <span className="text-xs tracking-[0.2em] text-gray-400 uppercase mb-8 block">
-          {about.intro.label}
-        </span>
-        <p className="text-2xl md:text-3xl lg:text-4xl font-light text-gray-900 leading-snug">
-          {about.intro.body}
-        </p>
-      </section>
-
       {/* Story */}
-      <section className="py-20 md:py-32 px-6 max-w-7xl mx-auto w-full border-t border-gray-100">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-24 items-center">
-          <div className="md:col-span-5 order-2 md:order-1">
-            <span className="text-xs tracking-[0.2em] text-gray-400 uppercase mb-8 block">
-              {about.story.label}
-            </span>
-            <h2 className="text-3xl md:text-4xl font-light text-gray-900 mb-8 leading-tight">
-              {(about.story.heading || '').split(/\n|<br\s*\/?>/i).map((line, idx, arr) => (
-                <React.Fragment key={idx}>
-                  {line}
-                  {idx < arr.length - 1 && <br />}
-                </React.Fragment>
-              ))}
-            </h2>
-            <div className="space-y-6 text-gray-500 font-light text-lg leading-relaxed">
+      <section className="pb-20 md:pb-32 px-6 max-w-7xl mx-auto w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 items-center">
+          <div className="order-2 md:order-1">
+            {about.story.label && (
+              <span className="text-[13px] tracking-widest text-[#7D7975] uppercase mb-8 block font-medium">
+                {about.story.label}
+              </span>
+            )}
+            {about.story.heading && (
+              <h2 className="text-3xl md:text-4xl font-serif text-[#1B1A17] mb-8 leading-tight">
+                {about.story.heading}
+              </h2>
+            )}
+            <div className="space-y-6 text-[#5F4E44] text-lg leading-relaxed">
               {(about.story.paragraphs || []).map((paragraph, idx) => (
                 <p key={idx}>{paragraph}</p>
               ))}
             </div>
           </div>
-          <div className="md:col-span-7 order-1 md:order-2">
-            <div className="aspect-[4/5] bg-gray-100 w-full relative overflow-hidden">
+          <div className="order-1 md:order-2">
+            <div className="aspect-[4/5] md:aspect-square lg:aspect-[4/5] bg-[#EAE8E1] w-full relative overflow-hidden rounded-sm">
                <Image
                  src={imageSrc}
-                 alt={about.story.altText || "Founder image"}
+                 alt={about.story.altText || "About Miio"}
                  fill
                  className="object-cover"
                  sizes="(max-width: 768px) 100vw, 50vw"
@@ -93,44 +77,6 @@ export default async function AboutPage() {
             </div>
           </div>
         </div>
-      </section>
-
-      {/* Editorial Pull Quote */}
-      <section className="py-24 md:py-40 px-6 max-w-5xl mx-auto w-full text-center">
-        <blockquote className="font-cormorant italic text-4xl md:text-6xl text-gray-900 leading-tight font-light">
-          {about.pullQuote.text}
-        </blockquote>
-      </section>
-
-      {/* Philosophy */}
-      <section className="py-20 md:py-32 px-6 max-w-7xl mx-auto w-full border-t border-gray-100">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24">
-          <div>
-            <span className="text-xs tracking-[0.2em] text-gray-400 uppercase mb-8 block">
-              {about.philosophy.label}
-            </span>
-            <h2 className="text-3xl md:text-5xl font-light text-gray-900 leading-tight pr-8">
-              {about.philosophy.heading}
-            </h2>
-          </div>
-          <div className="flex flex-col justify-end">
-            <div className="space-y-6 text-gray-500 font-light text-lg leading-relaxed">
-              {(about.philosophy.paragraphs || []).map((paragraph, idx) => (
-                <p key={idx}>{paragraph}</p>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Closing Section */}
-      <section className="py-24 md:py-32 px-6 max-w-4xl mx-auto w-full text-center border-t border-gray-100">
-        <p className="text-2xl font-light text-gray-900 leading-relaxed mb-12">
-          {about.closing.body}
-        </p>
-        <a href={about.closing.cta.href} className="inline-block border-b border-gray-900 pb-1 text-gray-900 hover:text-gray-500 hover:border-gray-500 transition-colors tracking-wide uppercase text-sm">
-          {about.closing.cta.text}
-        </a>
       </section>
     </main>
   );

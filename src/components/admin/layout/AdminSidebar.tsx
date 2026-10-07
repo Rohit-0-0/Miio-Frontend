@@ -50,7 +50,7 @@ export function AdminSidebar() {
   return (
     <aside className="w-64 bg-gray-50 border-r border-gray-200 min-h-screen flex flex-col hidden md:flex sticky top-0 h-screen">
       <div className="p-6 border-b border-gray-200">
-        <Link href="/admin" className="text-2xl font-serif font-bold tracking-widest text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 rounded-sm inline-block">
+        <Link href="/admin" className="text-2xl font-serif font-normal tracking-widest text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 rounded-sm inline-block">
           MIIO <span className="text-sm font-sans font-normal text-gray-500">Admin</span>
         </Link>
       </div>

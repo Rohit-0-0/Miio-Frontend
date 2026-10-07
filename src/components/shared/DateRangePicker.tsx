@@ -201,7 +201,7 @@ export function DateRangePicker({
       >
         {customTrigger ? customTrigger : (
           <div className="flex flex-col w-full">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Check-in / Check-out</span>
+            <span className="text-[10px] font-normal uppercase tracking-widest text-gray-500 mb-1">Check-in / Check-out</span>
             <div className="text-sm font-medium text-gray-900 truncate">
               {displayString}
             </div>

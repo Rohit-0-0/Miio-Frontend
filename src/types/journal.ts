@@ -10,14 +10,13 @@ export interface JournalArticle extends BaseEntity {
   content: string;
   coverImage?: ImageAsset;
   author?: string;
-  category?: string;
   tags?: string[];
   status: JournalStatus;
   featured?: boolean;
   publishedAt?: string;
-  readingTime?: number;
   seo?: SeoMetadata;
-  relatedProperty?: any;
+  relatedProperties?: any[];
+  relatedProperty?: any; // Legacy support
   ctaText?: string;
   ctaTitle?: string;
   ctaDescription?: string;

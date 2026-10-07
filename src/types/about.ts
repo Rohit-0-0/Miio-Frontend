@@ -4,35 +4,33 @@ export interface AboutData {
   hero: {
     title: string;
     subtitle: string;
-    backgroundImage: ImageAsset;
+  };
+  intro: {
+    label: string;
+    body: string;
+  };
+  story: {
+    label: string;
+    heading: string;
+    paragraphs: string[];
+    founderImage: ImageAsset;
+  };
+  pullQuote: {
+    text: string;
+  };
+  philosophy: {
+    label: string;
+    heading: string;
+    paragraphs: string[];
+  };
+  closing: {
+    body: string;
     cta: {
-      label: string;
+      text: string;
       href: string;
+      style?: string;
     };
   };
-
-  story: {
-    title: string;
-    content: string;
-    image: ImageAsset;
-  };
-
-  mission: {
-    title: string;
-    description: string;
-  };
-
-  vision: {
-    title: string;
-    description: string;
-  };
-
-  values: {
-    title: string;
-    description: string;
-    icon: string;
-  }[];
-
   seo: SeoMetadata;
 }
 

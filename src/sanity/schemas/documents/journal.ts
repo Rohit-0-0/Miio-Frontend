@@ -61,11 +61,11 @@ export const journal = defineType({
       initialValue: false,
     }),
     defineField({
-      name: 'relatedProperty',
-      title: 'Related Property',
-      type: 'reference',
-      to: [{ type: 'propertyEditorial' }],
-      description: 'The single property this journal is linked to.'
+      name: 'relatedProperties',
+      title: 'Related Properties',
+      type: 'array',
+      of: [{ type: 'reference', to: [{ type: 'propertyEditorial' }] }],
+      description: 'The properties this journal is linked to.'
     }),
     defineField({
       name: 'ctaTitle',

@@ -160,7 +160,7 @@ export function StaysMap({ properties, searchQueryString }: StaysMapProps) {
                   )}
                 </div>
                 <div className="p-3">
-                  <h3 className="font-serif text-sm font-semibold text-gray-900 line-clamp-1 mb-1 group-hover:text-gray-600 transition-colors">
+                  <h3 className="font-serif text-sm font-normal text-gray-900 line-clamp-1 mb-1 group-hover:text-gray-600 transition-colors">
                     {selectedProperty.nickname || selectedProperty.title}
                   </h3>
                   <div className="text-xs text-gray-500 mb-2">

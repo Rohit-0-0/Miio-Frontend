@@ -4,13 +4,7 @@ import { useEffect, useRef } from 'react';
 import { trackEvent } from '@/lib/analytics';
 import * as meta from '@/lib/analytics/meta';
 
-export function TrackPropertyView({ 
-  propertyId, 
-  title 
-}: { 
-  propertyId: string;
-  title: string;
-}) {
+export function TrackPropertyView({ propertyId, title }: { propertyId: string; title: string }) {
   const tracked = useRef(false);
 
   useEffect(() => {
@@ -20,10 +14,12 @@ export function TrackPropertyView({
     // GA4 Event
     trackEvent('view_item', {
       currency: 'AUD',
-      items: [{
-        item_id: propertyId,
-        item_name: title,
-      }],
+      items: [
+        {
+          item_id: propertyId,
+          item_name: title,
+        },
+      ],
     });
 
     // Meta Pixel Event

@@ -19,12 +19,14 @@ export default async function LocationsPage() {
   const pageData = pageRes?.data;
 
   return (
-    <div className="min-h-screen bg-white pt-32 pb-24">
+    <div className="min-h-screen bg-[#FEF6EE] pt-[48px] pb-24">
       <Container>
-        <div className="mb-16">
-          <SectionHeader title={pageData?.title || "Locations"} align="left" />
-          <p className="font-sans text-xl text-gray-600 mt-6 max-w-2xl font-light">
-            {pageData?.description || "Discover our exclusive properties in the world's most sought-after destinations."}
+        <div className="mb-16 border-b border-[#1B1A17]/10 pb-12 text-left">
+          <h1 className="font-serif text-[40px] md:text-[56px] text-[#1B1A17] tracking-tight leading-tight mb-4">
+            {pageData?.title || "Explore our locations"}
+          </h1>
+          <p className="font-sans text-[15px] md:text-[16px] text-[#5F4E44] w-full font-light leading-[1.6]">
+            {pageData?.description || "A collection of thoughtfully curated homes designed for calm, effortless stays — each one shaped by its location and a considered approach to living."}
           </p>
         </div>
 

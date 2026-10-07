@@ -32,7 +32,6 @@ export function JournalForm({ initialData, isEditMode = false }: JournalFormProp
       excerpt: formData.get('excerpt') as string || undefined,
       content, // Using controlled state from RichTextEditor
       author: formData.get('author') as string || undefined,
-      category: formData.get('category') as string || undefined,
       status: formData.get('status') as 'draft' | 'published' | 'archived',
       featured: formData.get('featured') === 'on',
     };
@@ -88,17 +87,6 @@ export function JournalForm({ initialData, isEditMode = false }: JournalFormProp
             name="excerpt"
             rows={2}
             defaultValue={initialData?.excerpt}
-            className="w-full rounded-sm border border-gray-300 px-3 py-2 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
-          />
-        </div>
-
-        <div className="space-y-1">
-          <label htmlFor="category" className="block text-sm font-medium text-gray-700">Category</label>
-          <input
-            type="text"
-            id="category"
-            name="category"
-            defaultValue={initialData?.category}
             className="w-full rounded-sm border border-gray-300 px-3 py-2 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
           />
         </div>

@@ -4,6 +4,7 @@ import { BrowseHeader } from '@/components/properties/BrowseHeader';
 import { PropertiesListSuspense } from '@/components/properties/PropertiesListSuspense';
 import { PropertyCardSkeleton } from '@/components/ui/skeletons/CompositeSkeletons';
 import { FinalCTA } from '@/components/home/FinalCTA';
+import { Container } from '@/components/ui/Container';
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
 
@@ -65,41 +66,43 @@ export default async function PropertiesPage({
 
   return (
     <div className="min-h-screen bg-[#FEF6EE]">
-      <section className="pt-[48px] pb-16 md:pb-24 px-4 md:px-10 xl:px-[188px] mx-auto max-w-[1440px]">
-        <BrowseHeader
-          heading={generalSettings.heading}
-          introText={generalSettings.introText}
-        />
+      <div className="pt-[48px] pb-16 md:pb-24">
+        <Container>
+          <BrowseHeader
+            heading={generalSettings.heading}
+            introText={generalSettings.introText}
+          />
 
-        <Suspense
-          fallback={
-            <div>
-              <div className="flex flex-row items-center justify-between gap-4 mb-8">
-                <div className="flex gap-2">
-                  {['Location', 'Guests', 'Price'].map((label) => (
-                    <div
-                      key={label}
-                      className="h-9 w-24 rounded-full border border-[#1B1A17]/10 bg-white animate-pulse"
-                    />
+          <Suspense
+            fallback={
+              <div>
+                <div className="flex flex-row items-center justify-between gap-4 mb-8">
+                  <div className="flex gap-2">
+                    {['Location', 'Guests', 'Price'].map((label) => (
+                      <div
+                        key={label}
+                        className="h-9 w-24 rounded-full border border-[#1B1A17]/10 bg-white animate-pulse"
+                      />
+                    ))}
+                  </div>
+                  <div className="h-4 w-36 bg-[#1B1A17]/5 animate-pulse rounded" />
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-5 md:gap-x-6 gap-y-10">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <PropertyCardSkeleton key={i} />
                   ))}
                 </div>
-                <div className="h-4 w-36 bg-[#1B1A17]/5 animate-pulse rounded" />
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-5 md:gap-x-6 gap-y-10">
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <PropertyCardSkeleton key={i} />
-                ))}
-              </div>
-            </div>
-          }
-        >
-          <PropertiesListSuspense
-            query={query}
-            resolvedParams={resolvedParams}
-            emptyStateConfig={emptyStateConfig}
-          />
-        </Suspense>
-      </section>
+            }
+          >
+            <PropertiesListSuspense
+              query={query}
+              resolvedParams={resolvedParams}
+              emptyStateConfig={emptyStateConfig}
+            />
+          </Suspense>
+        </Container>
+      </div>
 
       <FinalCTA finalCta={finalCta} defaults={STAYS_FINAL_CTA_DEFAULTS} />
     </div>

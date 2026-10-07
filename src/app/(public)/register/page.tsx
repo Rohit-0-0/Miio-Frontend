@@ -72,7 +72,7 @@ export default function RegisterPage() {
             <span className="text-xs font-semibold uppercase tracking-widest text-gray-400">
               Create an account
             </span>
-            <h2 className="mt-2 font-serif text-3xl font-bold tracking-tight text-gray-900">
+            <h2 className="mt-2 font-serif text-3xl font-normal tracking-tight text-gray-900">
               Join Miio
             </h2>
           </div>

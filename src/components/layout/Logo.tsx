@@ -20,7 +20,7 @@ export function Logo({ image, className = '', isLink = true }: LogoProps) {
       />
     </div>
   ) : (
-    <span className={`text-2xl font-bold font-serif tracking-tighter ${className}`}>MiiO</span>
+    <span className={`text-2xl font-normal font-serif tracking-tighter ${className}`}>MiiO</span>
   );
 
   if (!isLink) {
@@ -30,7 +30,7 @@ export function Logo({ image, className = '', isLink = true }: LogoProps) {
   return (
     <Link
       href={ROUTES.HOME}
-      className={`text-2xl font-bold font-serif tracking-tighter text-current focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-2 rounded-sm flex items-center ${className}`}
+      className={`text-2xl font-normal font-serif tracking-tighter text-current focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-2 rounded-sm flex items-center ${className}`}
       aria-label="MiiO Home"
     >
       {content}

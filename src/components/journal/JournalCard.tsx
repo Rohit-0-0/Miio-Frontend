@@ -14,53 +14,44 @@ export function JournalCard({ article }: { article: JournalArticle }) {
 
   const slugStr = typeof article.slug === 'object' ? (article.slug as any)?.current : article.slug;
 
+  const metaParts = [
+    article.author || 'Miio Team',
+    publishedDate,
+  ].filter(Boolean);
+
   return (
-    <article className="group flex flex-col h-full relative">
     <Link 
       href={`${ROUTES.JOURNAL}/${slugStr}`} 
       prefetch={true}
-      className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 rounded-sm mb-6"
+      className="group block no-underline cursor-pointer w-full"
     >
-        <div className="relative w-full aspect-[4/3] md:aspect-[3/2] overflow-hidden rounded-sm bg-gray-100">
+      <div className="relative w-full aspect-[345/460] overflow-hidden bg-[#EAE8E1] mb-3">
+        {article.coverImage ? (
           <AppImage
             image={article.coverImage}
             alt={article.coverImage?.alt || article.title}
             fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            className="object-cover transition-transform duration-[520ms] ease-out group-hover:scale-[1.03]"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
-          {article.featured && (
-            <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 text-xs font-bold uppercase tracking-wider text-gray-900 rounded-sm shadow-sm">
-              Featured
-            </div>
-          )}
-        </div>
-      </Link>
-      
-      <div className="flex flex-col flex-grow">
-        <div className="flex items-center space-x-2 text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">
-          {article.category && <span>{article.category}</span>}
-          {article.category && article.readingTime && <span>&middot;</span>}
-          {article.readingTime && <span>{article.readingTime} min read</span>}
-        </div>
-        
-        <h3 className="text-xl font-serif font-bold text-gray-900 mb-3 group-hover:text-gray-600 transition-colors">
-          <Link href={`${ROUTES.JOURNAL}/${slugStr}`} className="focus-visible:outline-none focus-visible:underline rounded-sm">
-            {article.title}
-          </Link>
-        </h3>
-        
-        {article.excerpt && (
-          <p className="font-sans text-sm text-gray-600 mb-6 flex-grow line-clamp-3">
-            {article.excerpt}
-          </p>
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-[#7D7975]/40">
+            <span className="font-serif text-2xl tracking-widest uppercase">MiiO</span>
+          </div>
         )}
-        
-        <div className="mt-auto flex items-center justify-between text-xs text-gray-500 border-t border-gray-100 pt-4">
-          <span className="font-medium">{article.author || 'Miio Team'}</span>
-          {publishedDate && <span>{publishedDate}</span>}
-        </div>
       </div>
-    </article>
+      
+      <div className="flex flex-col gap-1">
+        <div className="flex justify-between items-baseline gap-3">
+          <h3 className="text-[15px] font-medium text-[#1B1A17] capitalize leading-tight line-clamp-1 min-w-0">
+            {article.title}
+          </h3>
+        </div>
+        
+        <p className="text-[13px] text-[#7D7975] leading-snug truncate">
+          {metaParts.join(' · ')}
+        </p>
+      </div>
+    </Link>
   );
 }

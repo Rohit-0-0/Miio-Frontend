@@ -102,6 +102,12 @@ export const about = defineType({
       type: 'object',
       fields: [
         { name: 'label', title: 'Label', type: 'string' },
+        { 
+          name: 'heading', 
+          title: 'Heading', 
+          type: 'text',
+          description: 'Main heading for the philosophy section.' 
+        },
         { name: 'paragraphs', title: 'Paragraphs', type: 'array', of: [{ type: 'text' }] }
       ],
       preview: {
@@ -116,6 +122,12 @@ export const about = defineType({
       title: 'Closing',
       type: 'object',
       fields: [
+        { 
+          name: 'body', 
+          title: 'Body Text', 
+          type: 'text',
+          description: 'The closing paragraph text.'
+        },
         { name: 'cta', title: 'Call to Action', type: 'cta' }
       ],
       preview: {

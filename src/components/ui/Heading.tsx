@@ -14,7 +14,7 @@ export function Heading({
   const Component = level;
 
   return (
-    <Component className={`font-serif font-bold tracking-tight ${className}`}>
+    <Component className={`font-serif font-normal tracking-tight ${className}`}>
       {children}
     </Component>
   );

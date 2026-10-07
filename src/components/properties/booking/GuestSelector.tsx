@@ -59,7 +59,7 @@ export function GuestSelector({
         {customTrigger ? customTrigger : (
           <>
             <div>
-              <div className="text-[10px] uppercase font-bold text-gray-900 tracking-wider">Guests</div>
+              <div className="text-[10px] uppercase font-normal text-gray-900 tracking-wider">Guests</div>
               <div className="text-sm text-gray-900 mt-0.5 truncate max-w-[200px]">{displayString}</div>
             </div>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={`transform transition-transform ${isOpen ? 'rotate-180' : ''}`}>

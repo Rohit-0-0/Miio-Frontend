@@ -23,12 +23,8 @@ export function AboutForm({ initialData, isSaving, onSave }: AboutFormProps) {
     // Auto-populate alt tags from corresponding titles if missing
     const submissionData = { ...formData };
     
-    if (submissionData.hero?.backgroundImage?.assetId && !submissionData.hero.backgroundImage.alt) {
-      submissionData.hero.backgroundImage.alt = submissionData.hero.title;
-    }
-    
-    if (submissionData.story?.image?.assetId && !submissionData.story.image.alt) {
-      submissionData.story.image.alt = submissionData.story.title;
+    if (submissionData.story?.founderImage?.assetId && !submissionData.story.founderImage.alt) {
+      submissionData.story.founderImage.alt = submissionData.story.heading;
     }
     
     onSave(submissionData);
@@ -41,21 +37,14 @@ export function AboutForm({ initialData, isSaving, onSave }: AboutFormProps) {
     }));
   };
 
-  const handleHeroCtaChange = (field: keyof AboutData['hero']['cta'], value: string) => {
+  const handleIntroChange = (field: keyof AboutData['intro'], value: string) => {
     setFormData(prev => ({
       ...prev,
-      hero: { ...prev.hero, cta: { ...prev.hero.cta, [field]: value } }
+      intro: { ...prev.intro, [field]: value }
     }));
   };
 
-  const handleHeroImageChange = (image: ImageAsset | null) => {
-    setFormData(prev => ({
-      ...prev,
-      hero: { ...prev.hero, backgroundImage: image || { assetId: '', alt: '' } }
-    }));
-  };
-
-  const handleStoryChange = (field: keyof AboutData['story'], value: string) => {
+  const handleStoryChange = (field: keyof AboutData['story'], value: string | string[]) => {
     setFormData(prev => ({
       ...prev,
       story: { ...prev.story, [field]: value }
@@ -65,21 +54,35 @@ export function AboutForm({ initialData, isSaving, onSave }: AboutFormProps) {
   const handleStoryImageChange = (image: ImageAsset | null) => {
     setFormData(prev => ({
       ...prev,
-      story: { ...prev.story, image: image || { assetId: '', alt: '' } }
+      story: { ...prev.story, founderImage: image || { assetId: '', alt: '' } }
     }));
   };
 
-  const handleMissionChange = (field: keyof AboutData['mission'], value: string) => {
+  const handlePullQuoteChange = (value: string) => {
     setFormData(prev => ({
       ...prev,
-      mission: { ...prev.mission, [field]: value }
+      pullQuote: { ...prev.pullQuote, text: value }
     }));
   };
 
-  const handleVisionChange = (field: keyof AboutData['vision'], value: string) => {
+  const handlePhilosophyChange = (field: keyof AboutData['philosophy'], value: string | string[]) => {
     setFormData(prev => ({
       ...prev,
-      vision: { ...prev.vision, [field]: value }
+      philosophy: { ...prev.philosophy, [field]: value }
+    }));
+  };
+
+  const handleClosingChange = (field: 'body', value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      closing: { ...prev.closing, [field]: value }
+    }));
+  };
+
+  const handleClosingCtaChange = (field: keyof AboutData['closing']['cta'], value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      closing: { ...prev.closing, cta: { ...prev.closing?.cta, [field]: value } }
     }));
   };
 
@@ -97,35 +100,32 @@ export function AboutForm({ initialData, isSaving, onSave }: AboutFormProps) {
     }));
   };
 
-  const emptyValue = { title: '', description: '', icon: '' };
-
   return (
     <form onSubmit={handleSubmit} className="bg-white border border-gray-200 rounded-sm shadow-sm p-6 space-y-8">
       <section className="space-y-4">
         <h3 className="text-lg font-bold text-gray-900 border-b border-gray-200 pb-2">Hero Section</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="md:col-span-2">
+        <div className="grid grid-cols-1 gap-4">
+          <div>
             <label className="block text-sm font-medium text-gray-700">Title</label>
             <input required value={formData.hero?.title || ''} onChange={e => handleHeroChange('title', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" />
           </div>
-          <div className="md:col-span-2">
+          <div>
             <label className="block text-sm font-medium text-gray-700">Subtitle</label>
             <textarea required value={formData.hero?.subtitle || ''} onChange={e => handleHeroChange('subtitle', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" rows={2} />
           </div>
-          <div className="md:col-span-2">
-            <ImageUploader 
-              label="Background Image"
-              value={formData.hero?.backgroundImage?.assetId ? formData.hero.backgroundImage as ImageAsset : null}
-              onChange={(img) => handleHeroImageChange(img)}
-            />
+        </div>
+      </section>
+
+      <section className="space-y-4">
+        <h3 className="text-lg font-bold text-gray-900 border-b border-gray-200 pb-2">Intro Section</h3>
+        <div className="grid grid-cols-1 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Label (uppercase)</label>
+            <input value={formData.intro?.label || ''} onChange={e => handleIntroChange('label', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">CTA Label</label>
-            <input value={formData.hero?.cta?.label || ''} onChange={e => handleHeroCtaChange('label', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">CTA Href</label>
-            <input value={formData.hero?.cta?.href || ''} onChange={e => handleHeroCtaChange('href', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" />
+            <label className="block text-sm font-medium text-gray-700">Body</label>
+            <textarea required value={formData.intro?.body || ''} onChange={e => handleIntroChange('body', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" rows={3} />
           </div>
         </div>
       </section>
@@ -134,80 +134,71 @@ export function AboutForm({ initialData, isSaving, onSave }: AboutFormProps) {
         <h3 className="text-lg font-bold text-gray-900 border-b border-gray-200 pb-2">Story Section</h3>
         <div className="grid grid-cols-1 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">Title</label>
-            <input required value={formData.story?.title || ''} onChange={e => handleStoryChange('title', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" />
+            <label className="block text-sm font-medium text-gray-700">Label</label>
+            <input value={formData.story?.label || ''} onChange={e => handleStoryChange('label', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Content</label>
-            <RichTextEditor 
-              value={formData.story?.content || ''} 
-              onChange={val => handleStoryChange('content', val)} 
+            <label className="block text-sm font-medium text-gray-700">Heading</label>
+            <input required value={formData.story?.heading || ''} onChange={e => handleStoryChange('heading', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Paragraphs (one per line)</label>
+            <textarea required value={(formData.story?.paragraphs || []).join('\n')} onChange={e => handleStoryChange('paragraphs', e.target.value.split('\n'))} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" rows={5} />
+          </div>
+          <div className="mt-4">
+            <ImageUploader 
+              label="Founder Image"
+              value={formData.story?.founderImage?.assetId ? formData.story.founderImage as ImageAsset : null}
+              onChange={(img) => handleStoryImageChange(img)}
             />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="md:col-span-2">
-              <ImageUploader 
-                label="Story Image"
-                value={formData.story?.image?.assetId ? formData.story.image as ImageAsset : null}
-                onChange={(img) => handleStoryImageChange(img)}
-              />
-            </div>
+        </div>
+      </section>
+
+      <section className="space-y-4">
+        <h3 className="text-lg font-bold text-gray-900 border-b border-gray-200 pb-2">Pull Quote</h3>
+        <div className="grid grid-cols-1 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Quote Text</label>
+            <textarea value={formData.pullQuote?.text || ''} onChange={e => handlePullQuoteChange(e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" rows={3} />
           </div>
         </div>
       </section>
 
       <section className="space-y-4">
-        <h3 className="text-lg font-bold text-gray-900 border-b border-gray-200 pb-2">Mission & Vision</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-4">
-            <h4 className="font-semibold">Mission</h4>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Title</label>
-              <input required value={formData.mission?.title || ''} onChange={e => handleMissionChange('title', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Description</label>
-              <textarea required value={formData.mission?.description || ''} onChange={e => handleMissionChange('description', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" rows={4} />
-            </div>
+        <h3 className="text-lg font-bold text-gray-900 border-b border-gray-200 pb-2">Philosophy</h3>
+        <div className="grid grid-cols-1 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Label</label>
+            <input value={formData.philosophy?.label || ''} onChange={e => handlePhilosophyChange('label', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" />
           </div>
-          <div className="space-y-4">
-            <h4 className="font-semibold">Vision</h4>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Title</label>
-              <input required value={formData.vision?.title || ''} onChange={e => handleVisionChange('title', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Description</label>
-              <textarea required value={formData.vision?.description || ''} onChange={e => handleVisionChange('description', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" rows={4} />
-            </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Heading</label>
+            <input value={formData.philosophy?.heading || ''} onChange={e => handlePhilosophyChange('heading', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Paragraphs (one per line)</label>
+            <textarea required value={(formData.philosophy?.paragraphs || []).join('\n')} onChange={e => handlePhilosophyChange('paragraphs', e.target.value.split('\n'))} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" rows={5} />
           </div>
         </div>
       </section>
 
       <section className="space-y-4">
-        <h3 className="text-lg font-bold text-gray-900 border-b border-gray-200 pb-2">Values</h3>
-        <ArrayFieldEditor
-          label="Company Values"
-          initialItems={formData.values || []}
-          emptyItem={emptyValue}
-          onChange={(items) => setFormData(prev => ({ ...prev, values: items }))}
-          renderItem={(item, index, updateItem) => (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Title</label>
-                <input required value={item.title} onChange={e => updateItem({ ...item, title: e.target.value })} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" />
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Description</label>
-                <textarea required value={item.description} onChange={e => updateItem({ ...item, description: e.target.value })} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" rows={2} />
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Icon (optional)</label>
-                <input value={item.icon || ''} onChange={e => updateItem({ ...item, icon: e.target.value })} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" />
-              </div>
-            </div>
-          )}
-        />
+        <h3 className="text-lg font-bold text-gray-900 border-b border-gray-200 pb-2">Closing</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-700">Body Text</label>
+            <textarea value={formData.closing?.body || ''} onChange={e => handleClosingChange('body', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" rows={3} />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">CTA Text</label>
+            <input value={formData.closing?.cta?.text || ''} onChange={e => handleClosingCtaChange('text', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">CTA Href</label>
+            <input value={formData.closing?.cta?.href || ''} onChange={e => handleClosingCtaChange('href', e.target.value)} className="w-full rounded-sm border-gray-300 px-3 py-2 border focus:ring-gray-900 focus:border-gray-900" />
+          </div>
+        </div>
       </section>
 
       <section className="space-y-4">

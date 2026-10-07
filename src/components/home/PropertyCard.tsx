@@ -33,7 +33,7 @@ export function PropertyCard({ slug, name, location, description, coverImage }: 
         <span className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">
           {location}
         </span>
-        <h3 className="text-xl font-serif font-bold text-gray-900 mb-3">
+        <h3 className="text-xl font-serif font-normal text-gray-900 mb-3">
           {name}
         </h3>
         <p className="text-sm text-gray-600 mb-6 flex-grow line-clamp-3">

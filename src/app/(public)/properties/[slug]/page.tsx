@@ -36,7 +36,7 @@ const STAYS_FINAL_CTA_DEFAULTS = {
 async function resolveProperty(
   slug: string,
   guestyId: string | undefined,
-  options?: RequestInit
+  options?: RequestInit,
 ): Promise<PropertyDetails | undefined> {
   const isObjectId = /^[0-9a-fA-F]{24}$/.test(slug);
   const idHint = guestyId || (isObjectId ? slug : undefined);
@@ -71,14 +71,26 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
           title: property.editorial.seo.title || property.title,
           description: property.editorial.seo.description || property.shortDescription || '',
           url: `/properties/${slug}`,
-          images: property.gallery?.[0] ? [buildImageUrl(property.gallery[0].assetId || (property.gallery[0] as any).asset?._ref || '')].filter((url): url is string => Boolean(url)) : [],
+          images: property.gallery?.[0]
+            ? [
+                buildImageUrl(
+                  property.gallery[0].assetId || (property.gallery[0] as any).asset?._ref || '',
+                ),
+              ].filter((url): url is string => Boolean(url))
+            : [],
         },
         twitter: {
           card: 'summary_large_image',
           title: property.editorial.seo.title || property.title,
           description: property.editorial.seo.description || property.shortDescription || '',
-          images: property.gallery?.[0] ? [buildImageUrl(property.gallery[0].assetId || (property.gallery[0] as any).asset?._ref || '')].filter((url): url is string => Boolean(url)) : [],
-        }
+          images: property.gallery?.[0]
+            ? [
+                buildImageUrl(
+                  property.gallery[0].assetId || (property.gallery[0] as any).asset?._ref || '',
+                ),
+              ].filter((url): url is string => Boolean(url))
+            : [],
+        },
       };
     }
 
@@ -93,14 +105,26 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
           title: property.title,
           description: property.shortDescription || '',
           url: `/properties/${slug}`,
-          images: property.gallery?.[0] ? [buildImageUrl(property.gallery[0].assetId || (property.gallery[0] as any).asset?._ref || '')].filter((url): url is string => Boolean(url)) : [],
+          images: property.gallery?.[0]
+            ? [
+                buildImageUrl(
+                  property.gallery[0].assetId || (property.gallery[0] as any).asset?._ref || '',
+                ),
+              ].filter((url): url is string => Boolean(url))
+            : [],
         },
         twitter: {
           card: 'summary_large_image',
           title: property.title,
           description: property.shortDescription || '',
-          images: property.gallery?.[0] ? [buildImageUrl(property.gallery[0].assetId || (property.gallery[0] as any).asset?._ref || '')].filter((url): url is string => Boolean(url)) : [],
-        }
+          images: property.gallery?.[0]
+            ? [
+                buildImageUrl(
+                  property.gallery[0].assetId || (property.gallery[0] as any).asset?._ref || '',
+                ),
+              ].filter((url): url is string => Boolean(url))
+            : [],
+        },
       };
     }
   } catch (error) {
@@ -140,7 +164,8 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
   // Preload the LCP Hero image right into the document <head> using React 18+ Server preloading
   if (property.gallery && property.gallery.length > 0) {
     const firstImage = property.gallery[0];
-    const assetId = firstImage.assetId || (firstImage as any).asset?._ref || (firstImage as any).asset?._id;
+    const assetId =
+      firstImage.assetId || (firstImage as any).asset?._ref || (firstImage as any).asset?._id;
     if (assetId) {
       const url = buildImageUrl(assetId);
       if (url) {
@@ -151,7 +176,10 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
 
   const editorial = property.editorial;
   const actualGuestyId =
-    guestyId || property.guestyId || property.id || (/^[0-9a-fA-F]{24}$/.test(slug) ? slug : undefined);
+    guestyId ||
+    property.guestyId ||
+    property.id ||
+    (/^[0-9a-fA-F]{24}$/.test(slug) ? slug : undefined);
 
   let finalCta = STAYS_FINAL_CTA_DEFAULTS;
   try {
@@ -160,8 +188,7 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
       finalCta = {
         ...STAYS_FINAL_CTA_DEFAULTS,
         ...staysPage.finalCta,
-        description:
-          staysPage.finalCta.description ?? STAYS_FINAL_CTA_DEFAULTS.description,
+        description: staysPage.finalCta.description ?? STAYS_FINAL_CTA_DEFAULTS.description,
       };
     }
   } catch {
@@ -183,7 +210,10 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
     <article className="min-h-screen bg-[#FEF6EE]">
       <div className="max-w-[1440px] mx-auto px-4 md:px-[188px] pt-10 md:pt-10">
         <PropertyBackLink />
-        <TrackPropertyView propertyId={actualGuestyId!} title={property.nickname || property.title} />
+        <TrackPropertyView
+          propertyId={actualGuestyId!}
+          title={property.nickname || property.title}
+        />
 
         <div className="mb-8 md:mb-10">
           <HeroGallery images={property.gallery || []} />
@@ -217,9 +247,9 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
                 }
               >
                 {actualGuestyId ? (
-                  <BookingCard 
-                    listingId={actualGuestyId} 
-                    paymentTrustImages={siteSettings?.paymentTrustImages} 
+                  <BookingCard
+                    listingId={actualGuestyId}
+                    paymentTrustImages={siteSettings?.paymentTrustImages}
                   />
                 ) : (
                   <div className="bg-white border border-[#1B1A17]/10 rounded-xl p-6 text-[#7D7975]">
@@ -251,7 +281,7 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
             )}
 
             <FAQSection faqs={editorial?.faq} />
-            
+
             <div className="lg:hidden">
               <MiioStandard standards={editorial?.miioStandard} />
             </div>
@@ -265,9 +295,9 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
               }
             >
               {actualGuestyId ? (
-                <BookingCard 
-                  listingId={actualGuestyId} 
-                  paymentTrustImages={siteSettings?.paymentTrustImages} 
+                <BookingCard
+                  listingId={actualGuestyId}
+                  paymentTrustImages={siteSettings?.paymentTrustImages}
                   hideMobileSticky
                 />
               ) : (

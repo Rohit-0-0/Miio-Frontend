@@ -13,7 +13,7 @@ export function ErrorState({
 }: ErrorStateProps) {
   return (
     <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
-      <h3 className="text-xl font-bold text-gray-900 mb-2">{title}</h3>
+      <h3 className="text-xl font-normal text-gray-900 mb-2">{title}</h3>
       <p className="text-gray-500 max-w-sm mb-6">{message}</p>
       {retryAction && (
         <button

@@ -27,7 +27,7 @@ export function JournalCard({ slug, category, title, excerpt }: JournalCardProps
         <span className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">
           {category}
         </span>
-        <h3 className="text-xl font-serif font-bold text-gray-900 mb-3 group-hover:text-gray-600 transition-colors">
+        <h3 className="text-xl font-serif font-normal text-gray-900 mb-3 group-hover:text-gray-600 transition-colors">
           <Link href={`${ROUTES.JOURNAL}/${slug}`} className="focus-visible:outline-none focus-visible:underline rounded-sm">
             {title}
           </Link>

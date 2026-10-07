@@ -22,7 +22,7 @@ export function FeaturedProperties({ properties, config }: FeaturedPropertiesPro
   return (
     <div className="flex flex-col gap-[16px] md:gap-[32px]">
       <div className="flex flex-row justify-between items-center px-4 md:px-0">
-        <h2 className="text-[24px] font-serif font-bold text-[#1B1A17] m-0 leading-tight">
+        <h2 className="text-[24px] font-serif font-normal text-[#1B1A17] m-0 leading-tight">
           {title}
         </h2>
           

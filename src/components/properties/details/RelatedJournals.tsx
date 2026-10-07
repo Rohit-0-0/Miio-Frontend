@@ -47,8 +47,6 @@ export function RelatedJournals({ journals }: RelatedJournalsProps) {
               excerpt: journal.excerpt,
               coverImage: journal.coverImage || journal.heroImage,
               author: journal.author,
-              category: journal.category,
-              readingTime: journal.readingTime,
               publishedAt: journal.publishDate || journal.publishedAt,
               featured: false,
               status: journal.status || 'published',

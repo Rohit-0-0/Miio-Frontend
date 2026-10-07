@@ -16,33 +16,34 @@ export function EditorialCard({
   description,
   image,
   link,
-  ctaText = 'Explore',
+  ctaText = 'Explore', // Keep for backward compatibility, though we won't show it visually
   className = '',
 }: EditorialCardProps) {
   const content = (
-    <div className={`group flex flex-col space-y-6 cursor-pointer ${className}`}>
-      <div className="relative w-full aspect-[3/4] overflow-hidden bg-gray-100">
+    <div className={`group block w-full cursor-pointer ${className}`}>
+      <div className="relative w-full aspect-[345/460] overflow-hidden bg-[#EAE8E1] mb-3">
         {image ? (
           <AppImage
             image={image}
             alt={title}
             fill
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
+            className="object-cover transition-transform duration-[520ms] ease-out group-hover:scale-[1.03]"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         ) : (
-          <div className="absolute inset-0 flex items-center justify-center bg-[#F8F5EF] text-[#1B1A17]/20">
-            {/* Fallback pattern or just solid bg */}
+          <div className="w-full h-full flex items-center justify-center text-[#7D7975]/40">
             <span className="font-serif text-2xl tracking-widest uppercase">MiiO</span>
           </div>
         )}
       </div>
-      <div className="flex flex-col space-y-3">
-        <h3 className="text-2xl md:text-3xl font-serif text-[#1B1A17]">{title}</h3>
-        {description && <p className="font-sans text-[#1B1A17]/70 font-light leading-relaxed">{description}</p>}
-        {link && (
-          <span className="text-sm font-medium tracking-widest uppercase text-[#1B1A17] group-hover:underline underline-offset-4 decoration-1 transition-all">
-            {ctaText} &rarr;
-          </span>
+      <div className="flex flex-col gap-1">
+        <h3 className="text-[15px] font-medium text-[#1B1A17] capitalize leading-tight line-clamp-1 min-w-0">
+          {title}
+        </h3>
+        {description && (
+          <p className="text-[13px] text-[#7D7975] leading-snug line-clamp-1">
+            {description}
+          </p>
         )}
       </div>
     </div>
@@ -50,7 +51,7 @@ export function EditorialCard({
 
   if (link) {
     return (
-      <Link href={link} className="block w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-4 rounded-sm">
+      <Link href={link} className="block w-full no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-4 rounded-sm">
         {content}
       </Link>
     );

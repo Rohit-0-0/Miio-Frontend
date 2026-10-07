@@ -72,7 +72,7 @@ function VerifyEmailForm() {
         <span className="text-xs font-semibold uppercase tracking-widest text-gray-400">
           Security
         </span>
-        <h2 className="mt-2 font-serif text-3xl font-bold tracking-tight text-gray-900">
+        <h2 className="mt-2 font-serif text-3xl font-normal tracking-tight text-gray-900">
           Verify your email
         </h2>
         <p className="mt-2 text-sm text-gray-500">

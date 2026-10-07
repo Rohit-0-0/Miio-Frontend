@@ -8,7 +8,7 @@ export function PartnerCTA() {
     <Section className="bg-white py-20 md:py-32">
       <Container>
         <div className="mx-auto max-w-3xl text-center flex flex-col items-center">
-          <h2 className="font-serif text-3xl md:text-5xl font-bold tracking-tight text-gray-900 mb-6">
+          <h2 className="font-serif text-3xl md:text-5xl font-normal tracking-tight text-gray-900 mb-6">
             Partner With Us
           </h2>
           <p className="text-lg md:text-xl text-gray-600 mb-10 leading-relaxed">
