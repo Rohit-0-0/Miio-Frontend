@@ -17,7 +17,8 @@ export const footer = defineType({
       type: 'object',
       fields: [
         { name: 'heading', title: 'Heading', type: 'string' },
-        { name: 'description', title: 'Description', type: 'text' }
+        { name: 'description', title: 'Description', type: 'text' },
+        { name: 'icon', title: 'Key Icon', type: 'image' }
       ],
       preview: {
         select: { title: 'heading' },
@@ -25,6 +26,27 @@ export const footer = defineType({
           return { title: title || 'Newsletter Section', subtitle: 'Section Content' }
         }
       }
+    }),
+    defineField({
+      name: 'socialLinks',
+      title: 'Social Media Links',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'platform', title: 'Platform Name', type: 'string' },
+            { name: 'url', title: 'URL', type: 'url' },
+            { name: 'icon', title: 'Icon', type: 'image', options: { hotspot: true } }
+          ]
+        }
+      ]
+    }),
+    defineField({
+      name: 'whatsappNumber',
+      title: 'WhatsApp Number',
+      description: 'Format: Include country code (e.g., +1234567890)',
+      type: 'string'
     }),
     defineField({
       name: 'copyright',
