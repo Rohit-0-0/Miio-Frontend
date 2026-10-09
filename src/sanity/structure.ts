@@ -72,6 +72,13 @@ export const structure: StructureResolver = (S) =>
                     .schemaType('staysPage')
                     .documentId('staysPage')
                 ),
+              S.listItem()
+                .title('Interior Design Page')
+                .child(
+                  S.document()
+                    .schemaType('interiorDesignPage')
+                    .documentId('interiorDesignPage')
+                ),
             ])
         ),
       S.divider(),
@@ -87,13 +94,14 @@ export const structure: StructureResolver = (S) =>
               S.documentTypeListItem('journal').title('Journals'),
               S.documentTypeListItem('location').title('Locations'),
               S.documentTypeListItem('faq').title('FAQs'),
+              S.documentTypeListItem('interiorCaseStudy').title('Interior Case Studies'),
             ])
         ),
 
       // Hide all manually organized schemas from the main list
       ...S.documentTypeListItems().filter(
         (listItem) =>
-          !['siteSettings', 'navigation', 'footer', 'home', 'about', 'partnerWithUs', 'journalPage', 'locationsPage', 'staysPage', 'propertyEditorial', 'journal', 'location', 'review', 'faq'].includes(
+          !['siteSettings', 'navigation', 'footer', 'home', 'about', 'partnerWithUs', 'journalPage', 'locationsPage', 'staysPage', 'interiorDesignPage', 'propertyEditorial', 'journal', 'location', 'review', 'faq', 'interiorCaseStudy'].includes(
             listItem.getId() as string
           )
       )

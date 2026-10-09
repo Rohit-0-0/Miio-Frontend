@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { ImageAsset as ImageType } from '@/types/common';
 import { GalleryGrid } from './GalleryGrid';
 import { CrossfadeCarousel } from '@/components/shared/CrossfadeCarousel';
+import { ImageLightbox } from '@/components/shared/ImageLightbox';
 
 interface HeroGalleryProps {
   images: ImageType[];
@@ -33,20 +34,12 @@ export function HeroGallery({ images }: HeroGalleryProps) {
         </div>
       </section>
 
-      {lightboxOpen && (
-        <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4">
-          <button
-            type="button"
-            onClick={() => setLightboxOpen(false)}
-            className="absolute top-6 right-6 text-white text-sm tracking-wider uppercase"
-          >
-            Close
-          </button>
-          <div className="text-white">
-            Fullscreen Gallery — Image {initialIndex + 1} of {images.length || 1}
-          </div>
-        </div>
-      )}
+      <ImageLightbox
+        images={images}
+        initialIndex={initialIndex}
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+      />
     </>
   );
 }

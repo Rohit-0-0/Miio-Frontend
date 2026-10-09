@@ -2,6 +2,7 @@ import React from 'react';
 
 interface ReserveButtonProps {
   disabled?: boolean;
+  visualDisabled?: boolean;
   isLoading?: boolean;
   onClick?: () => void;
   label?: string;
@@ -9,17 +10,19 @@ interface ReserveButtonProps {
 
 export function ReserveButton({
   disabled,
+  visualDisabled,
   isLoading,
   onClick,
   label = 'Book now',
 }: ReserveButtonProps) {
+  const isVisuallyDisabled = disabled || visualDisabled;
   return (
     <button
       disabled={disabled}
       onClick={onClick}
       className={`w-full font-medium py-3.5 px-6 rounded-full transition-opacity flex justify-center items-center text-[15px] ${
-        disabled
-          ? 'bg-[#C3BA8D]/50 text-black/70 cursor-not-allowed'
+        isVisuallyDisabled
+          ? 'bg-[#C3BA8D]/50 text-black/70 cursor-pointer'
           : 'bg-[#C3BA8D] text-black hover:opacity-90'
       }`}
     >

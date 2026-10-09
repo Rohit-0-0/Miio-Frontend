@@ -44,9 +44,24 @@ export function BookingCard({ listingId, paymentTrustImages, hideMobileSticky = 
 
   const router = useRouter();
 
+  const forceScrollToCard = () => {
+    const mobileCard = document.getElementById('property-booking-card-mobile');
+    const el = mobileCard || cardRef.current;
+    if (el) {
+      const y = el.getBoundingClientRect().top + window.scrollY - 100;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+      document.documentElement.scrollTo({ top: y, behavior: 'smooth' });
+      document.body.scrollTo({ top: y, behavior: 'smooth' });
+      // Fallback
+      setTimeout(() => {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 50);
+    }
+  };
+
   const handleBookNowClick = () => {
     if (!checkIn || !checkOut) {
-      cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      forceScrollToCard();
       return;
     }
     const params = new URLSearchParams({
@@ -75,7 +90,7 @@ export function BookingCard({ listingId, paymentTrustImages, hideMobileSticky = 
       {/* Same inline booking card on all screen sizes */}
       <div
         ref={cardRef}
-        id="property-booking-card"
+        id={hideMobileSticky ? 'property-booking-card-desktop' : 'property-booking-card-mobile'}
         className="bg-white rounded-xl p-5 lg:p-6 border border-[#1B1A17]/10 shadow-[0_4px_16px_rgba(0,0,0,0.06)] w-full lg:max-w-[345px]"
       >
         <PriceSummary isLoading={false} quote={null} />
@@ -107,10 +122,10 @@ export function BookingCard({ listingId, paymentTrustImages, hideMobileSticky = 
         {!hideSubmit && (
           <BookingActions>
             <ReserveButton
-              disabled={!checkIn || !checkOut}
               onClick={handleBookNowClick}
               isLoading={false}
               label={reserveLabel}
+              visualDisabled={!checkIn || !checkOut}
             />
           </BookingActions>
         )}
@@ -128,9 +143,7 @@ export function BookingCard({ listingId, paymentTrustImages, hideMobileSticky = 
             </div>
             <button
               type="button"
-              onClick={() => {
-                cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-              }}
+              onClick={forceScrollToCard}
               className="text-[12px] text-[#7D7975] underline font-medium text-left hover:text-[#1B1A17] transition-colors"
             >
               {datesLabel}
@@ -139,11 +152,10 @@ export function BookingCard({ listingId, paymentTrustImages, hideMobileSticky = 
 
           <button
             type="button"
-            onClick={handleBookNowClick}
-            disabled={!checkIn || !checkOut}
+            onClick={(!checkIn || !checkOut) ? forceScrollToCard : handleBookNowClick}
             className={`font-semibold py-2.5 px-6 rounded-full text-xs uppercase tracking-wider transition-all flex items-center justify-center ${
               !checkIn || !checkOut
-                ? 'bg-[#C3BA8D]/60 text-black/60 cursor-not-allowed'
+                ? 'bg-[#C3BA8D]/60 text-black/60 cursor-pointer'
                 : 'bg-[#C3BA8D] text-black hover:opacity-90 active:scale-95 shadow-md shadow-black/10'
             }`}
           >

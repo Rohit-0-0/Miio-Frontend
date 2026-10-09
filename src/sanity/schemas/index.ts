@@ -23,6 +23,9 @@ import { partnerWithUs } from './singletons/partnerWithUs'
 import { journalPage } from './singletons/journalPage'
 import { locationsPage } from './singletons/locationsPage'
 import { staysPage } from './singletons/staysPage'
+import { interiorDesignPage } from './singletons/interiorDesignPage'
+
+import { interiorCaseStudy } from './documents/interiorCaseStudy'
 
 export const schemaTypes = [
   seo,
@@ -49,4 +52,6 @@ export const schemaTypes = [
   location,
   faq,
   review,
+  interiorDesignPage,
+  interiorCaseStudy,
 ]

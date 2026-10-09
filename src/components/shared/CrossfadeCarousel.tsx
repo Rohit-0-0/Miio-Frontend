@@ -38,6 +38,37 @@ export function CrossfadeCarousel({
     setIsPaused(true);
   };
 
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEndHandler = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe || isRightSwipe) {
+      setIsPaused(true);
+      if (isLeftSwipe) {
+        setActiveIndex((current) => (current + 1) % images.length);
+      }
+      if (isRightSwipe) {
+        setActiveIndex((current) => (current === 0 ? images.length - 1 : current - 1));
+      }
+    }
+  };
+
   if (!images || images.length === 0) return null;
 
   if (images.length === 1) {
@@ -57,18 +88,23 @@ export function CrossfadeCarousel({
 
   // Multiple images carousel with infinite crossfade animation
   return (
-    <div className={`relative w-full h-full overflow-hidden bg-[#1B1A17] ${className}`}>
+    <div 
+      className={`relative w-full h-full overflow-hidden bg-[#1B1A17] touch-pan-y ${className}`}
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEndHandler}
+    >
       {images.map((img, index) => (
         <div 
           key={`${img.assetId || 'carousel-img'}-${index}`}
-          className={`absolute inset-0 z-0 transition-opacity duration-[2000ms] ease-in-out ${index === activeIndex ? 'opacity-100' : 'opacity-0'}`}
+          className={`absolute inset-0 z-0 transition-opacity ${isPaused ? 'duration-500' : 'duration-[2000ms]'} ease-in-out ${index === activeIndex ? 'opacity-100' : 'opacity-0'}`}
         >
           <AppImage 
             image={img} 
             alt={alt}
             fill
             priority={priority && index === 0}
-            className="object-cover animate-in fade-in zoom-in-105 duration-[2000ms] ease-out fill-mode-both"
+            className={`object-cover animate-in fade-in zoom-in-105 ${isPaused ? 'duration-500' : 'duration-[2000ms]'} ease-out fill-mode-both`}
           />
         </div>
       ))}

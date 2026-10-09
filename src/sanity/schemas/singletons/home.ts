@@ -204,13 +204,6 @@ export const home = defineType({
           return { title: title || 'Final CTA', subtitle: 'Section Content' }
         }
       }
-    }),
-    defineField({
-      name: 'footerLogos',
-      title: 'Footer Logos',
-      description: 'Logos to display in the footer (e.g. payment methods, trust badges)',
-      type: 'array',
-      of: [{ type: 'customImage' }]
     })
   ],
   preview: {

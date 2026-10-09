@@ -26,29 +26,6 @@ export const partnerWithUs = defineType({
       description: 'The solution statement (e.g. "Full-service management. Design-led approach. Reliable returns.")',
       validation: (rule) => rule.required(),
     }),
-    defineField({
-      name: 'processCtaText',
-      title: 'Process & CTA Text',
-      type: 'string',
-      description: 'Text above the button (e.g. "Simple steps -> Enquire now.")',
-    }),
-    defineField({
-      name: 'ctaButton',
-      title: 'CTA Button',
-      type: 'object',
-      fields: [
-        defineField({
-          name: 'label',
-          title: 'Label',
-          type: 'string',
-        }),
-        defineField({
-          name: 'link',
-          title: 'Link / Email',
-          type: 'string',
-        }),
-      ],
-    }),
   ],
   preview: {
     prepare() {

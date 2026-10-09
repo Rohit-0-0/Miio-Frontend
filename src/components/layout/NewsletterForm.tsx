@@ -16,7 +16,10 @@ export function NewsletterForm() {
     setErrorMessage('');
 
     try {
-      const response = await apiClient.post<any>('/newsletter/subscribe', { email });
+      const response = await apiClient.post<any>('/newsletter/subscribe', { 
+        email, 
+        source: 'Newsletter Signup' 
+      });
       if (response.success) {
         setStatus('success');
         setEmail('');

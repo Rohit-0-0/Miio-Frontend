@@ -6,6 +6,7 @@ import { Metadata } from 'next';
 import { preload } from 'react-dom';
 import { buildImageUrl } from '@/lib/media/buildImageUrl';
 import { staysPageService } from '@/services/stays-page.service';
+import { env } from '@/config/env';
 
 import { HeroGallery } from '@/components/properties/details/HeroGallery';
 import { PropertyHeader } from '@/components/properties/details/PropertyHeader';
@@ -206,8 +207,23 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
     console.error('Failed to fetch site settings:', err);
   }
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Accommodation',
+    name: property.nickname || property.title,
+    description: property.shortDescription,
+    image: property.gallery?.[0] ? buildImageUrl(property.gallery[0].assetId || (property.gallery[0] as any).asset?._ref || '') : undefined,
+    numberOfRooms: property.bedrooms,
+    bed: property.beds,
+    url: `${env.NEXT_PUBLIC_APP_URL}/properties/${slug}`,
+  };
+
   return (
     <article className="min-h-screen bg-[#FEF6EE]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="max-w-[1440px] mx-auto px-4 md:px-[188px] pt-10 md:pt-10">
         <PropertyBackLink />
         <TrackPropertyView

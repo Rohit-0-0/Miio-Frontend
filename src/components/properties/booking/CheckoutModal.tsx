@@ -6,6 +6,8 @@ import { X, CheckCircle } from 'lucide-react';
 import { apiClient } from '@/lib/api/client';
 import { PaymentProviderType, PaymentToken } from '@/lib/payments/types';
 import { StripeProvider, StripeProviderRef } from '@/lib/payments/stripe/StripeProvider';
+import PhoneInput from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -187,7 +189,17 @@ const CheckoutForm = ({
             </div>
             <div className="col-span-2">
               <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Phone</label>
-              <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} required disabled={isProcessing} className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-1 focus:ring-black outline-none" />
+              <div className="w-full border border-gray-300 rounded-md p-2 text-sm focus-within:ring-1 focus-within:ring-black bg-white [&_.PhoneInputInput]:border-none [&_.PhoneInputInput]:outline-none [&_.PhoneInputInput]:bg-transparent">
+                <PhoneInput
+                  international
+                  defaultCountry="GB"
+                  limitMaxLength={true}
+                  value={phone}
+                  onChange={(val) => setPhone(val || '')}
+                  disabled={isProcessing}
+                  className="w-full"
+                />
+              </div>
             </div>
           </div>
         </div>

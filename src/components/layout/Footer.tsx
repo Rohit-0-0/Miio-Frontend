@@ -35,11 +35,12 @@ export async function Footer() {
     { label: 'About', href: '/about' }
   ];
   const fallbackCol2 = [
-    { label: 'Partner With Us', href: '/partner' }
+    { label: 'Partner With Us', href: '/partner' },
+    { label: 'Interior Design & Property Styling', href: '/interior-design' }
   ];
 
   const col1 = hasLinks ? allLinks.slice(0, 5) : fallbackCol1;
-  const col2 = hasLinks && allLinks.length > 5 ? allLinks.slice(5) : fallbackCol2;
+  const col2 = hasLinks ? allLinks.slice(5) : fallbackCol2;
 
   const newsletterHeading = homepage?.newsletter?.heading || 'Join the Miio Club for 10% off your first stay.';
 

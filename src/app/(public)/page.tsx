@@ -62,9 +62,21 @@ export default async function HomePage() {
       preload(url, { as: 'image', fetchPriority: 'high' });
     }
   }
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Miio',
+    url: 'https://www.miio.com.au',
+    logo: 'https://www.miio.com.au/favicon.ico',
+    description: 'A New Standard in Hospitality',
+  };
 
   return (
     <main className="w-full flex flex-col">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {homepage.hero && <Hero hero={homepage.hero} />}
       
       {homepage.trust && <Trust trust={homepage.trust} />}

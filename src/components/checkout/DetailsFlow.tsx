@@ -3,6 +3,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { apiClient } from '@/lib/api/client';
+import PhoneInput from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
 import { PropertyDetails } from '@/types/property';
 import { MinimalPropertyCard } from '@/components/home/MinimalPropertyCard';
 import { buildImageUrl } from '@/lib/media/buildImageUrl';
@@ -319,7 +321,10 @@ export function DetailsFlow({ property, searchParams, paymentTrustImages, cmsCon
                   }
                   // Hit our Klaviyo API directly
                   try {
-                    await apiClient.post('/newsletter/subscribe', { email });
+                    await apiClient.post('/newsletter/subscribe', { 
+                      email,
+                      source: 'Newsletter Signup'
+                    });
                   } catch (err) {
                     console.error('Failed to subscribe during checkout', err);
                   }
@@ -356,9 +361,15 @@ export function DetailsFlow({ property, searchParams, paymentTrustImages, cmsCon
                 {/* Phone */}
                 <div className="flex flex-col gap-1">
                   <label className="text-[11px] uppercase tracking-[0.08em] text-[#241D19] font-normal">Phone</label>
-                  <div className="relative flex items-center">
-                    <span className="absolute left-0 bottom-2 text-[14px] text-[#5F4E44]/50 pointer-events-none">+</span>
-                    <input type="tel" required maxLength={15} value={phone} onChange={(e) => setPhone(e.target.value.replace(/[^0-9\s-]/g, ''))} placeholder="61 400 000 000" className="pl-3 w-full border-b border-[#1B1A17]/10 pb-2 text-[14px] text-[#5F4E44] focus:outline-none focus:border-[#1B1A17]/30 bg-transparent placeholder:text-[#5F4E44]/50" />
+                  <div className="border-b border-[#1B1A17]/10 pb-1 pt-1 [&_.PhoneInputInput]:bg-transparent [&_.PhoneInputInput]:outline-none [&_.PhoneInputInput]:text-[#5F4E44] [&_.PhoneInputInput]:placeholder-[#5F4E44]/50 [&_.PhoneInputCountryIcon--border]:border-none [&_.PhoneInputCountryIcon]:!shadow-none [&_.PhoneInputCountrySelectArrow]:opacity-50">
+                    <PhoneInput
+                      international
+                      defaultCountry="GB"
+                      limitMaxLength={true}
+                      value={phone}
+                      onChange={(val) => setPhone(val || '')}
+                      className="w-full text-[14px]"
+                    />
                   </div>
                 </div>
               </div>

@@ -7,6 +7,8 @@ import { Container } from '@/components/ui/Container';
 import { ROUTES } from '@/constants/routes';
 import { RichTextRenderer } from '@/components/ui/editor/RichTextRenderer';
 import { PropertyBrowseCard } from '@/components/properties/PropertyBrowseCard';
+import { env } from '@/config/env';
+import { buildImageUrl } from '@/lib/media/buildImageUrl';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -76,8 +78,25 @@ export default async function JournalDetailPage({
       })
     : null;
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: article.title,
+    image: article.coverImage ? buildImageUrl(article.coverImage.assetId || (article.coverImage as any).asset?._ref || '') : undefined,
+    datePublished: article.publishedAt || new Date().toISOString(),
+    author: {
+      '@type': 'Person',
+      name: article.author || 'Miio',
+    },
+    url: `${env.NEXT_PUBLIC_APP_URL}/journal/${slug}`,
+  };
+
   return (
     <article className="flex flex-col bg-[#FEF6EE] min-h-screen pb-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Cover Image Section */}
       <div className="relative w-full h-[50vh] md:h-[60vh] lg:h-[70vh] bg-[#EAE8E1] mb-12 md:mb-20">
         <AppImage
