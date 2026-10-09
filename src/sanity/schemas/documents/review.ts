@@ -36,6 +36,13 @@ export const review = defineType({
       description: 'e.g. from Airbnb',
     }),
     defineField({
+      name: 'featuredImage',
+      title: 'Featured Image',
+      type: 'image',
+      description: 'Large image used when featuring this review prominently',
+      options: { hotspot: true },
+    }),
+    defineField({
       name: 'sourceLogo',
       title: 'Source Logo',
       type: 'image',

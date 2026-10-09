@@ -155,14 +155,16 @@ export async function Footer() {
         <div className="flex md:hidden flex-col items-center text-center gap-[48px] w-full">
           {/* Newsletter Form */}
           <div className="flex flex-col gap-[20px] w-full items-center">
-            {newsletterIconUrl && (
-              <div className="shrink-0 mb-2">
-                <Image src={newsletterIconUrl} alt="Newsletter Icon" width={24} height={48} className="object-contain w-auto h-12" />
-              </div>
-            )}
-            <h3 className="text-[28px] font-serif font-normal text-white leading-[108%] m-0">
-              {newsletterHeading}
-            </h3>
+            <div className="flex flex-row gap-4 items-start justify-center text-left">
+              {newsletterIconUrl && (
+                <div className="shrink-0 mt-1">
+                  <Image src={newsletterIconUrl} alt="Newsletter Icon" width={24} height={48} className="object-contain w-auto h-12" />
+                </div>
+              )}
+              <h3 className="text-[24px] font-serif font-normal text-white leading-[108%] m-0 whitespace-pre-line text-left">
+                {newsletterHeading}
+              </h3>
+            </div>
             <NewsletterForm />
           </div>
 

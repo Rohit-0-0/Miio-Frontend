@@ -4,7 +4,8 @@ export async function getInteriorDesignPage() {
   const query = `
     *[_type == "interiorDesignPage"][0] {
       hero {
-        backgroundImage,
+        "backgroundImage": backgroundImage.asset->url,
+        "backgroundImageRef": backgroundImage.asset._ref,
         eyebrow,
         headline,
         bodyCopy,
@@ -15,22 +16,30 @@ export async function getInteriorDesignPage() {
         bodyCopy,
         items
       },
-      caseStudies[]->{
-        title,
-        description,
-        linkUrl,
-        "pdfUrl": pdfDownload.asset->url,
-        linkText,
-        beforeImage,
-        afterImage
+      caseStudiesSection {
+        eyebrow,
+        headline,
+        bodyCopy,
+        caseStudies[]->{
+          title,
+          description,
+          linkUrl,
+          "pdfUrl": pdfDownload.asset->url,
+          linkText,
+          "beforeImage": beforeImage.asset->url,
+          "afterImage": afterImage.asset->url
+        }
       },
       services {
         eyebrow,
         headline,
-        items
+        items,
+        ctaHeadline,
+        ctaBody,
+        ctaButtonText
       },
       brandMoment {
-        image,
+        "image": image.asset->url,
         headline
       },
       process {
@@ -42,12 +51,17 @@ export async function getInteriorDesignPage() {
         headline,
         points
       },
-      testimonial->{
-        quote,
-        author,
-        date,
-        location,
-        source
+      socialProofSection {
+        eyebrow,
+        supportingText,
+        testimonials[]->{
+          quote,
+          author,
+          date,
+          location,
+          source,
+          "featuredImage": featuredImage.asset->url
+        }
       },
       clientGroups {
         eyebrow,
@@ -61,7 +75,7 @@ export async function getInteriorDesignPage() {
         ctaText,
         ctaLink
       },
-      faqs[]->{
+      "faqs": faqs[]->questions[] {
         question,
         answer
       },

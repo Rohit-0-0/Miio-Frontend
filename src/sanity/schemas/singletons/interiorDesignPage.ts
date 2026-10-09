@@ -61,11 +61,21 @@ export const interiorDesignPage = defineType({
       ]
     }),
     defineField({
-      name: 'caseStudies',
-      title: 'Case Studies',
-      type: 'array',
-      of: [{ type: 'reference', to: [{ type: 'interiorCaseStudy' }] }],
-      description: 'Select the featured case studies to show in the Before/After section.',
+      name: 'caseStudiesSection',
+      title: 'Case Studies Section',
+      type: 'object',
+      fields: [
+        defineField({ name: 'eyebrow', type: 'string', title: 'Eyebrow', initialValue: 'OUR WORK' }),
+        defineField({ name: 'headline', type: 'string', title: 'Headline', initialValue: 'Spaces we\'ve transformed.' }),
+        defineField({ name: 'bodyCopy', type: 'text', title: 'Body Copy', initialValue: 'From short-term stays to corporate and healthcare accommodation, our approach begins with the same question: how can this space look beautiful, work better and deliver more for the people using it?' }),
+        defineField({
+          name: 'caseStudies',
+          title: 'Case Studies',
+          type: 'array',
+          of: [{ type: 'reference', to: [{ type: 'interiorCaseStudy' }] }],
+          description: 'Select the featured case studies to show in the Before/After section.',
+        }),
+      ]
     }),
     defineField({
       name: 'services',
@@ -86,6 +96,9 @@ export const interiorDesignPage = defineType({
             ]
           }]
         }),
+        defineField({ name: 'ctaHeadline', type: 'string', title: 'Mini CTA Headline', initialValue: 'Not sure what you need?' }),
+        defineField({ name: 'ctaBody', type: 'text', title: 'Mini CTA Body', initialValue: 'Book a Discovery Call and we\'ll recommend the right level of support.' }),
+        defineField({ name: 'ctaButtonText', type: 'string', title: 'Mini CTA Button Text', initialValue: 'BOOK A DISCOVERY CALL' }),
       ]
     }),
     defineField({
@@ -139,11 +152,20 @@ export const interiorDesignPage = defineType({
       ]
     }),
     defineField({
-      name: 'testimonial',
-      title: 'Featured Testimonial',
-      type: 'reference',
-      to: [{ type: 'review' }],
-      description: 'Select an existing review to feature as the social proof.',
+      name: 'socialProofSection',
+      title: 'Social Proof (Testimonials)',
+      type: 'object',
+      fields: [
+        defineField({ name: 'eyebrow', type: 'string', title: 'Eyebrow', initialValue: 'DESIGNED BY MIIO. PROVEN THROUGH MIIO.' }),
+        defineField({ name: 'supportingText', type: 'string', title: 'Supporting Text', initialValue: 'A Miio-operated stay, designed and styled by our team.' }),
+        defineField({
+          name: 'testimonials',
+          title: 'Featured Testimonials',
+          type: 'array',
+          of: [{ type: 'reference', to: [{ type: 'review' }] }],
+          description: 'Select one or more existing reviews to feature as the social proof.',
+        }),
+      ]
     }),
     defineField({
       name: 'clientGroups',

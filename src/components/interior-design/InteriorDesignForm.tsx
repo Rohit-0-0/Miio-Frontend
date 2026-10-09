@@ -78,21 +78,32 @@ export function InteriorDesignForm() {
     setIsUploading(true);
     
     try {
-      const file = e.target.files[0];
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData
-      });
-
-      const data = await res.json();
+      const uploadedUrls: string[] = [];
+      const currentFiles = Array.from(e.target.files);
       
-      if (data.url) {
-        updateForm('floorplanUrl', data.url);
+      for (const file of currentFiles) {
+        const fileData = new FormData();
+        fileData.append('file', file);
+
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          body: fileData
+        });
+
+        const data = await res.json();
+        
+        if (data.url) {
+          uploadedUrls.push(data.url);
+        } else {
+          console.error('Failed to upload a file:', data.error);
+        }
+      }
+
+      if (uploadedUrls.length > 0) {
+        const existingUrls = formData.floorplanUrl ? formData.floorplanUrl.split(', ') : [];
+        updateForm('floorplanUrl', [...existingUrls, ...uploadedUrls].join(', '));
       } else {
-        alert(data.error || 'Failed to upload file');
+        alert('Failed to upload files');
       }
     } catch (error) {
       console.error(error);
@@ -201,7 +212,7 @@ export function InteriorDesignForm() {
                   required
                   value={formData.propertyType}
                   onChange={(e) => updateForm('propertyType', e.target.value)}
-                  className="bg-transparent border-b border-[#FEF6EE]/20 py-3 outline-none focus:border-[#FEF6EE] transition-colors appearance-none cursor-pointer [&>option]:bg-[#2C241F] [&>option]:text-[#FEF6EE]"
+                  className="w-full text-ellipsis overflow-hidden whitespace-nowrap bg-transparent border-b border-[#FEF6EE]/20 py-3 outline-none focus:border-[#FEF6EE] transition-colors appearance-none cursor-pointer [&>option]:bg-[#2C241F] [&>option]:text-[#FEF6EE]"
                 >
                   <option value="" disabled>Select</option>
                   <option value="Apartment">Apartment</option>
@@ -219,7 +230,7 @@ export function InteriorDesignForm() {
                   required
                   value={formData.propertyUsage}
                   onChange={(e) => updateForm('propertyUsage', e.target.value)}
-                  className="bg-transparent border-b border-[#FEF6EE]/20 py-3 outline-none focus:border-[#FEF6EE] transition-colors appearance-none cursor-pointer [&>option]:bg-[#2C241F] [&>option]:text-[#FEF6EE]"
+                  className="w-full text-ellipsis overflow-hidden whitespace-nowrap bg-transparent border-b border-[#FEF6EE]/20 py-3 outline-none focus:border-[#FEF6EE] transition-colors appearance-none cursor-pointer [&>option]:bg-[#2C241F] [&>option]:text-[#FEF6EE]"
                 >
                   <option value="" disabled>Select</option>
                   <option value="Short-term rental / Airbnb">Short-term rental / Airbnb</option>
@@ -252,9 +263,17 @@ export function InteriorDesignForm() {
                     'Photography preparation',
                     'Not sure yet'
                   ].map((service) => (
-                    <label key={service} className="flex items-center gap-3 cursor-pointer group">
+                    <label 
+                      key={service} 
+                      className="flex items-center gap-3 cursor-pointer group"
+                      onClick={() => toggleService(service)}
+                    >
                       <div className={`w-5 h-5 border flex items-center justify-center transition-colors ${formData.services.includes(service) ? 'bg-[#FEF6EE] border-[#FEF6EE]' : 'border-[#FEF6EE]/30 group-hover:border-[#FEF6EE]/60'}`}>
-                        {formData.services.includes(service) && <div className="w-2.5 h-2.5 bg-[#2C241F]" />}
+                        {formData.services.includes(service) && (
+                          <svg className="w-3.5 h-3.5 text-[#2C241F]" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M11.6666 3.5L5.24992 9.91667L2.33325 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        )}
                       </div>
                       <span className="opacity-90 text-sm">{service}</span>
                     </label>
@@ -279,7 +298,7 @@ export function InteriorDesignForm() {
                     required
                     value={formData.propertyStage}
                     onChange={(e) => updateForm('propertyStage', e.target.value)}
-                    className="bg-transparent border-b border-[#FEF6EE]/20 py-3 outline-none focus:border-[#FEF6EE] transition-colors appearance-none cursor-pointer [&>option]:bg-[#2C241F] [&>option]:text-[#FEF6EE]"
+                    className="w-full text-ellipsis overflow-hidden whitespace-nowrap bg-transparent border-b border-[#FEF6EE]/20 py-3 outline-none focus:border-[#FEF6EE] transition-colors appearance-none cursor-pointer [&>option]:bg-[#2C241F] [&>option]:text-[#FEF6EE]"
                   >
                     <option value="" disabled>Select</option>
                     <option value="Empty / unfurnished">Empty / unfurnished</option>
@@ -296,7 +315,7 @@ export function InteriorDesignForm() {
                     required
                     value={formData.budget}
                     onChange={(e) => updateForm('budget', e.target.value)}
-                    className="bg-transparent border-b border-[#FEF6EE]/20 py-3 outline-none focus:border-[#FEF6EE] transition-colors appearance-none cursor-pointer [&>option]:bg-[#2C241F] [&>option]:text-[#FEF6EE]"
+                    className="w-full text-ellipsis overflow-hidden whitespace-nowrap bg-transparent border-b border-[#FEF6EE]/20 py-3 outline-none focus:border-[#FEF6EE] transition-colors appearance-none cursor-pointer [&>option]:bg-[#2C241F] [&>option]:text-[#FEF6EE]"
                   >
                     <option value="" disabled>Select</option>
                     <option value="Under $5,000">Under $5,000</option>
@@ -366,7 +385,7 @@ export function InteriorDesignForm() {
                 <select 
                   value={formData.hearAboutUs}
                   onChange={(e) => updateForm('hearAboutUs', e.target.value)}
-                  className="bg-transparent border-b border-[#FEF6EE]/20 py-3 outline-none focus:border-[#FEF6EE] transition-colors appearance-none cursor-pointer [&>option]:bg-[#2C241F] [&>option]:text-[#FEF6EE]"
+                  className="w-full text-ellipsis overflow-hidden whitespace-nowrap bg-transparent border-b border-[#FEF6EE]/20 py-3 outline-none focus:border-[#FEF6EE] transition-colors appearance-none cursor-pointer [&>option]:bg-[#2C241F] [&>option]:text-[#FEF6EE]"
                 >
                   <option value="" disabled>Select</option>
                   <option value="Instagram">Instagram</option>
@@ -383,21 +402,21 @@ export function InteriorDesignForm() {
           </div>
         )}
 
-        <div className="flex justify-between items-center mt-8 pt-8 border-t border-[#FEF6EE]/10">
+        <div className="flex flex-col-reverse md:flex-row justify-between items-center gap-6 mt-8 pt-8 border-t border-[#FEF6EE]/10">
           {step > 1 ? (
             <button 
               type="button" 
               onClick={handlePrev}
-              className="uppercase tracking-widest text-sm border-b border-[#FEF6EE] pb-1 hover:opacity-70 transition-opacity"
+              className="uppercase tracking-widest text-sm border-b border-[#FEF6EE] pb-1 hover:opacity-70 transition-opacity mt-4 md:mt-0"
             >
               ← Back
             </button>
-          ) : <div />}
+          ) : <div className="hidden md:block" />}
 
           <button 
             type="submit"
             disabled={isSubmitting || (step === 2 && formData.services.length === 0)}
-            className="bg-[#FEF6EE] text-[#241D19] px-8 py-4 uppercase text-sm tracking-widest hover:bg-white transition-colors disabled:opacity-50"
+            className="bg-[#FEF6EE] text-[#241D19] px-8 py-4 uppercase text-sm tracking-widest hover:bg-white transition-colors disabled:opacity-50 w-full md:w-auto text-center"
           >
             {isSubmitting ? 'Submitting...' : step === 3 ? 'SUBMIT YOUR PROJECT' : 'Next Step →'}
           </button>
