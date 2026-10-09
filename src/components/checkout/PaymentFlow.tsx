@@ -362,32 +362,7 @@ function PaymentForm({
             )}
           </div>
 
-          {/* Pay Later Option */}
-          <div className={`bg-white rounded-[8px] border border-[#1B1A17]/20 p-6 transition-all ${paymentMethod === 'paylater' ? 'opacity-100' : 'opacity-50'}`}>
-            <label className="flex items-center gap-3 cursor-pointer group">
-              <div className={`w-4 h-4 rounded-full border border-[#1B1A17] flex items-center justify-center transition-colors ${paymentMethod === 'paylater' ? 'border-[5px] border-[#1B1A17]' : 'group-hover:border-[#1B1A17]/60'}`}>
-                <input 
-                  type="radio" 
-                  name="paymentMethod" 
-                  value="paylater" 
-                  checked={paymentMethod === 'paylater'} 
-                  onChange={() => setPaymentMethod('paylater')}
-                  className="hidden" 
-                />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-[14px] text-[#1B1A17] flex items-center gap-3">
-                  Pay later 
-                  <div className="flex items-center gap-1.5 opacity-80">
-                    <span className="text-[10px] font-bold tracking-tighter text-[#B2FCE4] bg-black px-1.5 rounded-sm">afterpay</span>
-                    <span className="text-[10px] font-bold tracking-tighter text-pink-200 bg-black px-1.5 rounded-sm">Klarna.</span>
-                    <span className="text-[10px] font-bold tracking-tighter text-white bg-black px-1.5 rounded-sm">zip</span>
-                  </div>
-                </span>
-                <span className="text-[10px] text-[#7D7975] mt-1">with Afterpay, Klarna or Zip</span>
-              </div>
-            </label>
-          </div>
+
           <div className="mt-4 flex flex-col gap-6">
             <label className="flex items-center gap-3 cursor-pointer group">
               <div className={`w-4 h-4 rounded-[3px] border border-[#1B1A17] flex items-center justify-center transition-colors ${agreedToPolicies ? 'bg-[#1B1A17]' : 'group-hover:border-[#1B1A17]/60'}`}>
@@ -560,18 +535,7 @@ function PaymentForm({
                 <span>${(total).toLocaleString()}</span>
               </div>
 
-              <div className="mt-2">
-                <p className="text-[10px] text-[#7D7975] mb-2">{cmsContent?.flexiblePaymentsText || 'or flexible payments with'}</p>
-                {cmsContent?.flexiblePaymentLogos && cmsContent.flexiblePaymentLogos.length > 0 ? (
-                  <PaymentLogos images={cmsContent.flexiblePaymentLogos} isFooter={false} />
-                ) : (
-                  <div className="flex gap-2 text-[10px] tracking-widest font-bold text-[#1B1A17]/70 uppercase">
-                    <span className="bg-[#B2FCE4] text-black px-1.5 rounded-sm">afterpay</span>
-                    <span className="bg-pink-200 text-black px-1.5 rounded-sm">Klarna.</span>
-                    <span className="bg-black text-white px-1.5 rounded-sm">zip</span>
-                  </div>
-                )}
-              </div>
+
               
               {/* Coupon Code Inline Section */}
               <div className="mt-4 flex flex-col gap-3">

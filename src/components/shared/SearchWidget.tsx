@@ -7,6 +7,7 @@ import { getNextDayStr, getTodayStr } from '@/lib/utils/dates';
 import { DateRangePicker } from './DateRangePicker';
 import { trackEvent } from '@/lib/analytics';
 import * as meta from '@/lib/analytics/meta';
+import { format, parseISO } from 'date-fns';
 
 interface SearchWidgetLabels {
   whereTo?: string;
@@ -264,7 +265,7 @@ export function SearchWidget({
                 <div className="flex flex-col items-start justify-center">
                   <span className="text-[10px] text-[#1B1A17] uppercase leading-tight">{labels?.dates || 'DATES'}</span>
                   <span className="text-sm text-[#1B1A17]/70 font-normal truncate leading-tight mt-[2px]">
-                    {checkIn ? `${checkIn}${checkOut ? ` - ${checkOut}` : ' - Add Date'}` : (
+                    {checkIn ? `${format(parseISO(checkIn), 'd MMM yyyy')}${checkOut ? ` - ${format(parseISO(checkOut), 'd MMM yyyy')}` : ' - Add Date'}` : (
                       <span>{labels?.addDates || 'Add dates'}</span>
                     )}
                   </span>

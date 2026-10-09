@@ -263,20 +263,7 @@ export function DetailsFlow({ property, searchParams, paymentTrustImages, cmsCon
                 <span>${(total).toLocaleString()}</span>
               </div>
 
-              <div>
-                <p className="text-[10px] text-[#7D7975] mb-2">{cmsContent?.flexiblePaymentsText || 'or flexible payments with'}</p>
-                {cmsContent?.flexiblePaymentLogos && cmsContent.flexiblePaymentLogos.length > 0 ? (
-                  <PaymentLogos images={cmsContent.flexiblePaymentLogos} isFooter={false} />
-                ) : (
-                  <div className="flex gap-2 text-[10px] tracking-widest font-bold text-[#1B1A17]/70 uppercase mt-5">
-                    <span>Afterpay</span>
-                    <span>·</span>
-                    <span>Klarna</span>
-                    <span>·</span>
-                    <span>Zip</span>
-                  </div>
-                )}
-              </div>
+
 
               <div className="mt-2 text-[12px]">
                 <a href="#" className="text-[#1B1A17] underline decoration-[#1B1A17]/30 hover:decoration-[#1B1A17]">{cmsContent?.addCodeText || 'Add a code'}</a>
