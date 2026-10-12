@@ -4,86 +4,174 @@ import React, { useEffect, useState } from 'react';
 import { PropertyReview } from '@/types/property';
 import { propertyService } from '@/services/property.service';
 
-interface PropertyReviewsProps {
-  propertyId: string;
+export interface CuratedReviewItem {
+  _key?: string;
+  reviewId: string;
+  quote: string;
+  author: string;
+  date?: string;
+  rating?: number;
+  source?: string;
 }
 
-export function PropertyReviews({ propertyId }: PropertyReviewsProps) {
-  const [reviews, setReviews] = useState<PropertyReview[]>([]);
-  const [loading, setLoading] = useState(true);
+interface PropertyReviewsProps {
+  propertyId: string;
+  curatedReviews?: CuratedReviewItem[];
+}
+
+interface NormalizedReview {
+  id: string;
+  text: string;
+  author: string;
+  dateLabel: string;
+  source: string;
+  rating: number;
+}
+
+function SingleReviewCard({ review }: { review: NormalizedReview }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const isLong = review.text && review.text.length > 130;
+
+  return (
+    <article className="bg-[#F7EEE9] rounded-xl px-6 py-8 md:px-8 md:py-8 w-full max-w-[705px]">
+      <div className="flex flex-wrap items-center gap-3 mb-5">
+        <div className="flex gap-0.5 text-[#241D19]">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <svg
+              key={i}
+              className={`w-3.5 h-3.5 ${i < review.rating ? 'fill-current' : 'fill-[#241D19]/20'}`}
+              viewBox="0 0 20 20"
+              aria-hidden
+            >
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+          ))}
+        </div>
+        <span className="inline-flex items-center rounded-full bg-[#99583D] text-white text-[11px] font-medium px-3 py-1 font-sans">
+          Verified stay
+        </span>
+      </div>
+
+      <div className="mb-5">
+        <blockquote
+          className={`font-serif text-[20px] md:text-[22px] text-[#241D19] leading-relaxed transition-all duration-300 ${
+            !isExpanded && isLong ? 'line-clamp-4' : ''
+          }`}
+        >
+          &ldquo;{review.text}&rdquo;
+        </blockquote>
+        {isLong && (
+          <button
+            type="button"
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="text-[14px] font-sans font-medium text-[#99583D] hover:text-[#241D19] transition-colors mt-2 focus:outline-none"
+          >
+            {isExpanded ? 'Read less' : 'Read more'}
+          </button>
+        )}
+      </div>
+
+      <div className="text-[14px] leading-[140%]">
+        <p className="font-medium text-[#241D19] m-0">
+          {review.author}
+          {review.dateLabel ? `, ${review.dateLabel}` : ''}
+        </p>
+        {review.source ? (
+          <p className="font-normal text-[#5F4E44] m-0 mt-0.5">
+            {/^from\s+/i.test(review.source) ? review.source : `from ${review.source}`}
+          </p>
+        ) : null}
+      </div>
+    </article>
+  );
+}
+
+export function PropertyReviews({ propertyId, curatedReviews }: PropertyReviewsProps) {
+  const [liveReviews, setLiveReviews] = useState<PropertyReview[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  // If curated reviews are provided from Sanity, use them directly without extra API call
+  const hasCurated = Array.isArray(curatedReviews) && curatedReviews.length > 0;
 
   useEffect(() => {
+    if (hasCurated) return;
+
+    let isMounted = true;
     const fetchReviews = async () => {
       try {
+        setLoading(true);
         const response = await propertyService.getPropertyReviews(propertyId);
-        const fetchedReviews = response.data?.results || response.data?.data || [];
-        if (fetchedReviews.length > 0) {
-          setReviews(fetchedReviews);
+        const fetched = response.data?.results || response.data?.data || [];
+        if (isMounted && fetched.length > 0) {
+          setLiveReviews(fetched);
         }
       } catch (error) {
         console.error('Failed to load reviews:', error);
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
     fetchReviews();
-  }, [propertyId]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [propertyId, hasCurated]);
 
   if (loading) {
     return (
       <section className="py-2">
-        <div className="animate-pulse h-40 bg-[#F7EEE9] rounded-xl" />
+        <div className="animate-pulse h-40 bg-[#F7EEE9] rounded-xl max-w-[705px]" />
       </section>
     );
   }
 
-  if (reviews.length === 0) return null;
+  // Determine list to render
+  let displayReviews: NormalizedReview[] = [];
 
-  const review: any = reviews[0];
-  const raw = review.rawReview || {};
-  const rating = Math.round(raw.overall_rating || review.overallRating || 5);
-  const text = raw.public_review || review.publicReview;
-  const firstName = review.reviewer?.firstName || 'Guest';
-  const dateStr = review.createdAt || review.createdAtGuesty;
-  const source = raw.channel || review.channel || 'Airbnb';
+  if (hasCurated) {
+    displayReviews = curatedReviews
+      .filter((r) => Boolean(r.quote))
+      .map((r, idx) => ({
+        id: r.reviewId || r._key || String(idx),
+        text: r.quote,
+        author: r.author || 'Guest',
+        dateLabel: r.date
+          ? new Date(r.date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+          : '',
+        source: r.source || 'Airbnb',
+        rating: Math.round(r.rating || 5),
+      }));
+  } else if (liveReviews.length > 0) {
+    // If live reviews fallback, display ONLY 1 review (the latest one)
+    displayReviews = liveReviews
+      .map((r: any, idx: number) => {
+        const raw = r.rawReview || {};
+        const text = raw.public_review || r.publicReview || '';
+        const dateStr = r.createdAt || r.createdAtGuesty;
+        return {
+          id: r._id || r.id || String(idx),
+          text,
+          author: r.reviewer?.firstName || 'Guest',
+          dateLabel: dateStr
+            ? new Date(dateStr).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+            : '',
+          source: raw.channel || r.channel || 'Airbnb',
+          rating: Math.round(raw.overall_rating || r.overallRating || 5),
+        };
+      })
+      .filter((r) => Boolean(r.text))
+      .slice(0, 1);
+  }
 
-  if (!text) return null;
-
-  const dateLabel = dateStr
-    ? new Date(dateStr).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
-    : '';
+  if (displayReviews.length === 0) return null;
 
   return (
     <section className="py-2 font-[family-name:var(--font-instrument-sans)]">
-      <div className="bg-[#F7EEE9] rounded-xl px-6 py-8 md:px-8 md:py-8 max-w-[705px]">
-        <div className="flex flex-wrap items-center gap-3 mb-5">
-          <div className="flex gap-0.5 text-[#241D19]">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <svg
-                key={i}
-                className={`w-3.5 h-3.5 ${i < rating ? 'fill-current' : 'fill-[#241D19]/20'}`}
-                viewBox="0 0 20 20"
-              >
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
-            ))}
-          </div>
-          <span className="inline-flex items-center rounded-full bg-[#99583D] text-white text-[11px] font-medium px-3 py-1">
-            Verified stay
-          </span>
-        </div>
-
-        <blockquote className="font-serif text-[20px] md:text-[22px] text-[#241D19] leading-relaxed mb-5">
-          &ldquo;{text}&rdquo;
-        </blockquote>
-
-        <div className="text-[14px] leading-[140%]">
-          <p className="font-medium text-[#241D19] m-0">
-            {firstName}
-            {dateLabel ? `, ${dateLabel}` : ''}
-          </p>
-          {source ? <p className="font-normal text-[#5F4E44] m-0 mt-0.5">from {source}</p> : null}
-        </div>
+      <div className="flex flex-col gap-6 max-w-[705px]">
+        {displayReviews.map((rev) => (
+          <SingleReviewCard key={rev.id} review={rev} />
+        ))}
       </div>
     </section>
   );

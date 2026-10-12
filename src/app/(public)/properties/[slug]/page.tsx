@@ -293,7 +293,10 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
             />
 
             {(actualGuestyId || property.guestyId || property.id) && (
-              <PropertyReviews propertyId={actualGuestyId || property.guestyId || property.id} />
+              <PropertyReviews
+                propertyId={actualGuestyId || property.guestyId || property.id}
+                curatedReviews={editorial?.reviews}
+              />
             )}
 
             <FAQSection faqs={editorial?.faq} />

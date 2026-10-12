@@ -100,6 +100,15 @@ export interface PropertyEditorialData {
     keywords: string[];
   };
   relatedProperties: RelatedPropertiesSettings;
+  reviews?: Array<{
+    _key?: string;
+    reviewId: string;
+    quote: string;
+    author: string;
+    date?: string;
+    rating?: number;
+    source?: string;
+  }>;
 }
 
 export const DEFAULT_PROPERTY_EDITORIAL: PropertyEditorialData = {

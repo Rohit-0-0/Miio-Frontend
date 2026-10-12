@@ -1,6 +1,7 @@
 import { defineField, defineType } from 'sanity'
 
 import { SinglePropertySelector } from '../../components/SinglePropertySelector'
+import { ListingReviewSelector } from '../../components/ListingReviewSelector'
 
 export const propertyEditorial = defineType({
   name: 'propertyEditorial',
@@ -79,7 +80,35 @@ export const propertyEditorial = defineType({
       name: 'futureBookingNotes',
       title: 'Future Booking Notes',
       type: 'text'
-    })
+    }),
+    defineField({
+      name: 'reviews',
+      title: 'Curated Reviews',
+      type: 'array',
+      description: 'Select reviews specifically for this property. If left empty, the latest live review from Guesty will be displayed.',
+      components: {
+        input: ListingReviewSelector,
+      },
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'reviewId', title: 'Review ID', type: 'string' },
+            { name: 'quote', title: 'Quote', type: 'text' },
+            { name: 'author', title: 'Author', type: 'string' },
+            { name: 'date', title: 'Date', type: 'string' },
+            { name: 'rating', title: 'Rating', type: 'number' },
+            { name: 'source', title: 'Source', type: 'string' },
+          ],
+          preview: {
+            select: {
+              title: 'author',
+              subtitle: 'quote',
+            },
+          },
+        },
+      ],
+    }),
   ],
   preview: {
     select: {
