@@ -30,13 +30,10 @@ interface CheckoutFlowProps {
     guestsHeading?: string;
     continueButton?: string;
     totalLabel?: string;
-    flexiblePaymentsText?: string;
     addCodeText?: string;
     freeCancellationText?: string;
     cleaningFeeText?: string;
-    includedText?: string;
     nightsText?: string;
-    flexiblePaymentLogos?: any[];
   };
 }
 
