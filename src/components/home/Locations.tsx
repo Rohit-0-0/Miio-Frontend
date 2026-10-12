@@ -16,12 +16,12 @@ export function Locations({ locations }: { locations: LocationsSection }) {
           {heading}
         </h2>
         
-        <div className="flex overflow-x-auto md:grid md:grid-cols-3 gap-[16px] md:gap-[32px] snap-x snap-mandatory scrollbar-hide -mx-5 px-5 md:mx-0 md:px-0 pb-4 md:pb-0">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-[24px] md:gap-[32px]">
           {items.map((location, i) => (
             <Link 
               key={location.id || i}
               href={location.ctaLink || `/locations/${location.slug || location.id}`}
-              className="group flex flex-col gap-[12px] cursor-pointer shrink-0 w-[85vw] max-w-[320px] md:w-auto md:max-w-none snap-start"
+              className="group flex flex-col gap-[12px] cursor-pointer"
             >
               <div className="relative w-full aspect-[35/31] overflow-hidden bg-gray-100">
                 {location.image ? (
