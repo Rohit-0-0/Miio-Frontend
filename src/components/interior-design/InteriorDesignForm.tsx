@@ -115,19 +115,16 @@ export function InteriorDesignForm() {
 
   if (isSuccess) {
     return (
-      <div className="bg-[#2C241F] p-12 text-center border border-[#FEF6EE]/10 rounded-xl max-w-2xl mx-auto">
-        <h3 className="text-3xl md:text-5xl font-serif mb-6 leading-tight">Your project sounds exciting.</h3>
-        <p className="opacity-80 mb-10 text-lg">
-          Thanks for telling us a little about your property. The next step is a short discovery call so we can understand the project in more detail and recommend the right approach.
+      <div className="bg-[#2C241F] p-12 text-center border border-[#FEF6EE]/10 rounded-xl max-w-2xl mx-auto animate-in fade-in zoom-in-95 duration-500">
+        <div className="w-16 h-16 rounded-full bg-[#FEF6EE]/10 text-[#FEF6EE] flex items-center justify-center mx-auto mb-6">
+          <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <h3 className="text-3xl md:text-5xl font-serif mb-6 leading-tight">Thank you!</h3>
+        <p className="opacity-80 text-lg leading-relaxed max-w-lg mx-auto">
+          Thanks for telling us about your property. Our team will review your project details and be in touch shortly to arrange your discovery call.
         </p>
-        <a 
-          href="https://calendly.com/miio/discovery-call" 
-          target="_blank"
-          rel="noopener noreferrer"
-          className="bg-[#FEF6EE] text-[#241D19] px-8 py-4 uppercase text-sm tracking-widest hover:bg-white transition-colors inline-block font-semibold"
-        >
-          BOOK YOUR DISCOVERY CALL →
-        </a>
       </div>
     );
   }
