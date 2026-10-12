@@ -134,8 +134,8 @@ export function ListingReviewSelector(props: ArrayOfObjectsInputProps) {
 
   if (!guestyListingId) {
     return (
-      <Card padding={4} tone="caution" radius={2}>
-        <Stack space={2}>
+      <Card padding={3} tone="caution" radius={2} border>
+        <Stack style={{ gap: '0.5rem' }}>
           <Text weight="semibold" size={1}>
             No Guesty Listing ID Selected
           </Text>
@@ -158,113 +158,109 @@ export function ListingReviewSelector(props: ArrayOfObjectsInputProps) {
   });
 
   return (
-    <Stack space={3}>
-      <Flex gap={2} align="center" justify="space-between">
-        <TextInput
-          fontSize={1}
-          placeholder="Filter listing reviews..."
-          value={search}
-          onChange={(event) => setSearch(event.currentTarget.value)}
-        />
-        <Flex gap={2} align="center">
-          {totalCount !== null && (
-            <Text size={1} muted>
-              Total: {totalCount}
-            </Text>
-          )}
-          <Badge tone={selectedCount > 0 ? 'positive' : 'default'} fontSize={1}>
-            Selected: {selectedCount}
-          </Badge>
-        </Flex>
-      </Flex>
-
-      {loading && (
-        <Flex align="center" justify="center" padding={4}>
-          <Spinner muted />
-        </Flex>
-      )}
-
-      {error && (
-        <Card padding={3} tone="critical" radius={2}>
-          <Text size={1}>{error}</Text>
-        </Card>
-      )}
-
-      {!loading && !error && filteredReviews.length === 0 && (
-        <Card padding={3} tone="transparent">
-          <Text size={1} muted>
-            {reviews.length === 0
-              ? 'No reviews found for this listing in Guesty.'
-              : 'No reviews match your search filter.'}
-          </Text>
-        </Card>
-      )}
-
-      {!loading && !error && filteredReviews.length > 0 && (
-        <Box style={{ maxHeight: '440px', overflowY: 'auto' }}>
-          <Stack space={2}>
-            {filteredReviews.map((review) => {
-              const isChecked = selected.some((item) => item.reviewId === review.id);
-
-              return (
-                <Card
-                  key={review.id}
-                  padding={3}
-                  radius={2}
-                  tone={isChecked ? 'primary' : 'default'}
-                  border
-                  style={{
-                    cursor: 'pointer',
-                    transition: 'all 0.15s ease-in-out',
-                  }}
-                  onClick={() => handleToggle(review, !isChecked)}
-                >
-                  <Flex gap={3} align="flex-start">
-                    <Box paddingTop={1}>
-                      <Checkbox
-                        checked={isChecked}
-                        onChange={() => {}} // Click is handled on card
-                      />
-                    </Box>
-                    <Stack space={2} flex={1}>
-                      <Flex align="center" justify="space-between">
-                        <Flex align="center" gap={2}>
-                          <Text weight="semibold" size={1}>
-                            {review.author}
-                          </Text>
-                          {review.rating ? (
-                            <Badge tone="caution" fontSize={0}>
-                              ★ {review.rating}
-                            </Badge>
-                          ) : null}
-                        </Flex>
-                        <Text size={0} muted>
-                          {review.date ? new Date(review.date).toLocaleDateString() : ''} {review.source ? `(${review.source})` : ''}
-                        </Text>
-                      </Flex>
-                      <Text size={1} style={{ fontStyle: 'italic', color: '#444' }}>
-                        &ldquo;{review.quote}&rdquo;
-                      </Text>
-                    </Stack>
-                  </Flex>
-                </Card>
-              );
-            })}
-
-            {hasMore && (
-              <Box paddingTop={2}>
-                <Button
-                  mode="ghost"
-                  text={loadingMore ? 'Loading more reviews...' : 'Load more reviews'}
-                  disabled={loadingMore}
-                  onClick={() => fetchReviewsPage(skip + PAGE_SIZE, true)}
-                  style={{ width: '100%' }}
-                />
-              </Box>
+    <Card padding={3} radius={2} border>
+      <Stack style={{ gap: '0.75rem' }}>
+        <Flex gap={2} align="center" justify="space-between">
+          <Box style={{ flex: 1 }}>
+            <TextInput
+              placeholder="Filter listing reviews..."
+              value={search}
+              onChange={(event) => setSearch(event.currentTarget.value)}
+            />
+          </Box>
+          <Flex gap={2} align="center">
+            {totalCount !== null && (
+              <Text size={1} muted>
+                Total: {totalCount}
+              </Text>
             )}
-          </Stack>
-        </Box>
-      )}
-    </Stack>
+            <Badge tone={selectedCount > 0 ? 'positive' : 'default'} fontSize={1}>
+              Selected: {selectedCount}
+            </Badge>
+          </Flex>
+        </Flex>
+
+        {loading ? (
+          <Flex align="center" justify="center" padding={4}>
+            <Spinner />
+          </Flex>
+        ) : error ? (
+          <Card padding={3} tone="critical" radius={2} border>
+            <Text size={1}>{error}</Text>
+          </Card>
+        ) : filteredReviews.length === 0 ? (
+          <Card padding={3} tone="transparent">
+            <Text size={1} muted>
+              {reviews.length === 0
+                ? 'No reviews found for this listing in Guesty.'
+                : 'No reviews match your search filter.'}
+            </Text>
+          </Card>
+        ) : (
+          <Box style={{ maxHeight: '400px', overflowY: 'auto' }}>
+            <Stack style={{ gap: '0.5rem' }}>
+              {filteredReviews.map((review) => {
+                const isChecked = selected.some((item) => item.reviewId === review.id);
+
+                return (
+                  <Card
+                    key={review.id}
+                    padding={3}
+                    radius={2}
+                    tone={isChecked ? 'primary' : 'default'}
+                    border
+                    style={{
+                      cursor: 'pointer',
+                      transition: 'all 0.15s ease-in-out',
+                    }}
+                    onClick={() => handleToggle(review, !isChecked)}
+                  >
+                    <Flex gap={3} align="flex-start">
+                      <Box style={{ paddingTop: '2px' }}>
+                        <Checkbox
+                          checked={isChecked}
+                          onChange={(e) => handleToggle(review, e.currentTarget.checked)}
+                        />
+                      </Box>
+                      <Stack style={{ gap: '0.35rem', flex: 1 }}>
+                        <Flex align="center" justify="space-between">
+                          <Text weight="medium">
+                            {review.author}
+                            {review.rating ? ` · ★ ${review.rating}` : ''}
+                          </Text>
+                          <Text size={0} muted>
+                            {review.date ? new Date(review.date).toLocaleDateString() : ''}{' '}
+                            {review.source ? `(${review.source})` : ''}
+                          </Text>
+                        </Flex>
+                        <Text size={1} muted style={{ fontStyle: 'italic' }}>
+                          &ldquo;{review.quote}&rdquo;
+                        </Text>
+                      </Stack>
+                    </Flex>
+                  </Card>
+                );
+              })}
+
+              {hasMore && !search && (
+                <Box style={{ paddingTop: '0.5rem' }}>
+                  <Button
+                    mode="ghost"
+                    text={loadingMore ? 'Loading more reviews...' : 'Load more reviews'}
+                    disabled={loadingMore}
+                    onClick={() => fetchReviewsPage(skip + PAGE_SIZE, true)}
+                    style={{ width: '100%' }}
+                  />
+                </Box>
+              )}
+            </Stack>
+          </Box>
+        )}
+
+        <Text size={1} muted>
+          {selectedCount} review{selectedCount === 1 ? '' : 's'} selected for this property
+        </Text>
+      </Stack>
+    </Card>
   );
 }
