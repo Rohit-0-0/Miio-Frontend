@@ -21,11 +21,8 @@ export function Hero({ hero }: { hero: HeroSection }) {
   }, [hero]);
 
   if (!hero) return null;
-
-  const eyebrow = hero.eyebrow || HOME_DEFAULTS.hero.eyebrow;
   const title = hero.title || HOME_DEFAULTS.hero.title;
   const subtitle = hero.subtitle || HOME_DEFAULTS.hero.subtitle;
-  const primaryCtaLabel = hero.primaryCta?.label || HOME_DEFAULTS.hero.cta.text;
 
   return (
     <section 

@@ -48,6 +48,10 @@ export interface FeaturedPropertiesSection extends SectionMetadata {
 export interface EditorialStatementSection extends SectionMetadata {
   heading: string;
   description: string;
+  buttonText?: string;
+  buttonLink?: string;
+  ctaText?: string;
+  ctaLink?: string;
 }
 
 export interface LocationItem {

@@ -6,11 +6,6 @@ export const hero = defineType({
   type: 'object',
   fields: [
     defineField({
-      name: 'eyebrow',
-      title: 'Eyebrow',
-      type: 'string',
-    }),
-    defineField({
       name: 'title',
       title: 'Title',
       type: 'string',
@@ -26,11 +21,6 @@ export const hero = defineType({
       type: 'array',
       of: [{ type: 'customImage' }],
       description: 'Upload one image for a static display. Upload multiple images to automatically enable the carousel on the frontend.',
-    }),
-    defineField({
-      name: 'cta',
-      title: 'Call to Action',
-      type: 'cta',
     }),
     defineField({
       name: 'searchWidgetLabels',

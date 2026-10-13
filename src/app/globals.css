@@ -116,3 +116,44 @@ input[type="date"]::-webkit-outer-spin-button {
   font-size: 14px !important; /* Make month title a bit smaller to match Figma */
 }
 
+/* Browser Autofill Styling Reset:
+ * Prevents Chrome/Safari/Edge from injecting their default light-blue background,
+ * black text, and misaligned padding/margins when selecting an autofill entry.
+ */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+textarea:-webkit-autofill:active,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus,
+select:-webkit-autofill:active {
+  -webkit-text-fill-color: currentColor !important;
+  caret-color: currentColor !important;
+  /* Cancel the browser's solid light-blue autofill box */
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+  box-shadow: 0 0 0px 1000px transparent inset !important;
+  transition: background-color 5000000s ease-in-out 0s, color 5000000s ease-in-out 0s !important;
+}
+
+/* For inputs on dark backgrounds like the Interior Design form (#241D19 background) */
+.bg-\[\#241D19\] input:-webkit-autofill,
+.bg-\[\#241D19\] input:-webkit-autofill:hover,
+.bg-\[\#241D19\] input:-webkit-autofill:focus,
+.bg-\[\#241D19\] input:-webkit-autofill:active,
+.bg-\[\#241D19\] textarea:-webkit-autofill,
+.bg-\[\#241D19\] textarea:-webkit-autofill:hover,
+.bg-\[\#241D19\] textarea:-webkit-autofill:focus,
+.bg-\[\#241D19\] textarea:-webkit-autofill:active {
+  -webkit-text-fill-color: #FEF6EE !important;
+  caret-color: #FEF6EE !important;
+  -webkit-box-shadow: 0 0 0px 1000px #241D19 inset !important;
+  box-shadow: 0 0 0px 1000px #241D19 inset !important;
+}
+
+
+

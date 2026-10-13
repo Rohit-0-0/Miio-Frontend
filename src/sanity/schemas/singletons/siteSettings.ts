@@ -6,11 +6,6 @@ export const siteSettings = defineType({
   type: 'document',
   fields: [
     defineField({
-      name: 'brandName',
-      title: 'Brand Name',
-      type: 'string',
-    }),
-    defineField({
       name: 'logo',
       title: 'Logo',
       type: 'customImage',

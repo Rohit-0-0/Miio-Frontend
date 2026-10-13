@@ -124,13 +124,13 @@ export async function Footer() {
               {socialLinks.length > 0 && (
                 <div className="flex flex-col gap-3">
                   <span className="font-sans text-[12px] text-white/80 uppercase tracking-wide">Connect</span>
-                  <div className="flex gap-4">
+                  <div className="flex gap-4 items-center h-8">
                     {socialLinks.map((link: any, i: number) => {
                       const iconUrl = buildImageUrl(link.icon?.asset?._ref);
                       return (
-                        <a key={i} href={link.url} target="_blank" rel="noreferrer" className="hover:opacity-80 transition-opacity block">
+                        <a key={i} href={link.url} target="_blank" rel="noreferrer" className="hover:opacity-80 transition-opacity flex items-center justify-center w-8 h-8">
                           {iconUrl ? (
-                            <Image src={iconUrl} alt={link.platform} width={24} height={24} className="object-contain w-6 h-6" />
+                            <Image src={iconUrl} alt={link.platform} width={32} height={32} className="object-contain w-8 h-8" />
                           ) : (
                             <span className="text-sm">{link.platform}</span>
                           )}
@@ -183,7 +183,7 @@ export async function Footer() {
           
           <div className="flex flex-col items-center gap-8 w-full border-t border-[#FEF6EE]/10 pt-8 mt-4">
             {/* Contact & Socials */}
-            <div className="flex gap-16 justify-center w-full">
+            <div className="flex gap-16 justify-center items-end w-full">
               {whatsappNumber && (
                 <div className="flex flex-col items-center gap-3">
                   <span className="font-sans text-[12px] text-white/80 uppercase tracking-wide">Contact us</span>
@@ -195,13 +195,13 @@ export async function Footer() {
               {socialLinks.length > 0 && (
                 <div className="flex flex-col items-center gap-3">
                   <span className="font-sans text-[12px] text-white/80 uppercase tracking-wide">Connect</span>
-                  <div className="flex gap-4">
+                  <div className="flex gap-4 items-center h-8">
                     {socialLinks.map((link: any, i: number) => {
                       const iconUrl = buildImageUrl(link.icon?.asset?._ref);
                       return (
-                        <a key={i} href={link.url} target="_blank" rel="noreferrer" className="hover:opacity-80 transition-opacity block">
+                        <a key={i} href={link.url} target="_blank" rel="noreferrer" className="hover:opacity-80 transition-opacity flex items-center justify-center w-8 h-8">
                           {iconUrl ? (
-                            <Image src={iconUrl} alt={link.platform} width={24} height={24} className="object-contain w-6 h-6" />
+                            <Image src={iconUrl} alt={link.platform} width={32} height={32} className="object-contain w-8 h-8" />
                           ) : (
                             <span className="text-sm">{link.platform}</span>
                           )}

@@ -335,15 +335,17 @@ export default async function InteriorDesignPage() {
       </section>
 
       {/* FINAL CTA & ENQUIRY FORM */}
-      <section id="enquiry-form" className="bg-[#241D19] text-[#FEF6EE] text-center pt-32 pb-16 px-5 relative z-10">
-        <p className="text-sm tracking-widest uppercase mb-6">{data?.finalCta?.eyebrow || 'INTERIOR DESIGN & PROPERTY STYLING'}</p>
-        <h2 className="text-4xl md:text-5xl font-serif mb-8">{data?.finalCta?.headline || 'Have a property in mind?'}</h2>
-        <p className="text-lg opacity-80 mb-16 max-w-2xl mx-auto whitespace-pre-line">
-          {data?.finalCta?.bodyCopy || 'Let\'s create a space that looks beautiful, works hard and stays with the people who experience it.'}
-        </p>
-        
-        <div className="text-left max-w-4xl mx-auto mt-16">
-          <InteriorDesignForm />
+      <section id="enquiry-form" className="bg-[#241D19] text-[#FEF6EE] text-center pt-32 pb-24 px-5 md:px-10 xl:px-[188px] relative z-10">
+        <div className="max-w-[1440px] mx-auto">
+          <p className="text-sm tracking-widest uppercase mb-6">{data?.finalCta?.eyebrow || 'INTERIOR DESIGN & PROPERTY STYLING'}</p>
+          <h2 className="text-4xl md:text-5xl font-serif mb-8">{data?.finalCta?.headline || 'Have a property in mind?'}</h2>
+          <p className="text-lg opacity-80 mb-16 max-w-2xl mx-auto whitespace-pre-line">
+            {data?.finalCta?.bodyCopy || 'Let\'s create a space that looks beautiful, works hard and stays with the people who experience it.'}
+          </p>
+          
+          <div className="text-left max-w-4xl mx-auto mt-16">
+            <InteriorDesignForm />
+          </div>
         </div>
       </section>
     </main>

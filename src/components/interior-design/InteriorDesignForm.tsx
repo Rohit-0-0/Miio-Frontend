@@ -151,38 +151,47 @@ export function InteriorDesignForm() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold uppercase tracking-widest opacity-80">First Name*</label>
+                <label htmlFor="firstName" className="text-sm font-semibold uppercase tracking-widest opacity-80">First Name*</label>
                 <input 
                   required
                   type="text" 
+                  id="firstName"
+                  name="firstName"
+                  autoComplete="given-name"
                   value={formData.firstName}
                   onChange={(e) => updateForm('firstName', e.target.value)}
-                  className="bg-transparent border-b border-[#FEF6EE]/20 py-3 outline-none focus:border-[#FEF6EE] transition-colors placeholder-[#FEF6EE]/30"
+                  className="bg-transparent border-b border-[#FEF6EE]/20 py-3 px-3 text-[#FEF6EE] outline-none focus:border-[#FEF6EE] transition-colors placeholder-[#FEF6EE]/30"
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold uppercase tracking-widest opacity-80">Last Name*</label>
+                <label htmlFor="lastName" className="text-sm font-semibold uppercase tracking-widest opacity-80">Last Name*</label>
                 <input 
                   required
                   type="text" 
+                  id="lastName"
+                  name="lastName"
+                  autoComplete="family-name"
                   value={formData.lastName}
                   onChange={(e) => updateForm('lastName', e.target.value)}
-                  className="bg-transparent border-b border-[#FEF6EE]/20 py-3 outline-none focus:border-[#FEF6EE] transition-colors placeholder-[#FEF6EE]/30"
+                  className="bg-transparent border-b border-[#FEF6EE]/20 py-3 px-3 text-[#FEF6EE] outline-none focus:border-[#FEF6EE] transition-colors placeholder-[#FEF6EE]/30"
                 />
               </div>
               <div className="flex flex-col gap-2 md:col-span-2">
-                <label className="text-sm font-semibold uppercase tracking-widest opacity-80">Email Address*</label>
+                <label htmlFor="email" className="text-sm font-semibold uppercase tracking-widest opacity-80">Email Address*</label>
                 <input 
                   required
                   type="email" 
+                  id="email"
+                  name="email"
+                  autoComplete="email"
                   value={formData.email}
                   onChange={(e) => updateForm('email', e.target.value)}
-                  className="bg-transparent border-b border-[#FEF6EE]/20 py-3 outline-none focus:border-[#FEF6EE] transition-colors placeholder-[#FEF6EE]/30"
+                  className="bg-transparent border-b border-[#FEF6EE]/20 py-3 px-3 text-[#FEF6EE] outline-none focus:border-[#FEF6EE] transition-colors placeholder-[#FEF6EE]/30"
                 />
               </div>
               <div className="flex flex-col gap-2 md:col-span-2">
-                <label className="text-sm font-semibold uppercase tracking-widest opacity-80">Phone Number</label>
-                <div className="border-b border-[#FEF6EE]/20 focus-within:border-[#FEF6EE] transition-colors pb-1 pt-2 [&_.PhoneInputInput]:bg-transparent [&_.PhoneInputInput]:outline-none [&_.PhoneInputInput]:text-[#FEF6EE] [&_.PhoneInputInput]:placeholder-[#FEF6EE]/30 [&_.PhoneInputCountryIcon--border]:border-none [&_.PhoneInputCountryIcon]:!shadow-none [&_.PhoneInputCountrySelectArrow]:opacity-50">
+                <label htmlFor="phone" className="text-sm font-semibold uppercase tracking-widest opacity-80">Phone Number</label>
+                <div className="border-b border-[#FEF6EE]/20 focus-within:border-[#FEF6EE] transition-colors pb-1 pt-2 px-3 [&_.PhoneInputInput]:bg-transparent [&_.PhoneInputInput]:outline-none [&_.PhoneInputInput]:text-[#FEF6EE] [&_.PhoneInputInput]:px-1 [&_.PhoneInputInput]:placeholder-[#FEF6EE]/30 [&_.PhoneInputCountryIcon--border]:border-none [&_.PhoneInputCountryIcon]:!shadow-none [&_.PhoneInputCountrySelectArrow]:opacity-50">
                   <PhoneInput
                     international
                     defaultCountry="GB"
@@ -194,13 +203,16 @@ export function InteriorDesignForm() {
                 </div>
               </div>
               <div className="flex flex-col gap-2 md:col-span-2">
-                <label className="text-sm font-semibold uppercase tracking-widest opacity-80">Property Location* (City / postcode)</label>
+                <label htmlFor="propertyLocation" className="text-sm font-semibold uppercase tracking-widest opacity-80">Property Location* (City / postcode)</label>
                 <input 
                   required
                   type="text" 
+                  id="propertyLocation"
+                  name="propertyLocation"
+                  autoComplete="address-level2"
                   value={formData.propertyLocation}
                   onChange={(e) => updateForm('propertyLocation', e.target.value)}
-                  className="bg-transparent border-b border-[#FEF6EE]/20 py-3 outline-none focus:border-[#FEF6EE] transition-colors placeholder-[#FEF6EE]/30"
+                  className="bg-transparent border-b border-[#FEF6EE]/20 py-3 px-3 text-[#FEF6EE] outline-none focus:border-[#FEF6EE] transition-colors placeholder-[#FEF6EE]/30"
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -209,7 +221,7 @@ export function InteriorDesignForm() {
                   required
                   value={formData.propertyType}
                   onChange={(e) => updateForm('propertyType', e.target.value)}
-                  className="w-full text-ellipsis overflow-hidden whitespace-nowrap bg-transparent border-b border-[#FEF6EE]/20 py-3 outline-none focus:border-[#FEF6EE] transition-colors appearance-none cursor-pointer [&>option]:bg-[#2C241F] [&>option]:text-[#FEF6EE]"
+                  className="w-full text-ellipsis overflow-hidden whitespace-nowrap bg-transparent border-b border-[#FEF6EE]/20 py-3 px-3 outline-none focus:border-[#FEF6EE] transition-colors appearance-none cursor-pointer [&>option]:bg-[#2C241F] [&>option]:text-[#FEF6EE]"
                 >
                   <option value="" disabled>Select</option>
                   <option value="Apartment">Apartment</option>
@@ -227,7 +239,7 @@ export function InteriorDesignForm() {
                   required
                   value={formData.propertyUsage}
                   onChange={(e) => updateForm('propertyUsage', e.target.value)}
-                  className="w-full text-ellipsis overflow-hidden whitespace-nowrap bg-transparent border-b border-[#FEF6EE]/20 py-3 outline-none focus:border-[#FEF6EE] transition-colors appearance-none cursor-pointer [&>option]:bg-[#2C241F] [&>option]:text-[#FEF6EE]"
+                  className="w-full text-ellipsis overflow-hidden whitespace-nowrap bg-transparent border-b border-[#FEF6EE]/20 py-3 px-3 outline-none focus:border-[#FEF6EE] transition-colors appearance-none cursor-pointer [&>option]:bg-[#2C241F] [&>option]:text-[#FEF6EE]"
                 >
                   <option value="" disabled>Select</option>
                   <option value="Short-term rental / Airbnb">Short-term rental / Airbnb</option>
@@ -284,7 +296,7 @@ export function InteriorDesignForm() {
                   type="text" 
                   value={formData.propertySize}
                   onChange={(e) => updateForm('propertySize', e.target.value)}
-                  className="bg-transparent border-b border-[#FEF6EE]/20 py-3 outline-none focus:border-[#FEF6EE] transition-colors placeholder-[#FEF6EE]/30"
+                  className="bg-transparent border-b border-[#FEF6EE]/20 py-3 px-3 outline-none focus:border-[#FEF6EE] transition-colors placeholder-[#FEF6EE]/30"
                 />
               </div>
 
@@ -295,7 +307,7 @@ export function InteriorDesignForm() {
                     required
                     value={formData.propertyStage}
                     onChange={(e) => updateForm('propertyStage', e.target.value)}
-                    className="w-full text-ellipsis overflow-hidden whitespace-nowrap bg-transparent border-b border-[#FEF6EE]/20 py-3 outline-none focus:border-[#FEF6EE] transition-colors appearance-none cursor-pointer [&>option]:bg-[#2C241F] [&>option]:text-[#FEF6EE]"
+                    className="w-full text-ellipsis overflow-hidden whitespace-nowrap bg-transparent border-b border-[#FEF6EE]/20 py-3 px-3 outline-none focus:border-[#FEF6EE] transition-colors appearance-none cursor-pointer [&>option]:bg-[#2C241F] [&>option]:text-[#FEF6EE]"
                   >
                     <option value="" disabled>Select</option>
                     <option value="Empty / unfurnished">Empty / unfurnished</option>
@@ -312,7 +324,7 @@ export function InteriorDesignForm() {
                     required
                     value={formData.budget}
                     onChange={(e) => updateForm('budget', e.target.value)}
-                    className="w-full text-ellipsis overflow-hidden whitespace-nowrap bg-transparent border-b border-[#FEF6EE]/20 py-3 outline-none focus:border-[#FEF6EE] transition-colors appearance-none cursor-pointer [&>option]:bg-[#2C241F] [&>option]:text-[#FEF6EE]"
+                    className="w-full text-ellipsis overflow-hidden whitespace-nowrap bg-transparent border-b border-[#FEF6EE]/20 py-3 px-3 outline-none focus:border-[#FEF6EE] transition-colors appearance-none cursor-pointer [&>option]:bg-[#2C241F] [&>option]:text-[#FEF6EE]"
                   >
                     <option value="" disabled>Select</option>
                     <option value="Under $5,000">Under $5,000</option>
@@ -332,7 +344,7 @@ export function InteriorDesignForm() {
                   type="date" 
                   value={formData.timeline}
                   onChange={(e) => updateForm('timeline', e.target.value)}
-                  className="bg-transparent border-b border-[#FEF6EE]/20 py-3 outline-none focus:border-[#FEF6EE] transition-colors placeholder-[#FEF6EE]/30 [&::-webkit-calendar-picker-indicator]:invert"
+                  className="bg-transparent border-b border-[#FEF6EE]/20 py-3 px-3 outline-none focus:border-[#FEF6EE] transition-colors placeholder-[#FEF6EE]/30 [&::-webkit-calendar-picker-indicator]:invert"
                 />
               </div>
 
@@ -342,7 +354,7 @@ export function InteriorDesignForm() {
                   value={formData.details}
                   onChange={(e) => updateForm('details', e.target.value)}
                   rows={4}
-                  className="bg-transparent border-b border-[#FEF6EE]/20 py-3 outline-none focus:border-[#FEF6EE] transition-colors resize-none placeholder-[#FEF6EE]/30"
+                  className="bg-transparent border-b border-[#FEF6EE]/20 py-3 px-3 outline-none focus:border-[#FEF6EE] transition-colors resize-none placeholder-[#FEF6EE]/30"
                   placeholder="Tell us a little about the property, what you'd like to change and what you're hoping to achieve."
                 />
               </div>

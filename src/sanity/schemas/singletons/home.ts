@@ -95,24 +95,17 @@ export const home = defineType({
     }),
     defineField({
       name: 'trust',
-      title: 'The Miio Standard',
+      title: 'Trust & Verification Bar',
       type: 'object',
       fields: [
-        { name: 'heading', title: 'Heading', type: 'string' },
         { name: 'ratingText', title: 'Rating Text', type: 'string' },
         { name: 'reviewText', title: 'Review Text', type: 'string' },
         { name: 'verifiedText', title: 'Verified Text', type: 'string' },
-        {
-          name: 'features',
-          title: 'Feature Labels',
-          type: 'array',
-          of: [{ type: 'string' }]
-        }
       ],
       preview: {
-        select: { title: 'heading' },
+        select: { title: 'ratingText' },
         prepare({ title }) {
-          return { title: title || 'The Miio Standard', subtitle: 'Section Content' }
+          return { title: title || 'Trust & Verification', subtitle: 'Section Content' }
         }
       }
     }),
@@ -122,7 +115,6 @@ export const home = defineType({
       type: 'object',
       fields: [
         { name: 'heading', title: 'Heading', type: 'string' },
-        { name: 'cta', title: 'Call to Action', type: 'cta' }
       ],
       preview: {
         select: { title: 'heading' },

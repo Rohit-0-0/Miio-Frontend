@@ -2,11 +2,9 @@ import { TrustSection } from '@/types/homepage';
 import { HOME_DEFAULTS } from '@/lib/defaults/home';
 
 export function Trust({ trust }: { trust: TrustSection }) {
-  const heading = trust?.heading || HOME_DEFAULTS.trust.heading;
   const rating = trust?.rating || HOME_DEFAULTS.trust.rating;
   const reviewCount = trust?.reviewCount || HOME_DEFAULTS.trust.reviewCount;
   const verifiedText = trust?.verifiedText || HOME_DEFAULTS.trust.verifiedText;
-  const items = trust?.items?.length ? trust.items : HOME_DEFAULTS.trust.items;
 
   return (
     <section className="w-full bg-[#E1DBC3] border-y border-[#5F4E442E]">
