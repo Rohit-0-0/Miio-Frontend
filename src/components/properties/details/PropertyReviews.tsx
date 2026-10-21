@@ -17,6 +17,8 @@ export interface CuratedReviewItem {
 interface PropertyReviewsProps {
   propertyId: string;
   curatedReviews?: CuratedReviewItem[];
+  rating?: string;
+  reviewCount?: string;
 }
 
 interface NormalizedReview {
@@ -30,10 +32,24 @@ interface NormalizedReview {
 
 function SingleReviewCard({ review }: { review: NormalizedReview }) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const isLong = review.text && review.text.length > 130;
+  const [isClamped, setIsClamped] = useState(false);
+  const textRef = React.useRef<HTMLQuoteElement>(null);
+
+  React.useLayoutEffect(() => {
+    const el = textRef.current;
+    if (!el) return;
+    const checkOverflow = () => {
+      if (!isExpanded) {
+        setIsClamped(el.scrollHeight > el.clientHeight + 1);
+      }
+    };
+    checkOverflow();
+    window.addEventListener('resize', checkOverflow);
+    return () => window.removeEventListener('resize', checkOverflow);
+  }, [review.text, isExpanded]);
 
   return (
-    <article className="bg-[#F7EEE9] rounded-xl px-6 py-8 md:px-8 md:py-8 w-full max-w-[705px]">
+    <article className="bg-[#E1DBC3]/10 rounded-[10px] px-6 py-8 md:px-8 md:py-8 w-full max-w-[707px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] border border-[#1B1A17]/5">
       <div className="flex flex-wrap items-center gap-3 mb-5">
         <div className="flex gap-0.5 text-[#241D19]">
           {Array.from({ length: 5 }).map((_, i) => (
@@ -54,17 +70,18 @@ function SingleReviewCard({ review }: { review: NormalizedReview }) {
 
       <div className="mb-5">
         <blockquote
+          ref={textRef}
           className={`font-serif text-[20px] md:text-[22px] text-[#241D19] leading-relaxed transition-all duration-300 ${
-            !isExpanded && isLong ? 'line-clamp-4' : ''
+            !isExpanded ? 'line-clamp-4' : ''
           }`}
         >
           &ldquo;{review.text}&rdquo;
         </blockquote>
-        {isLong && (
+        {(isClamped || isExpanded) && (
           <button
             type="button"
             onClick={() => setIsExpanded(!isExpanded)}
-            className="text-[14px] font-sans font-medium text-[#99583D] hover:text-[#241D19] transition-colors mt-2 focus:outline-none"
+            className="text-[14px] font-sans font-medium text-[#99583D] hover:text-[#241D19] transition-colors mt-2 focus:outline-none cursor-pointer"
           >
             {isExpanded ? 'Read less' : 'Read more'}
           </button>
@@ -86,7 +103,12 @@ function SingleReviewCard({ review }: { review: NormalizedReview }) {
   );
 }
 
-export function PropertyReviews({ propertyId, curatedReviews }: PropertyReviewsProps) {
+export function PropertyReviews({
+  propertyId,
+  curatedReviews,
+  rating = '4.97',
+  reviewCount = '128 reviews',
+}: PropertyReviewsProps) {
   const [liveReviews, setLiveReviews] = useState<PropertyReview[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -164,10 +186,35 @@ export function PropertyReviews({ propertyId, curatedReviews }: PropertyReviewsP
       .slice(0, 1);
   }
 
-  if (displayReviews.length === 0) return null;
+  const formattedCount = reviewCount.includes('review')
+    ? reviewCount
+    : `${reviewCount} reviews`;
 
   return (
     <section className="py-2 font-[family-name:var(--font-instrument-sans)]">
+      {/* Section Header as per Figma screenshot */}
+      <div className="mb-4">
+        <h2 className="font-sans font-medium text-[16px] leading-[130%] text-[#241D19] mb-2">
+          Guest reviews
+        </h2>
+        <div className="flex items-center gap-2 text-[14px] text-[#241D19]">
+          <span className="font-medium">{rating}</span>
+          <div className="flex items-center gap-0.5">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <svg
+                key={i}
+                className="w-3.5 h-3.5 fill-[#241D19]"
+                viewBox="0 0 20 20"
+                aria-hidden
+              >
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+            ))}
+          </div>
+          <span className="text-[#5F4E44]">· {formattedCount}</span>
+        </div>
+      </div>
+
       <div className="flex flex-col gap-6 max-w-[705px]">
         {displayReviews.map((rev) => (
           <SingleReviewCard key={rev.id} review={rev} />

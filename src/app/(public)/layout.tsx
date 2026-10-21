@@ -1,5 +1,7 @@
 import { AppLayout } from '@/components/layout/AppLayout';
 
+export const dynamic = 'force-dynamic';
+
 export default function PublicLayout({
   children,
 }: {
@@ -7,3 +9,4 @@ export default function PublicLayout({
 }) {
   return <AppLayout>{children}</AppLayout>;
 }
+

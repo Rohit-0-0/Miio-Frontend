@@ -1,6 +1,14 @@
 import { env } from '@/config/env';
 
-export function buildImageUrl(assetId?: string | null): string | null {
+export interface ImageUrlOptions {
+  width?: number;
+  quality?: number;
+}
+
+export function buildImageUrl(
+  assetId?: string | null,
+  options?: ImageUrlOptions
+): string | null {
   if (!assetId) return null;
 
   if (assetId.startsWith('http://') || assetId.startsWith('https://')) {
@@ -13,12 +21,6 @@ export function buildImageUrl(assetId?: string | null): string | null {
 
   const projectId = env.NEXT_PUBLIC_SANITY_PROJECT_ID;
   const dataset = env.NEXT_PUBLIC_SANITY_DATASET;
-
-  console.log('--- BUILD_IMAGE_URL TRACE ---');
-  console.log('1. incoming assetId:', assetId);
-  console.log('2. projectId:', projectId);
-  console.log('3. dataset:', dataset);
-  console.log('-----------------------------');
 
   if (!projectId || !dataset) {
     return null;
@@ -33,5 +35,13 @@ export function buildImageUrl(assetId?: string | null): string | null {
     filename = filename.substring(0, lastDashIndex) + '.' + filename.substring(lastDashIndex + 1);
   }
 
-  return `https://cdn.sanity.io/images/${projectId}/${dataset}/${filename}?auto=format&w=1080&q=75`;
+  // Never apply raster resize/compression parameters to SVG images
+  if (filename.toLowerCase().endsWith('.svg')) {
+    return `https://cdn.sanity.io/images/${projectId}/${dataset}/${filename}`;
+  }
+
+  const width = options?.width ?? 2560;
+  const quality = options?.quality ?? 100;
+
+  return `https://cdn.sanity.io/images/${projectId}/${dataset}/${filename}?auto=format&w=${width}&q=${quality}&fit=max`;
 }

@@ -46,7 +46,7 @@ export function FinalCTA({
         <div>
           <Link
             href={buttonLink}
-            className="font-sans inline-flex items-center justify-center bg-[#241D19] text-[#FEF6EE] px-[32px] py-[16px] text-[14px] font-medium transition-colors hover:bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#241D19] focus-visible:ring-offset-2 focus-visible:ring-offset-[#E1DBC3] rounded-full"
+            className="font-sans inline-flex items-center justify-center bg-[#241D19] text-[#FEF6EE] px-8 h-[52px] text-[14px] font-medium transition-colors hover:bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#241D19] focus-visible:ring-offset-2 focus-visible:ring-offset-[#E1DBC3] rounded-full shadow-sm"
           >
             {buttonText}
           </Link>

@@ -160,6 +160,7 @@ export interface HomepageData {
     icon?: { asset?: { _ref?: string } };
   }[];
   whatsappNumber?: string;
+  whatsappIcon?: { asset?: { _ref?: string } };
 }
 
 export interface HomepageDocument extends HomepageData, BaseEntity {}

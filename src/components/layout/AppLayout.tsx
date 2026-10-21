@@ -11,6 +11,7 @@ export async function AppLayout({ children }: { children: React.ReactNode }) {
       <Header 
         logo={siteSettings?.logo} 
         navItems={navigation?.headerNav} 
+        utilityBarLink={siteSettings?.utilityBarLink}
       />
       <main className="w-full">{children}</main>
       <Footer />

@@ -43,6 +43,58 @@ export function BookingCard({ listingId, paymentTrustImages, hideMobileSticky = 
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
   const router = useRouter();
+  const [showMobileStickyBar, setShowMobileStickyBar] = useState(false);
+
+  useEffect(() => {
+    if (hideMobileSticky) return;
+
+    const el = cardRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          // If the inline card is currently in view (even partially), sticky bar must NOT appear
+          if (entry.isIntersecting) {
+            setShowMobileStickyBar(false);
+          } else {
+            // Only show if the user has scrolled down past the card (top < 0)
+            if (entry.boundingClientRect.top < 0) {
+              setShowMobileStickyBar(true);
+            } else {
+              // User is above the card (e.g. hero section), so don't show yet
+              setShowMobileStickyBar(false);
+            }
+          }
+        });
+      },
+      {
+        threshold: 0, // as soon as even 1px of the card is visible or not visible
+      }
+    );
+
+    observer.observe(el);
+
+    // Also attach scroll listener to handle fast scrolls or edge cases
+    const handleScroll = () => {
+      const rect = el.getBoundingClientRect();
+      const inView = rect.top < window.innerHeight && rect.bottom > 0;
+      if (inView) {
+        setShowMobileStickyBar(false);
+      } else if (rect.bottom <= 0) {
+        setShowMobileStickyBar(true);
+      } else {
+        setShowMobileStickyBar(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [hideMobileSticky]);
 
   const forceScrollToCard = () => {
     const mobileCard = document.getElementById('property-booking-card-mobile');
@@ -81,9 +133,8 @@ export function BookingCard({ listingId, paymentTrustImages, hideMobileSticky = 
     (children > 0 ? `, ${children} child${children === 1 ? '' : 'ren'}` : '') +
     (infants > 0 ? `, ${infants} infant${infants === 1 ? '' : 's'}` : '');
 
-  const reserveLabel = !checkIn || !checkOut ? 'Select dates' : 'Book now';
-
   const datesLabel = checkIn && checkOut ? `${checkIn} – ${checkOut}` : 'Select dates';
+  const hasSelectedDates = Boolean(checkIn && checkOut);
 
   return (
     <>
@@ -124,17 +175,21 @@ export function BookingCard({ listingId, paymentTrustImages, hideMobileSticky = 
             <ReserveButton
               onClick={handleBookNowClick}
               isLoading={false}
-              label={reserveLabel}
-              visualDisabled={!checkIn || !checkOut}
+              label="Book now"
+              disabled={!hasSelectedDates}
             />
           </BookingActions>
         )}
         <PaymentLogos images={paymentTrustImages} />
       </div>
 
-      {/* Mobile Sticky Checkout Bar */}
+      {/* Mobile Sticky Checkout Bar: Only appears when the user has scrolled past the main booking card and it is not on screen */}
       {!hideMobileSticky && (
-        <div className="fixed bottom-0 left-0 right-0 z-[100] bg-[#FEF6EE] sm:bg-white border-t border-[#1B1A17]/10 px-5 py-3.5 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] backdrop-blur-md lg:hidden flex items-center justify-between">
+        <div
+          className={`fixed bottom-0 left-0 right-0 z-[100] bg-white border-t border-[#1B1A17]/10 px-5 py-3.5 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] backdrop-blur-md lg:hidden flex items-center justify-between transition-transform duration-300 ease-in-out ${
+            showMobileStickyBar ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'
+          }`}
+        >
           <div className="flex flex-col">
             <div className="flex items-baseline gap-1">
               <span className="text-[17px] font-semibold text-[#1B1A17]">
@@ -152,14 +207,15 @@ export function BookingCard({ listingId, paymentTrustImages, hideMobileSticky = 
 
           <button
             type="button"
-            onClick={(!checkIn || !checkOut) ? forceScrollToCard : handleBookNowClick}
+            disabled={!hasSelectedDates}
+            onClick={handleBookNowClick}
             className={`font-semibold py-2.5 px-6 rounded-full text-xs uppercase tracking-wider transition-all flex items-center justify-center ${
-              !checkIn || !checkOut
-                ? 'bg-[#C3BA8D]/60 text-black/60 cursor-pointer'
+              !hasSelectedDates
+                ? 'bg-[#C3BA8D]/50 text-black/40 cursor-not-allowed opacity-60'
                 : 'bg-[#C3BA8D] text-black hover:opacity-90 active:scale-95 shadow-md shadow-black/10'
             }`}
           >
-            {reserveLabel}
+            Book now
           </button>
         </div>
       )}

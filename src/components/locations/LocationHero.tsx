@@ -26,7 +26,7 @@ export function LocationHero({ title, image }: LocationHeroProps) {
         <div className="absolute inset-0 w-full h-full pointer-events-none">
           <div className="relative mx-auto max-w-[1440px] w-full h-full">
             <div className="absolute bottom-10 md:bottom-14 left-4 md:left-[188px] right-4 pointer-events-auto">
-              <h1 className="font-serif text-[56px] md:text-[72px] lg:text-[80px] text-white tracking-tight leading-none">
+              <h1 className="font-serif text-[36px] md:text-[44px] text-white tracking-tight leading-none">
                 {title}
               </h1>
             </div>

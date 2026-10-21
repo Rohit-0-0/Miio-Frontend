@@ -16,7 +16,7 @@ export const footer = defineType({
       title: 'Newsletter Section',
       type: 'object',
       fields: [
-        { name: 'heading', title: 'Heading', type: 'string' },
+        { name: 'heading', title: 'Heading', type: 'text', rows: 3 },
         { name: 'description', title: 'Description', type: 'text' },
         { name: 'icon', title: 'Key Icon', type: 'image' }
       ],
@@ -47,6 +47,13 @@ export const footer = defineType({
       title: 'WhatsApp Number',
       description: 'Format: Include country code (e.g., +1234567890)',
       type: 'string'
+    }),
+    defineField({
+      name: 'whatsappIcon',
+      title: 'WhatsApp Icon',
+      description: 'Custom icon for WhatsApp button. If not uploaded, the standard WhatsApp icon will be used.',
+      type: 'image',
+      options: { hotspot: true }
     }),
     defineField({
       name: 'copyright',

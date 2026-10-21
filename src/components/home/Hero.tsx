@@ -30,7 +30,7 @@ export function Hero({ hero }: { hero: HeroSection }) {
       role="banner"
       aria-label={hero.backgroundAlt || title}
     >
-      <div className="relative w-full min-h-[440px] md:min-h-[673px] md:h-[calc(100vh-128px)] flex flex-col items-center justify-start pt-8 md:justify-center md:pt-0 pb-6 md:pb-0">
+      <div className="relative w-full min-h-[580px] md:min-h-screen md:h-screen flex flex-col items-center justify-center pt-24 md:pt-28 pb-8 md:pb-12">
         {/* Background Images Carousel */}
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
           <CrossfadeCarousel 
@@ -49,11 +49,11 @@ export function Hero({ hero }: { hero: HeroSection }) {
         {/* Content */}
         <div className="relative z-10 w-full max-w-[1440px] mx-auto flex flex-col items-center text-center px-4 animate-in slide-in-from-bottom-8 fade-in duration-1000 delay-300 fill-mode-both">
           
-          <h1 className="font-serif text-[32px] md:text-[56px] font-medium tracking-wide text-white leading-[1.08] mb-3 md:mb-6 max-w-[310px] md:max-w-[636px]">
+          <h1 className="font-serif text-[32px] md:text-[56px] font-medium tracking-wide text-[#FEF6EE] leading-[1.08] mb-3 md:mb-6 max-w-[310px] md:max-w-[636px]">
             {title}
           </h1>
           
-          <p className="font-sans text-[15px] md:text-lg font-normal md:font-light text-white max-w-[350px] md:max-w-[500px] leading-none md:leading-relaxed mb-8 md:mb-12">
+          <p className="font-sans text-[15px] md:text-lg font-normal md:font-light text-[#FEF6EE] max-w-[350px] md:max-w-[500px] leading-none md:leading-relaxed mb-8 md:mb-12">
             {subtitle}
           </p>
 

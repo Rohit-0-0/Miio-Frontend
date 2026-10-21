@@ -18,6 +18,19 @@ export const propertyEditorial = defineType({
       validation: Rule => Rule.required().error('Guesty Listing ID is required to link with operational data.')
     }),
     defineField({
+      name: 'subtitle',
+      title: 'Editorial Tagline (Heading)',
+      description: 'Bold tagline directly under property title in Instrument Sans Semibold (e.g. "Bondi Beach Coastal Escape")',
+      type: 'string'
+    }),
+    defineField({
+      name: 'shortDescription',
+      title: 'Short Subtitle / Introductory Text',
+      description: 'Calm description line below the tagline (e.g. "A calm, design-led space just moments from the beach.")',
+      type: 'text',
+      rows: 2,
+    }),
+    defineField({
       name: 'heroStory',
       title: 'Hero Story',
       type: 'text'

@@ -10,7 +10,7 @@ interface LogoProps {
 
 export function Logo({ image, className = '', isLink = true }: LogoProps) {
   const content = image ? (
-    <div className="relative h-[42px] w-[110px]">
+    <div className={`relative h-[42px] w-[110px] transition-all duration-300 ${className}`}>
       <AppImage
         image={image}
         alt="MiiO Logo"

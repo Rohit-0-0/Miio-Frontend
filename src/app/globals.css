@@ -141,10 +141,10 @@ select:-webkit-autofill:active {
 }
 
 /* For inputs on dark backgrounds like the Interior Design form (#241D19 background) */
-.bg-\[\#241D19\] input:-webkit-autofill,
-.bg-\[\#241D19\] input:-webkit-autofill:hover,
-.bg-\[\#241D19\] input:-webkit-autofill:focus,
-.bg-\[\#241D19\] input:-webkit-autofill:active,
+.bg-\[\#241D19\] input:-webkit-autofill:not(#newsletter-email),
+.bg-\[\#241D19\] input:-webkit-autofill:not(#newsletter-email):hover,
+.bg-\[\#241D19\] input:-webkit-autofill:not(#newsletter-email):focus,
+.bg-\[\#241D19\] input:-webkit-autofill:not(#newsletter-email):active,
 .bg-\[\#241D19\] textarea:-webkit-autofill,
 .bg-\[\#241D19\] textarea:-webkit-autofill:hover,
 .bg-\[\#241D19\] textarea:-webkit-autofill:focus,
@@ -153,6 +153,36 @@ select:-webkit-autofill:active {
   caret-color: #FEF6EE !important;
   -webkit-box-shadow: 0 0 0px 1000px #241D19 inset !important;
   box-shadow: 0 0 0px 1000px #241D19 inset !important;
+}
+
+/* For inputs on warm/light cream backgrounds (#FEF6EE) such as Newsletter, Partner With Us, Checkout */
+#newsletter-email:-webkit-autofill,
+#newsletter-email:-webkit-autofill:hover,
+#newsletter-email:-webkit-autofill:focus,
+#newsletter-email:-webkit-autofill:active,
+.bg-\[\#FEF6EE\] input:-webkit-autofill,
+.bg-\[\#FEF6EE\] input:-webkit-autofill:hover,
+.bg-\[\#FEF6EE\] input:-webkit-autofill:focus,
+.bg-\[\#FEF6EE\] input:-webkit-autofill:active,
+.bg-\[\#FEF6EE\] textarea:-webkit-autofill,
+.bg-\[\#FEF6EE\] textarea:-webkit-autofill:hover,
+.bg-\[\#FEF6EE\] textarea:-webkit-autofill:focus,
+.bg-\[\#FEF6EE\] textarea:-webkit-autofill:active {
+  -webkit-text-fill-color: #1B1A17 !important;
+  caret-color: #1B1A17 !important;
+  -webkit-box-shadow: 0 0 0px 1000px #FEF6EE inset !important;
+  box-shadow: 0 0 0px 1000px #FEF6EE inset !important;
+}
+
+/* For checkout details flow inputs */
+.checkout-input:-webkit-autofill,
+.checkout-input:-webkit-autofill:hover,
+.checkout-input:-webkit-autofill:focus,
+.checkout-input:-webkit-autofill:active {
+  -webkit-text-fill-color: #5F4E44 !important;
+  caret-color: #5F4E44 !important;
+  -webkit-box-shadow: 0 0 0px 1000px #FAF7F2 inset !important;
+  box-shadow: 0 0 0px 1000px #FAF7F2 inset !important;
 }
 
 

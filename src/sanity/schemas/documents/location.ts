@@ -33,8 +33,15 @@ export const location = defineType({
     }),
     defineField({
       name: 'description',
-      title: 'Description',
+      title: 'Full Description',
+      description: 'Detailed description shown on the location detail page.',
       type: 'text',
+    }),
+    defineField({
+      name: 'shortDescription',
+      title: 'Short Description / Card Tagline',
+      description: 'Brief line shown below the location name on homepage location cards (e.g. "Coastal mornings, easy days")',
+      type: 'string',
     }),
     defineField({
       name: 'highlights',

@@ -11,6 +11,26 @@ export const siteSettings = defineType({
       type: 'customImage',
     }),
     defineField({
+      name: 'utilityBarLink',
+      title: 'Top Bar Link',
+      description: 'The link displayed in the top bar above the header (e.g. PARTNER WITH US).',
+      type: 'object',
+      fields: [
+        {
+          name: 'text',
+          title: 'Link Text',
+          type: 'string',
+          initialValue: 'PARTNER WITH US'
+        },
+        {
+          name: 'href',
+          title: 'Link URL',
+          type: 'string',
+          initialValue: '/partner-with-us'
+        }
+      ]
+    }),
+    defineField({
       name: 'paymentTrustImages',
       title: 'Payment Trust Images (Checkout Modal)',
       description: 'Upload the secure checkout and payment method logos here for the light background Checkout Modal.',

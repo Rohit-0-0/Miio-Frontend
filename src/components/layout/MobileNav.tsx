@@ -11,9 +11,10 @@ import { Logo } from './Logo';
 export interface MobileNavProps {
   navItems?: NavItem[];
   logo?: any;
+  isTransparent?: boolean;
 }
 
-export function MobileNav({ navItems, logo }: MobileNavProps = {}) {
+export function MobileNav({ navItems, logo, isTransparent = false }: MobileNavProps = {}) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
@@ -50,10 +51,10 @@ export function MobileNav({ navItems, logo }: MobileNavProps = {}) {
   
   let itemsToRender: NavItem[] = hasHome
     ? baseItems
-    : [{ label: 'HOME', href: ROUTES.HOME }, ...baseItems];
+    : [{ label: 'Home', href: ROUTES.HOME }, ...baseItems];
     
   if (!hasPartner) {
-    itemsToRender = [...itemsToRender, { label: 'PARTNER WITH US', href: '/partner-with-us' }];
+    itemsToRender = [...itemsToRender, { label: 'Partner with us', href: '/partner-with-us' }];
   }
 
   return (
@@ -64,7 +65,11 @@ export function MobileNav({ navItems, logo }: MobileNavProps = {}) {
         aria-expanded={isOpen}
         aria-controls="mobile-menu"
         aria-label="Open mobile menu"
-        className="group relative flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white/40 text-[#1B1A17] backdrop-blur-sm transition-all hover:bg-white/80 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C3BA8D]"
+        className={`group relative flex h-10 w-10 items-center justify-center rounded-full border backdrop-blur-sm transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C3BA8D] ${
+          isTransparent
+            ? 'border-[#FEF6EE]/30 bg-black/20 text-[#FEF6EE] hover:bg-black/40'
+            : 'border-black/10 bg-white/40 text-[#1B1A17] hover:bg-white/80'
+        }`}
       >
         <Menu className="h-5 w-5 transition-transform group-hover:scale-105" strokeWidth={1.75} />
       </button>
@@ -121,7 +126,7 @@ export function MobileNav({ navItems, logo }: MobileNavProps = {}) {
                           : 'text-[#1B1A17]/70 hover:bg-white/60 hover:text-[#1B1A17]'
                       }`}
                     >
-                      <span className="text-[14px] font-medium tracking-[0.15em] uppercase">
+                      <span className="text-[15px] font-medium tracking-normal">
                         {item.label}
                       </span>
                       <ChevronRight
@@ -143,7 +148,7 @@ export function MobileNav({ navItems, logo }: MobileNavProps = {}) {
               <Link
                 href={ROUTES.PROPERTIES}
                 onClick={() => setIsOpen(false)}
-                className="group relative flex w-full items-center justify-center gap-2.5 rounded-full bg-[#C3BA8D] px-6 py-3.5 text-xs font-semibold tracking-[0.2em] uppercase text-[#171310] transition-all hover:brightness-105 active:scale-[0.98] shadow-[0_4px_12px_rgba(195,186,141,0.3)]"
+                className="group relative flex w-full items-center justify-center rounded-full bg-[#C3BA8D] px-8 h-[52px] text-[14px] font-medium tracking-wide text-[#171310] transition-all hover:brightness-105 active:scale-[0.98] shadow-sm"
               >
                 <span>Reserve Your Stay</span>
               </Link>

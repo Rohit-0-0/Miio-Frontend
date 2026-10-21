@@ -42,6 +42,8 @@ export function StaysFilterBar({ resultLabel }: StaysFilterBarProps) {
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
   const filterRef = useRef<HTMLDivElement>(null);
+  const priceContainerRef = useRef<HTMLDivElement>(null);
+  const [priceDropdownStyle, setPriceDropdownStyle] = useState<React.CSSProperties>({});
 
   const [openDropdown, setOpenDropdown] = useState<'location' | 'price' | null>(null);
 
@@ -52,6 +54,42 @@ export function StaysFilterBar({ resultLabel }: StaysFilterBarProps) {
   const [pets, setPets] = useState(0);
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
+
+  useEffect(() => {
+    if (openDropdown !== 'price' || !priceContainerRef.current) return;
+
+    const updatePosition = () => {
+      const rect = priceContainerRef.current?.getBoundingClientRect();
+      if (!rect) return;
+
+      const viewportWidth = window.innerWidth;
+      const dropdownWidth = Math.min(288, viewportWidth - 32);
+
+      if (viewportWidth >= 640) {
+        setPriceDropdownStyle({});
+        return;
+      }
+
+      // Try right-aligned to button
+      let desiredLeft = rect.width - dropdownWidth;
+      const absoluteLeft = rect.left + desiredLeft;
+      const absoluteRight = absoluteLeft + dropdownWidth;
+
+      if (absoluteLeft < 16) {
+        const offset = 16 - rect.left;
+        setPriceDropdownStyle({ left: `${offset}px`, right: 'auto', width: `${dropdownWidth}px` });
+      } else if (absoluteRight > viewportWidth - 16) {
+        const offset = (viewportWidth - 16) - (rect.left + dropdownWidth);
+        setPriceDropdownStyle({ left: `${offset}px`, right: 'auto', width: `${dropdownWidth}px` });
+      } else {
+        setPriceDropdownStyle({ right: 0, left: 'auto', width: `${dropdownWidth}px` });
+      }
+    };
+
+    updatePosition();
+    window.addEventListener('resize', updatePosition);
+    return () => window.removeEventListener('resize', updatePosition);
+  }, [openDropdown]);
 
   useEffect(() => {
     if (!searchParams) return;
@@ -202,11 +240,12 @@ export function StaysFilterBar({ resultLabel }: StaysFilterBarProps) {
               syncGuests(adults, children, infants, val);
             }}
             customTrigger={<FilterPill label={guestLabel} active={guestsActive} />}
+            dropdownAlign="right"
           />
         </div>
 
         {/* Price */}
-        <div className="relative">
+        <div className="relative" ref={priceContainerRef}>
           <button
             type="button"
             onClick={() => setOpenDropdown(openDropdown === 'price' ? null : 'price')}
@@ -215,7 +254,12 @@ export function StaysFilterBar({ resultLabel }: StaysFilterBarProps) {
             <FilterPill label={priceLabel} active={priceActive} open={openDropdown === 'price'} />
           </button>
           {openDropdown === 'price' && (
-            <div className="absolute top-full left-0 mt-2 w-72 bg-white border border-[#1B1A17]/10 rounded-2xl shadow-lg z-50 p-4">
+            <div
+              style={priceDropdownStyle}
+              className={`absolute top-full mt-2 w-72 max-w-[calc(100vw-2rem)] bg-white border border-[#1B1A17]/10 rounded-2xl shadow-lg z-50 p-4 ${
+                Object.keys(priceDropdownStyle).length > 0 ? '' : 'right-0 sm:right-auto sm:left-0'
+              }`}
+            >
               <div className="flex gap-3 mb-4">
                 <label className="flex-1">
                   <span className="block text-[11px] uppercase tracking-wider text-[#7D7975] mb-1.5">

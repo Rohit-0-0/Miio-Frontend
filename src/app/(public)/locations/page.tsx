@@ -21,8 +21,8 @@ export default async function LocationsPage() {
   return (
     <div className="min-h-screen bg-[#FEF6EE] pt-[48px] pb-24">
       <Container>
-        <div className="mb-16 border-b border-[#1B1A17]/10 pb-12 text-left">
-          <h1 className="font-serif text-[40px] md:text-[56px] text-[#1B1A17] tracking-tight leading-tight mb-4">
+        <div className="mb-8  pb-8 text-left">
+          <h1 className="font-serif text-[36px] md:text-[44px] text-[#1B1A17] tracking-tight leading-tight mb-4">
             {pageData?.title || "Explore our locations"}
           </h1>
           <p className="font-sans text-[15px] md:text-[16px] text-[#5F4E44] w-full font-light leading-[1.6]">
@@ -36,7 +36,7 @@ export default async function LocationsPage() {
               <EditorialCard
                 key={location._id}
                 title={location.title}
-                description={location.description}
+                description={location.shortDescription || location.description}
                 image={location.heroImage}
                 link={`/locations/${location.slug}`}
                 ctaText="Explore Location"

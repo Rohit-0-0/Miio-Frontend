@@ -19,7 +19,7 @@ export function FAQSection({ faqs }: FAQSectionProps) {
 
   return (
     <section className="py-2">
-      <h2 className="font-serif text-[28px] md:text-[32px] text-[#1B1A17] mb-6">FAQ</h2>
+      <h2 className="font-sans font-medium text-[16px] leading-[130%] text-[#241D19] mb-4">FAQ</h2>
       <div className="border-t border-[#1B1A17]/15">
         {faqs.map((faq, index) => {
           const isOpen = openIndex === index;

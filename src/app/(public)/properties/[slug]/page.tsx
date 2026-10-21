@@ -6,6 +6,7 @@ import { Metadata } from 'next';
 import { preload } from 'react-dom';
 import { buildImageUrl } from '@/lib/media/buildImageUrl';
 import { staysPageService } from '@/services/stays-page.service';
+import { getHomepage } from '@/lib/server/homepage';
 import { env } from '@/config/env';
 
 import { HeroGallery } from '@/components/properties/details/HeroGallery';
@@ -207,6 +208,13 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
     console.error('Failed to fetch site settings:', err);
   }
 
+  let homepageData: any = null;
+  try {
+    homepageData = await getHomepage({ next: { revalidate: 300 } });
+  } catch (err) {
+    console.error('Failed to fetch homepage data:', err);
+  }
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Accommodation',
@@ -240,7 +248,11 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
           {/* Left Column: contains all content sections so right column can stick across entire page */}
           <div className="min-w-0 flex flex-col gap-10 md:gap-12">
             <div>
-              <PropertyHeader title={property.nickname || property.title} />
+              <PropertyHeader 
+                title={property.nickname || property.title} 
+                subtitle={editorial?.subtitle}
+                shortDescription={editorial?.shortDescription}
+              />
               <QuickInfo
                 guests={property.maxGuests}
                 bedrooms={property.bedrooms}
@@ -281,7 +293,7 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
             />
 
             <div className="hidden lg:block">
-              <MiioStandard standards={editorial?.miioStandard} />
+              <MiioStandard standards={editorial?.miioStandard} images={property.gallery || []} />
             </div>
 
             <PropertyExperience experience={editorial?.experience} />
@@ -296,13 +308,15 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
               <PropertyReviews
                 propertyId={actualGuestyId || property.guestyId || property.id}
                 curatedReviews={editorial?.reviews}
+                rating={homepageData?.trust?.rating}
+                reviewCount={homepageData?.trust?.reviewCount}
               />
             )}
 
             <FAQSection faqs={editorial?.faq} />
 
             <div className="lg:hidden">
-              <MiioStandard standards={editorial?.miioStandard} />
+              <MiioStandard standards={editorial?.miioStandard} images={property.gallery || []} />
             </div>
           </div>
 
@@ -328,8 +342,6 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
           </div>
         </div>
       </div>
-
-      <FinalCTA finalCta={finalCta} defaults={STAYS_FINAL_CTA_DEFAULTS} />
     </article>
   );
 }

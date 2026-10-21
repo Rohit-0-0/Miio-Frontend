@@ -53,10 +53,13 @@ export function NewsletterForm() {
             type="email" 
             placeholder="you@email.com"
             required
+            id="newsletter-email"
+            name="email"
+            autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             disabled={status === 'loading'}
-            className="bg-transparent border-none p-0 text-[14px] font-normal text-[#1B1A17] placeholder:text-[#7D7975]/70 focus:outline-none focus:ring-0 leading-none h-[14px] w-full text-left"
+            className="bg-transparent border-none p-0 text-[14px] font-normal text-[#1B1A17] placeholder:text-[#7D7975]/70 focus:outline-none focus:ring-0 leading-normal h-[20px] w-full text-left autofill:shadow-[0_0_0px_1000px_#FEF6EE_inset] autofill:[-webkit-text-fill-color:#1B1A17]"
           />
         </div>
         <button 

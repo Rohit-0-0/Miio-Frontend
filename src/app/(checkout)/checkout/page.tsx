@@ -53,7 +53,7 @@ export default async function CheckoutPage({ searchParams }: Props) {
       {/* Checkout Header */}
       <header className="w-full bg-[#FEF6EE] pt-6 pb-0 md:pt-8 md:pb-4">
         <div className="flex justify-center mb-6">
-          <Logo image={siteSettings?.logo} className="text-[#1B1A17]" isLink={false} />
+          <Logo image={siteSettings?.logo} className="text-[#1B1A17]" isLink={true} />
         </div>
         <div className="border-t border-[#1B1A17]/10">
           <div className="max-w-[1440px] mx-auto px-5 md:px-[188px] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 pt-4 pb-0 md:py-4 text-[10px] sm:text-xs tracking-wider">
@@ -66,7 +66,7 @@ export default async function CheckoutPage({ searchParams }: Props) {
                 infants: (resolvedParams.infants as string) || '0',
                 pets: (resolvedParams.pets as string) || '0',
               }).toString()}`} 
-              className="text-[#7D7975] hover:text-black transition-colors uppercase font-medium text-left w-full sm:w-auto"
+              className="text-[#7D7975] hover:text-black transition-colors font-medium text-left w-full sm:w-auto"
             >
               &larr; Back to {property.nickname || property.title}
             </a>

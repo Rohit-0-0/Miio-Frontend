@@ -19,15 +19,28 @@ function authorInitial(author?: string) {
 
 function TestimonialCard({ item }: { item: any }) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isClamped, setIsClamped] = useState(false);
+  const textRef = React.useRef<HTMLQuoteElement>(null);
   
   const from = sourceLabel(item.source, item.location);
   const rating = Math.min(5, Math.max(0, Math.round(item.rating || 5)));
-  
-  // Roughly estimate if text is long enough to need clamping (e.g. > 130 chars)
-  const isLong = item.quote && item.quote.length > 130;
+
+  React.useLayoutEffect(() => {
+    const el = textRef.current;
+    if (!el) return;
+    // Check if the content is actually overflowing the 4-line clamped height
+    const checkOverflow = () => {
+      if (!isExpanded) {
+        setIsClamped(el.scrollHeight > el.clientHeight + 4);
+      }
+    };
+    checkOverflow();
+    window.addEventListener('resize', checkOverflow);
+    return () => window.removeEventListener('resize', checkOverflow);
+  }, [item.quote, isExpanded]);
 
   return (
-    <article className="bg-[#FEF6EE] rounded-[10px] p-6 md:p-8 shadow-[0_4px_24px_rgba(0,0,0,0.06)] flex flex-col justify-between gap-8 h-full min-h-[280px]">
+    <article className="bg-[#FEF6EE] rounded-[10px] p-8 shadow-[0_4px_4px_rgba(0,0,0,0.25)] flex flex-col justify-between gap-4 h-full min-h-[262px] max-w-[520px]">
       <div className="flex flex-col gap-5">
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-0.5 text-[#241D19]">
@@ -48,13 +61,16 @@ function TestimonialCard({ item }: { item: any }) {
         </div>
 
         <div className="flex flex-col gap-2 items-start">
-          <blockquote className={`font-serif text-[20px] md:text-[22px] text-[#241D19] leading-[1.45] transition-all duration-300 ${!isExpanded && isLong ? 'line-clamp-4' : ''}`}>
+          <blockquote 
+            ref={textRef}
+            className={`font-serif text-[20px] md:text-[22px] text-[#241D19] leading-[1.45] transition-all duration-300 ${!isExpanded ? 'line-clamp-4' : ''}`}
+          >
             &ldquo;{item.quote}&rdquo;
           </blockquote>
-          {isLong && (
+          {(isClamped || isExpanded) && (
             <button 
               onClick={() => setIsExpanded(!isExpanded)} 
-              className="text-[14px] font-sans font-medium text-[#99583D] hover:text-[#241D19] transition-colors mt-1 focus:outline-none"
+              className="font-sans text-[13px] font-normal text-[#5F4E44] hover:text-[#1B1A17] hover:opacity-70 transition-all mt-1 focus:outline-none cursor-pointer"
             >
               {isExpanded ? 'Read less' : 'Read more'}
             </button>

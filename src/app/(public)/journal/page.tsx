@@ -1,3 +1,4 @@
+import React from 'react';
 import { getJournalListing } from '@/lib/server/journal';
 import { JournalListResponse } from '@/types/journal';
 import { Container } from '@/components/ui/Container';
@@ -50,8 +51,23 @@ export default async function JournalPage({
     <div className="flex flex-col bg-[#FEF6EE] min-h-screen pt-[48px] pb-24">
       <Container>
         <div className="mb-12 border-b border-[#1B1A17]/10 pb-12 text-left">
-          <h1 className="font-serif text-[40px] md:text-[56px] text-[#1B1A17] tracking-tight leading-tight mb-4">
-            {pageData?.title || 'Stories & Inspiration'}
+          <h1 className="font-serif text-[36px] md:text-[44px] text-[#1B1A17] tracking-tight leading-tight mb-4">
+            {pageData?.title ? (
+              pageData.title.includes('&') ? (
+                <>
+                  {pageData.title.split('&').map((part: string, idx: number, arr: string[]) => (
+                    <React.Fragment key={idx}>
+                      {part}
+                      {idx < arr.length - 1 && <span className="font-sans font-normal">&</span>}
+                    </React.Fragment>
+                  ))}
+                </>
+              ) : (
+                pageData.title
+              )
+            ) : (
+              <>Stories <span className="font-sans font-normal">&</span> inspiration</>
+            )}
           </h1>
           <p className="font-sans text-[15px] md:text-[16px] text-[#5F4E44] w-full font-light leading-[1.6]">
             {pageData?.description || 'Thoughts, stories, travel inspiration, and local experiences from Miio.'}

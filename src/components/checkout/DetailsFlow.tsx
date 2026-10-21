@@ -327,12 +327,12 @@ export function DetailsFlow({ property, searchParams, paymentTrustImages, cmsCon
                 {/* First Name */}
                 <div className="flex flex-col gap-1">
                   <label className="text-[11px] uppercase tracking-[0.08em] text-[#241D19] font-normal">First Name</label>
-                  <input type="text" required value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="First Name" className="border-b border-[#1B1A17]/10 pb-2 text-[14px] text-[#5F4E44] focus:outline-none focus:border-[#1B1A17]/30 bg-transparent placeholder:text-[#5F4E44]/50" />
+                  <input type="text" required value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="First Name" className="checkout-input border-b border-[#1B1A17]/10 pb-2 text-[14px] text-[#5F4E44] focus:outline-none focus:border-[#1B1A17]/30 bg-transparent placeholder:text-[#5F4E44]/50" />
                 </div>
                 {/* Last Name */}
                 <div className="flex flex-col gap-1">
                   <label className="text-[11px] uppercase tracking-[0.08em] text-[#241D19] font-normal">Last Name</label>
-                  <input type="text" required value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Last Name" className="border-b border-[#1B1A17]/10 pb-2 text-[14px] text-[#5F4E44] focus:outline-none focus:border-[#1B1A17]/30 bg-transparent placeholder:text-[#5F4E44]/50" />
+                  <input type="text" required value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Last Name" className="checkout-input border-b border-[#1B1A17]/10 pb-2 text-[14px] text-[#5F4E44] focus:outline-none focus:border-[#1B1A17]/30 bg-transparent placeholder:text-[#5F4E44]/50" />
                 </div>
               </div>
 
@@ -340,7 +340,7 @@ export function DetailsFlow({ property, searchParams, paymentTrustImages, cmsCon
                 {/* Email */}
                 <div className="flex flex-col gap-1">
                   <label className="text-[11px] uppercase tracking-[0.08em] text-[#241D19] font-normal">Email</label>
-                  <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email Address" className="border-b border-[#1B1A17]/10 pb-2 text-[14px] text-[#5F4E44] focus:outline-none focus:border-[#1B1A17]/30 bg-transparent placeholder:text-[#5F4E44]/50" />
+                  <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email Address" className="checkout-input border-b border-[#1B1A17]/10 pb-2 text-[14px] text-[#5F4E44] focus:outline-none focus:border-[#1B1A17]/30 bg-transparent placeholder:text-[#5F4E44]/50" />
                 </div>
                 {/* Phone */}
                 <div className="flex flex-col gap-1">
@@ -360,7 +360,7 @@ export function DetailsFlow({ property, searchParams, paymentTrustImages, cmsCon
 
               <div className="flex flex-col gap-1">
                 <label className="text-[11px] uppercase tracking-[0.08em] text-[#241D19] font-normal">Anything we should know? (Optional)</label>
-                <input type="text" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Any requests..." className="border-b border-[#1B1A17]/10 pb-2 text-[14px] text-[#5F4E44] focus:outline-none focus:border-[#1B1A17]/30 bg-transparent placeholder:text-[#5F4E44]/50" />
+                <input type="text" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Any requests..." className="checkout-input border-b border-[#1B1A17]/10 pb-2 text-[14px] text-[#5F4E44] focus:outline-none focus:border-[#1B1A17]/30 bg-transparent placeholder:text-[#5F4E44]/50" />
               </div>
 
               <div className="flex items-center gap-4 mt-2">
@@ -376,12 +376,14 @@ export function DetailsFlow({ property, searchParams, paymentTrustImages, cmsCon
               </div>
 
               <div className="mt-4">
-                <button 
-                  type="submit"
-                  className="w-full md:w-auto bg-[#1B1A17] text-white py-[14px] px-8 rounded-full font-semibold hover:bg-black/80 transition-colors text-[13px] tracking-wide"
-                >
-                  Continue to payment
-                </button>
+                {firstName.trim() && lastName.trim() && email.trim() && phone.trim() ? (
+                  <button 
+                    type="submit"
+                    className="w-full md:w-auto bg-[#1B1A17] text-white py-[14px] px-8 rounded-full font-semibold hover:bg-black/80 transition-all text-[13px] tracking-wide animate-in fade-in slide-in-from-bottom-2 duration-300"
+                  >
+                    Continue to payment
+                  </button>
+                ) : null}
               </div>
             </form>
           </div>

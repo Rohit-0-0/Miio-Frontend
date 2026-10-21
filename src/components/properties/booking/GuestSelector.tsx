@@ -12,6 +12,7 @@ interface GuestSelectorProps {
   className?: string;
   triggerClassName?: string;
   customTrigger?: React.ReactNode;
+  dropdownAlign?: 'left' | 'right' | 'center';
 }
 
 export function GuestSelector({ 
@@ -19,7 +20,8 @@ export function GuestSelector({
   onChangeAdults, onChangeChildren, onChangeInfants, onChangePets,
   className = "relative",
   triggerClassName = "border border-gray-300 border-t-0 rounded-b-md p-3 cursor-pointer hover:bg-gray-50 transition-colors flex justify-between items-center",
-  customTrigger
+  customTrigger,
+  dropdownAlign
 }: GuestSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -50,6 +52,50 @@ export function GuestSelector({
                         (infants > 0 ? `, ${infants} infant${infants > 1 ? 's' : ''}` : '') + 
                         (pets > 0 ? `, ${pets} pet${pets > 1 ? 's' : ''}` : '');
 
+  const [dropdownPositionStyle, setDropdownPositionStyle] = useState<React.CSSProperties>({});
+
+  useEffect(() => {
+    if (!isOpen || !containerRef.current) return;
+
+    const updatePosition = () => {
+      const rect = containerRef.current?.getBoundingClientRect();
+      if (!rect) return;
+
+      const viewportWidth = window.innerWidth;
+      const dropdownWidth = Math.min(290, viewportWidth - 32);
+
+      // On desktop/tablet, stick to normal behavior unless requested
+      if (viewportWidth >= 640) {
+        setDropdownPositionStyle({});
+        return;
+      }
+
+      // On mobile, ensure the dropdown stays fully within the screen margins [16px, viewportWidth - 16px]
+      // Desired left relative to container:
+      let desiredLeft = 0;
+      if (dropdownAlign === 'right') {
+        desiredLeft = rect.width - dropdownWidth;
+      }
+
+      const absoluteLeft = rect.left + desiredLeft;
+      const absoluteRight = absoluteLeft + dropdownWidth;
+
+      if (absoluteLeft < 16) {
+        const offset = 16 - rect.left;
+        setDropdownPositionStyle({ left: `${offset}px`, right: 'auto', width: `${dropdownWidth}px` });
+      } else if (absoluteRight > viewportWidth - 16) {
+        const offset = (viewportWidth - 16) - (rect.left + dropdownWidth);
+        setDropdownPositionStyle({ left: `${offset}px`, right: 'auto', width: `${dropdownWidth}px` });
+      } else {
+        setDropdownPositionStyle(dropdownAlign === 'right' ? { right: 0, left: 'auto', width: `${dropdownWidth}px` } : { left: 0, right: 'auto', width: `${dropdownWidth}px` });
+      }
+    };
+
+    updatePosition();
+    window.addEventListener('resize', updatePosition);
+    return () => window.removeEventListener('resize', updatePosition);
+  }, [isOpen, dropdownAlign]);
+
   return (
     <div className={className} ref={containerRef}>
       <div 
@@ -70,7 +116,18 @@ export function GuestSelector({
       </div>
 
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 sm:left-auto sm:-right-4 md:left-0 md:right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-2xl p-4 z-[100] space-y-4 min-w-[280px]">
+        <div
+          style={dropdownPositionStyle}
+          className={`absolute top-full mt-2 bg-white border border-gray-200 rounded-lg shadow-2xl p-4 z-[100] space-y-4 min-w-[270px] sm:min-w-[280px] sm:max-w-none ${
+            Object.keys(dropdownPositionStyle).length > 0
+              ? ''
+              : dropdownAlign === 'right'
+              ? 'right-0 sm:right-auto sm:left-0'
+              : dropdownAlign === 'left'
+              ? 'left-0'
+              : 'left-0 sm:left-auto sm:-right-4 md:left-0'
+          }`}
+        >
           <GuestRow label="Adults" description="Age 13+" value={adults} onChange={onChangeAdults} min={1} />
           <GuestRow label="Children" description="Ages 2-12" value={children} onChange={onChangeChildren} min={0} />
           <GuestRow label="Infants" description="Under 2" value={infants} onChange={onChangeInfants} min={0} />

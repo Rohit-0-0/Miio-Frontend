@@ -127,7 +127,7 @@ export function EditorialContentRenderer({ content, className = '' }: EditorialC
           return (
             <h3 
               key={index} 
-              className={`font-serif text-2xl text-gray-900 ${index !== 0 ? 'mt-10' : ''} mb-4`}
+              className={`font-serif text-[18px] font-normal text-[#1B1A17] leading-snug ${index !== 0 ? 'mt-8' : ''} mb-3`}
             >
               {node.text}
             </h3>
@@ -138,7 +138,7 @@ export function EditorialContentRenderer({ content, className = '' }: EditorialC
           return (
             <p 
               key={index} 
-              className="font-sans text-lg text-gray-600 leading-relaxed mb-6 font-light"
+              className="font-sans text-[15px] md:text-base text-[#1B1A17] leading-relaxed mb-6 font-normal"
             >
               {node.text}
             </p>
@@ -147,7 +147,7 @@ export function EditorialContentRenderer({ content, className = '' }: EditorialC
 
         if (node.type === 'list') {
           return (
-            <ul key={index} className="font-sans list-disc list-outside ml-5 mb-8 space-y-2 text-lg text-gray-600 font-light">
+            <ul key={index} className="font-sans list-disc list-outside ml-5 mb-8 space-y-2 text-[15px] md:text-base text-[#1B1A17] font-normal">
               {node.items.map((item, i) => (
                 <li key={i} className="pl-2 leading-relaxed">
                   {item}
