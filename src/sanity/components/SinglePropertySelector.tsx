@@ -8,6 +8,7 @@ interface Property {
   title: string;
   city: string;
   country: string;
+  imageUrl?: string;
 }
 
 export function SinglePropertySelector(props: StringInputProps) {
@@ -32,6 +33,12 @@ export function SinglePropertySelector(props: StringInputProps) {
             title: p.nickname || p.title || 'Unknown',
             city: p.address?.city || '',
             country: p.address?.country || '',
+            imageUrl:
+              p.picture?.thumbnail ||
+              p.picture?.regular ||
+              p.pictures?.[0]?.thumbnail ||
+              p.pictures?.[0]?.original ||
+              '',
           }));
           setProperties(mapped);
         }
@@ -60,7 +67,7 @@ export function SinglePropertySelector(props: StringInputProps) {
   const filteredProperties = properties.filter((p) =>
     p.title.toLowerCase().includes(search.toLowerCase()) || 
     p.city.toLowerCase().includes(search.toLowerCase()) ||
-    p.id.includes(search)
+    p.id.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -119,10 +126,23 @@ export function SinglePropertySelector(props: StringInputProps) {
                           checked={isChecked}
                           readOnly
                         />
-                        <Stack style={{ gap: '0.5rem' }}>
-                          <Text weight="medium">{property.title}</Text>
-                          <Text size={1} muted>
-                            {property.city}, {property.country} ({property.id})
+                        {property.imageUrl && (
+                          <img
+                            src={property.imageUrl}
+                            alt={property.title}
+                            style={{
+                              width: '40px',
+                              height: '40px',
+                              objectFit: 'cover',
+                              borderRadius: '4px',
+                              flexShrink: 0,
+                            }}
+                          />
+                        )}
+                        <Stack style={{ gap: '0.25rem', overflow: 'hidden' }}>
+                          <Text weight="medium" textOverflow="ellipsis">{property.title}</Text>
+                          <Text size={1} muted textOverflow="ellipsis">
+                            {property.city ? `${property.city}, ` : ''}{property.country} ({property.id})
                           </Text>
                         </Stack>
                       </Flex>

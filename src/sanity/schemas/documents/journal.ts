@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity'
+import { PropertySelector } from '../../components/PropertySelector'
 
 export const journal = defineType({
   name: 'journal',
@@ -43,12 +44,6 @@ export const journal = defineType({
       type: 'datetime',
     }),
     defineField({
-      name: 'tags',
-      title: 'Tags',
-      type: 'array',
-      of: [{ type: 'string' }]
-    }),
-    defineField({
       name: 'seo',
       title: 'SEO',
       type: 'seo'
@@ -64,26 +59,24 @@ export const journal = defineType({
       name: 'relatedProperties',
       title: 'Related Properties',
       type: 'array',
-      of: [{ type: 'reference', to: [{ type: 'propertyEditorial' }] }],
-      description: 'The properties this journal is linked to.'
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'propertyId', type: 'string' }
+          ]
+        }
+      ],
+      components: {
+        input: PropertySelector,
+      },
+      description: 'The Guesty properties to display in this journal article.'
     }),
     defineField({
       name: 'ctaTitle',
       title: 'CTA Title',
       type: 'string',
-      description: 'The heading text for the CTA block (e.g., "Experience this destination").'
-    }),
-    defineField({
-      name: 'ctaDescription',
-      title: 'CTA Description',
-      type: 'text',
-      description: 'The supporting text for the CTA block.'
-    }),
-    defineField({
-      name: 'ctaText',
-      title: 'CTA Button Text',
-      type: 'string',
-      description: 'The text for the button linking to the related property (e.g., "View The Bondi Estate"). If left blank, it defaults to "View Property".'
+      description: 'The heading text for the CTA block (e.g., "Experience this destination"). Defaults to "Experience this destination".'
     })
   ],
   preview: {

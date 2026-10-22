@@ -53,14 +53,31 @@ export default async function JournalDetailPage({
   }
 
   let propertiesData: any[] = [];
-  const relatedProperties = article?.relatedProperties || (article?.relatedProperty ? [article.relatedProperty] : []);
+  const rawList = Array.isArray(article?.relatedProperties) ? article.relatedProperties : [];
+  const singleItem = article?.relatedProperty ? [article.relatedProperty] : [];
+  const combinedList = [...rawList, ...singleItem];
   
-  if (relatedProperties.length > 0) {
+  // Deduplicate and extract valid Guesty property IDs
+  const seenIds = new Set<string>();
+  const validIds: string[] = [];
+
+  for (const item of combinedList) {
+    if (!item) continue;
+    let id: string | undefined;
+    if (typeof item === 'string') {
+      id = item;
+    } else if (typeof item === 'object') {
+      id = item.propertyId || item.guestyListingId || (item._type === 'propertyEditorial' ? item.guestyListingId : undefined) || (!item._type && item._id && !item._id.startsWith('drafts.') ? item._id : undefined);
+    }
+    if (id && !seenIds.has(id)) {
+      seenIds.add(id);
+      validIds.push(id);
+    }
+  }
+  
+  if (validIds.length > 0) {
     try {
-      const propertyPromises = relatedProperties
-        .filter((rp: any) => rp && rp.guestyListingId)
-        .map((rp: any) => propertyService.get(rp.guestyListingId));
-        
+      const propertyPromises = validIds.map((id) => propertyService.get(id));
       const results = await Promise.allSettled(propertyPromises);
       propertiesData = results
         .filter((r): r is PromiseFulfilledResult<any> => r.status === 'fulfilled' && !!r.value?.data)
@@ -140,49 +157,47 @@ export default async function JournalDetailPage({
           <div className="prose prose-lg max-w-none prose-headings:font-serif prose-headings:text-[#1B1A17] prose-headings:font-normal prose-p:font-sans prose-p:text-[#5F4E44] prose-p:leading-relaxed prose-p:font-light prose-a:text-[#99583D] hover:prose-a:text-[#1B1A17] prose-a:transition-colors prose-strong:text-[#1B1A17] prose-strong:font-medium">
             <RichTextRenderer html={article.content} />
           </div>
-
-          {/* Related Properties CTA */}
-          {propertiesData.length > 0 && (
-            <div className="mt-24">
-              <h3 className="text-2xl font-serif text-[#1B1A17] mb-8 tracking-tight text-center">
-                {article.ctaTitle || 'Experience this destination'}
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-                {propertiesData.map((propertyData, index) => {
-                  const rp = relatedProperties?.[index];
-                  return (
-                    <PropertyBrowseCard
-                      key={propertyData.guestyId || propertyData.id || propertyData._id}
-                      id={propertyData.guestyId || propertyData.id || propertyData._id}
-                      slug={propertyData.slug || propertyData.guestyId || propertyData.id || propertyData._id}
-                      name={propertyData.title || propertyData.nickname || 'View Property'}
-                      nickname={propertyData.nickname || propertyData.title}
-                      location={
-                        [propertyData.location?.city, propertyData.location?.country].filter(Boolean).join(', ') ||
-                        'Location available on request'
-                      }
-                      guests={propertyData.accommodates || propertyData.maxGuests || 2}
-                      bedrooms={propertyData.bedrooms || 1}
-                      price={
-                        propertyData.prices?.basePrice
-                          ? `$${propertyData.prices?.currency === 'USD' ? '' : (propertyData.prices?.currency || '')}${propertyData.prices?.basePrice}`
-                          : 'Enquire'
-                      }
-                      priceLabel={propertyData.prices?.basePrice ? '/ night' : ''}
-                      coverImage={
-                        propertyData.coverImageId || 
-                        propertyData.picture?.large || 
-                        propertyData.picture?.regular || 
-                        propertyData.pictures?.[0]?.original || 
-                        rp?.galleryOverrides?.[0]?.asset?.url
-                      }
-                    />
-                  );
-                })}
-              </div>
-            </div>
-          )}
         </div>
+
+        {/* Related Properties CTA */}
+        {propertiesData.length > 0 && (
+          <div className="mt-24 max-w-6xl mx-auto">
+            <h3 className="text-2xl md:text-3xl font-serif text-[#1B1A17] mb-8 tracking-tight text-left">
+              {article.ctaTitle || 'Experience this destination'}
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {propertiesData.map((propertyData) => {
+                return (
+                  <PropertyBrowseCard
+                    key={propertyData.guestyId || propertyData.id || propertyData._id}
+                    id={propertyData.guestyId || propertyData.id || propertyData._id}
+                    slug={propertyData.slug || propertyData.guestyId || propertyData.id || propertyData._id}
+                    name={propertyData.title || propertyData.nickname || 'View Property'}
+                    nickname={propertyData.nickname || propertyData.title}
+                    location={
+                      [propertyData.location?.city, propertyData.location?.country].filter(Boolean).join(', ') ||
+                      'Location available on request'
+                    }
+                    guests={propertyData.accommodates || propertyData.maxGuests || 2}
+                    bedrooms={propertyData.bedrooms || 1}
+                    price={
+                      propertyData.prices?.basePrice
+                        ? `$${propertyData.prices?.currency === 'USD' ? '' : (propertyData.prices?.currency || '')}${propertyData.prices?.basePrice}`
+                        : 'Enquire'
+                    }
+                    priceLabel={propertyData.prices?.basePrice ? '/ night' : ''}
+                    coverImage={
+                      propertyData.coverImageId || 
+                      propertyData.picture?.large || 
+                      propertyData.picture?.regular || 
+                      propertyData.pictures?.[0]?.original
+                    }
+                  />
+                );
+              })}
+            </div>
+          </div>
+        )}
       </Container>
     </article>
   );
