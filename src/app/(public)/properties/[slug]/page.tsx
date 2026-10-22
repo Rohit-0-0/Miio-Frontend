@@ -292,9 +292,7 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
               fallbackDescription={property.longDescription || property.shortDescription}
             />
 
-            <div className="hidden lg:block">
-              <MiioStandard standards={editorial?.miioStandard} images={property.gallery || []} />
-            </div>
+            <MiioStandard standards={editorial?.miioStandard} images={property.gallery || []} />
 
             <PropertyExperience experience={editorial?.experience} />
 
@@ -315,10 +313,6 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
             )}
 
             <FAQSection faqs={editorial?.faq} />
-
-            <div className="lg:hidden">
-              <MiioStandard standards={editorial?.miioStandard} images={property.gallery || []} />
-            </div>
           </div>
 
           {/* Desktop Only: Sticky Right Column */}
