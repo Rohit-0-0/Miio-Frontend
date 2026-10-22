@@ -59,19 +59,32 @@ export function MobileNav({ navItems, logo, isTransparent = false }: MobileNavPr
 
   return (
     <div className="md:hidden">
-      {/* Mobile Menu Trigger Button */}
       <button
         onClick={() => setIsOpen(true)}
         aria-expanded={isOpen}
         aria-controls="mobile-menu"
         aria-label="Open mobile menu"
-        className={`group relative flex h-10 w-10 items-center justify-center rounded-full border backdrop-blur-sm transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C3BA8D] ${
+        className={`flex h-10 w-10 items-center justify-center p-1.5 transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C3BA8D] ${
           isTransparent
-            ? 'border-[#FEF6EE]/30 bg-black/20 text-[#FEF6EE] hover:bg-black/40'
-            : 'border-black/10 bg-white/40 text-[#1B1A17] hover:bg-white/80'
+            ? 'text-[#FEF6EE] hover:opacity-80'
+            : 'text-[#1B1A17] hover:opacity-80'
         }`}
       >
-        <Menu className="h-5 w-5 transition-transform group-hover:scale-105" strokeWidth={1.75} />
+        <svg
+          width="24"
+          height="18"
+          viewBox="0 0 24 18"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-6 h-[18px]"
+        >
+          <path
+            d="M1 1.5H23M1 9H23M1 16.5H23"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+        </svg>
       </button>
 
       {isOpen && typeof document !== 'undefined' && createPortal(

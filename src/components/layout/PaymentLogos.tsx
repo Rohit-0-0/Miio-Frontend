@@ -20,7 +20,7 @@ export function PaymentLogos({
 
   if (images && images.length > 0) {
     return (
-      <div className={`flex flex-wrap items-center w-full ${isFooter ? 'gap-4 md:gap-6 justify-center md:justify-start' : 'gap-2 justify-center mt-5'} ${className}`}>
+      <div className={`flex items-center w-full ${isFooter ? 'flex-nowrap justify-between gap-1.5 sm:gap-3 md:gap-6 md:justify-start overflow-hidden' : 'flex-wrap gap-2 justify-center mt-5'} ${className}`}>
 
         {/* Uploaded Partner Logos */}
         {images.map((img: ImageAsset, idx: number) => {
@@ -38,7 +38,7 @@ export function PaymentLogos({
                 src={src}
                 alt={img.alt || `Payment Logo ${idx + 1}`}
                 className={isFooter
-                  ? (idx === 0 ? 'h-[27px] w-auto object-contain' : 'h-[52px] w-auto object-contain')
+                  ? (idx === 0 ? 'h-[16px] sm:h-[22px] md:h-[27px] w-auto object-contain' : 'h-[28px] sm:h-[40px] md:h-[52px] w-auto object-contain')
                   : (idx === 0 ? 'h-[15px] w-auto object-contain' : 'h-[28px] w-auto object-contain')
                 }
               />

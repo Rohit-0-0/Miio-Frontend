@@ -14,6 +14,7 @@ import { JournalPreviewSuspense } from '@/components/home/JournalPreviewSuspense
 import { PropertyCardSkeleton, JournalCardSkeleton } from '@/components/ui/skeletons/CompositeSkeletons';
 import { StayBenefits } from '@/components/home/StayBenefits';
 import { Testimonials } from '@/components/home/Testimonials';
+import { getSiteSettings } from '@/lib/server/globals';
 
 export async function generateMetadata(): Promise<Metadata> {
   const homepage = await getHomepage({ next: { revalidate: 300 } });
@@ -41,7 +42,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const homepage = await getHomepage();
+  const [homepage, siteSettings] = await Promise.all([
+    getHomepage(),
+    getSiteSettings().catch(() => null),
+  ]);
 
   if (!homepage) {
     return (
@@ -112,7 +116,10 @@ export default async function HomePage() {
       {homepage.locations && <Locations locations={homepage.locations} />}
       
       {homepage.testimonials?.items?.length ? (
-        <Testimonials testimonials={homepage.testimonials} />
+        <Testimonials 
+          testimonials={homepage.testimonials} 
+          reviewsLink={siteSettings?.reviewsLink} 
+        />
       ) : null}      
       {homepage.journal && (
         <Suspense

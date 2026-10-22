@@ -34,9 +34,9 @@ export default async function AboutPage() {
   return (
     <main className="flex flex-col min-h-screen bg-[#FEF6EE] font-sans">
       {/* Hero */}
-      <section className="pt-[48px] pb-16 md:pb-24 px-6 max-w-7xl mx-auto w-full">
-        <div className="flex flex-col text-left mb-8 border-b border-[#1B1A17]/10 pb-12">
-          <h1 className="font-serif text-[40px] md:text-[56px] text-[#1B1A17] tracking-tight leading-tight mb-4">
+      <section className="pt-[48px] pb-8 md:pb-12 px-6 max-w-7xl mx-auto w-full">
+        <div className="flex flex-col text-left mb-0 pb-0">
+          <h1 className="font-serif text-[36px] md:text-[44px] text-[#1B1A17] tracking-tight leading-tight mb-4">
             {(about.hero.title || '').replace(/\n|<br\s*\/?>/gi, ' ')}
           </h1>
           <p className="font-sans text-[15px] md:text-[16px] text-[#5F4E44] w-full font-light leading-[1.6]">
@@ -46,14 +46,9 @@ export default async function AboutPage() {
       </section>
 
       {/* Story */}
-      <section className="pb-20 md:pb-32 px-6 max-w-7xl mx-auto w-full">
+      <section className="pt-4 pb-20 md:pb-32 px-6 max-w-7xl mx-auto w-full">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 items-center">
           <div className="order-2 md:order-1">
-            {about.story.label && (
-              <span className="text-[13px] tracking-widest text-[#7D7975] uppercase mb-8 block font-medium">
-                {about.story.label}
-              </span>
-            )}
             {about.story.heading && (
               <h2 className="text-3xl md:text-4xl font-serif text-[#1B1A17] mb-8 leading-tight">
                 {about.story.heading}

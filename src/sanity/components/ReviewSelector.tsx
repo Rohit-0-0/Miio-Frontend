@@ -119,9 +119,6 @@ export function ReviewSelector(props: ArrayOfObjectsInputProps) {
           <Text weight="semibold" size={1}>
             Select reviews to feature on homepage
           </Text>
-          <Text size={1} muted style={{ marginTop: '0.5rem' }}>
-            Fetching from: {API_URL}/reviews (Guesty)
-          </Text>
         </Box>
 
         <TextInput

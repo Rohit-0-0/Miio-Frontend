@@ -80,6 +80,10 @@ export interface TrustSection extends SectionMetadata {
   rating: string;
   reviewCount: string;
   verifiedText: string;
+  reviewsLink?: {
+    text?: string;
+    href?: string;
+  };
   items: TrustItem[];
 }
 

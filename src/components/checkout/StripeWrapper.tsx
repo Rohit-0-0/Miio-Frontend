@@ -10,8 +10,9 @@ interface StripeWrapperProps {
   property: PropertyDetails;
   searchParams: { [key: string]: string | string[] | undefined };
   cmsContent?: any;
+  applePayLogo?: any;
 }
 
-export function StripeWrapper({ property, searchParams, cmsContent }: StripeWrapperProps) {
-  return <PaymentFlow property={property} searchParams={searchParams} cmsContent={cmsContent} stripePromise={stripePromise} />;
+export function StripeWrapper({ property, searchParams, cmsContent, applePayLogo }: StripeWrapperProps) {
+  return <PaymentFlow property={property} searchParams={searchParams} cmsContent={cmsContent} applePayLogo={applePayLogo} stripePromise={stripePromise} />;
 }

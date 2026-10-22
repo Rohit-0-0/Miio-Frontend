@@ -21,7 +21,7 @@ export default async function LocationsPage() {
   return (
     <div className="min-h-screen bg-[#FEF6EE] pt-[48px] pb-24">
       <Container>
-        <div className="mb-8  pb-8 text-left">
+        <div className="mb-8 text-left">
           <h1 className="font-serif text-[36px] md:text-[44px] text-[#1B1A17] tracking-tight leading-tight mb-4">
             {pageData?.title || "Explore our locations"}
           </h1>

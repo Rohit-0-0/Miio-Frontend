@@ -82,9 +82,6 @@ export function PropertySelector(props: ArrayOfPrimitivesInputProps) {
           <Text weight="semibold" size={1}>
             Select properties to feature
           </Text>
-          <Text size={1} muted style={{ marginTop: '0.5rem' }}>
-            Fetching from: {API_URL}
-          </Text>
         </Box>
 
         <TextInput

@@ -74,9 +74,13 @@ export default async function InteriorDesignPage() {
             { title: 'Designed to perform', desc: 'Every decision considers how the property will photograph, present online and operate as a commercial space.' },
           ].map((principle, i) => (
             <div key={i} className="border-t border-[#241D19]/20 pt-6">
-              <p className="text-sm font-semibold mb-2">PRINCIPLE 0{i + 1}</p>
-              <h3 className="text-xl font-serif mb-4">{data?.principles?.items?.[i]?.title || principle.title}</h3>
-              <p className="opacity-80">{data?.principles?.items?.[i]?.description || principle.desc}</p>
+              <div className="flex items-start gap-3.5 mb-4">
+                <div className="w-8 h-8 rounded-full border border-[#241D19] flex items-center justify-center font-sans text-sm font-medium text-[#241D19] shrink-0 mt-0.5">
+                  {i + 1}
+                </div>
+                <h3 className="text-xl font-serif leading-snug">{data?.principles?.items?.[i]?.title || principle.title}</h3>
+              </div>
+              <p className="opacity-80 pl-[46px]">{data?.principles?.items?.[i]?.description || principle.desc}</p>
             </div>
           ))}
         </div>
@@ -212,8 +216,13 @@ export default async function InteriorDesignPage() {
             { title: 'Ready to perform', desc: 'Your property is handed over complete and ready for guests, photography or operation.' },
           ]).map((step: any, i: number) => (
             <div key={i} className="min-w-[280px] flex-1 snap-start border-l border-[#241D19]/20 pl-6">
-              <p className="text-xl font-serif mb-4"><span className="text-sm font-sans font-semibold mr-4 opacity-50">0{i+1}</span> {step.title}</p>
-              <p className="opacity-80 text-sm leading-relaxed">{step.description || step.desc}</p>
+              <div className="flex items-start gap-3.5 mb-4">
+                <div className="w-8 h-8 rounded-full border border-[#241D19] flex items-center justify-center font-sans text-sm font-medium text-[#241D19] shrink-0 mt-0.5">
+                  {i + 1}
+                </div>
+                <h3 className="text-xl font-serif leading-snug">{step.title}</h3>
+              </div>
+              <p className="opacity-80 text-sm leading-relaxed pl-[46px]">{step.description || step.desc}</p>
             </div>
           ))}
         </div>

@@ -3,8 +3,11 @@ import { sanityFetch } from './sanityFetch';
 export async function getSiteSettings() {
   const query = `*[_type == "siteSettings"][0]{
     logo,
+    applePayLogo,
     utilityBarLink,
-    paymentTrustImages
+    paymentTrustImages,
+    reviewsLink,
+    checkoutTunnel
   }`;
   
   return await sanityFetch<any>({ 

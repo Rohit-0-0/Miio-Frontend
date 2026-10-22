@@ -148,10 +148,10 @@ export function DetailsFlow({ property, searchParams, paymentTrustImages, cmsCon
   const total = money?.subTotalPrice || 0;
 
   const summaryCard = (
-    <div className="bg-white rounded-lg lg:rounded-[4px] shadow-[0_4px_24px_rgba(0,0,0,0.06)] border border-[#1B1A17]/5 overflow-hidden self-start order-1 lg:order-2 w-full max-w-[400px] lg:max-w-none mx-auto lg:mx-0 p-4 lg:p-0 flex flex-row lg:flex-col items-center lg:items-start gap-4 lg:gap-0 mb-0 lg:mb-0">
+    <div className="bg-white rounded-[8px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] border border-[#1B1A17]/10 overflow-hidden self-start order-1 lg:order-2 w-full max-w-[400px] lg:max-w-[345px] mx-auto lg:mx-0 p-4 lg:p-6 flex flex-row lg:flex-col items-center lg:items-start gap-4 lg:gap-5 mb-0 lg:mb-0">
       {coverImageUrl && (
-        <div className="w-[84px] h-[64px] lg:h-[220px] lg:w-full overflow-hidden lg:p-3 lg:pb-0 shrink-0">
-          <img src={coverImageUrl} alt={propertyTitle} className="w-full h-full object-cover rounded-[6px] lg:rounded-t-[8px] lg:rounded-b-none" />
+        <div className="w-[84px] h-[64px] lg:h-[220px] lg:w-full overflow-hidden shrink-0">
+          <img src={coverImageUrl} alt={propertyTitle} className="w-full h-full object-cover rounded-[6px] lg:rounded-[8px]" />
         </div>
       )}
       <div className="lg:px-5 lg:py-5 flex flex-col lg:gap-4 w-full">

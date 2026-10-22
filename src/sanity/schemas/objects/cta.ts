@@ -14,15 +14,6 @@ export const cta = defineType({
       name: 'href',
       title: 'Link URL',
       type: 'string',
-    }),
-    defineField({
-      name: 'style',
-      title: 'Button Style',
-      type: 'string',
-      options: {
-        list: ['primary', 'secondary', 'link']
-      },
-      initialValue: 'primary'
     })
   ],
   preview: {

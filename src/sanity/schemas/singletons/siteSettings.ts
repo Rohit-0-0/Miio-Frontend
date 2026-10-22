@@ -31,6 +31,12 @@ export const siteSettings = defineType({
       ]
     }),
     defineField({
+      name: 'applePayLogo',
+      title: 'Apple Pay Logo (Checkout)',
+      description: 'Upload custom Apple Pay badge/logo for the payment options in the checkout tunnel. If not uploaded, the standard official Apple Pay badge is used.',
+      type: 'customImage',
+    }),
+    defineField({
       name: 'paymentTrustImages',
       title: 'Payment Trust Images (Checkout Modal)',
       description: 'Upload the secure checkout and payment method logos here for the light background Checkout Modal.',
@@ -64,6 +70,26 @@ export const siteSettings = defineType({
           description: 'The text to show when this code is applied (e.g., Miio Club (10%))',
           type: 'string',
           initialValue: 'Miio Club (10%)'
+        }
+      ]
+    }),
+    defineField({
+      name: 'reviewsLink',
+      title: 'Reviews Link',
+      description: 'The text and destination link for "Read all reviews" shown on the homepage and property details page.',
+      type: 'object',
+      fields: [
+        {
+          name: 'text',
+          title: 'Link Text',
+          type: 'string',
+          initialValue: 'Read all reviews'
+        },
+        {
+          name: 'href',
+          title: 'Link URL',
+          type: 'string',
+          initialValue: 'https://airbnb.com'
         }
       ]
     })

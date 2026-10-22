@@ -15,30 +15,6 @@ export const staysPage = defineType({
       ]
     }),
     defineField({
-      name: 'filters',
-      title: 'Filters Configuration',
-      type: 'object',
-      fields: [
-        { name: 'showLocationFilter', title: 'Show Location Filter', type: 'boolean' },
-        { name: 'showGuestsFilter', title: 'Show Guests Filter', type: 'boolean' },
-        { name: 'showPriceFilter', title: 'Show Price Filter', type: 'boolean' },
-        { name: 'enableMapButton', title: 'Enable Map Button', type: 'boolean' },
-        { 
-          name: 'defaultSort', 
-          title: 'Default Sort', 
-          type: 'string',
-          options: {
-            list: [
-              { title: 'Recommended', value: 'recommended' },
-              { title: 'Newest', value: 'newest' },
-              { title: 'Price (Low to High)', value: 'price_asc' },
-              { title: 'Price (High to Low)', value: 'price_desc' },
-            ]
-          }
-        }
-      ]
-    }),
-    defineField({
       name: 'emptyState',
       title: 'Empty State',
       type: 'object',

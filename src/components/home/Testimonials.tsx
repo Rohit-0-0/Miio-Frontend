@@ -111,9 +111,19 @@ function TestimonialCard({ item }: { item: any }) {
   );
 }
 
-export function Testimonials({ testimonials }: { testimonials: TestimonialsSection }) {
+export function Testimonials({ 
+  testimonials,
+  reviewsLink
+}: { 
+  testimonials: TestimonialsSection;
+  reviewsLink?: { text?: string; href?: string };
+}) {
   const items = testimonials?.items?.filter((item) => item?.quote) || [];
   if (items.length === 0) return null;
+
+  const linkText = reviewsLink?.text || 'Read all reviews';
+  const linkHref = reviewsLink?.href || 'https://airbnb.com';
+  const isExternal = /^https?:\/\//i.test(linkHref);
 
   return (
     <section className="w-full bg-[#E1DBC3] py-14 md:py-[72px]">
@@ -122,6 +132,29 @@ export function Testimonials({ testimonials }: { testimonials: TestimonialsSecti
           {items.map((item, index) => (
             <TestimonialCard key={`${item.author}-${index}`} item={item} />
           ))}
+        </div>
+
+        {/* Read all reviews link below the review cards */}
+        <div className="mt-6 flex justify-end">
+          {isExternal ? (
+            <a
+              href={linkHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 font-[family-name:var(--font-instrument-sans)] text-[14px] font-normal leading-[140%] text-[#5F4E44] hover:text-[#241D19] transition-colors"
+            >
+              <span>{linkText}</span>
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          ) : (
+            <Link
+              href={linkHref}
+              className="inline-flex items-center gap-1.5 font-[family-name:var(--font-instrument-sans)] text-[14px] font-normal leading-[140%] text-[#5F4E44] hover:text-[#241D19] transition-colors"
+            >
+              <span>{linkText}</span>
+              <span aria-hidden="true">&rarr;</span>
+            </Link>
+          )}
         </div>
       </div>
     </section>

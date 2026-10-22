@@ -50,27 +50,66 @@ input[type="date"]::-webkit-outer-spin-button {
   --rdp-accent-color: #C3BA8D !important;
   --rdp-accent-background-color: #E1DBC3 !important;
   --rdp-range_middle-background-color: #E1DBC3 !important;
+  --rdp-range_middle-color: #1B1A17 !important;
   
+  --rdp-range_start-color: #1B1A17 !important;
+  --rdp-range_start-background: transparent !important;
+  --rdp-range_start-date-background-color: #C3BA8D !important;
+
+  --rdp-range_end-color: #1B1A17 !important;
+  --rdp-range_end-background: transparent !important;
+  --rdp-range_end-date-background-color: #C3BA8D !important;
+
   --rdp-today-color: #C3BA8D !important;
-  --rdp-selected-border: 2px solid transparent !important;
-  
-  /* Make standard selected (not range) match the olive color */
+  --rdp-selected-border: none !important;
   --rdp-selected-color: #1B1A17 !important;
 }
 
-.rdp-selected .rdp-day_button {
+/* Ensure the cell container of start and end does not have rectangular background leaking */
+.rdp-range_start,
+.rdp-range_end {
+  background: transparent !important;
+}
+
+/* Solid circle on selected start date */
+.rdp-range_start .rdp-day_button {
+  background-color: #C3BA8D !important;
   color: #1B1A17 !important;
+  border-radius: 9999px !important;
+  font-weight: 500 !important;
+}
+
+/* Solid circle on selected end date */
+.rdp-range_end .rdp-day_button {
+  background-color: #C3BA8D !important;
+  color: #1B1A17 !important;
+  border-radius: 9999px !important;
+  font-weight: 500 !important;
+}
+
+/* Middle dates in between: grayish rectangular fill */
+.rdp-range_middle {
+  background-color: #E1DBC3 !important;
+}
+
+.rdp-range_middle .rdp-day_button {
+  background: transparent !important;
+  border-radius: 0 !important;
+  color: #1B1A17 !important;
+  font-weight: 400 !important;
+}
+
+/* Single selected date (when not range or start===end) */
+.rdp-selected:not(.rdp-range_middle) .rdp-day_button {
+  background-color: #C3BA8D !important;
+  color: #1B1A17 !important;
+  border-radius: 9999px !important;
 }
 
 .rdp-disabled {
   color: #A3A3A3 !important;
   opacity: 0.7 !important;
   text-decoration: line-through !important;
-}
-
-.rdp-range_start .rdp-day_button,
-.rdp-range_end .rdp-day_button {
-  color: #1B1A17 !important;
 }
 
 .rdp-months {

@@ -12,12 +12,14 @@ interface PaymentFlowProps {
   searchParams: { [key: string]: string | string[] | undefined };
   cmsContent?: any;
   stripePromise?: any;
+  applePayLogo?: any;
 }
 
 function PaymentForm({ 
   property, 
   searchParams, 
   cmsContent, 
+  applePayLogo,
   quote, 
   total,
   checkIn,
@@ -338,8 +340,27 @@ function PaymentForm({
               </div>
               <div className="flex flex-col gap-1">
                 <span className="text-[14px] text-[#1B1A17] flex items-center gap-2">
-                  Apple Pay 
-                  <span className="bg-black text-white text-[10px] font-bold px-2 py-0.5 rounded flex items-center justify-center tracking-tighter">Pay</span>
+                  <span>Apple Pay</span>
+                  {(() => {
+                    const customLogoUrl = applePayLogo ? buildImageUrl(applePayLogo?.asset?._ref || applePayLogo?.asset?._id || applePayLogo) : null;
+                    if (customLogoUrl) {
+                      return (
+                        <span className="inline-flex items-center justify-center h-[24px]">
+                          <img src={customLogoUrl} alt="Apple Pay" className="h-[22px] w-auto object-contain" />
+                        </span>
+                      );
+                    }
+                    return (
+                      <span className="inline-flex items-center justify-center bg-black text-white px-2.5 py-1 rounded-[4px] h-[22px]">
+                        <svg className="h-[14px] w-auto fill-current" viewBox="0 0 170 80" aria-label="Apple Pay" role="img">
+                          {/* Apple Logo */}
+                          <path d="M43.064 33.176c-.222-6.52 5.34-9.67 5.586-9.824-3.048-4.453-7.784-5.06-9.467-5.132-4.04-.412-7.892 2.38-9.943 2.38-2.052 0-5.244-2.32-8.604-2.257-4.417.065-8.497 2.569-10.771 6.525-4.59 7.962-1.173 19.742 3.284 26.185 2.18 3.149 4.774 6.69 8.183 6.564 3.284-.132 4.526-2.124 8.496-2.124 3.97 0 5.092 2.124 8.544 2.059 3.51-.065 5.736-3.184 7.887-6.337 2.493-3.642 3.519-7.172 3.575-7.354-.08-.036-6.862-2.634-6.937-10.457zM36.14 13.916c1.815-2.2 3.036-5.26 2.702-8.316-2.616.105-5.787 1.745-7.659 3.935-1.636 1.895-3.07 4.996-2.684 7.973 2.92.226 5.826-1.393 7.641-3.592z"/>
+                          {/* Pay Text */}
+                          <path d="M79.245 42.668c0 8.04-4.872 13.08-12.24 13.08-4.128 0-7.344-1.68-9.048-4.632v12.48h-5.04V30h4.848v4.44c1.728-2.928 5.04-4.632 9.24-4.632 7.368 0 12.24 5.04 12.24 12.86zm-5.04.096c0-5.4-3.216-8.784-7.8-8.784-4.56 0-7.776 3.408-7.776 8.784 0 5.4 3.216 8.808 7.776 8.808 4.584 0 7.8-3.408 7.8-8.808zm26.471 12.504l-.696-3.888c-1.68 2.76-4.944 4.344-8.76 4.344-5.28 0-8.904-3.336-8.904-7.872 0-5.112 4.104-7.896 11.232-8.328l6.768-.408v-1.68c0-3.384-2.136-5.184-6.024-5.184-3.48 0-5.784 1.44-6.384 3.84l-4.728-.84c.984-4.224 5.256-6.84 11.232-6.84 6.96 0 10.944 3.288 10.944 9.144v17.712h-4.68zm-6.816-4.104c3.96 0 6.816-2.4 6.816-5.832v-2.064l-5.856.36c-4.488.288-6.936 1.728-6.936 4.608 0 2.232 1.944 3.696 4.776 3.696zm28.32 12.408l3.144-8.88 10.704-24.216h5.352l-13.848 29.568c-2.328 4.992-4.968 7.032-9.72 7.032-1.2 0-2.352-.168-3.096-.408l.792-3.984c.672.216 1.416.312 2.064.312 2.376 0 3.792-.936 4.608-2.688l-10.024-29.832h5.184l7.104 22.08 7.344-22.08h5.136z"/>
+                        </svg>
+                      </span>
+                    );
+                  })()}
                 </span>
                 {paymentMethod === 'applepay' && !paymentRequest && (
                   <span className="text-[10px] text-red-500 mt-1">Apple Pay is not supported in this browser.</span>
@@ -405,17 +426,17 @@ function PaymentForm({
       </div>
 
       {/* Right Column - Booking Summary Card */}
-      <div className="w-full max-w-[400px] lg:max-w-none mx-auto lg:mx-0 order-1 lg:order-2 self-start sticky lg:top-24 mb-6 lg:mb-0">
-        <div className="bg-white rounded-lg lg:rounded-[4px] shadow-[0_4px_24px_rgba(0,0,0,0.06)] border border-[#1B1A17]/5 overflow-hidden flex flex-col">
+      <div className="w-full max-w-[400px] lg:max-w-[345px] mx-auto lg:mx-0 order-1 lg:order-2 self-start sticky lg:top-24 mb-6 lg:mb-0">
+        <div className="bg-white rounded-[8px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] border border-[#1B1A17]/10 overflow-hidden flex flex-col p-4 lg:p-6 gap-4 lg:gap-5">
           
           {/* Header block: Horizontal on mobile, vertical on desktop */}
-          <div className="flex flex-row lg:flex-col items-center lg:items-start gap-4 lg:gap-0 p-3 lg:p-0">
+          <div className="flex flex-row lg:flex-col items-center lg:items-start gap-4 lg:gap-0 p-0">
             {(() => {
               const imgRef = property.gallery?.[0]?.assetId || property.gallery?.[0]?.asset?._ref || property.heroImage?.asset?._ref;
               const src = buildImageUrl(imgRef);
               return src ? (
-                <div className="w-[84px] h-[64px] lg:h-[220px] lg:w-full overflow-hidden lg:p-3 lg:pb-0 shrink-0">
-                  <img src={src} alt={property.nickname || property.title} className="w-full h-full object-cover rounded-[6px] lg:rounded-t-[8px] lg:rounded-b-none" />
+                <div className="w-[84px] h-[64px] lg:h-[220px] lg:w-full overflow-hidden shrink-0">
+                  <img src={src} alt={property.nickname || property.title} className="w-full h-full object-cover rounded-[6px] lg:rounded-[8px]" />
                 </div>
               ) : null;
             })()}
@@ -621,7 +642,7 @@ function PaymentForm({
   );
 }
 
-export function PaymentFlow({ property, searchParams, cmsContent, stripePromise }: PaymentFlowProps) {
+export function PaymentFlow({ property, searchParams, cmsContent, stripePromise, applePayLogo }: PaymentFlowProps) {
   const [isLoading, setIsLoading] = React.useState(true);
   const [quote, setQuote] = React.useState<any>(null);
   const [appliedCoupon, setAppliedCoupon] = React.useState('');
@@ -761,6 +782,7 @@ export function PaymentFlow({ property, searchParams, cmsContent, stripePromise 
         property={property} 
         searchParams={searchParams} 
         cmsContent={cmsContent}
+        applePayLogo={applePayLogo}
         quote={quote}
         total={total}
         checkIn={checkIn}

@@ -86,6 +86,7 @@ export default async function PaymentPage({ searchParams }: Props) {
             property={property} 
             searchParams={resolvedParams}
             cmsContent={siteSettings?.checkoutTunnel}
+            applePayLogo={siteSettings?.applePayLogo}
           />
         </Suspense>
       </main>

@@ -211,8 +211,8 @@ export function BookingCard({ listingId, paymentTrustImages, hideMobileSticky = 
             onClick={handleBookNowClick}
             className={`font-semibold py-2.5 px-6 rounded-full text-xs uppercase tracking-wider transition-all flex items-center justify-center ${
               !hasSelectedDates
-                ? 'bg-[#C3BA8D]/50 text-black/40 cursor-not-allowed opacity-60'
-                : 'bg-[#C3BA8D] text-black hover:opacity-90 active:scale-95 shadow-md shadow-black/10'
+                ? 'bg-[#C3BA8D]/50 text-[#241D19]/40 cursor-not-allowed opacity-60'
+                : 'bg-[#C3BA8D] text-[#241D19] hover:opacity-90 active:scale-95 shadow-md shadow-black/10'
             }`}
           >
             Book now

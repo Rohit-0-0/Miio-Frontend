@@ -268,7 +268,7 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
             </div>
 
             {/* Mobile Only: Inline booking card placed right after amenity icons as per Figma */}
-            <div className="lg:hidden">
+            <div className="lg:hidden relative z-30">
               <Suspense
                 fallback={
                   <div className="bg-white border border-[#1B1A17]/10 rounded-xl p-6 h-[337px] animate-pulse" />
@@ -310,6 +310,7 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
                 curatedReviews={editorial?.reviews}
                 rating={homepageData?.trust?.rating}
                 reviewCount={homepageData?.trust?.reviewCount}
+                reviewsLink={siteSettings?.reviewsLink}
               />
             )}
 
@@ -321,7 +322,7 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
           </div>
 
           {/* Desktop Only: Sticky Right Column */}
-          <div className="hidden lg:block lg:sticky lg:top-[144px] self-start w-[345px] shrink-0">
+          <div className="hidden lg:block lg:sticky lg:top-[144px] self-start w-[345px] shrink-0 relative z-30">
             <Suspense
               fallback={
                 <div className="bg-white border border-[#1B1A17]/10 rounded-xl p-6 h-[337px] animate-pulse" />

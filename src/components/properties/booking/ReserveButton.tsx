@@ -22,15 +22,15 @@ export function ReserveButton({
       onClick={onClick}
       className={`w-full font-medium py-3.5 px-6 rounded-full transition-all flex justify-center items-center text-[15px] ${
         disabled
-          ? 'bg-[#C3BA8D]/50 text-black/40 cursor-not-allowed opacity-60'
+          ? 'bg-[#C3BA8D]/50 text-[#241D19]/40 cursor-not-allowed opacity-60'
           : visualDisabled
-          ? 'bg-[#C3BA8D]/50 text-black/70 cursor-pointer'
-          : 'bg-[#C3BA8D] text-black hover:opacity-90 active:scale-[0.99]'
+          ? 'bg-[#C3BA8D]/50 text-[#241D19]/70 cursor-pointer'
+          : 'bg-[#C3BA8D] text-[#241D19] hover:opacity-90 active:scale-[0.99]'
       }`}
     >
       {isLoading && (
         <svg
-          className="animate-spin -ml-1 mr-3 h-5 w-5 text-black"
+          className="animate-spin -ml-1 mr-3 h-5 w-5 text-[#241D19]"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
