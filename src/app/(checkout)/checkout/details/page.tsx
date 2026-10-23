@@ -21,6 +21,7 @@ export default async function DetailsPage({ searchParams }: Props) {
   let property: PropertyDetails | null = null;
   try {
     const res = await getPropertyById<PropertyDetails>(propertyId);
+    console.log('[DetailsPage] getPropertyById result for id:', propertyId, 'res:', JSON.stringify(res));
     if (res?.data) {
       property = res.data;
     }
@@ -29,6 +30,7 @@ export default async function DetailsPage({ searchParams }: Props) {
   }
 
   if (!property) {
+    console.error('[DetailsPage] No property found, calling notFound(). propertyId:', propertyId);
     notFound();
   }
 
@@ -55,8 +57,8 @@ export default async function DetailsPage({ searchParams }: Props) {
         <div className="flex justify-center mb-6">
           <Logo image={siteSettings?.logo} className="text-[#1B1A17]" isLink={true} />
         </div>
-        <div className="border-t border-[#1B1A17]/10">
-          <div className="max-w-[1440px] mx-auto px-5 md:px-[188px] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 pt-4 pb-0 md:py-4 text-[10px] sm:text-xs tracking-wider">
+        <div className="sm:border-t sm:border-[#1B1A17]/10">
+          <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-10 xl:px-[188px] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 pt-4 pb-0 md:py-4 text-[10px] sm:text-xs tracking-wider">
             <a 
               href={`/properties/${property.slug}?${new URLSearchParams({
                 checkIn: (resolvedParams.checkIn as string) || '',
@@ -72,9 +74,9 @@ export default async function DetailsPage({ searchParams }: Props) {
             </a>
             <div className="flex items-center justify-between sm:justify-center w-full sm:w-auto gap-2 sm:gap-3 uppercase text-[9px] sm:text-[10px]">
               <a href={`/checkout?${new URLSearchParams(resolvedParams as any).toString()}`} className="text-[#7D7975] hover:text-black transition-colors whitespace-nowrap">1 Dates</a>
-              <div className="h-[1px] bg-[#1B1A17]/20 flex-1 sm:w-8 sm:flex-none"></div>
+              <div className="flex-1 sm:flex-none border-b border-dotted border-[#1B1A17]/30 sm:border-b-0 sm:h-[1px] sm:bg-[#1B1A17]/20 sm:w-8"></div>
               <span className="text-[#1B1A17] font-semibold whitespace-nowrap">2 Details</span>
-              <div className="h-[1px] bg-[#1B1A17]/20 flex-1 sm:w-8 sm:flex-none"></div>
+              <div className="flex-1 sm:flex-none border-b border-dotted border-[#1B1A17]/30 sm:border-b-0 sm:h-[1px] sm:bg-[#1B1A17]/20 sm:w-8"></div>
               <span className="opacity-40 text-[#7D7975] whitespace-nowrap">3 Pay</span>
             </div>
           </div>
@@ -83,7 +85,7 @@ export default async function DetailsPage({ searchParams }: Props) {
 
       {/* Main Content scaffold */}
       <main className="flex-1">
-        <div className="max-w-[1440px] mx-auto px-5 md:px-[188px] pt-8 pb-24 md:pt-12 md:pb-24">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-10 xl:px-[188px] pt-8 pb-24 md:pt-12 md:pb-24">
           <DetailsFlow 
             property={property as any}
             searchParams={resolvedParams as any}
@@ -95,7 +97,7 @@ export default async function DetailsPage({ searchParams }: Props) {
 
       {/* Checkout Footer */}
       <footer className="w-full bg-[#1B1A17] text-white py-8 mt-auto">
-        <div className="max-w-[1440px] mx-auto px-4 md:px-[188px] flex flex-col md:flex-row justify-between items-center text-xs">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-10 xl:px-[188px] flex flex-col md:flex-row justify-between items-center text-xs">
           <div className="flex items-center gap-4 order-1 md:order-2 mb-6 md:mb-0">
             <div className="flex gap-2 [&_img]:!h-[20px] [&_img:first-child]:!h-[20px]">
                <PaymentLogos images={footerLogos} isFooter={true} />
@@ -104,8 +106,8 @@ export default async function DetailsPage({ searchParams }: Props) {
           <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 text-white/60 order-2 md:order-1">
             <span>© Stay with Miio. All rights reserved.</span>
             <div className="flex gap-4 mt-1 md:mt-0">
-              <a href="/terms" target="_blank" rel="noopener noreferrer" className="hover:text-white">Terms</a>
-              <a href="/privacy" target="_blank" rel="noopener noreferrer" className="hover:text-white">Privacy</a>
+              <span className="cursor-default">Terms</span>
+              <span className="cursor-default">Privacy</span>
             </div>
           </div>
         </div>

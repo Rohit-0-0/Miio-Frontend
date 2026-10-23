@@ -112,9 +112,17 @@ input[type="date"]::-webkit-outer-spin-button {
   text-decoration: line-through !important;
 }
 
+.rdp-root {
+  display: flex !important;
+  justify-content: center !important;
+  width: auto !important;
+  margin: 0 auto !important;
+}
+
 .rdp-months {
   display: flex !important;
-  justify-content: flex-start !important;
+  justify-content: center !important;
+  gap: 2rem !important;
 }
 
 @media (min-width: 768px) {
@@ -124,35 +132,50 @@ input[type="date"]::-webkit-outer-spin-button {
   }
 }
 
-/* Force arrows to be on opposite sides of the calendar header */
+.rdp-month {
+  position: relative !important;
+  margin: 0 auto !important;
+}
+
+/* Ensure navigation bar is positioned over the month caption with clickable buttons */
 .rdp-nav {
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
   display: flex !important;
   justify-content: space-between !important;
-  width: 100% !important;
-  position: absolute !important;
-  left: 0;
-  top: 0;
-  padding: 0; /* Removing padding to push arrows to the very edge */
+  align-items: center !important;
+  height: 2.25rem !important;
+  z-index: 10 !important;
+}
+
+.rdp-button_next,
+.rdp-button_previous {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 2.25rem !important;
+  height: 2.25rem !important;
+  cursor: pointer !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
 }
 
 .rdp-month_caption {
   display: flex !important;
   justify-content: center !important;
-  width: 100% !important;
-}
-
-.rdp-caption {
-  position: relative !important;
-  display: flex !important;
-  justify-content: center !important;
   align-items: center !important;
-  margin-bottom: 2rem !important; /* Space between header and days */
+  height: 2.25rem !important;
+  width: 100% !important;
 }
 
 .rdp-caption_label {
   text-align: center;
   font-weight: 500 !important;
-  font-size: 14px !important; /* Make month title a bit smaller to match Figma */
+  font-size: 14px !important;
+  color: #1B1A17 !important;
 }
 
 /* Browser Autofill Styling Reset:

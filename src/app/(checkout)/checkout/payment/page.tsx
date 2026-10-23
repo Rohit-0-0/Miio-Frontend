@@ -54,8 +54,8 @@ export default async function PaymentPage({ searchParams }: Props) {
         <div className="flex justify-center mb-6">
           <Logo image={siteSettings?.logo} className="text-[#1B1A17]" isLink={true} />
         </div>
-        <div className="border-t border-[#1B1A17]/10">
-          <div className="max-w-[1440px] mx-auto px-4 md:px-[188px] flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 py-4 text-[10px] sm:text-xs tracking-wider">
+        <div className="sm:border-t sm:border-[#1B1A17]/10">
+          <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-10 xl:px-[188px] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 pt-4 pb-0 md:py-4 text-[10px] sm:text-xs tracking-wider">
             <a 
               href={`/properties/${property.slug}?${new URLSearchParams({
                 checkIn: (resolvedParams.checkIn as string) || '',
@@ -65,22 +65,22 @@ export default async function PaymentPage({ searchParams }: Props) {
                 infants: (resolvedParams.infants as string) || '0',
                 pets: (resolvedParams.pets as string) || '0',
               }).toString()}`} 
-              className="text-[#7D7975] hover:text-black transition-colors font-medium text-center sm:text-left w-full sm:w-auto"
+              className="text-[#7D7975] hover:text-black transition-colors font-medium text-left w-full sm:w-auto"
             >
               &larr; Back to {property.nickname || property.title}
             </a>
             <div className="flex items-center justify-between sm:justify-center w-full sm:w-auto gap-2 sm:gap-3 uppercase text-[9px] sm:text-[10px]">
               <a href={`/checkout?${new URLSearchParams(resolvedParams as any).toString()}`} className="text-[#7D7975] hover:text-black transition-colors whitespace-nowrap">1 Dates</a>
-              <div className="h-[1px] bg-[#1B1A17]/20 flex-1 sm:w-8 sm:flex-none"></div>
+              <div className="flex-1 sm:flex-none border-b border-dotted border-[#1B1A17]/30 sm:border-b-0 sm:h-[1px] sm:bg-[#1B1A17]/20 sm:w-8"></div>
               <a href={`/checkout/details?${new URLSearchParams(resolvedParams as any).toString()}`} className="text-[#7D7975] hover:text-black transition-colors whitespace-nowrap">2 Details</a>
-              <div className="h-[1px] bg-[#1B1A17]/20 flex-1 sm:w-8 sm:flex-none"></div>
+              <div className="flex-1 sm:flex-none border-b border-dotted border-[#1B1A17]/30 sm:border-b-0 sm:h-[1px] sm:bg-[#1B1A17]/20 sm:w-8"></div>
               <span className="text-[#1B1A17] font-semibold whitespace-nowrap">3 Pay</span>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="flex-1 w-full max-w-[1440px] mx-auto px-4 md:px-[188px] py-8 md:py-12">
+      <main className="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-10 xl:px-[188px] py-8 md:py-12">
         <Suspense fallback={<div className="animate-pulse h-96 bg-black/5 rounded-lg" />}>
           <StripeWrapper 
             property={property} 
@@ -93,9 +93,9 @@ export default async function PaymentPage({ searchParams }: Props) {
 
       {/* Checkout Footer (Minimal) */}
       <footer className="w-full bg-[#1B1A17] text-white py-6">
-        <div className="max-w-[1440px] mx-auto px-4 md:px-[188px] flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-10 xl:px-[188px] flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="text-[10px] text-white/50 tracking-wider">
-            © Stay with Miio. All rights reserved. <a href="/terms" target="_blank" rel="noopener noreferrer" className="ml-4 hover:text-white transition-colors">Terms</a> <a href="/privacy" target="_blank" rel="noopener noreferrer" className="ml-4 hover:text-white transition-colors">Privacy</a>
+            © Stay with Miio. All rights reserved. <span className="ml-4 cursor-default">Terms</span> <span className="ml-4 cursor-default">Privacy</span>
           </div>
           {footerLogos.length > 0 && (
             <div className="flex gap-4 items-center">

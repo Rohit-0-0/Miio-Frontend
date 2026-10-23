@@ -178,7 +178,10 @@ export function DateRangePicker({
   if (inline) {
     return (
       <div className={`${className} flex justify-center pb-4`}>
-        <div style={{ '--rdp-cell-size': inline ? '32px' : '40px' } as React.CSSProperties}>
+        <div 
+          className="relative inline-flex justify-center" 
+          style={{ '--rdp-cell-size': inline ? '32px' : '40px' } as React.CSSProperties}
+        >
           <DayPicker
             mode="range"
             selected={selectedRange}

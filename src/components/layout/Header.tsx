@@ -62,7 +62,7 @@ export function Header({ logo, navItems, utilityBarLink }: HeaderProps = {}) {
         className={`w-full transition-all duration-300 ${
           isTransparent
             ? 'bg-transparent text-[#FEF6EE] border-b border-transparent'
-            : 'bg-[#FEF6EE] text-[#1B1A17] border-b border-[#1B1A17]/10 shadow-sm'
+            : 'bg-[#FEF6EE] text-[#1B1A17]  '
         }`}
       >
         <Container>

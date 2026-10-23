@@ -208,140 +208,140 @@ export function CheckoutFlow({ property, searchParams, paymentTrustImages, cmsCo
   const total = money?.subTotalPrice || 0;
 
   const summaryCard = (
-    <div className="bg-white rounded-[8px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] border border-[#1B1A17]/10 overflow-hidden self-start order-1 lg:order-2 w-full max-w-[400px] lg:max-w-[345px] mx-auto lg:mx-0 p-4 lg:p-6 flex flex-row lg:flex-col items-center lg:items-start gap-4 lg:gap-5 mb-0 lg:mb-0">
-      {coverImageUrl && (
-        <div className="w-[84px] h-[64px] lg:h-[220px] lg:w-full overflow-hidden shrink-0">
-          <img src={coverImageUrl} alt={propertyTitle} className="w-full h-full object-cover rounded-[6px] lg:rounded-[8px]" />
-        </div>
-      )}
-      <div className="lg:px-5 lg:py-5 flex flex-col lg:gap-4 w-full">
-        <div>
+    <div className="bg-white rounded-[8px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] border border-[#1B1A17]/10 overflow-hidden self-start order-1 lg:order-2 w-full max-w-[400px] lg:max-w-[345px] mx-auto lg:mx-0 p-4 lg:p-6 flex flex-col gap-4 lg:gap-5 mb-0 lg:mb-0">
+      {/* Header block: Compact on mobile (no bottom line), full with divider on desktop */}
+      <div className="flex flex-row lg:flex-col items-center lg:items-start gap-4 pb-0 lg:pb-5 border-b-0 lg:border-b lg:border-[#1B1A17]/10">
+        {coverImageUrl && (
+          <div className="w-[84px] h-[64px] lg:h-[220px] lg:w-full overflow-hidden shrink-0 rounded-[6px]">
+            <img src={coverImageUrl} alt={propertyTitle} className="w-full h-full object-cover" />
+          </div>
+        )}
+        <div className="flex flex-col w-full">
           <h3 className="text-[14px] lg:text-[17px] font-serif text-[#1B1A17] leading-tight">{propertyTitle}</h3>
           <p className="text-[10px] lg:text-[12px] text-[#7D7975] mt-0.5 lg:mt-1">{property.location?.city}</p>
         </div>
+      </div>
 
-        <div className="hidden lg:flex border-t border-[#1B1A17]/10 pt-4 flex-col gap-2 text-[12px]">
-          <div className="flex justify-between">
-            <span className="text-[#7D7975]">{cmsContent?.datesHeading || 'Dates'}</span>
-            {quote ? (
-              <span className="text-[#1B1A17] text-right max-w-[120px]">{rightDatesStr}</span>
-            ) : (
-              <span className="text-[#1B1A17] text-right max-w-[120px] underline cursor-pointer hover:text-black">Choose new dates</span>
-            )}
-          </div>
-          <div className="flex justify-between mt-1">
-            <span className="text-[#7D7975]">{cmsContent?.guestsHeading || 'Guests'}</span>
-            <span className="text-[#1B1A17] text-right max-w-[120px]">{guestLabel}</span>
-          </div>
+      {/* Dates & Guests Block - Desktop only */}
+      <div className="hidden lg:flex flex-col gap-2 pb-5 border-b border-[#1B1A17]/10 text-[13px] lg:text-[14px]">
+        <div className="flex justify-between items-center">
+          <span className="text-[#7D7975]">{cmsContent?.datesHeading || 'Dates'}</span>
+          {quote ? (
+            <span className="text-[#1B1A17] text-right">{rightDatesStr}</span>
+          ) : (
+            <span className="text-[#1B1A17] text-right underline cursor-pointer hover:text-black">Choose new dates</span>
+          )}
         </div>
+        <div className="flex justify-between items-center">
+          <span className="text-[#7D7975]">{cmsContent?.guestsHeading || 'Guests'}</span>
+          <span className="text-[#1B1A17] text-right">{guestLabel}</span>
+        </div>
+      </div>
 
-        {quote ? (
-          <>
-            <div className="hidden lg:flex border-t border-[#1B1A17]/10 pt-4 flex-col gap-2 text-[12px]">
-              <div className="flex justify-between">
-                <span className="text-[#7D7975]">
-                  ${Math.round((money?.fareAccommodation || 0) / (quote?.rates?.ratePlans?.[0]?.days?.length || 1)).toLocaleString()} × {quote?.rates?.ratePlans?.[0]?.days?.length || 1} {cmsContent?.nightsText || 'nights'}
-                </span>
-                <span className="text-[#1B1A17]">${(money?.fareAccommodation || 0).toLocaleString()}</span>
-              </div>
-              {(() => {
-                const extractFees = (obj: any): any[] => {
-                  if (!obj || typeof obj !== 'object') return [];
-                  if (Array.isArray(obj)) {
-                    if (obj.length > 0 && obj[0]?.title && obj[0]?.amount !== undefined && obj[0]?.type) return obj;
-                    for (const item of obj) {
-                      const res = extractFees(item);
-                      if (res.length > 0) return res;
-                    }
-                    return [];
-                  }
-                  if (Array.isArray(obj.itemizedFees) && obj.itemizedFees.length > 0 && obj.itemizedFees[0]?.title) return obj.itemizedFees;
-                  if (Array.isArray(obj.fees) && obj.fees.length > 0 && obj.fees[0]?.title) return obj.fees;
-                  for (const key in obj) {
-                    const res = extractFees(obj[key]);
+      {quote ? (
+        <div className="hidden lg:flex flex-col gap-5">
+          <div className="flex flex-col gap-2 text-[13px] lg:text-[14px]">
+            <div className="flex justify-between items-center">
+              <span className="text-[#7D7975]">
+                ${Math.round((money?.fareAccommodation || 0) / (quote?.rates?.ratePlans?.[0]?.days?.length || 1)).toLocaleString()} &times; {quote?.rates?.ratePlans?.[0]?.days?.length || 1} {cmsContent?.nightsText || 'nights'}
+              </span>
+              <span className="text-[#1B1A17]">${(money?.fareAccommodation || 0).toLocaleString()}</span>
+            </div>
+            {(() => {
+              const extractFees = (obj: any): any[] => {
+                if (!obj || typeof obj !== 'object') return [];
+                if (Array.isArray(obj)) {
+                  if (obj.length > 0 && obj[0]?.title && obj[0]?.amount !== undefined && obj[0]?.type) return obj;
+                  for (const item of obj) {
+                    const res = extractFees(item);
                     if (res.length > 0) return res;
                   }
                   return [];
-                };
-
-                const itemizedFees = extractFees(quote);
-                const hasItemizedFees = Array.isArray(itemizedFees) && itemizedFees.length > 0;
-                
-                if (hasItemizedFees) {
-                  return itemizedFees
-                    .filter((fee: any) => {
-                      const titleStr = (fee.title || '').toLowerCase();
-                      return fee.type !== 'ACCOMMODATION' && !titleStr.includes('accommodation');
-                    })
-                    .map((fee: any, idx: number) => {
-                      let title = fee.title || 'Fee';
-                      if (fee.type === 'CLEANING' || title.toLowerCase().includes('cleaning')) {
-                        title = cmsContent?.cleaningFeeText || title;
-                      }
-                      return (
-                        <div key={idx} className="flex justify-between">
-                          <span className="text-[#7D7975] capitalize">{title}</span>
-                          <span className="text-[#1B1A17]">${(fee.amount || 0).toLocaleString()}</span>
-                        </div>
-                      );
-                  });
                 }
-                
-                // Fallback if no itemized array is provided
-                return (
-                  <>
-                    {((money?.fareCleaning || 0) > 0) && (
-                      <div className="flex justify-between">
-                        <span className="text-[#7D7975]">{cmsContent?.cleaningFeeText || 'Cleaning fee'}</span>
-                        <span className="text-[#1B1A17]">${(money?.fareCleaning || 0).toLocaleString()}</span>
+                if (Array.isArray(obj.itemizedFees) && obj.itemizedFees.length > 0 && obj.itemizedFees[0]?.title) return obj.itemizedFees;
+                if (Array.isArray(obj.fees) && obj.fees.length > 0 && obj.fees[0]?.title) return obj.fees;
+                for (const key in obj) {
+                  const res = extractFees(obj[key]);
+                  if (res.length > 0) return res;
+                }
+                return [];
+              };
+
+              const itemizedFees = extractFees(quote);
+              const hasItemizedFees = Array.isArray(itemizedFees) && itemizedFees.length > 0;
+              
+              if (hasItemizedFees) {
+                return itemizedFees
+                  .filter((fee: any) => {
+                    const titleStr = (fee.title || '').toLowerCase();
+                    return fee.type !== 'ACCOMMODATION' && !titleStr.includes('accommodation');
+                  })
+                  .map((fee: any, idx: number) => {
+                    let title = fee.title || 'Fee';
+                    if (fee.type === 'CLEANING' || title.toLowerCase().includes('cleaning')) {
+                      title = cmsContent?.cleaningFeeText || title;
+                    }
+                    return (
+                      <div key={idx} className="flex justify-between items-center">
+                        <span className="text-[#7D7975] capitalize">{title}</span>
+                        <span className="text-[#1B1A17]">${(fee.amount || 0).toLocaleString()}</span>
                       </div>
-                    )}
-                    {((money?.totalFees || 0) - (money?.fareCleaning || 0) > 0) && (
-                      <div className="flex justify-between">
-                        <span className="text-[#7D7975]">Fees</span>
-                        <span className="text-[#1B1A17]">${((money?.totalFees || 0) - (money?.fareCleaning || 0)).toLocaleString()}</span>
-                      </div>
-                    )}
-                  </>
-                );
-              })()}
+                    );
+                });
+              }
+              
+              // Fallback if no itemized array is provided
+              return (
+                <>
+                  {((money?.fareCleaning || 0) > 0) && (
+                    <div className="flex justify-between items-center">
+                      <span className="text-[#7D7975]">{cmsContent?.cleaningFeeText || 'Cleaning fee'}</span>
+                      <span className="text-[#1B1A17]">${(money?.fareCleaning || 0).toLocaleString()}</span>
+                    </div>
+                  )}
+                  {((money?.totalFees || 0) - (money?.fareCleaning || 0) > 0) && (
+                    <div className="flex justify-between items-center">
+                      <span className="text-[#7D7975]">Fees</span>
+                      <span className="text-[#1B1A17]">${((money?.totalFees || 0) - (money?.fareCleaning || 0)).toLocaleString()}</span>
+                    </div>
+                  )}
+                </>
+              );
+            })()}
 
-              {((money?.totalTaxes || 0) > 0) && (
-                <div className="flex justify-between">
-                  <span className="text-[#7D7975]">Taxes</span>
-                  <span className="text-[#1B1A17]">${(money?.totalTaxes || 0).toLocaleString()}</span>
-                </div>
-              )}
+            {((money?.totalTaxes || 0) > 0) && (
+              <div className="flex justify-between items-center">
+                <span className="text-[#7D7975]">Taxes</span>
+                <span className="text-[#1B1A17]">${(money?.totalTaxes || 0).toLocaleString()}</span>
+              </div>
+            )}
+          </div>
+
+          <div className="flex border-t border-[#1B1A17]/10 pt-4 flex-col gap-4">
+            <div className="flex justify-between items-center text-[15px] font-bold text-[#1B1A17]">
+              <span>{cmsContent?.totalLabel || 'Total (AUD)'}</span>
+              <span>${(total).toLocaleString()}</span>
             </div>
 
-            <div className="hidden lg:flex border-t border-[#1B1A17]/10 pt-4 flex-col gap-4">
-              <div className="flex justify-between text-[14px] font-bold text-[#1B1A17]">
-                <span>{cmsContent?.totalLabel || 'Total (AUD)'}</span>
-                <span>${(total).toLocaleString()}</span>
-              </div>
-
-
-
-              <div className="mt-2 text-[12px]">
-                <a href="#" className="text-[#1B1A17] underline decoration-[#1B1A17]/30 hover:decoration-[#1B1A17]">{cmsContent?.addCodeText || 'Add a code'}</a>
-              </div>
-
-              <div className="text-[10px] text-[#7D7975] mt-1">
-                {cmsContent?.freeCancellationText || 'Free cancellation until 7 days before check-in.'}
-              </div>
+            <div className="text-[12px]">
+              <a href="#" className="text-[#1B1A17] underline decoration-[#1B1A17]/30 hover:decoration-[#1B1A17]">{cmsContent?.addCodeText || 'Add a code'}</a>
             </div>
-          </>
-        ) : (
-          <div className="hidden lg:flex border-t border-[#1B1A17]/10 pt-4 flex-col gap-4">
-            <div className="text-[12px] text-[#7D7975]">
-              The total updates once new dates are chosen.
-            </div>
-            <div className="text-[10px] text-[#7D7975] mt-1">
+
+            <div className="text-[11px] text-[#7D7975]">
               {cmsContent?.freeCancellationText || 'Free cancellation until 7 days before check-in.'}
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="hidden lg:flex border-t border-[#1B1A17]/10 pt-4 flex-col gap-4">
+          <div className="text-[12px] text-[#7D7975]">
+            The total updates once new dates are chosen.
+          </div>
+          <div className="text-[11px] text-[#7D7975]">
+            {cmsContent?.freeCancellationText || 'Free cancellation until 7 days before check-in.'}
+          </div>
+        </div>
+      )}
     </div>
   );
 

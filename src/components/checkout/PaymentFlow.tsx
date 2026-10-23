@@ -273,7 +273,9 @@ function PaymentForm({
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_345px] gap-12 lg:gap-32 relative">
       {/* Left Column - Payment Form */}
       <div className="flex flex-col gap-6 order-2 lg:order-1">
-        <h2 className="text-[32px] font-serif text-[#1B1A17] mb-2">Payment</h2>
+        <div className="pb-2 lg:pb-4">
+          <h2 className="text-[32px] font-serif text-[#1B1A17]">Payment</h2>
+        </div>
         
         <form onSubmit={handlePaymentSubmit} className="flex flex-col gap-4">
           
@@ -400,7 +402,7 @@ function PaymentForm({
                 )}
               </div>
               <span className="text-[12px] text-[#1B1A17]">
-                I agree to the <a href="/terms" target="_blank" className="underline underline-offset-4 hover:opacity-70">house rules and the cancellation policy</a>
+                I agree to the <span className="underline underline-offset-4 cursor-default">house rules and the cancellation policy</span>
               </span>
             </label>
 
@@ -427,48 +429,45 @@ function PaymentForm({
 
       {/* Right Column - Booking Summary Card */}
       <div className="w-full max-w-[400px] lg:max-w-[345px] mx-auto lg:mx-0 order-1 lg:order-2 self-start sticky lg:top-24 mb-6 lg:mb-0">
-        <div className="bg-white rounded-[8px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] border border-[#1B1A17]/10 overflow-hidden flex flex-col p-4 lg:p-6 gap-4 lg:gap-5">
+        <div className="bg-white rounded-[8px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] border border-[#1B1A17]/10 overflow-hidden flex flex-col p-6 gap-5">
           
           {/* Header block: Horizontal on mobile, vertical on desktop */}
-          <div className="flex flex-row lg:flex-col items-center lg:items-start gap-4 lg:gap-0 p-0">
+          <div className="flex flex-row lg:flex-col items-center lg:items-start gap-4 pb-5 border-b border-[#1B1A17]/10">
             {(() => {
               const imgRef = property.gallery?.[0]?.assetId || property.gallery?.[0]?.asset?._ref || property.heroImage?.asset?._ref;
               const src = buildImageUrl(imgRef);
               return src ? (
-                <div className="w-[84px] h-[64px] lg:h-[220px] lg:w-full overflow-hidden shrink-0">
-                  <img src={src} alt={property.nickname || property.title} className="w-full h-full object-cover rounded-[6px] lg:rounded-[8px]" />
+                <div className="w-[84px] h-[64px] lg:h-[220px] lg:w-full overflow-hidden shrink-0 rounded-[6px]">
+                  <img src={src} alt={property.nickname || property.title} className="w-full h-full object-cover" />
                 </div>
               ) : null;
             })()}
-            <div className="lg:px-5 lg:pt-5 lg:pb-0 flex flex-col w-full">
-              <div>
-                <h3 className="text-[14px] lg:text-[17px] font-serif text-[#1B1A17] leading-tight">{property.nickname || property.title}</h3>
-                <p className="text-[10px] lg:text-[12px] text-[#7D7975] mt-0.5 lg:mt-1">{property.location?.city || property.tagline}</p>
-              </div>
+            <div className="flex flex-col w-full">
+              <h3 className="text-[14px] lg:text-[17px] font-serif text-[#1B1A17] leading-tight">{property.nickname || property.title}</h3>
+              <p className="text-[10px] lg:text-[12px] text-[#7D7975] mt-0.5 lg:mt-1">{property.location?.city || property.tagline}</p>
             </div>
           </div>
 
-          <div className="px-5 pb-5 flex flex-col gap-4">
-          {/* Booking Info */}
-          <div className="py-6 border-b border-[#1B1A17]/10 flex flex-col gap-4 text-[14px]">
-            <div className="flex justify-between items-start">
+          {/* Dates & Guests Block */}
+          <div className="flex flex-col gap-2 pb-5 border-b border-[#1B1A17]/10 text-[13px] lg:text-[14px]">
+            <div className="flex justify-between items-center">
               <span className="text-[#7D7975]">{cmsContent?.datesHeading || 'Dates'}</span>
               <span className="text-[#1B1A17] text-right">
                 {checkIn ? new Date(checkIn).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) : ''} 
-                {checkIn && checkOut ? ' - ' : ''}
+                {checkIn && checkOut ? ' – ' : ''}
                 {checkOut ? new Date(checkOut).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) : ''}
               </span>
             </div>
-            <div className="flex justify-between items-start">
+            <div className="flex justify-between items-center">
               <span className="text-[#7D7975]">{cmsContent?.guestsHeading || 'Guests'}</span>
               <span className="text-[#1B1A17] text-right">{guestLabel}</span>
             </div>
           </div>
 
           {/* Pricing Breakdown */}
-          <div className="pt-6 flex flex-col gap-4 text-[14px]">
-            <div className="flex flex-col gap-3 pb-6">
-              <div className="flex justify-between">
+          <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-2 text-[13px] lg:text-[14px]">
+              <div className="flex justify-between items-center">
                 <span className="text-[#7D7975]">${Math.round(money?.fareAccommodation / nightsCount || 0).toLocaleString()} &times; {nightsCount} {cmsContent?.nightsText || 'nights'}</span>
                 <span className="text-[#1B1A17]">${(money?.fareAccommodation || 0).toLocaleString()}</span>
               </div>
@@ -508,7 +507,7 @@ function PaymentForm({
                         title = cmsContent?.cleaningFeeText || title;
                       }
                       return (
-                        <div key={idx} className="flex justify-between">
+                        <div key={idx} className="flex justify-between items-center">
                           <span className="text-[#7D7975] capitalize">{title}</span>
                           <span className="text-[#1B1A17]">${(fee.amount || 0).toLocaleString()}</span>
                         </div>
@@ -519,13 +518,13 @@ function PaymentForm({
                 return (
                   <>
                     {((money?.fareCleaning || 0) > 0) && (
-                      <div className="flex justify-between">
+                      <div className="flex justify-between items-center">
                         <span className="text-[#7D7975]">{cmsContent?.cleaningFeeText || 'Cleaning fee'}</span>
                         <span className="text-[#1B1A17]">${(money?.fareCleaning || 0).toLocaleString()}</span>
                       </div>
                     )}
                     {((money?.totalFees || 0) - (money?.fareCleaning || 0) > 0) && (
-                      <div className="flex justify-between">
+                      <div className="flex justify-between items-center">
                         <span className="text-[#7D7975]">Fees</span>
                         <span className="text-[#1B1A17]">${((money?.totalFees || 0) - (money?.fareCleaning || 0)).toLocaleString()}</span>
                       </div>
@@ -535,13 +534,13 @@ function PaymentForm({
               })()}
 
               {((money?.totalTaxes || 0) > 0) && (
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <span className="text-[#7D7975]">Taxes</span>
                   <span className="text-[#1B1A17]">${(money?.totalTaxes || 0).toLocaleString()}</span>
                 </div>
               )}
               {appliedCoupon && (money?.discount || 0) > 0 && (
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <span className="text-[#7D7975]">
                     {appliedCoupon.toUpperCase() === (cmsContent?.miioClubCouponCode || 'MIIOCLUB').toUpperCase() ? (cmsContent?.miioClubCouponLabel || 'Miio Club (10%)') : appliedCoupon.toUpperCase()}
                   </span>
@@ -551,15 +550,13 @@ function PaymentForm({
             </div>
 
             <div className="border-t border-[#1B1A17]/10 pt-4 flex flex-col gap-4">
-              <div className="flex justify-between text-[14px] font-bold text-[#1B1A17]">
+              <div className="flex justify-between items-center text-[15px] font-bold text-[#1B1A17]">
                 <span>{cmsContent?.totalLabel || 'Total (AUD)'}</span>
                 <span>${(total).toLocaleString()}</span>
               </div>
-
-
               
               {/* Coupon Code Inline Section */}
-              <div className="mt-4 flex flex-col gap-3">
+              <div className="flex flex-col gap-3">
                  {!appliedCoupon && !isCouponInputOpen && (
                    <button 
                      type="button" 
@@ -630,15 +627,14 @@ function PaymentForm({
                  {couponError && <span className="text-[11px] text-red-500 font-medium">{couponError}</span>}
               </div>
 
-              <div className="text-[10px] text-[#7D7975] mt-2">
+              <div className="text-[11px] text-[#7D7975]">
                 {cmsContent?.freeCancellationText || 'Free cancellation until 7 days before check-in.'}
-              </div>
-            </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
   );
 }
 
