@@ -32,12 +32,12 @@ export const propertyEditorial = defineType({
     }),
     defineField({
       name: 'heroStory',
-      title: 'Hero Story',
+      title: 'The Experience',
       type: 'text'
     }),
     defineField({
       name: 'overview',
-      title: 'Overview',
+      title: 'Description',
       type: 'text'
     }),
     defineField({
