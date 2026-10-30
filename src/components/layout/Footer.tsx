@@ -5,7 +5,6 @@ import { NewsletterForm } from './NewsletterForm';
 import { PaymentLogos } from '@/components/layout/PaymentLogos';
 import { editorialService } from '@/services/about.service';
 import { buildImageUrl } from '@/lib/media/buildImageUrl';
-import { LegalLinks } from '@/components/legal/LegalLinks';
 
 export async function Footer() {
   const currentYear = new Date().getFullYear();
@@ -188,14 +187,10 @@ export async function Footer() {
           </div>
 
           {/* Row 3: Copyright */}
-          <div className="w-full flex justify-center items-center gap-6 mt-10">
+          <div className="w-full flex justify-center items-center mt-10">
             <p className="font-sans text-[14px] font-normal leading-[23px] text-[#FEF6EE]/60 m-0 text-center">
               © Stay with Miio. All rights reserved.
             </p>
-            <LegalLinks
-              className="flex items-center gap-6"
-              linkClassName="font-sans text-[14px] leading-[23px] text-[#FEF6EE]/60 hover:text-[#FEF6EE] transition-colors"
-            />
           </div>
         </div>
 
@@ -298,11 +293,7 @@ export async function Footer() {
           </div>
 
           {/* Copyright */}
-          <div className="w-full flex flex-col items-center gap-3 pt-2">
-            <LegalLinks
-              className="flex flex-wrap justify-center gap-x-6 gap-y-2"
-              linkClassName="font-sans text-[14px] leading-[23px] text-[#FEF6EE]/60 hover:text-[#FEF6EE] transition-colors"
-            />
+          <div className="w-full flex justify-center items-center pt-2">
             <p className="font-sans text-[14px] font-normal leading-[23px] text-[#FEF6EE]/60 m-0 text-center">
               © Stay with Miio. All rights reserved.
             </p>
