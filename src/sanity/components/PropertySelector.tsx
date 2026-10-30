@@ -55,21 +55,21 @@ export function PropertySelector(props: ArrayOfPrimitivesInputProps) {
   const handleToggle = useCallback(
     (propertyId: string, isChecked: boolean) => {
       const currentValue = (value as any[]) || [];
-      let newValue = [...currentValue];
+      // Clean up legacy non-propertyId references
+      let newValue = currentValue.filter(
+        (item) => item && typeof item === 'object' && typeof item.propertyId === 'string'
+      );
 
       if (isChecked) {
-        if (!newValue.some(item => typeof item === 'object' ? item.propertyId === propertyId : item === propertyId)) {
+        if (!newValue.some((item) => item.propertyId === propertyId)) {
           // Add object with _key and propertyId
           newValue.push({
             _key: Math.random().toString(36).substring(2, 9),
-            propertyId: propertyId
+            propertyId: propertyId,
           });
         }
       } else {
-        newValue = newValue.filter((item) => {
-          if (typeof item === 'object') return item.propertyId !== propertyId;
-          return item !== propertyId;
-        });
+        newValue = newValue.filter((item) => item.propertyId !== propertyId);
       }
 
       onChange(newValue.length > 0 ? set(newValue) : unset());

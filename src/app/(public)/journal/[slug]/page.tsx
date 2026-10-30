@@ -53,7 +53,10 @@ export default async function JournalDetailPage({
   }
 
   let propertiesData: any[] = [];
-  const rawList = Array.isArray(article?.relatedProperties) ? article.relatedProperties : [];
+  // Only accept valid property selections with a propertyId (filters out stale/legacy references)
+  const rawList = Array.isArray(article?.relatedProperties)
+    ? article.relatedProperties.filter((item: any) => item && (typeof item === 'string' || item.propertyId))
+    : [];
   const singleItem = article?.relatedProperty ? [article.relatedProperty] : [];
   const combinedList = [...rawList, ...singleItem];
   
