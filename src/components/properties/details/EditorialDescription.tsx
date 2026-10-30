@@ -14,9 +14,15 @@ export function EditorialDescription({ description, fallbackDescription }: Edito
     <section className="mb-2">
       <h2 className="font-sans font-medium text-[16px] leading-[130%] text-[#241D19] mb-3">Description</h2>
       {description ? (
-        <div className="font-sans prose prose-p:font-sans prose-p:text-[15px] prose-p:leading-relaxed prose-p:text-[#1B1A17] max-w-none">
-          <RichTextRenderer html={description} className="font-sans" />
-        </div>
+        /<[a-z][\s\S]*>/i.test(description) ? (
+          <div className="font-sans text-[15px] leading-relaxed text-[#1B1A17] max-w-none">
+            <RichTextRenderer html={description} className="font-sans" />
+          </div>
+        ) : (
+          <div className="font-sans text-[15px] leading-relaxed text-[#1B1A17]">
+            <EditorialContentRenderer content={description} className="font-sans" />
+          </div>
+        )
       ) : fallbackDescription ? (
         <div className="font-sans text-[15px] leading-relaxed text-[#1B1A17]">
           <EditorialContentRenderer content={fallbackDescription} className="font-sans" />

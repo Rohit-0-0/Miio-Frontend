@@ -12,8 +12,12 @@ const ALLOWED_TAGS = new Set([
   'i',
   'u',
   's',
+  'h1',
   'h2',
   'h3',
+  'h4',
+  'h5',
+  'h6',
   'ul',
   'ol',
   'li',
@@ -21,6 +25,8 @@ const ALLOWED_TAGS = new Set([
   'hr',
   'a',
   'img',
+  'figure',
+  'figcaption',
   'span',
   'div',
 ]);
@@ -28,7 +34,7 @@ const ALLOWED_TAGS = new Set([
 const GLOBAL_ATTRS = new Set(['class', 'title']);
 const TAG_ATTRS: Record<string, Set<string>> = {
   a: new Set(['href', 'target', 'rel', 'class', 'title']),
-  img: new Set(['src', 'alt', 'title', 'class']),
+  img: new Set(['src', 'alt', 'title', 'class', 'width', 'height', 'loading']),
 };
 
 const DANGEROUS_BLOCK =
