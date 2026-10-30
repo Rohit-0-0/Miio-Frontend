@@ -3,6 +3,7 @@ import { env } from '@/config/env';
 import { getPropertyListing } from '@/lib/server/property';
 import { getLocations } from '@/lib/server/location';
 import { getJournalListing } from '@/lib/server/journal';
+import { getLegalPageSlugs } from '@/lib/server/legal';
 import { PropertyDocument } from '@/types/property';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -50,10 +51,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let dynamicPages: MetadataRoute.Sitemap = [];
 
   try {
-    const [propertiesRes, locationsRes, journalsRes] = await Promise.allSettled([
+    const [propertiesRes, locationsRes, journalsRes, legalRes] = await Promise.allSettled([
       getPropertyListing<PropertyDocument>({ limit: '100' }, { next: { revalidate: 3600 } }),
       getLocations({ next: { revalidate: 3600 } }),
-      getJournalListing({ limit: '100' }, { next: { revalidate: 3600 } })
+      getJournalListing({ limit: '100' }, { next: { revalidate: 3600 } }),
+      getLegalPageSlugs()
     ]);
 
     if (propertiesRes.status === 'fulfilled' && propertiesRes.value?.data) {
@@ -84,6 +86,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.6,
       }));
       dynamicPages.push(...journalPages);
+    }
+
+    if (legalRes.status === 'fulfilled') {
+      const legalPages: MetadataRoute.Sitemap = legalRes.value.map((page) => ({
+        url: `${baseUrl}/legal/${page.slug}`,
+        lastModified: page.lastUpdated ? new Date(page.lastUpdated) : new Date(),
+        changeFrequency: 'yearly',
+        priority: 0.3,
+      }));
+      dynamicPages.push(...legalPages);
     }
   } catch (error) {
     console.error('Failed to generate dynamic sitemap entries:', error);

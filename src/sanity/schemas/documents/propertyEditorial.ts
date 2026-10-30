@@ -47,6 +47,21 @@ export const propertyEditorial = defineType({
       of: [{ type: 'reference', to: [{ type: 'faq' }] }]
     }),
     defineField({
+      name: 'houseRuleReferences',
+      title: 'House Rules',
+      description: 'House rules shown to guests during booking. If left empty, the default house rules group is used.',
+      type: 'array',
+      of: [{ type: 'reference', to: [{ type: 'houseRules' }] }],
+      validation: Rule => Rule.unique()
+    }),
+    defineField({
+      name: 'cancellationPolicyReference',
+      title: 'Cancellation Policy',
+      description: 'Cancellation policy shown to guests during booking. If left empty, the default cancellation policy is used.',
+      type: 'reference',
+      to: [{ type: 'cancellationPolicy' }]
+    }),
+    defineField({
       name: 'relatedJournals',
       title: 'Related Journals',
       type: 'array',

@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
-import { getPropertyBySlug, getPropertyById } from '@/lib/server/property';
+import { resolveProperty as resolvePropertyBySlugOrId } from '@/lib/server/property';
 import { LIFECYCLE_STATUS, PropertyDetails } from '@/types/property';
 import { Metadata } from 'next';
 import { preload } from 'react-dom';
@@ -28,30 +28,15 @@ type Props = {
   searchParams: Promise<{ id?: string }>;
 };
 
+const resolveProperty = (slug: string, guestyId: string | undefined, options?: RequestInit) =>
+  resolvePropertyBySlugOrId<PropertyDetails>(slug, guestyId, options);
+
 const STAYS_FINAL_CTA_DEFAULTS = {
   heading: 'A more direct way to stay',
   description: 'Book directly for the best available rates and a more seamless experience.',
   buttonText: 'Browse by location',
   buttonLink: '/locations',
 };
-
-async function resolveProperty(
-  slug: string,
-  guestyId: string | undefined,
-  options?: RequestInit,
-): Promise<PropertyDetails | undefined> {
-  const isObjectId = /^[0-9a-fA-F]{24}$/.test(slug);
-  const idHint = guestyId || (isObjectId ? slug : undefined);
-
-  // Prefer Guesty id when present — slug lookup can miss until backend syncs
-  if (idHint) {
-    const byId = await getPropertyById<PropertyDetails>(idHint, options);
-    if (byId?.data) return byId.data;
-  }
-
-  const bySlug = await getPropertyBySlug<PropertyDetails>(slug, options);
-  return bySlug?.data || undefined;
-}
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const resolvedParams = await params;

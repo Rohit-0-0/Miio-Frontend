@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { apiClient } from '@/lib/api/client';
 import { PropertyDetails } from '@/types/property';
+import { cancellationSummary } from '@/lib/property/policies';
 import { MinimalPropertyCard } from '@/components/home/MinimalPropertyCard';
 import { buildImageUrl } from '@/lib/media/buildImageUrl';
 import Link from 'next/link';
@@ -328,7 +329,7 @@ export function CheckoutFlow({ property, searchParams, paymentTrustImages, cmsCo
             </div>
 
             <div className="text-[11px] text-[#7D7975]">
-              {cmsContent?.freeCancellationText || 'Free cancellation until 7 days before check-in.'}
+              {cancellationSummary(property, cmsContent?.freeCancellationText)}
             </div>
           </div>
         </div>
@@ -338,7 +339,7 @@ export function CheckoutFlow({ property, searchParams, paymentTrustImages, cmsCo
             The total updates once new dates are chosen.
           </div>
           <div className="text-[11px] text-[#7D7975]">
-            {cmsContent?.freeCancellationText || 'Free cancellation until 7 days before check-in.'}
+            {cancellationSummary(property, cmsContent?.freeCancellationText)}
           </div>
         </div>
       )}

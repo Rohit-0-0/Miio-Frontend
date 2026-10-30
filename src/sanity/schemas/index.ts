@@ -6,6 +6,7 @@ import { customImage } from './objects/customImage'
 import { navigationItem } from './objects/navigationItem'
 import { footerColumn } from './objects/footerColumn'
 import { socialLink } from './objects/socialLink'
+import { legalRichText } from './objects/legalRichText'
 
 import { siteSettings } from './singletons/siteSettings'
 import { navigation } from './singletons/navigation'
@@ -18,6 +19,9 @@ import { journal } from './documents/journal'
 import { location } from './documents/location'
 import { faq } from './documents/faq'
 import { review } from './documents/review'
+import { houseRules } from './documents/houseRules'
+import { legalPage } from './documents/legalPage'
+import { cancellationPolicy } from './documents/cancellationPolicy'
 
 import { partnerWithUs } from './singletons/partnerWithUs'
 import { journalPage } from './singletons/journalPage'
@@ -36,6 +40,7 @@ export const schemaTypes = [
   navigationItem,
   footerColumn,
   socialLink,
+  legalRichText,
 
   siteSettings,
   navigation,
@@ -52,6 +57,9 @@ export const schemaTypes = [
   location,
   faq,
   review,
+  houseRules,
+  cancellationPolicy,
+  legalPage,
   interiorDesignPage,
   interiorCaseStudy,
 ]

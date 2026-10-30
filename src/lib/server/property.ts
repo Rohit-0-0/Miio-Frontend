@@ -1,6 +1,6 @@
 import { env } from '@/config/env';
 import { ApiResponse, PaginatedResponse } from '@/types/api';
-import { PropertyDocument } from '@/types/property';
+import { LIFECYCLE_STATUS, PropertyDetails, PropertyDocument } from '@/types/property';
 
 function generateBaseSlug(title: string): string {
   return title
@@ -172,5 +172,37 @@ export async function getPropertyBySlug<T = PropertyDocument>(
   } catch (error) {
     console.error('Slug fallback via property listing failed:', error);
     return { success: false, message: 'Not found', data: null as unknown as T };
+  }
+}
+
+export async function resolveProperty<T = PropertyDocument>(
+  slug: string,
+  guestyId: string | undefined,
+  options?: RequestInit,
+): Promise<T | undefined> {
+  const isObjectId = /^[0-9a-fA-F]{24}$/.test(slug);
+  const idHint = guestyId || (isObjectId ? slug : undefined);
+
+  // Prefer Guesty id when present — slug lookup can miss until backend syncs
+  if (idHint) {
+    const byId = await getPropertyById<T>(idHint, options);
+    if (byId?.data) return byId.data;
+  }
+
+  const bySlug = await getPropertyBySlug<T>(slug, options);
+  return bySlug?.data || undefined;
+}
+
+export async function getVisibleProperty(
+  slug: string,
+  guestyId: string | undefined,
+): Promise<PropertyDetails | undefined> {
+  try {
+    const property = await resolveProperty<PropertyDetails>(slug, guestyId, { next: { revalidate: 300 } });
+    const isPublished = !property?.lifecycleStatus || property.lifecycleStatus === LIFECYCLE_STATUS.PUBLISHED;
+    return property && isPublished && property.visibleOnWebsite !== false ? property : undefined;
+  } catch (error) {
+    console.error('Failed to fetch property:', error);
+    return undefined;
   }
 }

@@ -24,6 +24,12 @@ const nextConfig: NextConfig = {
   // Prevent accidental jsdom pulls (e.g. isomorphic-dompurify) from breaking Netlify SSR
   serverExternalPackages: ['jsdom', 'isomorphic-dompurify'],
   transpilePackages: ['sonner'],
+  async redirects() {
+    return [
+      { source: '/terms', destination: '/legal/terms', permanent: true },
+      { source: '/privacy', destination: '/legal/privacy', permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;

@@ -94,6 +94,9 @@ export const structure: StructureResolver = (S) =>
               S.documentTypeListItem('journal').title('Journals'),
               S.documentTypeListItem('location').title('Locations'),
               S.documentTypeListItem('faq').title('FAQs'),
+              S.documentTypeListItem('houseRules').title('House Rules'),
+              S.documentTypeListItem('cancellationPolicy').title('Cancellation Policies'),
+              S.documentTypeListItem('legalPage').title('Legal Pages'),
               S.documentTypeListItem('interiorCaseStudy').title('Interior Case Studies'),
             ])
         ),
@@ -101,7 +104,7 @@ export const structure: StructureResolver = (S) =>
       // Hide all manually organized schemas from the main list
       ...S.documentTypeListItems().filter(
         (listItem) =>
-          !['siteSettings', 'navigation', 'footer', 'home', 'about', 'partnerWithUs', 'journalPage', 'locationsPage', 'staysPage', 'interiorDesignPage', 'propertyEditorial', 'journal', 'location', 'review', 'faq', 'interiorCaseStudy'].includes(
+          !['siteSettings', 'navigation', 'footer', 'home', 'about', 'partnerWithUs', 'journalPage', 'locationsPage', 'staysPage', 'interiorDesignPage', 'propertyEditorial', 'journal', 'location', 'review', 'faq', 'houseRules', 'cancellationPolicy', 'legalPage', 'interiorCaseStudy'].includes(
             listItem.getId() as string
           )
       )

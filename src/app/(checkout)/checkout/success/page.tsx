@@ -4,6 +4,7 @@ import { PropertyDetails } from '@/types/property';
 import { Logo } from '@/components/layout/Logo';
 import { format } from 'date-fns';
 import { BookingCard } from '@/components/properties/booking/BookingCard';
+import { LegalLinks } from '@/components/legal/LegalLinks';
 
 type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -142,10 +143,11 @@ export default async function SuccessPage({ searchParams }: Props) {
           </div>
           <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 text-white/50 order-2 md:order-1">
             <span>Stay with Miio. All rights reserved.</span>
-            <div className="flex gap-4 mt-1 md:mt-0">
-              <a href="/terms" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Terms</a>
-              <a href="/privacy" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Privacy</a>
-            </div>
+            <LegalLinks
+              openInNewTab
+              className="flex gap-4 mt-1 md:mt-0"
+              linkClassName="hover:text-white transition-colors"
+            />
           </div>
         </div>
       </footer>

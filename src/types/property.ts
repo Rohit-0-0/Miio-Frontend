@@ -1,3 +1,4 @@
+import type { PortableTextBlock } from 'next-sanity';
 import { BaseEntity, ImageAsset, SeoMetadata } from './common';
 import { PaginatedResponse } from '@/types/api';
 
@@ -76,6 +77,29 @@ export interface FAQ {
   answer: string;
 }
 
+export type HouseRuleCategory = 'checkInOut' | 'duringStay' | 'beforeYouLeave' | 'safety' | 'additional';
+
+export interface HouseRule {
+  category: HouseRuleCategory;
+  rule: string;
+  details?: string;
+  icon?: string;
+}
+
+export interface CancellationTier {
+  title: string;
+  timeframe?: string;
+  details?: string;
+}
+
+export interface CancellationPolicy {
+  title: string;
+  summary?: string;
+  intro?: string;
+  tiers: CancellationTier[];
+  details?: PortableTextBlock[];
+}
+
 export interface MiioStandard {
   icon: string;
   title: string;
@@ -95,6 +119,9 @@ export interface PropertyEditorialData {
   experience: string;
   miioStandard: MiioStandard[];
   faq: FAQ[];
+  houseRules?: HouseRule[];
+  houseRulesIntro?: string;
+  cancellationPolicy?: CancellationPolicy | null;
   featuredAmenityIds: string[];
   seo: {
     title: string;

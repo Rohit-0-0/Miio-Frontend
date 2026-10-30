@@ -4,6 +4,7 @@ import { getPropertyById } from '@/lib/server/property';
 import { PropertyDetails } from '@/types/property';
 import { Logo } from '@/components/layout/Logo';
 import { StripeWrapper } from '@/components/checkout/StripeWrapper';
+import { LegalLinks } from '@/components/legal/LegalLinks';
 
 type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -95,7 +96,12 @@ export default async function PaymentPage({ searchParams }: Props) {
       <footer className="w-full bg-[#1B1A17] text-white py-6">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-10 xl:px-[188px] flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="text-[10px] text-white/50 tracking-wider">
-            © Stay with Miio. All rights reserved. <span className="ml-4 cursor-default">Terms</span> <span className="ml-4 cursor-default">Privacy</span>
+            © Stay with Miio. All rights reserved.
+            <LegalLinks
+              openInNewTab
+              className="inline-flex gap-4 ml-4"
+              linkClassName="hover:text-white transition-colors"
+            />
           </div>
           {footerLogos.length > 0 && (
             <div className="flex gap-4 items-center">

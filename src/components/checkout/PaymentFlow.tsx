@@ -4,6 +4,7 @@ import { Elements, CardNumberElement, CardExpiryElement, CardCvcElement, Payment
 import { buildImageUrl } from '@/lib/media/buildImageUrl';
 import { PaymentLogos } from '@/components/layout/PaymentLogos';
 import { PropertyDetails } from '@/types/property';
+import { cancellationSummary, propertyPolicyHref } from '@/lib/property/policies';
 import { trackEvent } from '@/lib/analytics';
 import * as meta from '@/lib/analytics/meta';
 
@@ -402,7 +403,26 @@ function PaymentForm({
                 )}
               </div>
               <span className="text-[12px] text-[#1B1A17]">
-                I agree to the <span className="underline underline-offset-4 cursor-default">house rules and the cancellation policy</span>
+                I agree to the{' '}
+                <a
+                  href={propertyPolicyHref(property, 'house-rules')}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="underline underline-offset-4 hover:text-[#99583D] transition-colors"
+                >
+                  house rules
+                </a>{' '}
+                and the{' '}
+                <a
+                  href={propertyPolicyHref(property, 'cancellation-policy')}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="underline underline-offset-4 hover:text-[#99583D] transition-colors"
+                >
+                  cancellation policy
+                </a>
               </span>
             </label>
 
@@ -628,7 +648,7 @@ function PaymentForm({
               </div>
 
               <div className="text-[11px] text-[#7D7975]">
-                {cmsContent?.freeCancellationText || 'Free cancellation until 7 days before check-in.'}
+                {cancellationSummary(property, cmsContent?.freeCancellationText)}
               </div>
             </div>
           </div>
