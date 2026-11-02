@@ -29,13 +29,13 @@ export async function Footer() {
   // Fallback links matching Figma if Sanity isn't set up yet
   const fallbackCol1 = [
     { label: 'Site map', href: '' },
-    { label: 'Stays', href: '/stays' },
+    { label: 'Stays', href: '/properties' },
     { label: 'Locations', href: '/locations' },
     { label: 'Journal', href: '/journal' },
     { label: 'About', href: '/about' }
   ];
   const fallbackCol2 = [
-    { label: 'Partner With Us', href: '/partner' },
+    { label: 'Partner With Us', href: '/partner-with-us' },
     { label: 'Interior Design & Property Styling', href: '/interior-design' }
   ];
 
