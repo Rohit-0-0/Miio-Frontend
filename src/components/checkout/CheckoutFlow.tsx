@@ -324,10 +324,6 @@ export function CheckoutFlow({ property, searchParams, paymentTrustImages, cmsCo
               <span>${(total).toLocaleString()}</span>
             </div>
 
-            <div className="text-[12px]">
-              <a href="#" className="text-[#1B1A17] underline decoration-[#1B1A17]/30 hover:decoration-[#1B1A17]">{cmsContent?.addCodeText || 'Add a code'}</a>
-            </div>
-
             <div className="text-[11px] text-[#7D7975]">
               {cancellationSummary(property, cmsContent?.freeCancellationText)}
             </div>
