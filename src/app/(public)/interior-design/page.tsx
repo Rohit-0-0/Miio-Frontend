@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { BeforeAfterSlider } from '@/components/interior-design/BeforeAfterSlider';
 import { InteriorDesignForm } from '@/components/interior-design/InteriorDesignForm';
+import { TestimonialsSlider } from '@/components/interior-design/TestimonialsSlider';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -253,50 +254,11 @@ export default async function InteriorDesignPage() {
       </section>
 
       {/* SOCIAL PROOF */}
-      <section className="w-full bg-[#E8E1DA] py-24 md:py-32 overflow-hidden">
-        <div className="max-w-[1440px] mx-auto px-5 md:px-10 xl:px-[188px] mb-12 md:mb-24">
-          <p className="text-sm font-semibold uppercase tracking-widest text-center md:text-left">
-            {data?.socialProofSection?.eyebrow || 'DESIGNED BY MIIO. PROVEN THROUGH MIIO.'}
-          </p>
-        </div>
-
-        <div className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-8 px-5 md:px-10 xl:px-[188px] gap-8 md:gap-16 max-w-[1440px] mx-auto">
-          {(data?.socialProofSection?.testimonials && data.socialProofSection.testimonials.length > 0 ? data.socialProofSection.testimonials : [
-            {
-              quote: '[INSERT SELECTED GUEST REVIEW]',
-              author: 'A Miio-operated stay, designed and styled by our team.',
-              featuredImage: ''
-            }
-          ]).map((t: any, i: number) => (
-            <div key={i} className="min-w-[100%] md:min-w-[85%] lg:min-w-[100%] shrink-0 snap-center flex flex-col lg:flex-row gap-8 lg:gap-16 items-center">
-              <div className="flex-1 w-full relative aspect-[4/3] lg:aspect-square">
-                {t.featuredImage ? (
-                  <Image 
-                    src={t.featuredImage} 
-                    alt="Testimonial Featured" 
-                    fill 
-                    className="object-cover" 
-                  />
-                ) : (
-                  <div className="absolute inset-0 bg-[#D3C7B6]" />
-                )}
-              </div>
-              <div className="flex-1 flex flex-col justify-center text-center lg:text-left py-8">
-                <h3 className="text-2xl md:text-4xl lg:text-5xl font-serif leading-snug mb-8 max-w-3xl">
-                  "{t.quote}"
-                </h3>
-                <div>
-                  <p className="opacity-80 font-semibold mb-2">{t.author}</p>
-                  <p className="opacity-70 text-sm max-w-sm mx-auto lg:mx-0">
-                    {data?.socialProofSection?.supportingText || 'A Miio-operated stay, designed and styled by our team.'}
-                  </p>
-                  {t.date && <p className="opacity-60 text-sm mt-1">{t.date}</p>}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+      <TestimonialsSlider
+        testimonials={data?.socialProofSection?.testimonials}
+        eyebrow={data?.socialProofSection?.eyebrow}
+        supportingText={data?.socialProofSection?.supportingText}
+      />
 
       {/* WHO WE WORK WITH */}
       <section className="max-w-[1440px] mx-auto px-5 md:px-10 xl:px-[188px] py-24 md:py-32">
