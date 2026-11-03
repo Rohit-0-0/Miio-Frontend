@@ -15,10 +15,16 @@ export function CancellationPolicyContent({ policy }: { policy?: CancellationPol
       {(policy.summary || policy.intro) && (
         <div className="flex flex-col gap-4">
           {policy.summary && (
-            <p className="font-sans text-[16px] md:text-[18px] text-[#1B1A17] leading-[1.5]">{policy.summary}</p>
+            <p className="font-sans text-[16px] md:text-[18px] text-[#1B1A17] leading-[1.5] whitespace-pre-line">{policy.summary}</p>
           )}
           {policy.intro && (
-            <p className="font-sans text-[15px] md:text-[16px] text-[#5F4E44] font-light leading-[1.7]">{policy.intro}</p>
+            <div className="flex flex-col gap-3">
+              {policy.intro.split(/\n\n+/).map((para, i) => (
+                <p key={i} className="font-sans text-[15px] md:text-[16px] text-[#5F4E44] font-light leading-[1.7] whitespace-pre-line">
+                  {para.trim()}
+                </p>
+              ))}
+            </div>
           )}
         </div>
       )}

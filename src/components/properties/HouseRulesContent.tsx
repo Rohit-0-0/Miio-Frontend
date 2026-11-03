@@ -59,7 +59,13 @@ export function HouseRulesContent({ rules, intro }: HouseRulesContentProps) {
   return (
     <div className="flex flex-col gap-12">
       {intro && (
-        <p className="font-sans text-[15px] md:text-[16px] text-[#5F4E44] font-light leading-[1.7]">{intro}</p>
+        <div className="flex flex-col gap-3">
+          {intro.split(/\n\n+/).map((para, i) => (
+            <p key={i} className="font-sans text-[15px] md:text-[16px] text-[#5F4E44] font-light leading-[1.7] whitespace-pre-line">
+              {para.trim()}
+            </p>
+          ))}
+        </div>
       )}
 
       {groups.map((group) => (

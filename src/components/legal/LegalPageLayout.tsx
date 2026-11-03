@@ -41,7 +41,13 @@ export function LegalPageLayout({ title, eyebrow, summary, toc = [], backLink, c
               {title}
             </h1>
             {summary && (
-              <p className="mt-6 font-sans text-[16px] md:text-[18px] text-[#5F4E44] font-light leading-[1.6]">{summary}</p>
+              <div className="mt-6 flex flex-col gap-4">
+                {summary.split(/\n\n+/).map((para, i) => (
+                  <p key={i} className="font-sans text-[16px] md:text-[18px] text-[#5F4E44] font-light leading-[1.6] whitespace-pre-line">
+                    {para.trim()}
+                  </p>
+                ))}
+              </div>
             )}
           </header>
 
