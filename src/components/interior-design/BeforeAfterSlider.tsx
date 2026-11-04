@@ -50,7 +50,6 @@ export function BeforeAfterSlider({ beforeImage, afterImage, comparisons }: Befo
 
   const beforeRatio = activePair.beforeImage ? aspectRatios[activePair.beforeImage] : undefined;
   const afterRatio = activePair.afterImage ? aspectRatios[activePair.afterImage] : undefined;
-  const hasVerticalImage = (beforeRatio && beforeRatio < 0.95) || (afterRatio && afterRatio < 0.95);
   const bothVertical = Boolean(beforeRatio && beforeRatio < 0.95 && afterRatio && afterRatio < 0.95);
 
   const handleMove = (clientX: number) => {
@@ -61,18 +60,35 @@ export function BeforeAfterSlider({ beforeImage, afterImage, comparisons }: Befo
     setSliderPosition(percent);
   };
 
-  const handleMouseMove = (e: MouseEvent | React.MouseEvent) => {
-    if (!isDragging) return;
-    handleMove((e as MouseEvent).clientX);
+  const handleMouseDown = (e: React.MouseEvent) => {
+    // If the click originated on a button or control, do not move the slider or start drag
+    if ((e.target as HTMLElement).closest('button, .slider-control')) {
+      return;
+    }
+    setIsDragging(true);
+    handleMove(e.clientX);
   };
 
-  const handleTouchMove = (e: TouchEvent | React.TouchEvent) => {
-    if (!isDragging) return;
-    handleMove((e as TouchEvent).touches[0].clientX);
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if ((e.target as HTMLElement).closest('button, .slider-control')) {
+      return;
+    }
+    setIsDragging(true);
+    handleMove(e.touches[0].clientX);
   };
 
   useEffect(() => {
     const stopDragging = () => setIsDragging(false);
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isDragging) return;
+      handleMove(e.clientX);
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isDragging) return;
+      handleMove(e.touches[0].clientX);
+    };
 
     if (isDragging) {
       window.addEventListener('mousemove', handleMouseMove);
@@ -89,16 +105,34 @@ export function BeforeAfterSlider({ beforeImage, afterImage, comparisons }: Befo
     };
   }, [isDragging]);
 
-  // Handle escape key to exit fullscreen
+  // Sync with native fullscreen change events
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isFullscreen) {
+    const onFullscreenChange = () => {
+      setIsFullscreen(Boolean(document.fullscreenElement));
+    };
+    document.addEventListener('fullscreenchange', onFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', onFullscreenChange);
+  }, []);
+
+  const toggleFullscreen = async () => {
+    try {
+      if (!document.fullscreenElement) {
+        if (containerRef.current?.requestFullscreen) {
+          await containerRef.current.requestFullscreen();
+        } else {
+          setIsFullscreen(true);
+        }
+      } else {
+        if (document.exitFullscreen) {
+          await document.exitFullscreen();
+        }
         setIsFullscreen(false);
       }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isFullscreen]);
+    } catch {
+      // Fallback to overlay state if browser blocks requestFullscreen
+      setIsFullscreen((prev) => !prev);
+    }
+  };
 
   const selectTab = (idx: number) => {
     setActiveTab(idx);
@@ -110,155 +144,19 @@ export function BeforeAfterSlider({ beforeImage, afterImage, comparisons }: Befo
   }
 
   // Determine container aspect ratio based on orientation
-  const containerAspectClass = bothVertical
+  const containerAspectClass = isFullscreen
+    ? 'h-full w-full'
+    : bothVertical
     ? 'aspect-[4/5] sm:aspect-[3/4] max-w-xl mx-auto'
-    : hasVerticalImage && fitMode === 'contain'
-    ? 'aspect-[4/3] md:aspect-[16/10]'
     : 'aspect-[4/3] md:aspect-[3/2]';
 
   const isContain = fitMode === 'contain';
 
-  const sliderBody = (
-    <div
-      ref={containerRef}
-      className={`relative w-full ${isFullscreen ? 'h-[85vh] w-[92vw] max-w-7xl' : containerAspectClass} bg-[#1F1915] overflow-hidden cursor-ew-resize select-none rounded-xl transition-[max-width,aspect-ratio] duration-300 shadow-sm`}
-      onMouseDown={(e) => {
-        setIsDragging(true);
-        handleMove(e.clientX);
-      }}
-      onTouchStart={(e) => {
-        setIsDragging(true);
-        handleMove(e.touches[0].clientX);
-      }}
-    >
-      {/* BEFORE IMAGE (Bottom Layer) */}
-      {activePair.beforeImage && (
-        <>
-          {/* Ambient Blurred Backdrop when fitMode is contain */}
-          {isContain && (
-            <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-25 filter blur-2xl scale-110">
-              <Image
-                src={activePair.beforeImage}
-                alt=""
-                fill
-                className="object-cover"
-                sizes="100vw"
-                aria-hidden="true"
-              />
-            </div>
-          )}
-          <Image
-            src={activePair.beforeImage}
-            alt={activePair.label ? `${activePair.label} - Before` : 'Before'}
-            fill
-            className={isContain ? 'object-contain' : 'object-cover'}
-            sizes="(max-width: 768px) 100vw, (max-width: 1440px) 90vw, 1400px"
-            priority
-            onLoad={(e) => handleImageLoad(activePair.beforeImage, e)}
-          />
-        </>
-      )}
-      <div className="absolute top-4 left-4 bg-black/70 backdrop-blur-sm text-white px-3 py-1 text-xs tracking-widest uppercase rounded shadow-sm z-10 pointer-events-none">
-        Before
-      </div>
-
-      {/* AFTER IMAGE (Top Layer - Clipped) */}
-      <div
-        className="absolute inset-0 w-full h-full overflow-hidden"
-        style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
-      >
-        {activePair.afterImage && (
-          <>
-            {/* Ambient Blurred Backdrop when fitMode is contain */}
-            {isContain && (
-              <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-25 filter blur-2xl scale-110">
-                <Image
-                  src={activePair.afterImage}
-                  alt=""
-                  fill
-                  className="object-cover"
-                  sizes="100vw"
-                  aria-hidden="true"
-                />
-              </div>
-            )}
-            <Image
-              src={activePair.afterImage}
-              alt={activePair.label ? `${activePair.label} - After` : 'After'}
-              fill
-              className={isContain ? 'object-contain' : 'object-cover'}
-              sizes="(max-width: 768px) 100vw, (max-width: 1440px) 90vw, 1400px"
-              priority
-              onLoad={(e) => handleImageLoad(activePair.afterImage, e)}
-            />
-          </>
-        )}
-        <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm text-black px-3 py-1 text-xs tracking-widest uppercase rounded shadow-sm z-10 pointer-events-none">
-          After
-        </div>
-      </div>
-
-      {/* FLOATING ACTION BUTTONS: Fit / Cover Toggle & Fullscreen */}
-      <div className="absolute bottom-4 right-4 z-20 flex items-center gap-2">
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            setFitMode((prev) => (prev === 'cover' ? 'contain' : 'cover'));
-          }}
-          title={isContain ? 'Fill container frame' : 'Fit full uncropped image'}
-          className="bg-black/60 hover:bg-black/85 text-white/90 hover:text-white px-3 py-1.5 rounded-full text-xs tracking-wider uppercase backdrop-blur-md transition-all flex items-center gap-1.5 shadow-md border border-white/10"
-        >
-          {isContain ? (
-            <>
-              <Shrink className="w-3.5 h-3.5" />
-              <span>Fill Frame</span>
-            </>
-          ) : (
-            <>
-              <Expand className="w-3.5 h-3.5" />
-              <span>Fit Full Image</span>
-            </>
-          )}
-        </button>
-
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsFullscreen((prev) => !prev);
-          }}
-          title={isFullscreen ? 'Exit fullscreen' : 'View fullscreen'}
-          className="w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white/90 hover:text-white flex items-center justify-center backdrop-blur-md transition-all shadow-md border border-white/10"
-        >
-          {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
-        </button>
-      </div>
-
-      {/* SLIDER HANDLE */}
-      <div
-        className="absolute top-0 bottom-0 w-0.5 bg-white cursor-ew-resize shadow-[0_0_12px_rgba(0,0,0,0.5)] z-20"
-        style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}
-      >
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-xl border border-black/10">
-          <svg
-            className="w-4 h-4 text-[#241D19]"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M8 9l4-4 4 4m0 6l-4 4-4-4"
-              transform="rotate(90 12 12)"
-            />
-          </svg>
-        </div>
-      </div>
-    </div>
-  );
+  // Smooth label fade:
+  // When slider is dragged past 85% to the right (viewing After), hide "Before" badge
+  const beforeBadgeOpacity = sliderPosition > 85 ? Math.max(0, (95 - sliderPosition) / 10) : 1;
+  // When slider is dragged past 15% to the left (viewing Before), hide "After" badge
+  const afterBadgeOpacity = sliderPosition < 15 ? Math.max(0, (sliderPosition - 5) / 10) : 1;
 
   return (
     <div className="w-full flex flex-col gap-4 font-[family-name:var(--font-instrument-sans)]">
@@ -286,30 +184,155 @@ export function BeforeAfterSlider({ beforeImage, afterImage, comparisons }: Befo
         </div>
       )}
 
-      {/* Standard Slider Viewport */}
-      {sliderBody}
+      {/* Before / After Slider Container */}
+      <div
+        ref={containerRef}
+        className={`relative w-full ${containerAspectClass} bg-[#1F1915] overflow-hidden cursor-ew-resize select-none rounded-xl transition-all duration-300 shadow-sm`}
+        onMouseDown={handleMouseDown}
+        onTouchStart={handleTouchStart}
+      >
+        {/* BEFORE IMAGE (Bottom Layer) */}
+        {activePair.beforeImage && (
+          <>
+            {/* Ambient Blurred Backdrop when fitMode is contain */}
+            {isContain && (
+              <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-25 filter blur-2xl scale-110">
+                <Image
+                  src={activePair.beforeImage}
+                  alt=""
+                  fill
+                  className="object-cover"
+                  sizes="100vw"
+                  aria-hidden="true"
+                />
+              </div>
+            )}
+            <Image
+              src={activePair.beforeImage}
+              alt={activePair.label ? `${activePair.label} - Before` : 'Before'}
+              fill
+              className={isContain ? 'object-contain' : 'object-cover'}
+              sizes="(max-width: 768px) 100vw, (max-width: 1440px) 90vw, 1400px"
+              priority
+              onLoad={(e) => handleImageLoad(activePair.beforeImage, e)}
+            />
+          </>
+        )}
 
-      {/* Fullscreen Lightbox Modal */}
-      {isFullscreen && (
+        {/* BEFORE LABEL: Fades out completely when After image is opened fully */}
         <div
-          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-4 sm:p-8"
-          onClick={() => setIsFullscreen(false)}
+          className="absolute top-4 left-4 bg-black/75 backdrop-blur-sm text-white px-3 py-1 text-xs tracking-widest uppercase rounded shadow-sm z-10 pointer-events-none transition-opacity duration-200"
+          style={{ opacity: beforeBadgeOpacity }}
         >
-          <div className="w-full max-w-7xl flex items-center justify-between mb-4 text-[#FEF6EE]">
-            <p className="text-sm uppercase tracking-widest opacity-80">
-              {activePair.label || 'Project Comparison'} — Drag slider to compare
-            </p>
-            <button
-              type="button"
-              onClick={() => setIsFullscreen(false)}
-              className="px-4 py-1.5 rounded-full border border-white/20 hover:bg-white hover:text-black transition-colors text-xs uppercase tracking-widest"
-            >
-              Close ✕
-            </button>
-          </div>
-          <div onClick={(e) => e.stopPropagation()}>{sliderBody}</div>
+          Before
         </div>
-      )}
+
+        {/* AFTER IMAGE (Top Layer - Clipped)
+            Crucial: bg-[#1F1915] ensures the Before image NEVER bleeds through when After is revealed */}
+        <div
+          className="absolute inset-0 w-full h-full overflow-hidden bg-[#1F1915]"
+          style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
+        >
+          {activePair.afterImage && (
+            <>
+              {/* Ambient Blurred Backdrop when fitMode is contain */}
+              {isContain && (
+                <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-25 filter blur-2xl scale-110">
+                  <Image
+                    src={activePair.afterImage}
+                    alt=""
+                    fill
+                    className="object-cover"
+                    sizes="100vw"
+                    aria-hidden="true"
+                  />
+                </div>
+              )}
+              <Image
+                src={activePair.afterImage}
+                alt={activePair.label ? `${activePair.label} - After` : 'After'}
+                fill
+                className={isContain ? 'object-contain' : 'object-cover'}
+                sizes="(max-width: 768px) 100vw, (max-width: 1440px) 90vw, 1400px"
+                priority
+                onLoad={(e) => handleImageLoad(activePair.afterImage, e)}
+              />
+            </>
+          )}
+
+          {/* AFTER LABEL: Fades out completely when Before image is opened fully */}
+          <div
+            className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm text-black px-3 py-1 text-xs tracking-widest uppercase rounded shadow-sm z-10 pointer-events-none transition-opacity duration-200"
+            style={{ opacity: afterBadgeOpacity }}
+          >
+            After
+          </div>
+        </div>
+
+        {/* FLOATING ACTION CONTROLS: Fit/Fill Toggle & Fullscreen Expand Button */}
+        <div className="slider-control absolute bottom-4 right-4 z-30 flex items-center gap-2">
+          <button
+            type="button"
+            onMouseDown={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation();
+              setFitMode((prev) => (prev === 'cover' ? 'contain' : 'cover'));
+            }}
+            title={isContain ? 'Fill container frame' : 'Fit full uncropped image'}
+            className="bg-black/70 hover:bg-black/90 text-white/95 hover:text-white px-3.5 py-1.5 rounded-full text-xs tracking-wider uppercase backdrop-blur-md transition-all flex items-center gap-1.5 shadow-md border border-white/15 cursor-pointer focus:outline-none"
+          >
+            {isContain ? (
+              <>
+                <Shrink className="w-3.5 h-3.5" />
+                <span>Fill Frame</span>
+              </>
+            ) : (
+              <>
+                <Expand className="w-3.5 h-3.5" />
+                <span>Fit Image</span>
+              </>
+            )}
+          </button>
+
+          <button
+            type="button"
+            onMouseDown={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleFullscreen();
+            }}
+            title={isFullscreen ? 'Exit fullscreen' : 'View full screen'}
+            className="w-8 h-8 rounded-full bg-black/70 hover:bg-black/90 text-white/95 hover:text-white flex items-center justify-center backdrop-blur-md transition-all shadow-md border border-white/15 cursor-pointer focus:outline-none"
+          >
+            {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+          </button>
+        </div>
+
+        {/* SLIDER DIVIDER HANDLE */}
+        <div
+          className="absolute top-0 bottom-0 w-0.5 bg-white cursor-ew-resize shadow-[0_0_12px_rgba(0,0,0,0.5)] z-20 pointer-events-none"
+          style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}
+        >
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-xl border border-black/10 pointer-events-auto">
+            <svg
+              className="w-4 h-4 text-[#241D19]"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8 9l4-4 4 4m0 6l-4 4-4-4"
+                transform="rotate(90 12 12)"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
