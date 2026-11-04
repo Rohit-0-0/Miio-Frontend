@@ -279,7 +279,7 @@ export function BeforeAfterSlider({ beforeImage, afterImage, comparisons }: Befo
               setFitMode((prev) => (prev === 'cover' ? 'contain' : 'cover'));
             }}
             title={isContain ? 'Fill container frame' : 'Fit full uncropped image'}
-            className="bg-black/70 hover:bg-black/90 text-white/95 hover:text-white px-3.5 py-1.5 rounded-full text-xs tracking-wider uppercase backdrop-blur-md transition-all flex items-center gap-1.5 shadow-md border border-white/15 cursor-pointer focus:outline-none"
+            className="bg-[#1A1513] hover:bg-black text-[#FEF6EE] px-3.5 py-1.5 rounded-full text-xs tracking-wider uppercase transition-all flex items-center gap-1.5 shadow-xl border border-white/20 cursor-pointer focus:outline-none"
           >
             {isContain ? (
               <>
@@ -304,7 +304,7 @@ export function BeforeAfterSlider({ beforeImage, afterImage, comparisons }: Befo
               toggleFullscreen();
             }}
             title={isFullscreen ? 'Exit fullscreen' : 'View full screen'}
-            className="w-8 h-8 rounded-full bg-black/70 hover:bg-black/90 text-white/95 hover:text-white flex items-center justify-center backdrop-blur-md transition-all shadow-md border border-white/15 cursor-pointer focus:outline-none"
+            className="w-8 h-8 rounded-full bg-[#1A1513] hover:bg-black text-[#FEF6EE] flex items-center justify-center transition-all shadow-xl border border-white/20 cursor-pointer focus:outline-none"
           >
             {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
           </button>

@@ -49,13 +49,13 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
 
     if (property?.editorial?.seo) {
       return {
-        title: property.editorial.seo.title || property.title,
+        title: property.editorial.seo.title || `${property.title} | Luxury ${property.location?.city || 'Sydney'} Stay`,
         description: property.editorial.seo.description || property.shortDescription || '',
         alternates: {
           canonical: `/properties/${slug}`,
         },
         openGraph: {
-          title: property.editorial.seo.title || property.title,
+          title: property.editorial.seo.title || `${property.title} | Luxury ${property.location?.city || 'Sydney'} Stay`,
           description: property.editorial.seo.description || property.shortDescription || '',
           url: `/properties/${slug}`,
           images: property.gallery?.[0]
@@ -68,7 +68,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
         },
         twitter: {
           card: 'summary_large_image',
-          title: property.editorial.seo.title || property.title,
+          title: property.editorial.seo.title || `${property.title} | Luxury ${property.location?.city || 'Sydney'} Stay`,
           description: property.editorial.seo.description || property.shortDescription || '',
           images: property.gallery?.[0]
             ? [
@@ -83,14 +83,14 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
 
     if (property) {
       return {
-        title: property.title,
-        description: property.shortDescription || '',
+        title: `${property.title} | Luxury ${property.location?.city || 'Sydney'} Stay`,
+        description: property.shortDescription || `Experience ${property.title}, an exclusive boutique luxury stay in ${property.location?.city || 'Sydney'}. Book directly with Stay with Miio.`,
         alternates: {
           canonical: `/properties/${slug}`,
         },
         openGraph: {
-          title: property.title,
-          description: property.shortDescription || '',
+          title: `${property.title} | Luxury ${property.location?.city || 'Sydney'} Stay`,
+          description: property.shortDescription || `Experience ${property.title}, an exclusive boutique luxury stay in ${property.location?.city || 'Sydney'}. Book directly with Stay with Miio.`,
           url: `/properties/${slug}`,
           images: property.gallery?.[0]
             ? [
@@ -102,8 +102,8 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
         },
         twitter: {
           card: 'summary_large_image',
-          title: property.title,
-          description: property.shortDescription || '',
+          title: `${property.title} | Luxury ${property.location?.city || 'Sydney'} Stay`,
+          description: property.shortDescription || `Experience ${property.title}, an exclusive boutique luxury stay in ${property.location?.city || 'Sydney'}. Book directly with Stay with Miio.`,
           images: property.gallery?.[0]
             ? [
                 buildImageUrl(
@@ -202,13 +202,45 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
 
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'Accommodation',
+    '@type': 'VacationRental',
     name: property.nickname || property.title,
     description: property.shortDescription,
     image: property.gallery?.[0] ? buildImageUrl(property.gallery[0].assetId || (property.gallery[0] as any).asset?._ref || '') : undefined,
     numberOfRooms: property.bedrooms,
     bed: property.beds,
-    url: `${env.NEXT_PUBLIC_APP_URL}/properties/${slug}`,
+    url: `${env.NEXT_PUBLIC_APP_URL || 'https://www.staywithmiio.com'}/properties/${slug}`,
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: property.location?.city || 'Sydney',
+      addressRegion: property.location?.state || 'NSW',
+      addressCountry: property.location?.country || 'Australia',
+    },
+    ...(property.location?.latitude && property.location?.longitude
+      ? {
+          geo: {
+            '@type': 'GeoCoordinates',
+            latitude: property.location.latitude,
+            longitude: property.location.longitude,
+          },
+        }
+      : {}),
+    ...(property.maxGuests
+      ? {
+          occupancy: {
+            '@type': 'QuantitativeValue',
+            maxValue: property.maxGuests,
+          },
+        }
+      : {}),
+    ...(property.reviews?.total && property.reviews.total > 0
+      ? {
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: property.reviews.avg,
+            reviewCount: property.reviews.total,
+          },
+        }
+      : {}),
   };
 
   return (

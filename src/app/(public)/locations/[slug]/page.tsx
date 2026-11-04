@@ -37,11 +37,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: 'Not Found | Miio' };
   }
 
-  const seoTitle = location.seo?.title || `${location.title} | Miio`;
+  const seoTitle = location.seo?.title || `Luxury Accommodation & Stays in ${location.title}`;
   const seoDesc =
     location.seo?.description ||
     location.description ||
-    `Discover ${location.title} with Miio.`;
+    `Discover curated luxury stays, boutique holiday homes, and accommodation in ${location.title}, Sydney with Stay with Miio.`;
 
   const ogImage =
     location.heroImage?.asset?._ref ||
@@ -100,6 +100,18 @@ export default async function LocationDetailPage({ params }: Props) {
 
   return (
     <article className="min-h-screen bg-[#FEF6EE]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'TouristDestination',
+            name: location.title,
+            description: location.description || `Luxury accommodation and boutique stays in ${location.title}, Sydney.`,
+            url: `${env.NEXT_PUBLIC_APP_URL || 'https://www.staywithmiio.com'}/locations/${slug}`,
+          }),
+        }}
+      />
       <LocationHero title={location.title} image={location.heroImage} />
 
       {/* Intro + highlights card (Figma: text left, white card right) */}

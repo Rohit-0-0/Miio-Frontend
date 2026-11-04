@@ -6,8 +6,8 @@ import { SectionHeader } from '@/components/shared/SectionHeader';
 import { editorialService } from '@/services/about.service';
 
 export const metadata: Metadata = {
-  title: 'Locations | Miio',
-  description: 'Explore our curated collection of luxury locations.',
+  title: 'Luxury Accommodation & Boutique Stays in Sydney',
+  description: 'Explore curated boutique holiday homes, designer apartments, and luxury accommodation across Bondi, Paddington, Vaucluse, and Sydney.',
 };
 
 export default async function LocationsPage() {
