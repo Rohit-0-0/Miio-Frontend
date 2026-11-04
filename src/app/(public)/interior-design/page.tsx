@@ -123,6 +123,7 @@ export default async function InteriorDesignPage() {
                   <BeforeAfterSlider 
                     beforeImage={study.beforeImage ? buildImageUrl(study.beforeImage.asset?._ref || study.beforeImage) || '' : "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=2070&auto=format&fit=crop"} 
                     afterImage={study.afterImage ? buildImageUrl(study.afterImage.asset?._ref || study.afterImage) || '' : "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=2070&auto=format&fit=crop"} 
+                    comparisons={study.comparisons}
                   />
                 </div>
               </div>

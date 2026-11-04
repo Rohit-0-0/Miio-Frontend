@@ -27,7 +27,12 @@ export async function getInteriorDesignPage() {
           "pdfUrl": pdfDownload.asset->url,
           linkText,
           "beforeImage": beforeImage.asset->url,
-          "afterImage": afterImage.asset->url
+          "afterImage": afterImage.asset->url,
+          "comparisons": comparisons[]{
+            label,
+            "beforeImage": beforeImage.asset->url,
+            "afterImage": afterImage.asset->url
+          }
         }
       },
       services {

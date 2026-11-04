@@ -46,14 +46,70 @@ export const interiorCaseStudy = defineType({
       title: 'Before Image',
       type: 'image',
       options: { hotspot: true },
-      validation: (Rule) => Rule.required(),
+      validation: (Rule) =>
+        Rule.custom((value, context: any) => {
+          const comparisons = context?.document?.comparisons;
+          if (Array.isArray(comparisons) && comparisons.length > 0) return true;
+          return value ? true : 'Before image is required when no comparisons are added';
+        }),
     }),
     defineField({
       name: 'afterImage',
       title: 'After Image',
       type: 'image',
       options: { hotspot: true },
-      validation: (Rule) => Rule.required(),
+      validation: (Rule) =>
+        Rule.custom((value, context: any) => {
+          const comparisons = context?.document?.comparisons;
+          if (Array.isArray(comparisons) && comparisons.length > 0) return true;
+          return value ? true : 'After image is required when no comparisons are added';
+        }),
+    }),
+    defineField({
+      name: 'comparisons',
+      title: 'Multiple Before / After Comparisons (Optional)',
+      description: 'Add multiple rooms/spaces for this project (e.g. Living Area, Bedroom, Kitchen). If provided, visitors can switch between rooms using tabs.',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'label',
+              title: 'Space / Room Label',
+              type: 'string',
+              description: 'e.g. Living Area, Master Bedroom, Kitchen',
+              validation: (Rule: any) => Rule.required(),
+            },
+            {
+              name: 'beforeImage',
+              title: 'Before Image',
+              type: 'image',
+              options: { hotspot: true },
+              validation: (Rule: any) => Rule.required(),
+            },
+            {
+              name: 'afterImage',
+              title: 'After Image',
+              type: 'image',
+              options: { hotspot: true },
+              validation: (Rule: any) => Rule.required(),
+            },
+          ],
+          preview: {
+            select: {
+              title: 'label',
+              media: 'afterImage',
+            },
+            prepare({ title, media }: any) {
+              return {
+                title: title || 'Comparison Pair',
+                media,
+              };
+            },
+          },
+        },
+      ],
     }),
   ],
   preview: {
