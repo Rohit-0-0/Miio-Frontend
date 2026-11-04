@@ -13,7 +13,7 @@ export const revalidate = 0;
 export async function generateMetadata(): Promise<Metadata> {
   const data = await getInteriorDesignPage();
   return {
-    title: data?.seo?.title || 'Interior Design & Property Styling | Miio',
+    title: data?.seo?.title || 'Interior Design & Property Styling',
     description: data?.seo?.description || 'Interior design and property styling for short-term rentals, serviced accommodation, investment properties and hospitality spaces across the UK and Australia.',
   };
 }

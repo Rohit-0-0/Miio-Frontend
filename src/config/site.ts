@@ -1,4 +1,4 @@
 export const siteConfig = {
-  name: 'Miio Frontend',
-  description: 'Scalable and production-ready frontend for Miio.',
+  name: 'Stay with Miio',
+  description: 'Design-led short stays, curated interiors, and boutique accommodation.',
 };
