@@ -120,9 +120,9 @@ export function TestimonialsSlider({
                 </blockquote>
                 <div>
                   <p className="font-semibold text-[#241D19] text-base mb-1">{current.author}</p>
-                  <p className="text-sm text-[#241D19]/70 max-w-md mx-auto lg:mx-0">
+                  {/* <p className="text-sm text-[#241D19]/70 max-w-md mx-auto lg:mx-0">
                     {supportingText}
-                  </p>
+                  </p> */}
                   {current.date && (
                     <p className="text-xs text-[#241D19]/50 mt-1">{current.date}</p>
                   )}
@@ -141,7 +141,7 @@ export function TestimonialsSlider({
                 <p className="font-semibold text-[#241D19] text-base md:text-lg mb-1">
                   {current.author}
                 </p>
-                <p className="text-sm text-[#241D19]/70 max-w-md mx-auto">{supportingText}</p>
+                {/* <p className="text-sm text-[#241D19]/70 max-w-md mx-auto">{supportingText}</p> */}
                 {current.date && (
                   <p className="text-xs text-[#241D19]/50 mt-1">{current.date}</p>
                 )}

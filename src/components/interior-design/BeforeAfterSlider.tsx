@@ -61,7 +61,7 @@ export function BeforeAfterSlider({ beforeImage, afterImage, comparisons }: Befo
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    // If the click originated on a button or control, do not move the slider or start drag
+    // If click originated from any button or slider control, prevent moving the slider
     if ((e.target as HTMLElement).closest('button, .slider-control')) {
       return;
     }
@@ -129,7 +129,6 @@ export function BeforeAfterSlider({ beforeImage, afterImage, comparisons }: Befo
         setIsFullscreen(false);
       }
     } catch {
-      // Fallback to overlay state if browser blocks requestFullscreen
       setIsFullscreen((prev) => !prev);
     }
   };
@@ -152,11 +151,11 @@ export function BeforeAfterSlider({ beforeImage, afterImage, comparisons }: Befo
 
   const isContain = fitMode === 'contain';
 
-  // Smooth label fade:
-  // When slider is dragged past 85% to the right (viewing After), hide "Before" badge
-  const beforeBadgeOpacity = sliderPosition > 85 ? Math.max(0, (95 - sliderPosition) / 10) : 1;
-  // When slider is dragged past 15% to the left (viewing Before), hide "After" badge
-  const afterBadgeOpacity = sliderPosition < 15 ? Math.max(0, (sliderPosition - 5) / 10) : 1;
+  // Dynamic Opacity for Labels:
+  // Left side shows AFTER image -> fades out when slider is dragged to the far left (< 15%)
+  const afterLabelOpacity = sliderPosition < 15 ? Math.max(0, (sliderPosition - 5) / 10) : 1;
+  // Right side shows BEFORE image -> fades out when slider is dragged to the far right (> 85%)
+  const beforeLabelOpacity = sliderPosition > 85 ? Math.max(0, (95 - sliderPosition) / 10) : 1;
 
   return (
     <div className="w-full flex flex-col gap-4 font-[family-name:var(--font-instrument-sans)]">
@@ -184,17 +183,16 @@ export function BeforeAfterSlider({ beforeImage, afterImage, comparisons }: Befo
         </div>
       )}
 
-      {/* Before / After Slider Container */}
+      {/* Before / After Slider Viewport */}
       <div
         ref={containerRef}
         className={`relative w-full ${containerAspectClass} bg-[#1F1915] overflow-hidden cursor-ew-resize select-none rounded-xl transition-all duration-300 shadow-sm`}
         onMouseDown={handleMouseDown}
         onTouchStart={handleTouchStart}
       >
-        {/* BEFORE IMAGE (Bottom Layer) */}
+        {/* BOTTOM LAYER: BEFORE IMAGE (Visible on the RIGHT side of the handle) */}
         {activePair.beforeImage && (
           <>
-            {/* Ambient Blurred Backdrop when fitMode is contain */}
             {isContain && (
               <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-25 filter blur-2xl scale-110">
                 <Image
@@ -219,23 +217,14 @@ export function BeforeAfterSlider({ beforeImage, afterImage, comparisons }: Befo
           </>
         )}
 
-        {/* BEFORE LABEL: Fades out completely when After image is opened fully */}
-        <div
-          className="absolute top-4 left-4 bg-black/75 backdrop-blur-sm text-white px-3 py-1 text-xs tracking-widest uppercase rounded shadow-sm z-10 pointer-events-none transition-opacity duration-200"
-          style={{ opacity: beforeBadgeOpacity }}
-        >
-          Before
-        </div>
-
-        {/* AFTER IMAGE (Top Layer - Clipped)
-            Crucial: bg-[#1F1915] ensures the Before image NEVER bleeds through when After is revealed */}
+        {/* TOP LAYER: AFTER IMAGE (Visible on the LEFT side of the handle, clipped from right)
+            Solid background bg-[#1F1915] guarantees the Before image never bleeds through */}
         <div
           className="absolute inset-0 w-full h-full overflow-hidden bg-[#1F1915]"
           style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
         >
           {activePair.afterImage && (
             <>
-              {/* Ambient Blurred Backdrop when fitMode is contain */}
               {isContain && (
                 <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-25 filter blur-2xl scale-110">
                   <Image
@@ -259,14 +248,23 @@ export function BeforeAfterSlider({ beforeImage, afterImage, comparisons }: Befo
               />
             </>
           )}
+        </div>
 
-          {/* AFTER LABEL: Fades out completely when Before image is opened fully */}
-          <div
-            className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm text-black px-3 py-1 text-xs tracking-widest uppercase rounded shadow-sm z-10 pointer-events-none transition-opacity duration-200"
-            style={{ opacity: afterBadgeOpacity }}
-          >
-            After
-          </div>
+        {/* --- LABELS --- */}
+        {/* AFTER LABEL: On TOP-LEFT (identifies the After image on the left) */}
+        <div
+          className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm text-black font-sans px-3 py-1 text-xs tracking-widest uppercase rounded shadow-sm z-20 pointer-events-none transition-opacity duration-200"
+          style={{ opacity: afterLabelOpacity }}
+        >
+          After
+        </div>
+
+        {/* BEFORE LABEL: On TOP-RIGHT (identifies the Before image on the right) */}
+        <div
+          className="absolute top-4 right-4 bg-black/75 backdrop-blur-sm text-white font-sans px-3 py-1 text-xs tracking-widest uppercase rounded shadow-sm z-20 pointer-events-none transition-opacity duration-200"
+          style={{ opacity: beforeLabelOpacity }}
+        >
+          Before
         </div>
 
         {/* FLOATING ACTION CONTROLS: Fit/Fill Toggle & Fullscreen Expand Button */}
@@ -275,6 +273,7 @@ export function BeforeAfterSlider({ beforeImage, afterImage, comparisons }: Befo
             type="button"
             onMouseDown={(e) => e.stopPropagation()}
             onTouchStart={(e) => e.stopPropagation()}
+            onPointerDown={(e) => e.stopPropagation()}
             onClick={(e) => {
               e.stopPropagation();
               setFitMode((prev) => (prev === 'cover' ? 'contain' : 'cover'));
@@ -299,6 +298,7 @@ export function BeforeAfterSlider({ beforeImage, afterImage, comparisons }: Befo
             type="button"
             onMouseDown={(e) => e.stopPropagation()}
             onTouchStart={(e) => e.stopPropagation()}
+            onPointerDown={(e) => e.stopPropagation()}
             onClick={(e) => {
               e.stopPropagation();
               toggleFullscreen();
