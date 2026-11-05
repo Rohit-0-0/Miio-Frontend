@@ -89,7 +89,7 @@ export const siteSettings = defineType({
           name: 'href',
           title: 'Link URL',
           type: 'string',
-          initialValue: 'https://airbnb.com'
+          initialValue: '/reviews'
         }
       ]
     })

@@ -79,6 +79,13 @@ export const structure: StructureResolver = (S) =>
                     .schemaType('interiorDesignPage')
                     .documentId('interiorDesignPage')
                 ),
+              S.listItem()
+                .title('Reviews Page')
+                .child(
+                  S.document()
+                    .schemaType('reviewsPage')
+                    .documentId('reviewsPage')
+                ),
             ])
         ),
       S.divider(),

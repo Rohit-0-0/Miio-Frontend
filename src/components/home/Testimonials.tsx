@@ -6,7 +6,14 @@ import Link from 'next/link';
 import { TestimonialsSection } from '@/types/homepage';
 
 function sourceLabel(source?: string, location?: string) {
-  const raw = (source || location || '').trim();
+  const s = (source || '').trim();
+  const l = (location || '').trim();
+  if (s && l) {
+    const sClean = s.replace(/^from\s+/i, '');
+    const lClean = l.replace(/^from\s+/i, '');
+    return `from ${sClean} · ${lClean}`;
+  }
+  const raw = (s || l).trim();
   if (!raw) return '';
   if (/^from\s+/i.test(raw)) return raw;
   return `from ${raw}`;
@@ -17,7 +24,7 @@ function authorInitial(author?: string) {
   return letter || 'G';
 }
 
-function TestimonialCard({ item }: { item: any }) {
+export function TestimonialCard({ item }: { item: any }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isClamped, setIsClamped] = useState(false);
   const textRef = React.useRef<HTMLQuoteElement>(null);
@@ -122,7 +129,7 @@ export function Testimonials({
   if (items.length === 0) return null;
 
   const linkText = reviewsLink?.text || 'Read all reviews';
-  const linkHref = reviewsLink?.href || 'https://airbnb.com';
+  const linkHref = reviewsLink?.href || '/reviews';
   const isExternal = /^https?:\/\//i.test(linkHref);
 
   return (

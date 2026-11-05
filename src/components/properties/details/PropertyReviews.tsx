@@ -197,7 +197,7 @@ export function PropertyReviews({
     : `${reviewCount} reviews`;
 
   const linkText = reviewsLink?.text || 'Read all reviews';
-  const linkHref = reviewsLink?.href || 'https://airbnb.com';
+  const linkHref = reviewsLink?.href || '/reviews';
   const isExternal = /^https?:\/\//i.test(linkHref);
 
   return (

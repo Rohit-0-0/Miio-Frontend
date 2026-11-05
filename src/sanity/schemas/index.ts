@@ -28,6 +28,7 @@ import { journalPage } from './singletons/journalPage'
 import { locationsPage } from './singletons/locationsPage'
 import { staysPage } from './singletons/staysPage'
 import { interiorDesignPage } from './singletons/interiorDesignPage'
+import { reviewsPage } from './singletons/reviewsPage'
 
 import { interiorCaseStudy } from './documents/interiorCaseStudy'
 
@@ -61,5 +62,6 @@ export const schemaTypes = [
   cancellationPolicy,
   legalPage,
   interiorDesignPage,
+  reviewsPage,
   interiorCaseStudy,
 ]
