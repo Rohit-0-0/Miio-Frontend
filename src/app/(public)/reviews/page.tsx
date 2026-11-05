@@ -126,10 +126,13 @@ export default async function ReviewsPage() {
 
       {/* Direct Booking CTA */}
       <FinalCTA
-        heading="A more direct way to stay"
-        description="Book directly for the best available rates, bespoke recommendations, and a more considered experience."
-        buttonText="Explore all stays"
-        buttonLink="/properties"
+        defaults={{
+          heading: 'A more direct way to stay',
+          description:
+            'Book directly for the best available rates, bespoke recommendations, and a more considered experience.',
+          buttonText: 'Explore all stays',
+          buttonLink: '/properties',
+        }}
       />
     </div>
   );
