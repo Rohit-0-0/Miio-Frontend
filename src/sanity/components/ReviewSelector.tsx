@@ -17,6 +17,11 @@ type FeaturedValue = {
   _key?: string;
   reviewId?: string;
   listingId?: string;
+  quote?: string;
+  author?: string;
+  date?: string;
+  source?: string;
+  rating?: number;
 };
 
 const PAGE_SIZE = 20;
@@ -91,6 +96,11 @@ export function ReviewSelector(props: ArrayOfObjectsInputProps) {
             _key: Math.random().toString(36).substring(2, 11),
             reviewId: review.id,
             listingId: review.listingId,
+            quote: review.quote,
+            author: review.author,
+            date: review.date,
+            source: review.source,
+            rating: review.rating,
           });
         }
       } else {
@@ -117,7 +127,7 @@ export function ReviewSelector(props: ArrayOfObjectsInputProps) {
       <Stack style={{ gap: '1rem' }}>
         <Box>
           <Text weight="semibold" size={1}>
-            Select reviews to feature on homepage
+            {props.schemaType?.title || 'Select reviews'}
           </Text>
         </Box>
 
@@ -195,7 +205,7 @@ export function ReviewSelector(props: ArrayOfObjectsInputProps) {
         )}
 
         <Text size={1} muted>
-          {selected.length} review{selected.length === 1 ? '' : 's'} selected for homepage
+          {selected.length} review{selected.length === 1 ? '' : 's'} selected
         </Text>
       </Stack>
     </Card>

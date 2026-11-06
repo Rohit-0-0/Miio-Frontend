@@ -35,9 +35,14 @@ export const reviewsPage = defineType({
           fields: [
             { name: 'reviewId', title: 'Guesty Review ID', type: 'string' },
             { name: 'listingId', title: 'Guesty Listing ID', type: 'string' },
+            { name: 'quote', title: 'Quote', type: 'text' },
+            { name: 'author', title: 'Author', type: 'string' },
+            { name: 'date', title: 'Date', type: 'string' },
+            { name: 'source', title: 'Source', type: 'string' },
+            { name: 'rating', title: 'Rating', type: 'number' },
           ],
           preview: {
-            select: { title: 'reviewId', subtitle: 'listingId' },
+            select: { title: 'author', subtitle: 'quote' },
           },
         },
       ],

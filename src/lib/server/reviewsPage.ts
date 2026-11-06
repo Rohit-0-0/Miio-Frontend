@@ -39,7 +39,7 @@ export async function getReviewsPage(): Promise<ReviewsPageData> {
     // 1. Fetch reviewsPage singleton and existing curated reviews across Sanity
     const [pageConfig, propertyEditorials] = await Promise.all([
       sanityFetch<any>({
-        query: `*[_type == "reviewsPage"][0]{
+        query: `*[_type == "reviewsPage" && (_id == "reviewsPage" || _id == "drafts.reviewsPage")] | order(_updatedAt desc)[0]{
           title,
           subtitle,
           featuredReviews,
@@ -131,6 +131,19 @@ export async function getReviewsPage(): Promise<ReviewsPageData> {
 
     if (selectedRefs.length > 0) {
       selectedRefs.forEach((ref) => {
+        if (ref?.quote) {
+          finalReviews.push({
+            id: ref.reviewId || ref._key || ref.quote.slice(0, 30),
+            quote: ref.quote,
+            author: ref.author || 'Guest',
+            date: ref.date || '',
+            location: resolveLocationName('', ref.listingId),
+            source: ref.source || 'Airbnb',
+            rating: Number(ref.rating) || 5,
+          });
+          return;
+        }
+
         const item = reviewPool.get(ref.reviewId);
         if (item) {
           finalReviews.push(item);
@@ -140,8 +153,8 @@ export async function getReviewsPage(): Promise<ReviewsPageData> {
       finalReviews.push(...manualItems);
     }
 
-    // 6. If no specific reviews were selected yet, show all curated property reviews
-    if (finalReviews.length === 0) {
+    // 6. Only if NO specific reviews were selected yet, show all curated property reviews
+    if (selectedRefs.length === 0 && finalReviews.length === 0) {
       finalReviews = [...Array.from(reviewPool.values()), ...manualItems];
     }
 
