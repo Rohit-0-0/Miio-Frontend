@@ -128,6 +128,7 @@ export default async function SuccessPage({ searchParams }: Props) {
               isCheckout={true}
               hideSubmit={true} 
               hideMobileSticky={true}
+              maxGuests={property.accommodates || property.maxGuests}
             />
           </div>
         </div>

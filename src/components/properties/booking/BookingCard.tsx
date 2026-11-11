@@ -19,11 +19,12 @@ interface BookingCardProps {
   hideMobileSticky?: boolean;
   isCheckout?: boolean;
   hideSubmit?: boolean;
+  maxGuests?: number;
 }
 
 import { PaymentLogos } from '@/components/layout/PaymentLogos';
 
-export function BookingCard({ listingId, paymentTrustImages, hideMobileSticky = false, isCheckout = false, hideSubmit = false }: BookingCardProps) {
+export function BookingCard({ listingId, paymentTrustImages, hideMobileSticky = false, isCheckout = false, hideSubmit = false, maxGuests }: BookingCardProps) {
   const searchParams = useSearchParams();
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -162,6 +163,7 @@ export function BookingCard({ listingId, paymentTrustImages, hideMobileSticky = 
           onChangeChildren={setChildren}
           onChangeInfants={setInfants}
           onChangePets={setPets}
+          maxGuests={maxGuests}
           customTrigger={
             <div className="pb-2 border-b border-[#1B1A17]/20 hover:border-[#1B1A17]/40 transition-colors cursor-pointer mb-5">
               <div className="text-[10px] uppercase tracking-[0.12em] text-[#7D7975] mb-1">Guests</div>

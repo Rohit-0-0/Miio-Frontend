@@ -295,6 +295,7 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
                   <BookingCard
                     listingId={actualGuestyId}
                     paymentTrustImages={siteSettings?.paymentTrustImages}
+                    maxGuests={property.accommodates || property.maxGuests}
                   />
                 ) : (
                   <div className="bg-white border border-[#1B1A17]/10 rounded-xl p-6 text-[#7D7975]">
@@ -344,6 +345,7 @@ export default async function PropertyDetailPage({ params, searchParams }: Props
                   listingId={actualGuestyId}
                   paymentTrustImages={siteSettings?.paymentTrustImages}
                   hideMobileSticky
+                  maxGuests={property.accommodates || property.maxGuests}
                 />
               ) : (
                 <div className="bg-white border border-[#1B1A17]/10 rounded-xl p-6 text-[#7D7975]">

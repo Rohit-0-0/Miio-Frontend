@@ -13,6 +13,7 @@ interface GuestSelectorProps {
   triggerClassName?: string;
   customTrigger?: React.ReactNode;
   dropdownAlign?: 'left' | 'right' | 'center';
+  maxGuests?: number;
 }
 
 export function GuestSelector({ 
@@ -21,7 +22,8 @@ export function GuestSelector({
   className = "relative",
   triggerClassName = "border border-gray-300 border-t-0 rounded-b-md p-3 cursor-pointer hover:bg-gray-50 transition-colors flex justify-between items-center",
   customTrigger,
-  dropdownAlign
+  dropdownAlign,
+  maxGuests
 }: GuestSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -128,17 +130,64 @@ export function GuestSelector({
               : 'left-0 sm:left-auto sm:-right-4 md:left-0'
           }`}
         >
-          <GuestRow label="Adults" description="Age 13+" value={adults} onChange={onChangeAdults} min={1} />
-          <GuestRow label="Children" description="Ages 2-12" value={children} onChange={onChangeChildren} min={0} />
-          <GuestRow label="Infants" description="Under 2" value={infants} onChange={onChangeInfants} min={0} />
-          <GuestRow label="Pets" description="Bringing a service animal?" value={pets} onChange={onChangePets} min={0} />
+          {maxGuests && (
+            <div className="text-[11px] text-[#7D7975] pb-1 border-b border-gray-100">
+              Maximum {maxGuests} guest{maxGuests > 1 ? 's' : ''} for this stay
+            </div>
+          )}
+          <GuestRow 
+            label="Adults" 
+            description="Age 13+" 
+            value={adults} 
+            onChange={onChangeAdults} 
+            min={1} 
+            disableIncrease={maxGuests !== undefined ? (adults + children) >= maxGuests : (adults + children) >= 20}
+          />
+          <GuestRow 
+            label="Children" 
+            description="Ages 2-12" 
+            value={children} 
+            onChange={onChangeChildren} 
+            min={0} 
+            disableIncrease={maxGuests !== undefined ? (adults + children) >= maxGuests : (adults + children) >= 20}
+          />
+          <GuestRow 
+            label="Infants" 
+            description="Under 2" 
+            value={infants} 
+            onChange={onChangeInfants} 
+            min={0} 
+            disableIncrease={infants >= 5}
+          />
+          <GuestRow 
+            label="Pets" 
+            description="Bringing a service animal?" 
+            value={pets} 
+            onChange={onChangePets} 
+            min={0} 
+            disableIncrease={pets >= 5}
+          />
         </div>
       )}
     </div>
   );
 }
 
-function GuestRow({ label, description, value, onChange, min }: { label: string, description: string, value: number, onChange: (val: number) => void, min: number }) {
+function GuestRow({ 
+  label, 
+  description, 
+  value, 
+  onChange, 
+  min, 
+  disableIncrease 
+}: { 
+  label: string; 
+  description: string; 
+  value: number; 
+  onChange: (val: number) => void; 
+  min: number;
+  disableIncrease?: boolean;
+}) {
   return (
     <div className="flex items-center justify-between">
       <div>
@@ -147,6 +196,7 @@ function GuestRow({ label, description, value, onChange, min }: { label: string,
       </div>
       <div className="flex items-center space-x-3">
         <button 
+          type="button"
           onClick={() => onChange(Math.max(min, value - 1))}
           disabled={value <= min}
           className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:border-gray-900 hover:text-gray-900 disabled:opacity-30 disabled:hover:border-gray-300 disabled:hover:text-gray-500 transition-colors"
@@ -155,8 +205,10 @@ function GuestRow({ label, description, value, onChange, min }: { label: string,
         </button>
         <span className="text-sm font-medium w-4 text-center">{value}</span>
         <button 
+          type="button"
           onClick={() => onChange(value + 1)}
-          className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:border-gray-900 hover:text-gray-900 transition-colors"
+          disabled={disableIncrease}
+          className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-500 hover:border-gray-900 hover:text-gray-900 disabled:opacity-30 disabled:hover:border-gray-300 disabled:hover:text-gray-500 transition-colors"
         >
           +
         </button>

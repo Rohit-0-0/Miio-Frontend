@@ -234,6 +234,7 @@ export interface PropertySummary {
   bedrooms: number;
   bathrooms: number;
   maxGuests: number;
+  accommodates?: number;
   beds: number;
   reviews?: { avg: number; total: number };
 }
@@ -260,6 +261,7 @@ export interface PropertyDetails {
   bedrooms: number;
   bathrooms: number;
   maxGuests: number;
+  accommodates?: number;
   beds: number;
   amenities: Amenity[];
   reviews?: { avg: number; total: number };

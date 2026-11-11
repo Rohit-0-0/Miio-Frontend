@@ -374,6 +374,7 @@ export function CheckoutFlow({ property, searchParams, paymentTrustImages, cmsCo
               children={children}
               infants={infants}
               pets={pets}
+              maxGuests={property?.accommodates || property?.maxGuests}
               onChangeAdults={(val) => {
                 const params = new URLSearchParams(searchParams as any);
                 params.set('adults', val.toString());
