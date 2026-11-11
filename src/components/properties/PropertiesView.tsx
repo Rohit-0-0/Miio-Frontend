@@ -27,9 +27,12 @@ export function PropertiesView({ properties, searchQueryString }: PropertiesView
 
   return (
     <div className="relative w-full">
-      <StaysFilterBar resultLabel={resultLabel} />
+      <div className="relative z-30">
+        <StaysFilterBar resultLabel={resultLabel} />
+      </div>
 
-      <PropertyGrid>
+      <div className="relative z-10">
+        <PropertyGrid>
         {properties.map((property: any) => {
           const id = property._id || property.id;
           const name = property.nickname || property.title || 'Unknown Property';
@@ -81,6 +84,7 @@ export function PropertiesView({ properties, searchQueryString }: PropertiesView
           );
         })}
       </PropertyGrid>
+      </div>
 
       {total > 0 && (
         <div className="mt-12 flex justify-center">

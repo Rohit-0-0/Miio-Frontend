@@ -23,20 +23,20 @@ export async function PropertiesListSuspense({
   const checkOut = query.checkOut as string | undefined;
   
   try {
-    const adults = query.adults as string | undefined;
-    const children = query.children as string | undefined;
-    const infants = query.infants as string | undefined;
-    const pets = query.pets as string | undefined;
-    const city = query.city as string | undefined;
+    const adults = (query.adults ?? resolvedParams?.adults) as string | number | undefined;
+    const children = (query.children ?? resolvedParams?.children) as string | number | undefined;
+    const infants = (query.infants ?? resolvedParams?.infants) as string | number | undefined;
+    const pets = (query.pets ?? resolvedParams?.pets) as string | number | undefined;
+    const city = (query.city ?? resolvedParams?.city) as string | undefined;
     
     const beSearchParams = new URLSearchParams();
     if (city) beSearchParams.append('city', city);
     if (checkIn) beSearchParams.append('checkIn', checkIn);
     if (checkOut) beSearchParams.append('checkOut', checkOut);
-    if (adults) beSearchParams.append('adults', adults);
-    if (children) beSearchParams.append('children', children);
-    if (infants) beSearchParams.append('infants', infants);
-    if (pets) beSearchParams.append('pets', pets);
+    if (adults !== undefined && adults !== null && adults !== '') beSearchParams.append('adults', adults.toString());
+    if (children !== undefined && children !== null && children !== '') beSearchParams.append('children', children.toString());
+    if (infants !== undefined && infants !== null && infants !== '') beSearchParams.append('infants', infants.toString());
+    if (pets !== undefined && pets !== null && pets !== '') beSearchParams.append('pets', pets.toString());
     
     // Append advanced filters
     if (query.propertyType) beSearchParams.append('propertyType', query.propertyType as string);

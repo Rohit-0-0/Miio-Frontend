@@ -156,13 +156,11 @@ export function StaysFilterBar({ resultLabel }: StaysFilterBarProps) {
   return (
     <div
       ref={filterRef}
-      className={`flex flex-col items-start md:flex-row md:items-center md:justify-between gap-4 mb-8 ${
-        isPending ? 'opacity-70' : ''
-      }`}
+      className="relative z-30 flex flex-col items-start md:flex-row md:items-center md:justify-between gap-4 mb-8"
     >
       <div className="flex flex-wrap items-center gap-2 w-full">
         {/* Location */}
-        <div className="relative">
+        <div className="relative z-40">
           <button
             type="button"
             onClick={() => setOpenDropdown(openDropdown === 'location' ? null : 'location')}
@@ -217,7 +215,7 @@ export function StaysFilterBar({ resultLabel }: StaysFilterBarProps) {
         </div>
 
         {/* Guests */}
-        <div className="relative" onClick={() => setOpenDropdown(null)}>
+        <div className="relative z-40" onClick={() => setOpenDropdown(null)}>
           <GuestSelector
             adults={adults}
             children={children}
@@ -245,7 +243,7 @@ export function StaysFilterBar({ resultLabel }: StaysFilterBarProps) {
         </div>
 
         {/* Price */}
-        <div className="relative" ref={priceContainerRef}>
+        <div className="relative z-40" ref={priceContainerRef}>
           <button
             type="button"
             onClick={() => setOpenDropdown(openDropdown === 'price' ? null : 'price')}
@@ -268,10 +266,15 @@ export function StaysFilterBar({ resultLabel }: StaysFilterBarProps) {
                   <input
                     type="number"
                     inputMode="numeric"
+                    min="0"
                     placeholder="0"
                     value={minPrice}
-                    onChange={(e) => setMinPrice(e.target.value)}
-                    className="w-full rounded-lg border border-[#1B1A17]/15 bg-transparent px-3 py-2 text-sm text-[#1B1A17] outline-none focus:border-[#1B1A17]/40"
+                    onWheel={(e) => (e.target as HTMLInputElement).blur()}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/[^0-9]/g, '');
+                      setMinPrice(val);
+                    }}
+                    className="w-full rounded-lg border border-[#1B1A17]/15 bg-transparent px-3 py-2 text-sm text-[#1B1A17] outline-none focus:border-[#1B1A17]/40 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </label>
                 <label className="flex-1">
@@ -281,10 +284,15 @@ export function StaysFilterBar({ resultLabel }: StaysFilterBarProps) {
                   <input
                     type="number"
                     inputMode="numeric"
+                    min="0"
                     placeholder="Any"
                     value={maxPrice}
-                    onChange={(e) => setMaxPrice(e.target.value)}
-                    className="w-full rounded-lg border border-[#1B1A17]/15 bg-transparent px-3 py-2 text-sm text-[#1B1A17] outline-none focus:border-[#1B1A17]/40"
+                    onWheel={(e) => (e.target as HTMLInputElement).blur()}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/[^0-9]/g, '');
+                      setMaxPrice(val);
+                    }}
+                    className="w-full rounded-lg border border-[#1B1A17]/15 bg-transparent px-3 py-2 text-sm text-[#1B1A17] outline-none focus:border-[#1B1A17]/40 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </label>
               </div>
