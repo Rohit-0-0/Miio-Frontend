@@ -35,6 +35,20 @@ interface NormalizedReview {
   rating: number;
 }
 
+function formatReviewDate(dateStr?: string): string {
+  if (!dateStr) return '';
+  const trimmed = dateStr.trim();
+  // If already "Month Year" (e.g. "October 2026"), return directly (prevents Invalid Date on iOS Safari)
+  if (/^[A-Za-z]+\s+\d{4}$/.test(trimmed)) {
+    return trimmed;
+  }
+  const parsed = new Date(trimmed);
+  if (!isNaN(parsed.getTime())) {
+    return parsed.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  }
+  return '';
+}
+
 function SingleReviewCard({ review }: { review: NormalizedReview }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isClamped, setIsClamped] = useState(false);
@@ -164,9 +178,7 @@ export function PropertyReviews({
         id: r.reviewId || r._key || String(idx),
         text: r.quote,
         author: r.author || 'Guest',
-        dateLabel: r.date
-          ? new Date(r.date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
-          : '',
+        dateLabel: formatReviewDate(r.date),
         source: r.source || 'Airbnb',
         rating: Math.round(r.rating || 5),
       }));
@@ -181,9 +193,7 @@ export function PropertyReviews({
           id: r._id || r.id || String(idx),
           text,
           author: r.reviewer?.firstName || 'Guest',
-          dateLabel: dateStr
-            ? new Date(dateStr).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
-            : '',
+          dateLabel: formatReviewDate(dateStr),
           source: raw.channel || r.channel || 'Airbnb',
           rating: Math.round(raw.overall_rating || r.overallRating || 5),
         };

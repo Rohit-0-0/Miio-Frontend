@@ -36,7 +36,7 @@ export async function Footer() {
   ];
   const fallbackCol2 = [
     { label: 'Partner With Us', href: '/partner-with-us' },
-    { label: 'Interior Design & Property Styling', href: '/interior-design' }
+    { label: 'Interior Design', href: '/interior-design' }
   ];
 
   const col1 = hasLinks ? allLinks.slice(0, 5) : fallbackCol1;
